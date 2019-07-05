@@ -80,10 +80,6 @@ Note: Will need to think about transitions, views, and animations, we'll use
 [Add picture of your hand sketched wireframes in this section]
 <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
 
-### [BONUS] Digital Wireframes & Mockups
-
-### [BONUS] Interactive Prototype
-
 # Helpful Stuff:
 
 - https://nextcity.org/daily/entry/pedestrian-open-data-safest-shortest-walk-map Sketch Factor approached this problem the wrong way, they used user reports instead of using actual data. We intend on obtaining a non-biased dataset from reliable sources such as FBI APIs.
