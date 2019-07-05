@@ -1,17 +1,3 @@
-# Helpful Stuff:
-
-- https://nextcity.org/daily/entry/pedestrian-open-data-safest-shortest-walk-map Sketch Factor approached this problem the wrong way, they used user reports instead of using actual data. We intend on obtaining a non-biased dataset from reliable sources such as FBI APIs.
-- An example model: http://www2.cs.uic.edu/~urbcomp2013/urbcomp2014/papers/Galbrun_Safe%20Navigation.pdf
--  https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2 Crime data in Chicago
--  https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i Crime data in NYC
--  https://www.ft.com/content/fecb0c38-c0dc-11e8-8d55-54197280d3f7 Article on whether Google Maps sghould plan safer routes.
-# Data for SF: 
--  https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-Historical-2003/tmnf-yvry
--  https://dev.socrata.com/foundry/data.sfgov.org/wg3w-h783
-
-Group Project - README Template
-===
-
 # Orbis
 
 
@@ -98,12 +84,14 @@ Note: Will need to think about transitions, views, and animations, we'll use
 
 ### [BONUS] Interactive Prototype
 
-## Schema 
-[This section will be completed in Unit 9]
-### Models
-[Add table of models]
-### Networking
-- [Add list of network requests by screen ]
-- [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+# Helpful Stuff:
+
+- https://nextcity.org/daily/entry/pedestrian-open-data-safest-shortest-walk-map Sketch Factor approached this problem the wrong way, they used user reports instead of using actual data. We intend on obtaining a non-biased dataset from reliable sources such as FBI APIs.
+- An example model: http://www2.cs.uic.edu/~urbcomp2013/urbcomp2014/papers/Galbrun_Safe%20Navigation.pdf
+-  https://data.cityofchicago.org/Public-Safety/Crimes-2001-to-present/ijzp-q8t2 Crime data in Chicago
+-  https://data.cityofnewyork.us/Public-Safety/NYPD-Complaint-Data-Historic/qgea-i56i Crime data in NYC
+-  https://www.ft.com/content/fecb0c38-c0dc-11e8-8d55-54197280d3f7 Article on whether Google Maps sghould plan safer routes.
+# Data for SF: 
+-  https://data.sfgov.org/Public-Safety/Police-Department-Incident-Reports-Historical-2003/tmnf-yvry
+-  https://dev.socrata.com/foundry/data.sfgov.org/wg3w-h783
 
