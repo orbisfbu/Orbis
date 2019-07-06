@@ -77,7 +77,7 @@ Note: Will need to think about transitions, views, and animations, we'll use
    => Routes Map that has tab navigation
    
 ## Wireframes
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+
 https://github.com/orbisfbu/Orbis/tree/master/Image_Assets
 
 # Helpful Stuff:
