@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -172,7 +172,6 @@
 				F9BA054355C534259F27AF7E /* Pods-PitchUITests.debug.xcconfig */,
 				C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -188,6 +187,7 @@
 				C138EDD422DFAD9F00AAA0D0 /* Frameworks */,
 				C138EDD522DFAD9F00AAA0D0 /* Resources */,
 				84B398B44754160447B6D96C /* [CP] Embed Pods Frameworks */,
+				8E45057B047B16F675A0BE9C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -322,6 +322,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pitch/Pods-Pitch-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8E45057B047B16F675A0BE9C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Pitch/Pods-Pitch-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Pitch/Pods-Pitch-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Pitch/Pods-Pitch-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9577267B8DED811CC402E99F /* [CP] Check Pods Manifest.lock */ = {
@@ -509,6 +526,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -561,6 +579,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};

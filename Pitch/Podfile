@@ -7,6 +7,10 @@ target 'Pitch' do
 
   # Pods for Pitch
   pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'FirebaseUI/Facebook'
+  pod 'FBSDKLoginKit'
+ 
 
   target 'PitchTests' do
     inherit! :search_paths
