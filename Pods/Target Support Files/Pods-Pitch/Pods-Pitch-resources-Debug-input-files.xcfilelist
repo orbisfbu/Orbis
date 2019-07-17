@@ -1,0 +1,3 @@
+${PODS_ROOT}/Target Support Files/Pods-Pitch/Pods-Pitch-resources.sh
+${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseAuthUI.bundle
+${PODS_CONFIGURATION_BUILD_DIR}/FirebaseUI/FirebaseFacebookAuthUI.bundle
