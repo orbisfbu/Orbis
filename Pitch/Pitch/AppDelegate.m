@@ -23,6 +23,7 @@
     [FIRApp configure];
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
+    [FBSDKSettings setAppID:@"2401394480184040"];
     return YES;
 }
 
