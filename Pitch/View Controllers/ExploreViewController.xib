@@ -22,15 +22,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gfd-S1-nQU">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <rect key="frame" x="3" y="0.0" width="408" height="896"/>
                 </mapView>
             </subviews>
-            <color key="backgroundColor" red="0.61045539380000002" green="0.17268377539999999" blue="0.3411842585" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="Gfd-S1-nQU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="63A-bM-0jn"/>
                 <constraint firstAttribute="bottom" secondItem="Gfd-S1-nQU" secondAttribute="bottom" id="XcZ-6F-ebJ"/>
-                <constraint firstAttribute="trailing" secondItem="Gfd-S1-nQU" secondAttribute="trailing" id="ZuX-Qc-q7X"/>
-                <constraint firstItem="Gfd-S1-nQU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="beU-Z1-x3V"/>
+                <constraint firstAttribute="trailing" secondItem="Gfd-S1-nQU" secondAttribute="trailing" constant="3" id="ZuX-Qc-q7X"/>
+                <constraint firstItem="Gfd-S1-nQU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="3" id="beU-Z1-x3V"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
         </view>
