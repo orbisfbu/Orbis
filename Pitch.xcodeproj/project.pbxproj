@@ -11,8 +11,14 @@
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
 		181FEAF8C20A861EEE46EA31 /* Pods_Pitch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */; };
 		5E0564BD2DE1E80B0B62790F /* Pods_PitchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA7A4CB52FA959324F5E08BB /* Pods_PitchUITests.framework */; };
+		C127D52222DFE684009963B0 /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52022DFE684009963B0 /* CreateEventViewController.m */; };
+		C127D52322DFE684009963B0 /* CreateEventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C127D52122DFE684009963B0 /* CreateEventViewController.xib */; };
+		C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52522DFE699009963B0 /* ExploreViewController.m */; };
+		C127D52822DFE699009963B0 /* ExploreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C127D52622DFE699009963B0 /* ExploreViewController.xib */; };
+		C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52A22DFE6A3009963B0 /* UserViewController.m */; };
+		C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C127D52B22DFE6A3009963B0 /* UserViewController.xib */; };
 		C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C138EDDB22DFAD9F00AAA0D0 /* AppDelegate.m */; };
-		C138EDDF22DFAD9F00AAA0D0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C138EDDE22DFAD9F00AAA0D0 /* ViewController.m */; };
+		C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C138EDDE22DFAD9F00AAA0D0 /* MasterViewController.m */; };
 		C138EDE222DFAD9F00AAA0D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C138EDE022DFAD9F00AAA0D0 /* Main.storyboard */; };
 		C138EDE422DFAD9F00AAA0D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C138EDE322DFAD9F00AAA0D0 /* Assets.xcassets */; };
 		C138EDE722DFAD9F00AAA0D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C138EDE522DFAD9F00AAA0D0 /* LaunchScreen.storyboard */; };
@@ -45,11 +51,20 @@
 		0DA70478CF425F487B0CDAC3 /* Pods-PitchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchTests.release.xcconfig"; path = "Target Support Files/Pods-PitchTests/Pods-PitchTests.release.xcconfig"; sourceTree = "<group>"; };
 		4A1CEDA789C916451CDD6B4A /* Pods-PitchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchTests.debug.xcconfig"; path = "Target Support Files/Pods-PitchTests/Pods-PitchTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA7A4CB52FA959324F5E08BB /* Pods_PitchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C127D51F22DFE684009963B0 /* CreateEventViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateEventViewController.h; sourceTree = "<group>"; };
+		C127D52022DFE684009963B0 /* CreateEventViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateEventViewController.m; sourceTree = "<group>"; };
+		C127D52122DFE684009963B0 /* CreateEventViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateEventViewController.xib; sourceTree = "<group>"; };
+		C127D52422DFE699009963B0 /* ExploreViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExploreViewController.h; sourceTree = "<group>"; };
+		C127D52522DFE699009963B0 /* ExploreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExploreViewController.m; sourceTree = "<group>"; };
+		C127D52622DFE699009963B0 /* ExploreViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExploreViewController.xib; sourceTree = "<group>"; };
+		C127D52922DFE6A3009963B0 /* UserViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
+		C127D52A22DFE6A3009963B0 /* UserViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
+		C127D52B22DFE6A3009963B0 /* UserViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserViewController.xib; sourceTree = "<group>"; };
 		C138EDD722DFAD9F00AAA0D0 /* Pitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C138EDDA22DFAD9F00AAA0D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C138EDDB22DFAD9F00AAA0D0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		C138EDDD22DFAD9F00AAA0D0 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		C138EDDE22DFAD9F00AAA0D0 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C138EDDD22DFAD9F00AAA0D0 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		C138EDDE22DFAD9F00AAA0D0 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
 		C138EDE122DFAD9F00AAA0D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C138EDE322DFAD9F00AAA0D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C138EDE622DFAD9F00AAA0D0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -105,6 +120,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C127D51E22DFE3CF009963B0 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				C138EDDD22DFAD9F00AAA0D0 /* MasterViewController.h */,
+				C138EDDE22DFAD9F00AAA0D0 /* MasterViewController.m */,
+				C127D51F22DFE684009963B0 /* CreateEventViewController.h */,
+				C127D52022DFE684009963B0 /* CreateEventViewController.m */,
+				C127D52122DFE684009963B0 /* CreateEventViewController.xib */,
+				C127D52422DFE699009963B0 /* ExploreViewController.h */,
+				C127D52522DFE699009963B0 /* ExploreViewController.m */,
+				C127D52622DFE699009963B0 /* ExploreViewController.xib */,
+				C127D52922DFE6A3009963B0 /* UserViewController.h */,
+				C127D52A22DFE6A3009963B0 /* UserViewController.m */,
+				C127D52B22DFE6A3009963B0 /* UserViewController.xib */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
 		C138EDCE22DFAD9F00AAA0D0 = {
 			isa = PBXGroup;
 			children = (
@@ -130,10 +163,9 @@
 		C138EDD922DFAD9F00AAA0D0 /* Pitch */ = {
 			isa = PBXGroup;
 			children = (
+				C127D51E22DFE3CF009963B0 /* View Controllers */,
 				C138EDDA22DFAD9F00AAA0D0 /* AppDelegate.h */,
 				C138EDDB22DFAD9F00AAA0D0 /* AppDelegate.m */,
-				C138EDDD22DFAD9F00AAA0D0 /* ViewController.h */,
-				C138EDDE22DFAD9F00AAA0D0 /* ViewController.m */,
 				C138EDE022DFAD9F00AAA0D0 /* Main.storyboard */,
 				C138EDE322DFAD9F00AAA0D0 /* Assets.xcassets */,
 				C138EDE522DFAD9F00AAA0D0 /* LaunchScreen.storyboard */,
@@ -283,9 +315,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */,
+				C127D52822DFE699009963B0 /* ExploreViewController.xib in Resources */,
 				C138EDE722DFAD9F00AAA0D0 /* LaunchScreen.storyboard in Resources */,
 				06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */,
 				C138EDE422DFAD9F00AAA0D0 /* Assets.xcassets in Resources */,
+				C127D52322DFE684009963B0 /* CreateEventViewController.xib in Resources */,
 				C138EDE222DFAD9F00AAA0D0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,9 +449,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C138EDDF22DFAD9F00AAA0D0 /* ViewController.m in Sources */,
+				C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */,
+				C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */,
 				C138EDEA22DFAD9F00AAA0D0 /* main.m in Sources */,
+				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,
 				C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */,
+				C127D52222DFE684009963B0 /* CreateEventViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
