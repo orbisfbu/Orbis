@@ -10,6 +10,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 @import UIKit;
 @import Firebase;
+@import FirebaseAuth;
 
 @interface AppDelegate ()
 
@@ -24,6 +25,7 @@
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [FBSDKSettings setAppID:@"2401394480184040"];
+    
     return YES;
 }
 

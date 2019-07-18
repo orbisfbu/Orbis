@@ -10,6 +10,8 @@ target 'Pitch' do
   pod 'Firebase/Auth'
   pod 'FirebaseUI/Facebook'
   pod 'FBSDKLoginKit'
+  pod 'Firebase/Database'
+  pod 'Firebase/Analytics'
  
 
   target 'PitchTests' do
