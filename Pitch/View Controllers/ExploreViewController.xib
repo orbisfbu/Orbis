@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExploreViewController">
             <connections>
+                <outlet property="photoMap" destination="Gfd-S1-nQU" id="eX9-d8-Rkp"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,7 +20,18 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gfd-S1-nQU">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                </mapView>
+            </subviews>
             <color key="backgroundColor" red="0.61045539380000002" green="0.17268377539999999" blue="0.3411842585" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="Gfd-S1-nQU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="63A-bM-0jn"/>
+                <constraint firstAttribute="bottom" secondItem="Gfd-S1-nQU" secondAttribute="bottom" id="XcZ-6F-ebJ"/>
+                <constraint firstAttribute="trailing" secondItem="Gfd-S1-nQU" secondAttribute="trailing" id="ZuX-Qc-q7X"/>
+                <constraint firstItem="Gfd-S1-nQU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="beU-Z1-x3V"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
         </view>
     </objects>
