@@ -41,7 +41,7 @@
                                             <constraint firstAttribute="height" constant="30" id="bSH-Tn-sOK"/>
                                             <constraint firstAttribute="width" constant="30" id="t43-tn-JX6"/>
                                         </constraints>
-                                        <state key="normal" title="Button" image="menu"/>
+                                        <state key="normal" title="Button" image="search"/>
                                         <connections>
                                             <action selector="exploreButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IQ8-Vs-sP8"/>
                                         </connections>
@@ -84,7 +84,7 @@
     </scenes>
     <resources>
         <image name="event" width="563" height="530"/>
-        <image name="menu" width="697" height="601"/>
+        <image name="search" width="642" height="594"/>
         <image name="user" width="691" height="610"/>
     </resources>
 </document>

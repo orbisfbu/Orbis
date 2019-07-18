@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExploreViewController">
             <connections>
                 <outlet property="photoMap" destination="Gfd-S1-nQU" id="eX9-d8-Rkp"/>
+                <outlet property="searchBar" destination="8Yx-83-rzV" id="Hke-Sf-jl4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,15 +25,39 @@
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gfd-S1-nQU">
                     <rect key="frame" x="3" y="0.0" width="408" height="896"/>
                 </mapView>
+                <searchBar contentMode="redraw" placeholder="Search Events" translatesAutoresizingMaskIntoConstraints="NO" id="8Yx-83-rzV">
+                    <rect key="frame" x="3" y="94" width="408" height="56"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="402-va-wqo">
+                    <rect key="frame" x="369" y="109.5" width="25" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="aIY-wh-A98"/>
+                        <constraint firstAttribute="width" constant="25" id="ccp-Uz-WLj"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="menu"/>
+                    <connections>
+                        <action selector="filterButtonPressed:" destination="-1" eventType="touchUpInside" id="yrn-Ac-pHX"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="8Yx-83-rzV" firstAttribute="width" secondItem="Gfd-S1-nQU" secondAttribute="width" id="0xv-eO-F0l"/>
                 <constraint firstItem="Gfd-S1-nQU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="63A-bM-0jn"/>
+                <constraint firstItem="402-va-wqo" firstAttribute="centerY" secondItem="8Yx-83-rzV" secondAttribute="centerY" id="E7A-0i-kxK"/>
+                <constraint firstItem="8Yx-83-rzV" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="L9h-VN-YWe"/>
                 <constraint firstAttribute="bottom" secondItem="Gfd-S1-nQU" secondAttribute="bottom" id="XcZ-6F-ebJ"/>
                 <constraint firstAttribute="trailing" secondItem="Gfd-S1-nQU" secondAttribute="trailing" constant="3" id="ZuX-Qc-q7X"/>
                 <constraint firstItem="Gfd-S1-nQU" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="3" id="beU-Z1-x3V"/>
+                <constraint firstItem="8Yx-83-rzV" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="50" id="ets-T9-cUo"/>
+                <constraint firstAttribute="trailing" secondItem="402-va-wqo" secondAttribute="trailing" constant="20" id="tij-a6-hp9"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <point key="canvasLocation" x="137.68115942028987" y="130.58035714285714"/>
         </view>
     </objects>
+    <resources>
+        <image name="menu" width="697" height="601"/>
+    </resources>
 </document>
