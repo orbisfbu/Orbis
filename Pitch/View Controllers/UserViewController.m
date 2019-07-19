@@ -80,18 +80,21 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
     }
 }
 
-//
-//- (void)addUser:(FIRUser *)currentUser
-//{
-//    NSString *key = [[self.refUsers childByAutoId] key];
-//    NSDictionary *userInfo = @{
-//                               @"id":key,
-//                               @"First Name": userProfile.firstName,
-//                               @"Last Name": userProfile.lastName
-//                               };
-//    [[self.refUsers child:key] setValue: userInfo];
-//    NSLog(@"Successfully saved info to database");
-//}
+- (void)addUser:(FIRUser *)currentUser
+{
+    NSString *key = [[self.refUsers childByAutoId] key];
+    NSString *fullName = currentUser.displayName;
+    NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
+    NSString *profileImageURLString = [currentUser.photoURL absoluteString];
+    NSDictionary *userInfo = @{
+                               @"userID":currentUser.uid,
+                               @"First Name":[nameArray objectAtIndex:0],
+                               @"Last Name": [nameArray objectAtIndex:1],
+                               @"Profile Image": profileImageURLString
+                               };
+    [[self.refUsers child:key] setValue: userInfo];
+    NSLog(@"Successfully saved info to database");
+}
 
 
 
