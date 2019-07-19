@@ -46,6 +46,8 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Add the FB login button
+    // will probably have to use tokens to check whether
+    // facebook user is already logged in
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
     loginButton.delegate = self; // added
     // Optional: Place the button in the center of your view.
@@ -54,6 +56,8 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     loginButton.permissions = @[@"public_profile", @"email"];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:@"Users"];
 }
+
+
 
 - (void)loginButton:(FBSDKLoginButton *)loginButton
 didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
@@ -79,7 +83,6 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
         NSLog(AUTHENTICATION_ERROR);
     }
 }
-
 
 - (void)loginButtonDidLogOut:(nonnull FBSDKLoginButton *)loginButton {
     NSError *signOutError;
