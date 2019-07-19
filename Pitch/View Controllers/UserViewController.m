@@ -52,11 +52,26 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
     // NSString *accessToken = [FBSDKAccessToken currentAccessToken];
     loginButton.delegate = self; // added
+    
+    //loginButton.topAnchor set
+    
+    //[loginButton addConstraint:top];
+    
     // Optional: Place the button in the center of your view.
     loginButton.center = self.view.center;
     [self.view addSubview:loginButton];
-    loginButton.permissions = @[@"public_profile", @"email"];
-    self.databaseUsersReference = [[[FIRDatabase database] reference] child:@"Users"];
+    loginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
+    if ([FBSDKAccessToken currentAccessToken]) {
+        [self setUserProfileImage];
+        NSLog(@"User was already logged in");
+        
+    }
+    else
+    {
+        NSLog(@"No user signed in; no profile image to load");
+    }
+    
+    self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
 }
 
 
@@ -122,6 +137,7 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
     [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSString *retrievedURLString = snapshot.value[USER_PROFILE_IMAGE_URLSTRING];
         NSURL *profileImageNSURL = [NSURL URLWithString:retrievedURLString];
+        self.profilePicImageView.image = nil;
         [self.profilePicImageView setImageWithURL:profileImageNSURL];
     } withCancelBlock:^(NSError * _Nonnull error) {
         NSLog(DATA_FETCH_ERROR);
@@ -139,6 +155,8 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
 }
 */
 
+- (IBAction)continueButton:(id)sender {
+}
 @end
 
 
