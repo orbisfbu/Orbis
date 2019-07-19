@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "UserViewController.h"
 #import "UIImageView+AFNetworking.h"
+// #import <FBSDKAccessToken.h>
 
 @import UIKit;
 @import Firebase;
@@ -49,6 +50,7 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     // will probably have to use tokens to check whether
     // facebook user is already logged in
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
+    // NSString *accessToken = [FBSDKAccessToken currentAccessToken];
     loginButton.delegate = self; // added
     // Optional: Place the button in the center of your view.
     loginButton.center = self.view.center;
@@ -78,7 +80,8 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
                                           [self setUserProfileImage];
                                   }];
     } else {
-        NSLog(AUTHENTICATION_ERROR);
+        //NSLog(AUTHENTICATION_ERROR);
+        NSLog(@"clicked cancel and an error has occurred");
     }
 }
 

@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *profilePicImageView;
 
+// + (FBSDKAccessToken *) currentAccessToken;
+
 @end
 
 NS_ASSUME_NONNULL_END

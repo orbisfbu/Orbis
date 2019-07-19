@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02AC025ECB2F25A725644A38 /* Pods_PitchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */; };
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
+		06A909B422E2300E00CD2969 /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B322E2300E00CD2969 /* Poll.m */; };
 		181FEAF8C20A861EEE46EA31 /* Pods_Pitch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */; };
 		5E0564BD2DE1E80B0B62790F /* Pods_PitchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA7A4CB52FA959324F5E08BB /* Pods_PitchUITests.framework */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
@@ -49,6 +50,8 @@
 /* Begin PBXFileReference section */
 		02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pitch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		06A909B222E2300E00CD2969 /* Poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poll.h; sourceTree = "<group>"; };
+		06A909B322E2300E00CD2969 /* Poll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
 		0D890758ED881E4EF92ED47C /* Pods-Pitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.debug.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.debug.xcconfig"; sourceTree = "<group>"; };
 		0DA70478CF425F487B0CDAC3 /* Pods-PitchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchTests.release.xcconfig"; path = "Target Support Files/Pods-PitchTests/Pods-PitchTests.release.xcconfig"; sourceTree = "<group>"; };
 		4A1CEDA789C916451CDD6B4A /* Pods-PitchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchTests.debug.xcconfig"; path = "Target Support Files/Pods-PitchTests/Pods-PitchTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -141,6 +144,8 @@
 				78FC04B422E17C640049E0BD /* User.m */,
 				78FC04B622E17C700049E0BD /* Event.h */,
 				78FC04B722E17C700049E0BD /* Event.m */,
+				06A909B222E2300E00CD2969 /* Poll.h */,
+				06A909B322E2300E00CD2969 /* Poll.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -481,6 +486,7 @@
 				C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */,
 				C138EDEA22DFAD9F00AAA0D0 /* main.m in Sources */,
 				78FC04B822E17C700049E0BD /* Event.m in Sources */,
+				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
 				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,
 				C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */,
 				C127D52222DFE684009963B0 /* CreateEventViewController.m in Sources */,
