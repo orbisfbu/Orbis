@@ -65,7 +65,6 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
     if (error == nil) {
         FIRAuthCredential *credential = [FIRFacebookAuthProvider
                                          credentialWithAccessToken:[FBSDKAccessToken currentAccessToken].tokenString];
-        
         [[FIRAuth auth] signInWithCredential:credential
                                   completion:^(FIRAuthDataResult * _Nullable authResult,
                                                NSError * _Nullable error) {
@@ -77,7 +76,6 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
                                           FIRUser *user = authResult.user;
                                           [self addUserToDatabase:user];
                                           [self setUserProfileImage];
-        
                                   }];
     } else {
         NSLog(AUTHENTICATION_ERROR);
@@ -93,10 +91,7 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
     }
 }
 
-
-- (void)addUserToDatabase:(FIRUser *)currentUser
-
-{
+- (void)addUserToDatabase:(FIRUser *)currentUser{
     NSString *userID = [FIRAuth auth].currentUser.uid;
     //Display name is a string of the full name
     //Separating it below
