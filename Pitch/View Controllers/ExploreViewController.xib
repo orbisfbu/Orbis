@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ExploreViewController">
             <connections>
+                <outlet property="filterButton" destination="402-va-wqo" id="duK-ke-4DU"/>
                 <outlet property="photoMap" destination="Gfd-S1-nQU" id="eX9-d8-Rkp"/>
                 <outlet property="searchBar" destination="8Yx-83-rzV" id="Hke-Sf-jl4"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -19,18 +20,18 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gfd-S1-nQU">
-                    <rect key="frame" x="3" y="0.0" width="408" height="896"/>
+                    <rect key="frame" x="3" y="0.0" width="369" height="667"/>
                 </mapView>
                 <searchBar contentMode="redraw" placeholder="Search Events" translatesAutoresizingMaskIntoConstraints="NO" id="8Yx-83-rzV">
-                    <rect key="frame" x="3" y="94" width="408" height="56"/>
+                    <rect key="frame" x="3" y="70" width="369" height="56"/>
                     <textInputTraits key="textInputTraits"/>
                 </searchBar>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="402-va-wqo">
-                    <rect key="frame" x="369" y="109.5" width="25" height="25"/>
+                    <rect key="frame" x="330" y="85.5" width="25" height="25"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="25" id="aIY-wh-A98"/>
                         <constraint firstAttribute="width" constant="25" id="ccp-Uz-WLj"/>

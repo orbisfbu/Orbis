@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIImageView *profilePicImageView;
+- (IBAction)continueButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *orSeparatorLabel;
 
 @end
 
