@@ -12,6 +12,7 @@ target 'Pitch' do
   pod 'FBSDKLoginKit'
   pod 'Firebase/Database'
   pod 'Firebase/Analytics'
+  pod 'AFNetworking'
  
 
   target 'PitchTests' do
