@@ -7,8 +7,6 @@
 //
 
 #import "UserViewController.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "FirebaseDatabase/FirebaseDatabase.h"
 #import "AppDelegate.h"
 #import "UserViewController.h"
@@ -35,34 +33,45 @@ static NSString * const SIGN_OUT_FAILURE = @"Error occured while signing out";
 static NSString * const AUTHENTICATION_ERROR = @"Error occured while authenticating user";
 static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving User profile image";
 
-@interface UserViewController () <FBSDKLoginButtonDelegate>
+@interface UserViewController () <FBSDKLoginButtonDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
 
+//this flag will be used to trigger initial loading
+//@property (weak, nonatomic) BOOL *userIsSignedIn;
+
+//inputted properties to be used and checked during
+//the welcoming process; will have to check whether or not
+//initially inputted email and password correspond to existing account
+@property (weak, nonatomic) NSString *inputtedUserEmail;
+@property (weak, nonatomic) NSString *inputtedPassword;
+//these registering properties are to be set if inputted email doesn't
+//correspond to an account
+@property (weak, nonatomic) NSString *registerFirstName;
+@property (weak, nonatomic) NSString *registerLastName;
+@property (weak, nonatomic) NSString *registerUsername;
+//for the password confirm field later on, just make sure that
+//the text of that cofirm password field is the same registerPassword
+@property (weak, nonatomic) NSString *registerPassword;
 @end
+
 
 @implementation UserViewController
 
+
 - (void)viewDidLoad {
+    //user currentAccessToken to detect whether a Facebook user
+    //is already logged-in; if so, automatically load the profile
+    //and profile picture when userView is selected
     [super viewDidLoad];
-    // Add the FB login button
-    // will probably have to use tokens to check whether
-    // facebook user is already logged in
-    FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    loginButton.delegate = self;
-    
-    //loginButton.topAnchor set
-    
-    //[loginButton addConstraint:top];
-    
-    // Optional: Place the button in the center of your view.
-    loginButton.center = self.view.center;
-    [self.view addSubview:loginButton];
-    loginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
+    [self showFirstTimeUserPage];
+    //hide the backbutton unless user proceeds with signup
+    self.backButtonOutlet.hidden = YES;
+    self.FBLoginButtonOutlet.delegate = self;
+    self.FBLoginButtonOutlet.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
     if ([FBSDKAccessToken currentAccessToken]) {
         [self setUserProfileImage];
         NSLog(@"User was already logged in");
-        
     }
     else
     {
@@ -70,40 +79,6 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     }
     
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
-}
-
-
-
-- (void)loginButton:(FBSDKLoginButton *)loginButton
-didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
-              error:(NSError *)error {
-    if (error == nil) {
-        FIRAuthCredential *credential = [FIRFacebookAuthProvider
-                                         credentialWithAccessToken:[FBSDKAccessToken currentAccessToken].tokenString];
-        [[FIRAuth auth] signInWithCredential:credential
-                                  completion:^(FIRAuthDataResult * _Nullable authResult,
-                                               NSError * _Nullable error) {
-                                      if (error) {
-                                          NSLog(AUTHENTICATION_ERROR);
-                                      }
-                                      // User successfully signed in
-                                      if (authResult == nil) { return; }
-                                          FIRUser *user = authResult.user;
-                                          [self addUserToDatabase:user];
-                                          [self setUserProfileImage];
-                                  }];
-    } else {
-        NSLog(AUTHENTICATION_ERROR);
-    }
-}
-
-- (void)loginButtonDidLogOut:(nonnull FBSDKLoginButton *)loginButton {
-    NSError *signOutError;
-    BOOL status = [[FIRAuth auth] signOut:&signOutError];
-    if (!status) {
-        NSLog(SIGN_OUT_FAILURE);
-        return;
-    }
 }
 
 - (void)addUserToDatabase:(FIRUser *)currentUser{
@@ -127,33 +102,169 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
 //OR the user has changed profile image in profileViewController
 - (void)setUserProfileImage
 {
-    //eventually create a class full of getters for the User class
-    //this APImanager class should implement the backend to retrieve user information from
-    //the Firebase Database --> create similiar class for the Event objects as well
     NSString *userID = [FIRAuth auth].currentUser.uid;
     [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSString *retrievedURLString = snapshot.value[USER_PROFILE_IMAGE_URLSTRING];
         NSURL *profileImageNSURL = [NSURL URLWithString:retrievedURLString];
-        self.profilePicImageView.image = nil;
-        [self.profilePicImageView setImageWithURL:profileImageNSURL];
+        //self.profilePicImageView.image = nil;
+        //[self.profilePicImageView setImageWithURL:profileImageNSURL];
     } withCancelBlock:^(NSError * _Nonnull error) {
         NSLog(DATA_FETCH_ERROR);
     }];
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+//call this if the user hasn't signed up or logged-in
+- (void)showFirstTimeUserPage
+{
+    self.emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
 }
-*/
 
-- (IBAction)continueButton:(id)sender {
+
+- (void)showTheBasicsPage1
+{
+    UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.font = [UIFont systemFontOfSize:15];
+    textField.placeholder = @"Enter Password";
+    textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    textField.keyboardType = UIKeyboardTypeDefault;
+    textField.returnKeyType = UIReturnKeyDone;
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    textField.alpha = .5;
+    //textField.center = self.view.center;
+    textField.delegate = self;
+    [self.view addSubview:textField];
+
 }
+
+
+- (void)showTheBasicsPage2
+{
+    
+    
+    
+}
+
+
+//this function will be called if the user had already signed in before
+//this function will load the elements that are to be displayed in the profileView
+//this function should end up calling the setUserProfileImage method defined earlier
+- (void)showUserProfile:(BOOL *) isSignedIn
+{
+    
+    
+}
+
+
+- (void)dismissFirstTimeUserPage
+{
+    self.continueButtonOutlet.hidden = YES;
+    self.emailTextField.hidden = YES;
+    self.welcomingMessageLabel.hidden = YES;
+    self.FBLoginButtonOutlet.hidden = YES;
+    self.orSeparatorLabel.hidden = YES;
+    self.backButtonOutlet.hidden = NO;
+}
+
+- (void)dismissTheBasicsPage1
+{
+    for (UIView *view in [self.view subviews]) {
+        if (view.restorationIdentifier isEqualToString:@"")
+    }
+}
+
+
+- (void)dismissTheBasicsPage2
+{
+    
+    
+    
+}
+
+- (void)dismissUserProfile
+{
+    
+    
+}
+
+
+- (IBAction)continueButtonAction:(id)sender {
+    if (self.emailTextField.text && self.emailTextField.text.length > 0)
+    {
+        //need to check if that email is already in the database
+        [self dismissFirstTimeUserPage];
+        [self showTheBasicsPage1];
+    }
+    
+    else
+    {
+        [self presentAlert:@"Invalid Email" withMessage:@"Please provide a valid email"];
+    }
+}
+
+//FacebookLoginButton methods
+//if user successfully logins with Facebook
+//they'll be added to the databse and their profile image will be set
+- (void)loginButton:(FBSDKLoginButton *)loginButton
+didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
+              error:(NSError *)error {
+    if (error == nil) {
+        FIRAuthCredential *credential = [FIRFacebookAuthProvider
+                                         credentialWithAccessToken:[FBSDKAccessToken currentAccessToken].tokenString];
+        [[FIRAuth auth] signInWithCredential:credential
+                                  completion:^(FIRAuthDataResult * _Nullable authResult,
+                                               NSError * _Nullable error) {
+                                      if (error) {
+                                          NSLog(AUTHENTICATION_ERROR);
+                                      }
+                                      // User successfully signed in
+                                      if (authResult == nil) { return; }
+                                      FIRUser *user = authResult.user;
+                                      [self addUserToDatabase:user];
+                                      [self setUserProfileImage];
+                                  }];
+    } else {
+        NSLog(AUTHENTICATION_ERROR);
+    }
+}
+
+
+- (void)loginButtonDidLogOut:(nonnull FBSDKLoginButton *)loginButton {
+    NSError *signOutError;
+    BOOL status = [[FIRAuth auth] signOut:&signOutError];
+    if (!status) {
+        NSLog(SIGN_OUT_FAILURE);
+        return;
+    }
+}
+
+
+- (IBAction)backButtonAction:(id)sender {
+}
+
+
+- (void)presentAlert:(NSString *)alertTitle withMessage:(NSString *)alertMessage
+{
+    
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: alertTitle
+                                                                   message:alertMessage
+                                                            preferredStyle:(UIAlertControllerStyleAlert)];
+    // create an OK action
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         // handle response here.
+                                                     }];
+    // add the OK action to the alert controller
+    [alert addAction:okAction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+
+
 @end
 
 
