@@ -38,7 +38,9 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
 
 //this flag will be used to trigger initial loading
-//@property (weak, nonatomic) BOOL *userIsSignedIn;
+//if YES, then profile will be loaded
+//if NO, then sign-in/signup views will be displayed
+@property (nonatomic) BOOL *userIsSignedIn;
 
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
@@ -59,6 +61,12 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
 @implementation UserViewController
 
 
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.view layoutIfNeeded];
+}
+
 - (void)viewDidLoad {
     //user currentAccessToken to detect whether a Facebook user
     //is already logged-in; if so, automatically load the profile
@@ -77,9 +85,9 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     {
         NSLog(@"No user signed in; no profile image to load");
     }
-    
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
 }
+
 
 - (void)addUserToDatabase:(FIRUser *)currentUser{
     NSString *userID = [FIRAuth auth].currentUser.uid;
@@ -122,20 +130,38 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
 
 - (void)showTheBasicsPage1
 {
-    UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
-    textField.borderStyle = UITextBorderStyleRoundedRect;
-    textField.font = [UIFont systemFontOfSize:15];
-    textField.placeholder = @"Enter Password";
-    textField.autocorrectionType = UITextAutocorrectionTypeNo;
-    textField.keyboardType = UIKeyboardTypeDefault;
-    textField.returnKeyType = UIReturnKeyDone;
-    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    textField.alpha = .5;
+    UITextField *firstNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
+    firstNameTextField.borderStyle = UITextBorderStyleRoundedRect;
+    firstNameTextField.font = [UIFont systemFontOfSize:15];
+    firstNameTextField.placeholder = @"First Name";
+    firstNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    firstNameTextField.keyboardType = UIKeyboardTypeDefault;
+    firstNameTextField.returnKeyType = UIReturnKeyDone;
+    firstNameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    firstNameTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    firstNameTextField.alpha = .5;
     //textField.center = self.view.center;
-    textField.delegate = self;
-    [self.view addSubview:textField];
-
+    firstNameTextField.delegate = self;
+    [self.view addSubview:firstNameTextField];
+    //[textField.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor].active = YES;
+    firstNameTextField.translatesAutoresizingMaskIntoConstraints = YES;
+    [firstNameTextField.widthAnchor constraintEqualToConstant:50.0].active = YES;
+    [firstNameTextField.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:40.0].active = YES;
+    [firstNameTextField.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:50.0].active = YES;
+    
+    
+    UITextField *lastNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
+    lastNameTextField.borderStyle = UITextBorderStyleRoundedRect;
+    lastNameTextField.font = [UIFont systemFontOfSize:15];
+    lastNameTextField.placeholder = @"Last Name";
+    lastNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
+    lastNameTextField.keyboardType = UIKeyboardTypeDefault;
+    lastNameTextField.returnKeyType = UIReturnKeyDone;
+    lastNameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    lastNameTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    lastNameTextField.delegate = self;
+    [self.view addSubview:lastNameTextField];
+    
 }
 
 
@@ -169,9 +195,9 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
 
 - (void)dismissTheBasicsPage1
 {
-    for (UIView *view in [self.view subviews]) {
-        if (view.restorationIdentifier isEqualToString:@"")
-    }
+//    for (UIView *view in [self.view subviews]) {
+//        if (view.restorationIdentifier isEqualToString:@"")
+//    }
 }
 
 
@@ -196,7 +222,6 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
         [self dismissFirstTimeUserPage];
         [self showTheBasicsPage1];
     }
-    
     else
     {
         [self presentAlert:@"Invalid Email" withMessage:@"Please provide a valid email"];
@@ -246,8 +271,6 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
 
 - (void)presentAlert:(NSString *)alertTitle withMessage:(NSString *)alertMessage
 {
-    
-    
     UIAlertController *alert = [UIAlertController alertControllerWithTitle: alertTitle
                                                                    message:alertMessage
                                                             preferredStyle:(UIAlertControllerStyleAlert)];
@@ -259,11 +282,8 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
                                                      }];
     // add the OK action to the alert controller
     [alert addAction:okAction];
-    
     [self presentViewController:alert animated:YES completion:nil];
 }
-
-
 
 @end
 
