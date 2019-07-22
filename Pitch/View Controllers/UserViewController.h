@@ -7,15 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UserViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIImageView *profilePicImageView;
-- (IBAction)continueButton:(id)sender;
+- (IBAction)continueButtonAction:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *orSeparatorLabel;
-
-// + (FBSDKAccessToken *) currentAccessToken;
+@property (readonly, nonatomic) BOOL isCancelled;
+@property (weak, nonatomic) IBOutlet UIButton *continueButtonOutlet;
+@property (weak, nonatomic) IBOutlet FBSDKLoginButton *FBLoginButtonOutlet;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextField;
+@property (weak, nonatomic) IBOutlet UILabel *welcomingMessageLabel;
+@property (weak, nonatomic) IBOutlet UIButton *backButtonOutlet;
+- (IBAction)backButtonAction:(id)sender;
 
 @end
 
