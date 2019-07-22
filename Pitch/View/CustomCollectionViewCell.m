@@ -13,6 +13,12 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    NSLog(@"AHAHAHHAHAHAH");
+    self.layer.cornerRadius = 12;
+}
+
+- (void) setLabelText:(NSString *)text {
+    self.titleLabel.text = text;
 }
 
 @end

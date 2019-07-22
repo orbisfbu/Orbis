@@ -100,6 +100,7 @@
     //[cell awakeFromNib];
     if (indexPath.row == 0) {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"VibesCell"];
+        [cell awakeFromNib];
     } else if (indexPath.row == 1) {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"DistanceCell"];
         [cell awakeFromNib];
@@ -117,10 +118,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 80;
 }
 
 @end

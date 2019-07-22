@@ -21,11 +21,11 @@
     [self.contentView addSubview: self.menu];
     [self.menu selectIndexPath:[DOPIndexPath indexPathWithCol:0 row:0 item:0]];
     
-    NSLayoutConstraint *bottom =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1 constant:10];
-    NSLayoutConstraint *left =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1 constant:10];
-    NSLayoutConstraint *top =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.distanceLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:10];
-    NSLayoutConstraint *right =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1 constant:10];
-    [self.contentView addConstraints:@[top, right, left, bottom]];
+//    NSLayoutConstraint *bottom =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1 constant:10];
+//    NSLayoutConstraint *left =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1 constant:10];
+//    NSLayoutConstraint *top =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.distanceLabel attribute:NSLayoutAttributeBottom multiplier:1 constant:10];
+//    NSLayoutConstraint *right =[NSLayoutConstraint constraintWithItem:self.menu attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1 constant:10];
+//    [self.contentView addConstraints:@[top, right, left, bottom]];
     //self.distancePickerView.delegate = self;
     //self.distancePickerView.dataSource = self;
 }

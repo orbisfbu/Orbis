@@ -11,7 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CustomCollectionViewCell : UICollectionViewCell
-
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+- (void) setLabelText:(NSString *)text;
 @end
 
 NS_ASSUME_NONNULL_END

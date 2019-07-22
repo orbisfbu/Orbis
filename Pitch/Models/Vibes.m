@@ -16,8 +16,7 @@
 
 @implementation Vibes
 
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init];
     if (self) {
         self.vibesArray = @[@"Sports", @"Chill", @"Electronic", @"Jazz", @"Drinking", @"Party", @"Other"];
