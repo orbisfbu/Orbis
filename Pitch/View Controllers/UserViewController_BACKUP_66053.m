@@ -11,8 +11,6 @@
 #import "AppDelegate.h"
 #import "UserViewController.h"
 #import "UIImageView+AFNetworking.h"
-#import "FBSDKLoginManagerLoginResult.h"
-#import <FBSDKAccessToken.h>
 
 @import UIKit;
 @import Firebase;
@@ -23,7 +21,7 @@ static NSString * const DATABASE_USER_NODE = @"Users";
 static NSString * const USER_FIRSTNAME = @"First Name";
 static NSString * const USER_LASTNAME = @"Last Name";
 static NSString * const USER_EMAIL = @"Email";
-static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"Profile Image";
+static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImage";
 
 //Required permissions for user info
 static NSString * const PUBLIC_PROFILE_PERMISSION = @"public_profile";
@@ -74,10 +72,6 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     //is already logged-in; if so, automatically load the profile
     //and profile picture when userView is selected
     [super viewDidLoad];
-    // Add the FB login button
-    // will probably have to use tokens to check whether
-    // facebook user is already logged in
-
     [self showFirstTimeUserPage];
     //hide the backbutton unless user proceeds with signup
     self.backButtonOutlet.hidden = YES;
@@ -93,6 +87,7 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     }
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
 }
+
 
 - (void)addUserToDatabase:(FIRUser *)currentUser{
     NSString *userID = [FIRAuth auth].currentUser.uid;

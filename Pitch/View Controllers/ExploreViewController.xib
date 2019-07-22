@@ -55,7 +55,7 @@
                 <constraint firstAttribute="trailing" secondItem="402-va-wqo" secondAttribute="trailing" constant="20" id="tij-a6-hp9"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
-            <point key="canvasLocation" x="137.68115942028987" y="130.58035714285714"/>
+            <point key="canvasLocation" x="140" y="103"/>
         </view>
     </objects>
     <resources>

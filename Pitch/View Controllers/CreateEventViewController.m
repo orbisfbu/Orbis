@@ -51,22 +51,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [super viewDidLoad];
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
-
     Event *newEvent = [[Event alloc] init];
     newEvent.eventNameString = @"Another Festival";
     newEvent.gatheringTypeString = @"Classical";
     newEvent.eventOwnerUser = self.makingUser;
 //    newEvent.peopleAttendingCount = 25;
-//
     NSString *userID = @"MVUXlDMufZhpqOmFuSdsUJfw2sR2";
 //    NSString *userID = [FIRAuth auth].currentUser.uid;
     // define makingUser as the current authenticated user
     [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        //self.makingUser = [[User alloc] initWithDictionary:snapshot.value];
-        
         User *newUser = [[User alloc] initWithDictionary:snapshot.value];
         [self addEventToDatabase:newEvent withCreator:newUser];
-
         NSLog([NSString stringWithFormat:@"**************%@", newUser.profileImageURLString]);
 } withCancelBlock:^(NSError * _Nonnull error) {
         NSLog(@"test failed!");
@@ -77,8 +72,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void)addEventToDatabase:(Event *)currentEvent withCreator:(User *)currentUser{
-    
-    
     NSString *eventID = [[NSUUID UUID] UUIDString]; // Generate a UUID
     NSString *eventName = currentEvent.eventNameString;
     NSString *gatheringTypeName = currentEvent.gatheringTypeString;
@@ -93,7 +86,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //                               NUMBER_OF_GUESTS : numberOfGuests,
                                EVENT_OWNER: eventOwner
                                };
-    
     [[self.databaseEventsReference child:eventID] setValue: eventInfo];
     NSLog(SUCCESSFUL_EVENT_SAVE);
 }
