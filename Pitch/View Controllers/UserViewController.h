@@ -14,8 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *profilePicImageView;
 - (IBAction)continueButton:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *orSeparatorLabel;
-
-// + (FBSDKAccessToken *) currentAccessToken;
+@property (readonly, nonatomic) BOOL isCancelled;
 
 @end
 

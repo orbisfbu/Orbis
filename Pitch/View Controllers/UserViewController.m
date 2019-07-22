@@ -13,7 +13,8 @@
 #import "AppDelegate.h"
 #import "UserViewController.h"
 #import "UIImageView+AFNetworking.h"
-// #import <FBSDKAccessToken.h>
+#import "FBSDKLoginManagerLoginResult.h"
+#import <FBSDKAccessToken.h>
 
 @import UIKit;
 @import Firebase;
@@ -24,7 +25,7 @@ static NSString * const DATABASE_USER_NODE = @"Users";
 static NSString * const USER_FIRSTNAME = @"First Name";
 static NSString * const USER_LASTNAME = @"Last Name";
 static NSString * const USER_EMAIL = @"Email";
-static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImage";
+static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"Profile Image";
 
 //Required permissions for user info
 static NSString * const PUBLIC_PROFILE_PERMISSION = @"public_profile";
@@ -50,30 +51,22 @@ static NSString * const DATA_FETCH_ERROR = @"An error occured while retrieving U
     // will probably have to use tokens to check whether
     // facebook user is already logged in
     FBSDKLoginButton *loginButton = [[FBSDKLoginButton alloc] init];
-    // NSString *accessToken = [FBSDKAccessToken currentAccessToken];
-    loginButton.delegate = self; // added
-    
-    //loginButton.topAnchor set
-    
-    //[loginButton addConstraint:top];
-    
-    // Optional: Place the button in the center of your view.
+    NSString *accessToken = [FBSDKAccessToken currentAccessToken];
+    // give facebook a token
+    loginButton.delegate = self;
     loginButton.center = self.view.center;
     [self.view addSubview:loginButton];
     loginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
     if ([FBSDKAccessToken currentAccessToken]) {
         [self setUserProfileImage];
         NSLog(@"User was already logged in");
-        
     }
     else
     {
         NSLog(@"No user signed in; no profile image to load");
     }
-    
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
 }
-
 
 
 - (void)loginButton:(FBSDKLoginButton *)loginButton
@@ -88,14 +81,18 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
                                       if (error) {
                                           NSLog(AUTHENTICATION_ERROR);
                                       }
+                                      
+//                                      if (result.isCancelled){
+//                                          NSLog(@"Result is cancelled");
+//                                      }
                                       // User successfully signed in
                                       if (authResult == nil) { return; }
                                           FIRUser *user = authResult.user;
                                           [self addUserToDatabase:user];
                                           [self setUserProfileImage];
                                   }];
-    } else {
-        //NSLog(AUTHENTICATION_ERROR);
+    }
+    else {
         NSLog(@"clicked cancel and an error has occurred");
     }
 }
