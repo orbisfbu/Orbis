@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 //@property (weak, nonatomic) IBOutlet UILabel *welcomingMessageLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 //- (IBAction)backButtonAction:(id)sender;
-
-
 @end
 
 NS_ASSUME_NONNULL_END

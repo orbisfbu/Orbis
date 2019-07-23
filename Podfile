@@ -13,6 +13,7 @@ target 'Pitch' do
   pod 'Firebase/Database'
   pod 'Firebase/Analytics'
   pod 'AFNetworking'
+  pod 'DOPDropDownMenu-Enhanced'
  
 
   target 'PitchTests' do

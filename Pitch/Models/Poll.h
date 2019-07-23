@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Poll : NSObject
 
+@property (nonatomic, strong) NSString *pollTitle;
+@property (nonatomic, strong) NSString *pollOption;
+
 @end
 
 NS_ASSUME_NONNULL_END

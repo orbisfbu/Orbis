@@ -11,6 +11,8 @@
 #import "AppDelegate.h"
 #import "UserViewController.h"
 #import "UIImageView+AFNetworking.h"
+#import "FBSDKLoginManagerLoginResult.h"
+#import <FBSDKAccessToken.h>
 
 @import UIKit;
 @import Firebase;
@@ -21,7 +23,7 @@ static NSString * const DATABASE_USER_NODE = @"Users";
 static NSString * const USER_FIRSTNAME = @"First Name";
 static NSString * const USER_LASTNAME = @"Last Name";
 static NSString * const USER_EMAIL = @"Email";
-static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImage";
+static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"Profile Image";
 
 //Required permissions for user info
 static NSString * const PUBLIC_PROFILE_PERMISSION = @"public_profile";
@@ -396,7 +398,7 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 }
 
 
-- (void)addUserToDatabase:(FIRUser *)currentUser {
+- (void)addUserToDatabase:(FIRUser *)currentUser{
     NSString *userID = [FIRAuth auth].currentUser.uid;
     //Display name is a string of the full name
     //Separating it below

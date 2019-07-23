@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
+  - DOPDropDownMenu-Enhanced (1.0.0)
   - FBSDKCoreKit (5.2.3):
     - FBSDKCoreKit/Basics (= 5.2.3)
     - FBSDKCoreKit/Core (= 5.2.3)
@@ -102,6 +103,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
+  - DOPDropDownMenu-Enhanced
   - FBSDKLoginKit
   - Firebase/Analytics
   - Firebase/Auth
@@ -112,6 +114,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
+    - DOPDropDownMenu-Enhanced
     - FBSDKCoreKit
     - FBSDKLoginKit
     - Firebase
@@ -130,6 +133,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  DOPDropDownMenu-Enhanced: 9ec473b16351b5b0b2d6ef87e7f666fe5ff54ad5
   FBSDKCoreKit: 5154c35d9058fd7dfa0445ba19e194c4b172fc32
   FBSDKLoginKit: dc98b6bf12334f1a42f28d0457fffc9aa3d1eca5
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
@@ -146,6 +150,6 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
 
-PODFILE CHECKSUM: f979eddac4bc1f677d8ae12d21244566e40f40bb
+PODFILE CHECKSUM: e88fd053d618d09ad07133758abc956e3476aa2d
 
 COCOAPODS: 1.7.2
