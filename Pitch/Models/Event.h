@@ -7,28 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "User.h"
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
-
-@class User;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Event : NSObject
 
-@property (nonatomic, strong) User *user;
-@property (nonatomic, strong) User *eventOwnerUser;
-@property (nonatomic, strong) NSString *eventNameString;
-@property (nonatomic, strong) NSString *gatheringTypeString;
-@property (nonatomic) BOOL musicAllowedBOOL;
-@property (nonatomic) int peopleAttendingCount;
+@property (nonatomic, strong) NSString *eventCreator;
+@property (nonatomic, strong) NSString *eventName;
+@property (nonatomic, strong) NSArray *eventVibesArray;
+@property (nonatomic, strong) NSArray *eventPollsArray;
+@property (nonatomic) NSString *eventHasMusic;
+@property (nonatomic) int *eventAttendanceCount;
 @property (nonatomic, strong) NSString *eventImageURLString;
-@property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
-@property (nonatomic, readwrite) CLLocationDegrees latitudeDegrees;
-@property (nonatomic, readwrite) CLLocationDegrees longitudeDegrees;
+@property (nonatomic) NSString *eventDescription;
+@property (nonatomic) int *eventAgeRestriction;
+//going to use google maps api and then createEvent method to correctly
+//save the event coordinates
+@property (nonatomic) CLLocationCoordinate2D eventCoordinates;
 
-//+ (NSMutableArray *)eventVibesWithArray:(NSArray *)dictionaries;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+
 
 @end
 

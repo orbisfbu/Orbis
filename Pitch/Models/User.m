@@ -13,12 +13,8 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary { // returns a User
     self = [super init];
     if (self) {
-        NSLog(@"89function got called");
         self.userNameString = dictionary[@"First Name"];
-        //self.screenNameString = [NSString stringWithFormat:@"%@", dictionary[@""]];
-        //self.userBioString = dictionary[@"user_bio"];
         self.profileImageURLString = dictionary[@"ProfileImage"];
-        //self.profileBackgroundImageURLString = dictionary[@"background_image_url_https"];
     }
     return self;
 }
