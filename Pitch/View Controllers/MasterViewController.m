@@ -11,7 +11,7 @@
 #import "ExploreViewController.h"
 #import "UserViewController.h"
 
-@interface MasterViewController ()
+@interface MasterViewController () <UIScrollViewDelegate>
 @property (strong, nonatomic) CreateEventViewController *createEventController;
 @property (strong, nonatomic) ExploreViewController *exploreController;
 @property (strong, nonatomic) UserViewController *userController;
@@ -24,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Set up the scroll view with nested view controllers
+    self.viewControllerScrollView.delegate = self;
     [self initializeHorizontalSwiping];
 }
 
@@ -57,6 +58,11 @@
     
     [self.viewControllerScrollView setContentOffset:CGPointMake(self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [self.view endEditing:YES];
+}
+
 - (IBAction)createNewEventButtonPressed:(id)sender {
     [self.viewControllerScrollView setContentOffset:CGPointMake(self.createEventController.view.frame.origin.x, self.createEventController.view.frame.origin.y) animated:YES];
 }
