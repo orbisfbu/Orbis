@@ -18,6 +18,11 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "Event.h"
 #import "User.h"
+#import "VibesCell.h"
+#import "EventTitleCell.h"
+#import "LocationCell.h"
+#import "PollsTitleCell.h"
+#import "CustomPollCell.h"
 
 @import UIKit;
 @import Firebase;
@@ -28,8 +33,6 @@ static NSString * const NAME_OF_EVENT = @"Name of Event";
 static NSString * const GATHERING_TYPE_NAME = @"Gathering Type";
 static NSString * const EVENT_OWNER = @"Creator of the Event";
 static NSString * const EVENT_IMAGE_URLSTRING = @"Event Image";
-static NSString * const NUMBER_OF_GUESTS = @"Number of Guests";
-static NSString * const IS_MUSIC_ALLOWED = @"Music Allowed";
 static NSString * const DATABASE_EVENTS_NODE = @"Events";
 static NSString * const DATABASE_USERS_NODE = @"Users";
 
@@ -37,11 +40,13 @@ static NSString * const DATABASE_USERS_NODE = @"Users";
 //Debugging/Error Messages
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
-@interface CreateEventViewController ()
+@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
-@property (strong, nonatomic) User *makingUser; // added
+@property (strong, nonatomic) UITableView *createEventTV;
+@property (strong, nonatomic) NSMutableArray *customPollCellsArray;
+@property (strong, nonatomic) User *makingUser;
 
 @end
 
@@ -55,20 +60,27 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     newEvent.eventNameString = @"Another Festival";
     newEvent.gatheringTypeString = @"Classical";
     newEvent.eventOwnerUser = self.makingUser;
-//    newEvent.peopleAttendingCount = 25;
     NSString *userID = @"MVUXlDMufZhpqOmFuSdsUJfw2sR2";
-//    NSString *userID = [FIRAuth auth].currentUser.uid;
-    // define makingUser as the current authenticated user
     [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         User *newUser = [[User alloc] initWithDictionary:snapshot.value];
         [self addEventToDatabase:newEvent withCreator:newUser];
-        NSLog([NSString stringWithFormat:@"**************%@", newUser.profileImageURLString]);
 } withCancelBlock:^(NSError * _Nonnull error) {
         NSLog(@"test failed!");
     }];
     
-    
-    
+    CGRect frame = CGRectMake(0, 0, 0, 0);
+    self.createEventTV = [[UITableView alloc] initWithFrame:frame];
+    self.createEventTV.layer.cornerRadius = 10;
+    [self.view addSubview:self.createEventTV];
+    [self.createEventTV setFrame:frame];
+    self.createEventTV.delegate = self;
+    self.createEventTV.dataSource = self;
+    [self.createEventTV registerNib:[UINib nibWithNibName:@"EventTitleCell" bundle:nil] forCellReuseIdentifier:@"EventTitleCell"];
+    [self.createEventTV registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
+    [self.createEventTV registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
+    [self.createEventTV registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
+    [self.createEventTV registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
+    [self.createEventTV setAllowsSelection:NO];
 }
 
 - (void)addEventToDatabase:(Event *)currentEvent withCreator:(User *)currentUser{
@@ -76,28 +88,42 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     NSString *eventName = currentEvent.eventNameString;
     NSString *gatheringTypeName = currentEvent.gatheringTypeString;
     NSString *eventOwner = currentUser.userNameString;
-//    int numGuests = currentEvent.peopleAttendingCount;
-//    NSString *numberOfGuests = [[NSString alloc] initWithFormat:@"%i", numGuests];
 //    NSString *eventImageURLString = currentEvent.eventImageURLString;
     NSDictionary *eventInfo = @{
                                NAME_OF_EVENT: eventName,
                                GATHERING_TYPE_NAME: gatheringTypeName,
 //                               EVENT_IMAGE_URLSTRING : eventImageURLString,
-//                               NUMBER_OF_GUESTS : numberOfGuests,
                                EVENT_OWNER: eventOwner
                                };
     [[self.databaseEventsReference child:eventID] setValue: eventInfo];
     NSLog(SUCCESSFUL_EVENT_SAVE);
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    UITableViewCell *cell;
+    //[cell awakeFromNib];
+    if (indexPath.row == 0) {
+        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"EventTitleCell"];
+        [cell awakeFromNib];
+    } else if (indexPath.row == 1) {
+        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"VibesCell"];
+        [cell awakeFromNib];
+    } else if (indexPath.row == 2) {
+        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"LocationCell"];
+    } else if (indexPath.row == 3) {
+        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
+    } else {
+        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"CustomPollCell"];
+    }
+    return cell;
 }
-*/
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return (self.customPollCellsArray.count + 4);
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
+}
 
 @end
