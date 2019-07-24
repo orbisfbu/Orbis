@@ -12,27 +12,39 @@
 #import "DistanceCell.h"
 #import "NumberOfPeopleCell.h"
 #import "AgeCell.h"
+#import "Event.h"
+#import "Datahandling.h"
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
 @property (nonatomic) BOOL filterMenuIsShowing;
 @property (strong, nonatomic) UITableView *dropDownFilterTV;
+@property (strong, nonatomic) NSMutableArray <Event *> *eventsArray;
+@property (strong, nonatomic) DataHandling *dataHandlingObject;
 @end
 
 @implementation ExploreViewController
 
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self refreshEventsData];
+}
+
+
 - (void) viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    self.dataHandlingObject = [DataHandling shared];
+    self.dataHandlingObject.delegate = self;
+    [self refreshEventsData];
+
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667), MKCoordinateSpanMake(0.1, 0.1));
     [self.photoMap setRegion:sfRegion animated:false];
     //self.photoMap.delegate = self;
-    
     // Eliminate the gray background color of the search bar
     self.searchBar.backgroundImage = [[UIImage alloc] init];
-    
     // Add tap recognizer to dismiss keyboard
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboardAndRemoveFilters)];
     [self.photoMap addGestureRecognizer:tap];
@@ -55,6 +67,28 @@
     [self.dropDownFilterTV setAllowsSelection:NO];
     //[self.dropDownFilterTV setRowHeight:UITableViewAutomaticDimension];
 }
+
+
+- (void)refreshEventsData
+{
+    [self.dataHandlingObject getEventsArray];
+}
+
+
+- (void)populateMapWithEvents
+{
+    if (self.eventsArray.count > 0)
+    {
+        for (Event *thisEvent in self.eventsArray)
+        {
+            MKPointAnnotation *annotation = [MKPointAnnotation new];
+            annotation.coordinate = thisEvent.eventCoordinates;
+            annotation.title = thisEvent.eventName;
+            [self.photoMap addAnnotation:annotation];
+        }
+    }
+}
+
 
 - (void) dismissKeyboardAndRemoveFilters {
     [self.view endEditing:YES];
@@ -119,5 +153,13 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
 }
+
+
+- (void)updateEvents:(nonnull NSArray *)events {
+    self.eventsArray = [NSMutableArray arrayWithArray:events];
+    NSLog(@"--Size of events array is: %i--", events.count);
+    [self populateMapWithEvents];
+}
+
 
 @end

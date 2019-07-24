@@ -20,11 +20,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
 @interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
-//this flag will be used to trigger initial loading
-//if YES, then profile will be loaded
-//if NO, then sign-in/signup views will be displayed
-@property (nonatomic) BOOL *userIsSignedIn;
-
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
 //initially inputted email and password correspond to existing account
@@ -139,15 +134,29 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     // Resize everything to original size, not the size it is modified to after scrolling
 }
 
-- (void) editButtonPressed {
-    
-}
-
 ////call this if the user hasn't signed up or logged-in
 //- (void)showFirstTimeUserPage
 //{
 //    self.emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
 //}
+
+////will be called whenever Facebook login/authentication is successful
+////OR the user has changed profile image in profileViewController
+//- (void)setUserProfileImage {
+//    NSString *userID = [FIRAuth auth].currentUser.uid;
+//    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+//        NSString *retrievedURLString = snapshot.value[USER_PROFILE_IMAGE_URLSTRING];
+//        NSURL *profileImageNSURL = [NSURL URLWithString:retrievedURLString];
+//        //self.profilePicImageView.image = nil;
+//        //[self.profilePicImageView setImageWithURL:profileImageNSURL];
+//    } withCancelBlock:^(NSError * _Nonnull error) {
+//        NSLog(DATA_FETCH_ERROR);
+//    }];
+//}
+
+- (void) editButtonPressed {
+    
+}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"VibesCell"];

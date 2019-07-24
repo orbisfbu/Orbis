@@ -19,19 +19,20 @@
     if (self) {
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
-        self.eventVibesArray = snapshotDictionary[@"Vibes"];
-        self.eventPollsArray = snapshotDictionary[@"Polls"] ;
+        //self.eventVibesArray = snapshotDictionary[@"Vibes"];
+        //self.eventPollsArray = snapshotDictionary[@"Polls"] ;
         self.eventHasMusic = snapshotDictionary[@"Has Music"];
         self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
-        self.eventImageURLString = snapshotDictionary[@"Image"];
+        self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
         self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
         //location in the data base will be a string with latitude and longitude string separated with a space character
-        NSArray *locationComponents = [snapshotDictionary[@"Location"] componentsSeparatedByString:@" "];
+        self.eventLocationString = snapshotDictionary[@"Location"];
+        NSArray *locationComponents = [self.eventLocationString componentsSeparatedByString:@" "];
         NSString *latitudeString = [locationComponents objectAtIndex:0];
         NSString *longitudeString = [locationComponents objectAtIndex:1];
-        NSNumber  *latitudeNum = [NSNumber numberWithInteger: [latitudeString integerValue]];
-        NSNumber  *longitudeNum = [NSNumber numberWithInteger: [longitudeString integerValue]];
+        NSNumber  *latitudeNum = [NSNumber numberWithFloat: [latitudeString floatValue]];
+        NSNumber  *longitudeNum = [NSNumber numberWithFloat: [longitudeString floatValue]];
         NSLog([NSString stringWithFormat:@"This is the latitude and longitude: %@, %@", latitudeNum, longitudeNum]);
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
     }

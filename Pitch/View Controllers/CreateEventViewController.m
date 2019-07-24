@@ -18,11 +18,13 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "Event.h"
 #import "User.h"
+#import "DataHandling.h"
 #import "VibesCell.h"
 #import "EventTitleCell.h"
 #import "LocationCell.h"
 #import "PollsTitleCell.h"
 #import "CustomPollCell.h"
+
 
 @import UIKit;
 @import Firebase;
@@ -39,6 +41,7 @@ static NSString * const DATABASE_USERS_NODE = @"Users";
 //Debugging/Error Messages
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
+
 @interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
@@ -53,12 +56,29 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //if NO, then user is prompted to sign-in/signup, and those views will be displayed
 @property (nonatomic) BOOL *userIsSignedIn;
 
+
 @end
 
 @implementation CreateEventViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    NSDictionary *eventDefinition = @{
+                                      @"Created By": @"Sebastian",
+                                      @"Event Name": @"TestName",
+                                      @"Has Music": @"YES",
+                                      @"Attendance": @"4",
+                                      @"ImageURL": @"testingURL",
+                                      @"Description": @"testing",
+                                      @"Age Restriction": @"18",
+                                      @"Location": @"37.777596 -122.458708"
+                                      };
+    
+    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
+    
+    [[DataHandling shared] addEventToDatabase:eventToAdd];
+    
     [self makeCreateEventButton];
     self.createEventTableView.delegate = self;
     self.createEventTableView.dataSource = self;
@@ -80,6 +100,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
     Event *newEvent = [[Event alloc] init];
+
 }
 
 - (void) makeCreateEventButton{
@@ -93,6 +114,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventButton addTarget:self action:@selector(createEventButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createEventButton];
 }
+
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell;

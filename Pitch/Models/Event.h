@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *eventImageURLString;
 @property (nonatomic) NSString *eventDescription;
 @property (nonatomic) int *eventAgeRestriction;
+@property (nonatomic, strong) NSString *eventLocationString;
 //going to use google maps api and then createEvent method to correctly
 //save the event coordinates
 @property (nonatomic) CLLocationCoordinate2D eventCoordinates;

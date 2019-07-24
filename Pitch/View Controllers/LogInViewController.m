@@ -36,6 +36,21 @@ static NSString * const SIGNUP_VIEW1 = @"SIGNUP_VIEW1";
 static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
 @interface LogInViewController () <FBSDKLoginButtonDelegate>
+
+//inputted properties to be used and checked during
+//the welcoming process; will have to check whether or not
+//initially inputted email and password correspond to existing account
+@property (weak, nonatomic) NSString *inputtedUserEmail;
+@property (weak, nonatomic) NSString *inputtedPassword;
+//these registering properties are to be set if inputted email doesn't
+//correspond to an account
+@property (weak, nonatomic) NSString *registerFirstName;
+@property (weak, nonatomic) NSString *registerLastName;
+@property (weak, nonatomic) NSString *registerUsername;
+//for the password confirm field later on, just make sure that
+//the text of that cofirm password field is the same registerPassword
+@property (weak, nonatomic) NSString *registerPassword;
+
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
@@ -334,6 +349,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 - (void) continueButtonPressed {
     BOOL emailExists = YES; // TODO: Implement later with Firebase code
     [self dismissContinuePage];
+    self.inputtedUserEmail = self.emailTextField.text;
     if (emailExists) {
         [self createSignInPage];
     } else {
@@ -344,7 +360,15 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 - (void) logInButtonPressed {
     BOOL loginIsCorrect = YES; // TODO: Implement later with Firebase code
     if (loginIsCorrect) {
+        self.inputtedPassword = self.passwordTextField.text;
         [self dismissSignInPage];
+        
+        [[FIRAuth auth] signInWithEmail: self.inputtedUserEmail
+                               password: self.inputtedPassword
+                             completion:^(FIRAuthDataResult * _Nullable authResult,
+                                          NSError * _Nullable error) {
+                                 NSLog(@"SUCCESSFULLY SIGNED IN REGULAR USER");
+                             }];
         [self segueToApp];
     }
 }
@@ -352,19 +376,48 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 - (void) nextButtonPressed {
     BOOL signupIsCorrect = YES; // TODO: Implement later with Firebase code
     if (signupIsCorrect) {
+        self.registerFirstName = self.firstNameTextField.text;
+        self.registerLastName = self.lastNameTextField.text;
         [self dismissSignUpPage1:YES];
         [self createSignUpPage2];
     }
 }
 
 - (void) signUpButtonPressed {
-    BOOL signupIsCorrect = YES; // TODO: Implement later with Firebase code
+    BOOL signupIsCorrect = [self.passwordSignUpTextField.text isEqualToString:self.confirmPasswordSignUpTextField.text];
     if (signupIsCorrect) {
+        self.registerUsername = self.usernameTextField.text;
+        self.registerPassword = self.passwordSignUpTextField.text;
         [self dismissSignUpPage2:YES];
+        [[FIRAuth auth] createUserWithEmail:self.inputtedUserEmail
+                                   password:self.registerPassword
+                                 completion:^(FIRAuthDataResult * _Nullable authResult,
+                                              NSError * _Nullable error) {
+                                     NSLog(@"USER WAS CREATED SUCCESSFULLY");
+                                 }];
+        NSLog(@"USER WILL BE CREATED NOW");
         [self segueToApp];
+    }
+    else{
+        [self presentAlert:@"Passwords Don't Match" withMessage:@"Make sure your password fields match"];
+        self.passwordSignUpTextField.text = @"";
+        self.confirmPasswordSignUpTextField.text = @"";
     }
 }
 
+- (void) signoutButtonPressed
+{
+    NSLog(@"LOGOUT BUTTON WAS PRESSED");
+    NSError *signOutError;
+    BOOL status = [[FIRAuth auth] signOut:&signOutError];
+    if (!status) {
+        NSLog(@"Error signing out: %@", signOutError);
+        return;
+    }else{
+        NSLog(@"Successfully Signout");
+        NSLog(@"IS THE USER STILL IN SESSION? %@", [FIRAuth auth].currentUser);
+    }
+}
 
 /*
 #pragma mark - Navigation
@@ -390,9 +443,14 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
             }
             // User successfully signed in
             if (authResult == nil) { return; }
-            FIRUser *user = authResult.user;
-            [self addUserToDatabase:user];
-            [self setUserProfileImage];
+            //will probably have to make a user locally?
+            //use the datahandling thing here
+            NSLog(@"SUCCESSFULLY AUTHENTICATED USER");
+            //                                      self.currentUser = authResult.user;
+            //have to create delegate to let other
+            //view controllers know when signin has occured
+            //and who is signed in
+            
         }];
     } else {
         NSLog(AUTHENTICATION_ERROR);
