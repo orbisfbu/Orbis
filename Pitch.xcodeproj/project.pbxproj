@@ -157,14 +157,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		78FC04B122E16EBE0049E0BD /* API Manager */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "API Manager";
-			path = ..;
-			sourceTree = "<group>";
-		};
 		78FC04B222E16ECF0049E0BD /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -225,7 +217,6 @@
 			children = (
 				C14E19E922E23B5600883CFB /* View */,
 				78FC04B222E16ECF0049E0BD /* Models */,
-				78FC04B122E16EBE0049E0BD /* API Manager */,
 				C127D51E22DFE3CF009963B0 /* View Controllers */,
 				C138EDDA22DFAD9F00AAA0D0 /* AppDelegate.h */,
 				C138EDDB22DFAD9F00AAA0D0 /* AppDelegate.m */,

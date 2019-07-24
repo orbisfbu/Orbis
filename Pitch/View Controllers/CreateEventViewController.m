@@ -52,29 +52,32 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
     Event *newEvent = [[Event alloc] init];
-    newEvent.eventNameString = @"Another Festival";
-    newEvent.gatheringTypeString = @"Classical";
-    newEvent.eventOwnerUser = self.makingUser;
-//    newEvent.peopleAttendingCount = 25;
-    NSString *userID = @"MVUXlDMufZhpqOmFuSdsUJfw2sR2";
-//    NSString *userID = [FIRAuth auth].currentUser.uid;
-    // define makingUser as the current authenticated user
-    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        User *newUser = [[User alloc] initWithDictionary:snapshot.value];
-        [self addEventToDatabase:newEvent withCreator:newUser];
-        NSLog([NSString stringWithFormat:@"**************%@", newUser.profileImageURLString]);
-} withCancelBlock:^(NSError * _Nonnull error) {
-        NSLog(@"test failed!");
-    }];
     
     
-    
+//    newEvent.eventName = @"Another Festival";
+//    newEvent.gatheringTypeString = @"Classical";
+//    newEvent.eventOwnerUser = self.makingUser;
+////    newEvent.peopleAttendingCount = 25;
+//    NSString *userID = @"MVUXlDMufZhpqOmFuSdsUJfw2sR2";
+////    NSString *userID = [FIRAuth auth].currentUser.uid;
+//    // define makingUser as the current authenticated user
+//    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+//        User *newUser = [[User alloc] initWithDictionary:snapshot.value];
+//        [self addEventToDatabase:newEvent withCreator:newUser];
+//        NSLog([NSString stringWithFormat:@"**************%@", newUser.profileImageURLString]);
+//} withCancelBlock:^(NSError * _Nonnull error) {
+//        NSLog(@"test failed!");
+//    }];
 }
+
+
 
 - (void)addEventToDatabase:(Event *)currentEvent withCreator:(User *)currentUser{
 //    NSString *eventID = [[NSUUID UUID] UUIDString]; // Generate a UUID
 //    NSString *eventName = currentEvent.eventNameString;
 //    NSString *gatheringTypeName = currentEvent.gatheringTypeString;
+//    NSString *eventName = currentEvent.eventName;
+//    //NSString *gatheringTypeName = currentEvent.gatheringTypeString;
 //    NSString *eventOwner = currentUser.userNameString;
 ////    int numGuests = currentEvent.peopleAttendingCount;
 ////    NSString *numberOfGuests = [[NSString alloc] initWithFormat:@"%i", numGuests];
