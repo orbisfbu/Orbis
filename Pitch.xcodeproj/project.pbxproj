@@ -47,6 +47,7 @@
 		C14E1A0422E2768B00883CFB /* CustomCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C14E1A0222E2768B00883CFB /* CustomCollectionViewCell.m */; };
 		C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C14E1A0322E2768B00883CFB /* CustomCollectionViewCell.xib */; };
 		C14E1A0822E276F400883CFB /* Vibes.m in Sources */ = {isa = PBXBuildFile; fileRef = C14E1A0722E276F400883CFB /* Vibes.m */; };
+		C14E1A0D22E8D52E00883CFB /* LogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C14E1A0C22E8D52E00883CFB /* LogInViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +134,8 @@
 		C14E1A0322E2768B00883CFB /* CustomCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCollectionViewCell.xib; sourceTree = "<group>"; };
 		C14E1A0622E276F400883CFB /* Vibes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vibes.h; sourceTree = "<group>"; };
 		C14E1A0722E276F400883CFB /* Vibes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Vibes.m; sourceTree = "<group>"; };
+		C14E1A0B22E8D52E00883CFB /* LogInViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogInViewController.h; sourceTree = "<group>"; };
+		C14E1A0C22E8D52E00883CFB /* LogInViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogInViewController.m; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -214,6 +217,8 @@
 				06A909D022E7B5DC00CD2969 /* CreateEventViewController.h */,
 				06A909D122E7B5DC00CD2969 /* CreateEventViewController.m */,
 				06A909D222E7B5DC00CD2969 /* CreateEventViewController.xib */,
+				C14E1A0B22E8D52E00883CFB /* LogInViewController.h */,
+				C14E1A0C22E8D52E00883CFB /* LogInViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -587,6 +592,7 @@
 				78FC04B822E17C700049E0BD /* Event.m in Sources */,
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
 				06A909D322E7B5DC00CD2969 /* CreateEventViewController.m in Sources */,
+				C14E1A0D22E8D52E00883CFB /* LogInViewController.m in Sources */,
 				C14E1A0822E276F400883CFB /* Vibes.m in Sources */,
 				06A909CC22E67A3500CD2969 /* CustomPollCell.m in Sources */,
 				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,

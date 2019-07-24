@@ -17,18 +17,7 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Zp-AK-59O">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                            </scrollView>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="6Zp-AK-59O" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="9qQ-9d-x31"/>
-                            <constraint firstAttribute="trailing" secondItem="6Zp-AK-59O" secondAttribute="trailing" id="KnD-a6-E07"/>
-                            <constraint firstAttribute="bottom" secondItem="6Zp-AK-59O" secondAttribute="bottom" id="Kpq-hK-MLD"/>
-                            <constraint firstItem="6Zp-AK-59O" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="ubU-Pd-g3I"/>
-                        </constraints>
+                        <color key="backgroundColor" red="0.37075540420000003" green="0.77097988129999995" blue="0.59605771299999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
