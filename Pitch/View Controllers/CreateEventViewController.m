@@ -2,7 +2,7 @@
 //  CreateEventViewController.m
 //  Pitch
 //
-//  Created by mariobaxter on 7/17/19.
+//  Created by ezietz on 7/23/19.
 //  Copyright © 2019 PitchFBU. All rights reserved.
 //
 
@@ -42,11 +42,18 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 @interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource>
 
+@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
-@property (strong, nonatomic) UITableView *createEventTV;
 @property (strong, nonatomic) NSMutableArray *customPollCellsArray;
 @property (strong, nonatomic) User *makingUser;
+@property (strong, nonatomic) UITableView *createEventTableView;
+@property (strong, nonatomic) UIButton *createEventButton;
+
+//this flag will be used to trigger initial loading
+//if YES, then event is created
+//if NO, then user is prompted to sign-in/signup, and those views will be displayed
+@property (nonatomic) BOOL *userIsSignedIn;
 
 @end
 
@@ -54,66 +61,90 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self makeCreateEventButton];
+    self.createEventTableView.delegate = self;
+    self.createEventTableView.dataSource = self;
+    [self.createEventTableView setAllowsSelection:NO];
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
-    Event *newEvent = [[Event alloc] init];
-    newEvent.eventNameString = @"Another Festival";
-    newEvent.gatheringTypeString = @"Classical";
-    newEvent.eventOwnerUser = self.makingUser;
-    NSString *userID = @"MVUXlDMufZhpqOmFuSdsUJfw2sR2";
-    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        User *newUser = [[User alloc] initWithDictionary:snapshot.value];
-        [self addEventToDatabase:newEvent withCreator:newUser];
-} withCancelBlock:^(NSError * _Nonnull error) {
-        NSLog(@"test failed!");
-    }];
     
-    CGRect frame = CGRectMake(0, 0, 0, 0);
-    self.createEventTV = [[UITableView alloc] initWithFrame:frame];
-    self.createEventTV.layer.cornerRadius = 10;
-    [self.view addSubview:self.createEventTV];
-    [self.createEventTV setFrame:frame];
-    self.createEventTV.delegate = self;
-    self.createEventTV.dataSource = self;
-    [self.createEventTV registerNib:[UINib nibWithNibName:@"EventTitleCell" bundle:nil] forCellReuseIdentifier:@"EventTitleCell"];
-    [self.createEventTV registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
-    [self.createEventTV registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
-    [self.createEventTV registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
-    [self.createEventTV registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
-    [self.createEventTV setAllowsSelection:NO];
+    CGRect frame = CGRectMake(self.createEventButton.frame.origin.x, self.createEventButton.frame.origin.y + self.createEventButton.frame.size.height, self.createEventButton.frame.size.width, self.view.frame.size.height - self.createEventButton.frame.size.height);
+    self.createEventTableView = [[UITableView alloc] initWithFrame:frame];
+    self.createEventTableView.layer.cornerRadius = 10;
+    [self.view addSubview:self.createEventTableView];
+    [self.createEventTableView setFrame:frame];
+    self.createEventTableView.delegate = self;
+    self.createEventTableView.dataSource = self;
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"EventTitleCell" bundle:nil] forCellReuseIdentifier:@"EventTitleCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
+    [self.createEventTableView setAllowsSelection:NO];
+    [self.view addSubview:self.createEventTableView];
+    
+    Event *newEvent = [[Event alloc] init];
+    //    newEvent.eventNameString = @"Another Festival";
+    //    newEvent.gatheringTypeString = @"Classical";
+    //    newEvent.eventOwnerUser = self.makingUser;
+    //    NSString *userID = @"MVUXlDMufZhpqOmFuSdsUJfw2sR2";
+    //    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+    //        User *newUser = [[User alloc] initWithDictionary:snapshot.value];
+    //        [self addEventToDatabase:newEvent withCreator:newUser];
+    //} withCancelBlock:^(NSError * _Nonnull error) {
+    //        NSLog(@"test failed!");
+    //    }];
+    
+}
+
+- (void) makeCreateEventButton{
+    // Add create event button
+    self.createEventButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
+    [self.createEventButton setTitle:@"Create Event" forState:UIControlStateNormal];
+    [self.createEventButton setBackgroundColor:[UIColor greenColor]];
+    self.createEventButton.layer.cornerRadius = 5;
+    self.createEventButton.alpha = 1;
+    [self.createEventButton setEnabled:NO];
+    [self.createEventButton addTarget:self action:@selector(createEventButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.createEventButton];
 }
 
 - (void)addEventToDatabase:(Event *)currentEvent withCreator:(User *)currentUser{
-    NSString *eventID = [[NSUUID UUID] UUIDString]; // Generate a UUID
-    NSString *eventName = currentEvent.eventNameString;
-    NSString *gatheringTypeName = currentEvent.gatheringTypeString;
-    NSString *eventOwner = currentUser.userNameString;
-//    NSString *eventImageURLString = currentEvent.eventImageURLString;
-    NSDictionary *eventInfo = @{
-                               NAME_OF_EVENT: eventName,
-                               GATHERING_TYPE_NAME: gatheringTypeName,
-//                               EVENT_IMAGE_URLSTRING : eventImageURLString,
-                               EVENT_OWNER: eventOwner
-                               };
-    [[self.databaseEventsReference child:eventID] setValue: eventInfo];
-    NSLog(SUCCESSFUL_EVENT_SAVE);
+    // Sebastian is changing this
+    //    NSString *eventID = [[NSUUID UUID] UUIDString]; // Generate a UUID
+    //    NSString *eventName = currentEvent.eventName;
+    //    //NSString *gatheringTypeName = currentEvent.gatheringTypeString;
+    //    NSString *eventOwner = currentUser.userNameString;
+    ////    int numGuests = currentEvent.peopleAttendingCount;
+    ////    NSString *numberOfGuests = [[NSString alloc] initWithFormat:@"%i", numGuests];
+    ////    NSString *eventImageURLString = currentEvent.eventImageURLString;
+    //    NSDictionary *eventInfo = @{
+    //                               NAME_OF_EVENT: eventName,
+    //                               GATHERING_TYPE_NAME: gatheringTypeName,
+    ////                               EVENT_IMAGE_URLSTRING : eventImageURLString,
+    ////                               NUMBER_OF_GUESTS : numberOfGuests,
+    //                               EVENT_OWNER: eventOwner
+    //                               };
+    //    [[self.databaseEventsReference child:eventID] setValue: eventInfo];
+    //    NSLog(SUCCESSFUL_EVENT_SAVE);
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell;
     //[cell awakeFromNib];
+    
     if (indexPath.row == 0) {
-        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"EventTitleCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"EventTitleCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 1) {
-        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"VibesCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 2) {
-        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"LocationCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
     } else if (indexPath.row == 3) {
-        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
     } else {
-        cell = [self.createEventTV dequeueReusableCellWithIdentifier:@"CustomPollCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"CustomPollCell"];
     }
     return cell;
 }
@@ -127,3 +158,4 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 @end
+

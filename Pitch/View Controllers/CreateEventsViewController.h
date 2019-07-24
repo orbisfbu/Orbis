@@ -2,7 +2,7 @@
 //  CreateEventViewController.h
 //  Pitch
 //
-//  Created by ezietz on 7/23/19.
+//  Created by mariobaxter on 7/17/19.
 //  Copyright © 2019 PitchFBU. All rights reserved.
 //
 
@@ -11,6 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CreateEventViewController : UIViewController
+
+@property (strong, nonatomic) IBOutlet UIButton *createEventButton;
+@property (strong, nonatomic) IBOutlet UITableView *createEventTableView;
 
 @end
 

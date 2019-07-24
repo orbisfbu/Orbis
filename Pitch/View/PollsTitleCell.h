@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PollsTitleCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UIButton *addPollButton;
+
 @end
 
 NS_ASSUME_NONNULL_END

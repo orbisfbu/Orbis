@@ -12,6 +12,8 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    self.addPollButton.layer.borderWidth = 1.0f;
+    self.addPollButton.layer.borderColor = [UIColor greenColor].CGColor;
     // Initialization code
 }
 
