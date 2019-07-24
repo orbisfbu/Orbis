@@ -24,6 +24,8 @@
 #import "LocationCell.h"
 #import "PollsTitleCell.h"
 #import "CustomPollCell.h"
+#import <MapKit/MKLocalSearchRequest.h>
+#import <MapKit/MKLocalSearch.h>
 
 
 @import UIKit;
@@ -100,7 +102,18 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
     Event *newEvent = [[Event alloc] init];
+    
+    MKLocalSearchRequest *req = [[MKLocalSearchRequest alloc] init];
+    [req setNaturalLanguageQuery:@"San "];
+    
+    MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:req];
+    [search startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
+        NSLog(@"%@", response);
+    }];
+}
 
+- (void) myFunc {
+    
 }
 
 - (void) makeCreateEventButton{
