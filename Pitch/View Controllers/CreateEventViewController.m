@@ -72,22 +72,22 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void)addEventToDatabase:(Event *)currentEvent withCreator:(User *)currentUser{
-    NSString *eventID = [[NSUUID UUID] UUIDString]; // Generate a UUID
-    NSString *eventName = currentEvent.eventNameString;
-    NSString *gatheringTypeName = currentEvent.gatheringTypeString;
-    NSString *eventOwner = currentUser.userNameString;
-//    int numGuests = currentEvent.peopleAttendingCount;
-//    NSString *numberOfGuests = [[NSString alloc] initWithFormat:@"%i", numGuests];
-//    NSString *eventImageURLString = currentEvent.eventImageURLString;
-    NSDictionary *eventInfo = @{
-                               NAME_OF_EVENT: eventName,
-                               GATHERING_TYPE_NAME: gatheringTypeName,
-//                               EVENT_IMAGE_URLSTRING : eventImageURLString,
-//                               NUMBER_OF_GUESTS : numberOfGuests,
-                               EVENT_OWNER: eventOwner
-                               };
-    [[self.databaseEventsReference child:eventID] setValue: eventInfo];
-    NSLog(SUCCESSFUL_EVENT_SAVE);
+//    NSString *eventID = [[NSUUID UUID] UUIDString]; // Generate a UUID
+//    NSString *eventName = currentEvent.eventNameString;
+//    NSString *gatheringTypeName = currentEvent.gatheringTypeString;
+//    NSString *eventOwner = currentUser.userNameString;
+////    int numGuests = currentEvent.peopleAttendingCount;
+////    NSString *numberOfGuests = [[NSString alloc] initWithFormat:@"%i", numGuests];
+////    NSString *eventImageURLString = currentEvent.eventImageURLString;
+//    NSDictionary *eventInfo = @{
+//                               NAME_OF_EVENT: eventName,
+//                               GATHERING_TYPE_NAME: gatheringTypeName,
+////                               EVENT_IMAGE_URLSTRING : eventImageURLString,
+////                               NUMBER_OF_GUESTS : numberOfGuests,
+//                               EVENT_OWNER: eventOwner
+//                               };
+//    [[self.databaseEventsReference child:eventID] setValue: eventInfo];
+//    NSLog(SUCCESSFUL_EVENT_SAVE);
 }
 
 /*

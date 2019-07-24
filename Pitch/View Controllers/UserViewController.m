@@ -14,6 +14,8 @@
 #import "FBSDKLoginManagerLoginResult.h"
 #import <FBSDKAccessToken.h>
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @import UIKit;
 @import Firebase;
 @import FirebaseAuth;
@@ -42,7 +44,11 @@ static NSString * const SIGNUP_VIEW1 = @"SIGNUP_VIEW1";
 static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 
-@interface UserViewController () <FBSDKLoginButtonDelegate, UITextFieldDelegate>
+// Constant max and min heights of profile background image view
+static double const BACKGORUND_IMAGE_MIN_HEIGHT = 50.0;
+static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
+
+@interface UserViewController () <FBSDKLoginButtonDelegate, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
 
@@ -92,6 +98,13 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 @property (strong, nonatomic) UITextField *passwordSignUpTextField;
 @property (strong, nonatomic) UITextField *confirmPasswordSignUpTextField;
 @property (strong, nonatomic) UIButton *signUpButton;
+
+// For user profile screen
+@property (strong, nonatomic) UIImageView *userBackgroundImageView;
+@property (strong, nonatomic) UIImageView *userProfileImageView;
+@property (strong, nonatomic) UITableView *userProfileTableView;
+@property (strong, nonatomic) UILabel *usernameLabel;
+@property (strong, nonatomic) UIButton *editProfileButton;
 
 @end
 
@@ -235,10 +248,83 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
     self.signUpButton.layer.cornerRadius = 5;
     [self.signUpButton addTarget:self action:@selector(signUpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.signUpButton];
+    
+    // Add user background photo
+    self.userBackgroundImageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 200)];
+    [self.userBackgroundImageView setImage:[UIImage imageNamed:@"default_background"]];
+    [self.userBackgroundImageView setBackgroundColor:[UIColor blueColor]];
+    [self.view addSubview:self.userBackgroundImageView];
+    
+    // Add profile scroll view
+    self.userProfileTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.userBackgroundImageView.frame.size.height) style:UITableViewStylePlain];
+    self.userProfileTableView.delegate = self;
+    self.userProfileTableView.dataSource = self;
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
+    [self.view addSubview:self.userProfileTableView];
+    
+    // Add user profile photo
+    self.userProfileImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, self.view.frame.size.height, self.view.frame.size.width/3, self.view.frame.size.width/3)];
+    self.userProfileImageView.layer.cornerRadius = self.userProfileImageView.frame.size.width/2;
+    [self.userProfileImageView setImage:[UIImage imageNamed:@"default_profile"]];
+    [self.userProfileImageView setBackgroundColor:[UIColor redColor]];
+    [self.view addSubview:self.userProfileImageView];
+    
+    // Add username label
+    self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50, self.view.frame.size.height, 100, 20)];
+    [self.usernameLabel setFont:[UIFont fontWithName:@"roboto" size:20]];
+    [self.usernameLabel setClipsToBounds:YES];
+    self.usernameLabel.layer.cornerRadius = 5;
+    [self.usernameLabel setText:@" @user_name "];
+    [self.usernameLabel sizeToFit];
+    [self.usernameLabel setCenter:CGPointMake(self.view.center.x, self.usernameLabel.center.y)];
+    [self.usernameLabel setBackgroundColor:UIColorFromRGB(0x157f5f)];
+    [self.view addSubview:self.usernameLabel];
+    
+    // Add edit profile button
+    self.editProfileButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 10 - 30, self.view.frame.size.height, 30, 30)];
+    [self.editProfileButton setImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
+    [self.editProfileButton setBackgroundColor:UIColorFromRGB(0x157f5f)];
+    self.editProfileButton.layer.cornerRadius = 5;
+    [self.editProfileButton setContentEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    [self.editProfileButton addTarget:self action:@selector(editButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.editProfileButton];
 }
 
 - (void) createUserProfile {
+    self.viewName = PROFILE_VIEW;
     
+    // Add table view constraints needed for animation
+//    NSLayoutConstraint *top = [NSLayoutConstraint constraintWithItem:self.userProfileTableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.userBackgroundImageView attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+//    NSLayoutConstraint *left = [NSLayoutConstraint constraintWithItem:self.userProfileTableView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0];
+//    NSLayoutConstraint *right = [NSLayoutConstraint constraintWithItem:self.userProfileTableView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1 constant:0];
+//    NSLayoutConstraint *bottom = [NSLayoutConstraint constraintWithItem:self.userProfileTableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
+//    [self.view addConstraints:@[top, left, right, bottom]];
+    
+//    [self.userProfileTableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    [self.userBackgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//
+//    [[self.userBackgroundImageView.heightAnchor constraintLessThanOrEqualToConstant:200] setActive:YES];
+//    [[self.userBackgroundImageView.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:YES];
+    //[self.userBackgroundImageView addConstraint: [NSLayoutConstraint constraintWithItem:self.userBackgroundImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.userBackgroundImageView attribute:NSLayoutAttributeWidth multiplier:self.userBackgroundImageView.frame.size.height/self.userBackgroundImageView.frame.size.width constant:0]];
+//    [[self.userBackgroundImageView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:YES];
+//    [[self.userBackgroundImageView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:YES];
+//    [[self.userBackgroundImageView.bottomAnchor constraintEqualToAnchor:self.userProfileTableView.topAnchor] setActive:YES];
+//
+//    [[self.userProfileTableView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:YES];
+//    [[self.userProfileTableView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:YES];
+//    [[self.userProfileTableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor] setActive:YES];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.userBackgroundImageView.frame = CGRectMake(self.userBackgroundImageView.frame.origin.x, 0, self.userBackgroundImageView.frame.size.width, self.userBackgroundImageView.frame.size.height);
+        self.userProfileImageView.frame = CGRectMake(self.userProfileImageView.frame.origin.x, self.userBackgroundImageView.frame.size.height/3, self.userProfileImageView.frame.size.width, self.userProfileImageView.frame.size.height);
+        self.userProfileTableView.frame = CGRectMake(self.userProfileTableView.frame.origin.x, self.userBackgroundImageView.frame.size.height, self.userProfileTableView.frame.size.width, self.userProfileTableView.frame.size.height);
+        self.usernameLabel.frame = CGRectMake(self.usernameLabel.frame.origin.x, 15, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height);
+        self.editProfileButton.frame = CGRectMake(self.editProfileButton.frame.origin.x, 15, self.editProfileButton.frame.size.width, self.editProfileButton.frame.size.height);
+    }];
+}
+
+- (void) dismissUserProfile {
+    // Resize everything to original size, not the size it is modified to after scrolling
 }
 
 - (void) createContinuePage {
@@ -397,6 +483,10 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
     }
 }
 
+- (void) editButtonPressed {
+    
+}
+
 
 - (void)addUserToDatabase:(FIRUser *)currentUser{
     NSString *userID = [FIRAuth auth].currentUser.uid;
@@ -465,68 +555,6 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
     [self.view addSubview:lastNameTextField];
     
 }
-
-
-- (void)showTheBasicsPage2 {
-    
-    
-    
-}
-
-
-//this function will be called if the user had already signed in before
-//this function will load the elements that are to be displayed in the profileView
-//this function should end up calling the setUserProfileImage method defined earlier
-- (void)showUserProfile:(BOOL *) isSignedIn
-{
-    
-    
-}
-
-
-- (void)dismissFirstTimeUserPage
-{
-//    self.continueButtonOutlet.hidden = YES;
-//    self.emailTextField.hidden = YES;
-//    self.welcomingMessageLabel.hidden = YES;
-//    self.FBLoginButton.hidden = YES;
-//    self.orSeparatorLabel.hidden = YES;
-//    self.backButtonOutlet.hidden = NO;
-}
-
-- (void)dismissTheBasicsPage1
-{
-//    for (UIView *view in [self.view subviews]) {
-//        if (view.restorationIdentifier isEqualToString:@"")
-//    }
-}
-
-
-- (void)dismissTheBasicsPage2 {
-    
-    
-    
-}
-
-- (void)dismissUserProfile {
-    
-    
-}
-
-
-- (IBAction)continueButtonAction:(id)sender {
-//    if (self.emailTextField.text && self.emailTextField.text.length > 0)
-//    {
-//        //need to check if that email is already in the database
-//        [self dismissFirstTimeUserPage];
-//        [self showTheBasicsPage1];
-//    }
-//    else
-//    {
-//        [self presentAlert:@"Invalid Email" withMessage:@"Please provide a valid email"];
-//    }
-}
-
 //FacebookLoginButton methods
 //if user successfully logins with Facebook
 //they'll be added to the databse and their profile image will be set
@@ -579,6 +607,40 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
     // add the OK action to the alert controller
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    UITableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 10;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    int delta = scrollView.contentOffset.y;
+    
+    if (self.userBackgroundImageView.frame.size.height - delta < BACKGORUND_IMAGE_MIN_HEIGHT) {
+        self.userBackgroundImageView.frame = CGRectMake(self.userBackgroundImageView.frame.origin.x, self.userBackgroundImageView.frame.origin.y, self.userBackgroundImageView.frame.size.width, BACKGORUND_IMAGE_MIN_HEIGHT);
+        self.userProfileTableView.frame = CGRectMake(self.userProfileTableView.frame.origin.x, BACKGORUND_IMAGE_MIN_HEIGHT, self.userProfileTableView.frame.size.width, self.view.frame.size.height - BACKGORUND_IMAGE_MIN_HEIGHT);
+    } else if (self.userBackgroundImageView.frame.size.height - delta > BACKGORUND_IMAGE_MAX_HEIGHT) {
+        self.userBackgroundImageView.frame = CGRectMake(self.userBackgroundImageView.frame.origin.x, self.userBackgroundImageView.frame.origin.y, self.userBackgroundImageView.frame.size.width, BACKGORUND_IMAGE_MAX_HEIGHT);
+        self.userProfileTableView.frame = CGRectMake(self.userProfileTableView.frame.origin.x, BACKGORUND_IMAGE_MAX_HEIGHT, self.userProfileTableView.frame.size.width, self.view.frame.size.height - BACKGORUND_IMAGE_MAX_HEIGHT);
+    } else {
+        NSLog(@"%i", delta);
+        // Reframe the background image
+        self.userBackgroundImageView.frame = CGRectMake(0, 0, self.userBackgroundImageView.frame.size.width, self.userBackgroundImageView.frame.size.height-delta);
+        self.userProfileTableView.frame = CGRectMake(0, self.userBackgroundImageView.frame.size.height-delta, self.userBackgroundImageView.frame.size.width, self.view.frame.size.height - self.userBackgroundImageView.frame.size.height);
+        // Reframe the profile image
+        self.userProfileImageView.frame = CGRectMake(self.userProfileImageView.frame.origin.x, self.userProfileImageView.frame.origin.y - 0.45*delta, self.userProfileImageView.frame.size.width - 0.45*delta, self.userProfileImageView.frame.size.height - 0.45*delta);
+        self.userProfileImageView.layer.cornerRadius = self.userProfileImageView.frame.size.width/2;
+        [self.userProfileTableView setContentOffset: CGPointMake(self.userProfileTableView.contentOffset.x, 0)];
+    }
+    float heightOfBackgroundImage = self.userBackgroundImageView.frame.size.height;
+    if (heightOfBackgroundImage > BACKGORUND_IMAGE_MIN_HEIGHT && heightOfBackgroundImage < 200) {
+        [self.userBackgroundImageView setAlpha:(heightOfBackgroundImage-BACKGORUND_IMAGE_MIN_HEIGHT + 20)/100];
+    }
 }
 
 @end
