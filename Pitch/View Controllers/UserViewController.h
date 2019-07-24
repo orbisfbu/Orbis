@@ -11,10 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UserViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *signoutButton;
-- (void) signoutButtonPressed;
-- (void) backButtonPressed;
+
 @end
 
 NS_ASSUME_NONNULL_END

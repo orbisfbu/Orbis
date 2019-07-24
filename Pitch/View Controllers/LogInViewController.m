@@ -225,11 +225,9 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) segueToApp {
-    
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     MasterViewController * vc = (MasterViewController *)[sb instantiateViewControllerWithIdentifier:@"MasterViewController"];
     [self presentViewController:vc animated:YES completion:nil];
-    //[self performSegueWithIdentifier:@"goToMain3VCs" sender:self];
 }
 
 - (void) createContinuePage {
