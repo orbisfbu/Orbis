@@ -13,6 +13,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UserViewController">
             <connections>
                 <outlet property="backButton" destination="gkc-M1-UIn" id="MxA-Ua-tGb"/>
+                <outlet property="signoutButton" destination="Pv9-69-EYf" id="n1j-Hh-QPR"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -30,15 +31,20 @@
                     <state key="normal" title="Back" image="back">
                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
-                    <connections>
-                        <action selector="backButtonAction:" destination="-1" eventType="touchUpInside" id="l91-gY-d27"/>
-                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pv9-69-EYf">
+                    <rect key="frame" x="299" y="25" width="60" height="30"/>
+                    <state key="normal" title="Sign Out">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </state>
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.3707554042339325" green="0.77097988128662109" blue="0.5960577130317688" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="gkc-M1-UIn" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="9ov-zY-VIN"/>
                 <constraint firstItem="gkc-M1-UIn" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="25" id="M3Q-nU-2mb"/>
+                <constraint firstAttribute="trailing" secondItem="Pv9-69-EYf" secondAttribute="trailing" constant="16" id="SP8-Xb-2Ac"/>
+                <constraint firstItem="Pv9-69-EYf" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="25" id="yqr-aL-fn2"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <point key="canvasLocation" x="136.80000000000001" y="100.29985007496252"/>

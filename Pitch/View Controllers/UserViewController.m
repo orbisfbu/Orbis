@@ -13,17 +13,11 @@
 #import "UIImageView+AFNetworking.h"
 #import "FBSDKLoginManagerLoginResult.h"
 #import <FBSDKAccessToken.h>
+#import "DataHandling.h"
 
 @import UIKit;
 @import Firebase;
 @import FirebaseAuth;
-
-//Fields to be used when saving user to database
-static NSString * const DATABASE_USER_NODE = @"Users";
-static NSString * const USER_FIRSTNAME = @"First Name";
-static NSString * const USER_LASTNAME = @"Last Name";
-static NSString * const USER_EMAIL = @"Email";
-static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"Profile Image";
 
 //Required permissions for user info
 static NSString * const PUBLIC_PROFILE_PERMISSION = @"public_profile";
@@ -45,13 +39,7 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 @interface UserViewController () <FBSDKLoginButtonDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
-
 @property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
-
-//this flag will be used to trigger initial loading
-//if YES, then profile will be loaded
-//if NO, then sign-in/signup views will be displayed
-@property (nonatomic) BOOL *userIsSignedIn;
 
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
@@ -106,6 +94,10 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
     [self.backButton setEnabled:NO];
     self.backButton.alpha = 0;
     [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.signoutButton setEnabled:NO];
+    self.backButton.alpha = 0;
+    [self.signoutButton addTarget:self action:@selector(signoutButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     self.FBLoginButton.delegate = self;
     self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
     
@@ -114,15 +106,17 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
     [self.view addGestureRecognizer:tapGesture];
     
     [self createPageObjects];
+    //[self createContinuePage];
     
-    if ([FBSDKAccessToken currentAccessToken]) {
-        NSLog(@"User was already logged in... Creating user profile");
+    if ([FBSDKAccessToken currentAccessToken] || [FIRAuth auth].currentUser) {
+        NSLog(@"User was already logged in... Creating user profile page");
+        FIRUser *signedinUser = [FIRAuth auth].currentUser;
+        NSLog(@"THIS IS WHO IS CURRENTLY SIGNED IN %@", signedinUser.uid);
         [self createUserProfile];
     } else {
         NSLog(@"No user signed in... Creating sign in/up page");
         [self createContinuePage];
     }
-    self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
 }
 
 - (void) dismissKeyboard {
@@ -238,7 +232,8 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 }
 
 - (void) createUserProfile {
-    
+    [self.signoutButton setEnabled:YES];
+    self.backButton.alpha = 1;
 }
 
 - (void) createContinuePage {
@@ -322,6 +317,7 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
     }];
 }
 
+
 - (void) createSignUpPage2 {
     self.viewName = SIGNUP_VIEW2;
     [UIView animateWithDuration:0.5 animations:^{
@@ -366,6 +362,7 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 - (void) continueButtonPressed {
     BOOL emailExists = YES; // TODO: Implement later with Firebase code
     [self dismissContinuePage];
+    self.inputtedUserEmail = self.emailTextField.text;
     if (emailExists) {
         [self createSignInPage];
     } else {
@@ -376,7 +373,16 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 - (void) logInButtonPressed {
     BOOL loginIsCorrect = YES; // TODO: Implement later with Firebase code
     if (loginIsCorrect) {
+        self.inputtedPassword = self.passwordTextField.text;
         [self dismissSignInPage];
+        
+        [[FIRAuth auth] signInWithEmail: self.inputtedUserEmail
+                               password: self.inputtedPassword
+                             completion:^(FIRAuthDataResult * _Nullable authResult,
+                                          NSError * _Nullable error) {
+                                 NSLog(@"SUCCESSFULLY SIGNED IN REGULAR USER");
+                             }];
+        
         [self createUserProfile];
     }
 }
@@ -384,148 +390,64 @@ static NSString * const PROFILE_VIEW = @"PROFILE_VIEW";
 - (void) nextButtonPressed {
     BOOL signupIsCorrect = YES; // TODO: Implement later with Firebase code
     if (signupIsCorrect) {
+        self.registerFirstName = self.firstNameTextField.text;
+        self.registerLastName = self.lastNameTextField.text;
         [self dismissSignUpPage1:YES];
         [self createSignUpPage2];
     }
 }
 
 - (void) signUpButtonPressed {
-    BOOL signupIsCorrect = YES; // TODO: Implement later with Firebase code
+    BOOL signupIsCorrect = [self.passwordSignUpTextField.text isEqualToString:self.confirmPasswordSignUpTextField.text];
     if (signupIsCorrect) {
+        self.registerUsername = self.usernameTextField.text;
+        self.registerPassword = self.passwordSignUpTextField.text;
         [self dismissSignUpPage2:YES];
+        [[FIRAuth auth] createUserWithEmail:self.inputtedUserEmail
+                                   password:self.registerPassword
+                        completion:^(FIRAuthDataResult * _Nullable authResult,
+                                              NSError * _Nullable error) {
+                            NSLog(@"USER WAS CREATED SUCCESSFULLY");
+        }];
+        NSLog(@"USER WILL BE CREATED NOW");
         [self createUserProfile];
+    }
+    else{
+        [self presentAlert:@"Passwords Don't Match" withMessage:@"Make sure your password fields match"];
+        self.passwordSignUpTextField.text = @"";
+        self.confirmPasswordSignUpTextField.text = @"";
+    }
+}
+
+- (void) signoutButtonPressed
+{
+    NSLog(@"LOGOUT BUTTON WAS PRESSED");
+    NSError *signOutError;
+    BOOL status = [[FIRAuth auth] signOut:&signOutError];
+    if (!status) {
+        NSLog(@"Error signing out: %@", signOutError);
+        return;
+    }else{
+        NSLog(@"Successfully Signout");
+        NSLog(@"IS THE USER STILL IN SESSION? %@", [FIRAuth auth].currentUser);
     }
 }
 
 
-- (void)addUserToDatabase:(FIRUser *)currentUser{
-    NSString *userID = [FIRAuth auth].currentUser.uid;
-    //Display name is a string of the full name
-    //Separating it below
-    NSString *fullName = currentUser.displayName;
-    NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
-    NSString *profileImageURLString = [currentUser.photoURL absoluteString];
-    NSDictionary *userInfo = @{ USER_FIRSTNAME: [nameArray objectAtIndex:0], USER_LASTNAME: [nameArray  objectAtIndex:1], USER_PROFILE_IMAGE_URLSTRING : profileImageURLString, USER_EMAIL: currentUser.email};
-    [[self.databaseUsersReference child:userID] setValue: userInfo];
-    NSLog(SUCCESSFUL_USER_SAVE);
-}
-
-//will be called whenever Facebook login/authentication is successful
-//OR the user has changed profile image in profileViewController
-- (void)setUserProfileImage {
-    NSString *userID = [FIRAuth auth].currentUser.uid;
-    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        NSString *retrievedURLString = snapshot.value[USER_PROFILE_IMAGE_URLSTRING];
-        NSURL *profileImageNSURL = [NSURL URLWithString:retrievedURLString];
-        //self.profilePicImageView.image = nil;
-        //[self.profilePicImageView setImageWithURL:profileImageNSURL];
-    } withCancelBlock:^(NSError * _Nonnull error) {
-        NSLog(DATA_FETCH_ERROR);
-    }];
-}
-
-////call this if the user hasn't signed up or logged-in
-//- (void)showFirstTimeUserPage
-//{
-//    self.emailTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+////will be called whenever Facebook login/authentication is successful
+////OR the user has changed profile image in profileViewController
+//- (void)setUserProfileImage {
+//    NSString *userID = [FIRAuth auth].currentUser.uid;
+//    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+//        NSString *retrievedURLString = snapshot.value[USER_PROFILE_IMAGE_URLSTRING];
+//        NSURL *profileImageNSURL = [NSURL URLWithString:retrievedURLString];
+//        //self.profilePicImageView.image = nil;
+//        //[self.profilePicImageView setImageWithURL:profileImageNSURL];
+//    } withCancelBlock:^(NSError * _Nonnull error) {
+//        NSLog(DATA_FETCH_ERROR);
+//    }];
 //}
 
-
-- (void)showTheBasicsPage1 {
-    UITextField *firstNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
-    firstNameTextField.borderStyle = UITextBorderStyleRoundedRect;
-    firstNameTextField.font = [UIFont systemFontOfSize:15];
-    firstNameTextField.placeholder = @"First Name";
-    firstNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    firstNameTextField.keyboardType = UIKeyboardTypeDefault;
-    firstNameTextField.returnKeyType = UIReturnKeyDone;
-    firstNameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    firstNameTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    firstNameTextField.alpha = .5;
-    //textField.center = self.view.center;
-    firstNameTextField.delegate = self;
-    [self.view addSubview:firstNameTextField];
-    //[textField.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor].active = YES;
-    firstNameTextField.translatesAutoresizingMaskIntoConstraints = YES;
-    [firstNameTextField.widthAnchor constraintEqualToConstant:50.0].active = YES;
-    [firstNameTextField.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:40.0].active = YES;
-    [firstNameTextField.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:50.0].active = YES;
-    
-    
-    UITextField *lastNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(10, firstNameTextField.frame.origin.y + firstNameTextField.frame.size.height +10, 300, 40)];
-    lastNameTextField.borderStyle = UITextBorderStyleRoundedRect;
-    lastNameTextField.font = [UIFont systemFontOfSize:15];
-    lastNameTextField.placeholder = @"Last Name";
-    lastNameTextField.autocorrectionType = UITextAutocorrectionTypeNo;
-    lastNameTextField.keyboardType = UIKeyboardTypeDefault;
-    lastNameTextField.returnKeyType = UIReturnKeyDone;
-    lastNameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    lastNameTextField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    lastNameTextField.delegate = self;
-    [self.view addSubview:lastNameTextField];
-    
-}
-
-
-- (void)showTheBasicsPage2 {
-    
-    
-    
-}
-
-
-//this function will be called if the user had already signed in before
-//this function will load the elements that are to be displayed in the profileView
-//this function should end up calling the setUserProfileImage method defined earlier
-- (void)showUserProfile:(BOOL *) isSignedIn
-{
-    
-    
-}
-
-
-- (void)dismissFirstTimeUserPage
-{
-//    self.continueButtonOutlet.hidden = YES;
-//    self.emailTextField.hidden = YES;
-//    self.welcomingMessageLabel.hidden = YES;
-//    self.FBLoginButton.hidden = YES;
-//    self.orSeparatorLabel.hidden = YES;
-//    self.backButtonOutlet.hidden = NO;
-}
-
-- (void)dismissTheBasicsPage1
-{
-//    for (UIView *view in [self.view subviews]) {
-//        if (view.restorationIdentifier isEqualToString:@"")
-//    }
-}
-
-
-- (void)dismissTheBasicsPage2 {
-    
-    
-    
-}
-
-- (void)dismissUserProfile {
-    
-    
-}
-
-
-- (IBAction)continueButtonAction:(id)sender {
-//    if (self.emailTextField.text && self.emailTextField.text.length > 0)
-//    {
-//        //need to check if that email is already in the database
-//        [self dismissFirstTimeUserPage];
-//        [self showTheBasicsPage1];
-//    }
-//    else
-//    {
-//        [self presentAlert:@"Invalid Email" withMessage:@"Please provide a valid email"];
-//    }
-}
 
 //FacebookLoginButton methods
 //if user successfully logins with Facebook
@@ -541,9 +463,14 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
                                       }
                                       // User successfully signed in
                                       if (authResult == nil) { return; }
-                                      FIRUser *user = authResult.user;
-                                      [self addUserToDatabase:user];
-                                      [self setUserProfileImage];
+                                        //will probably have to make a user locally?
+                                        //use the datahandling thing here
+                                      NSLog(@"SUCCESSFULLY AUTHENTICATED USER");
+//                                      self.currentUser = authResult.user;
+                                      //have to create delegate to let other
+                                      //view controllers know when signin has occured
+                                      //and who is signed in
+            
                                   }];
     } else {
         NSLog(AUTHENTICATION_ERROR);
@@ -559,11 +486,6 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
         return;
     }
 }
-
-
-- (IBAction)backButtonAction:(id)sender {
-}
-
 
 - (void)presentAlert:(NSString *)alertTitle withMessage:(NSString *)alertMessage
 {
