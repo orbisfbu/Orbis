@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CreateEventViewController">
+            <connections>
+                <outlet property="createEventButton" destination="k8R-P4-eVQ" id="GDe-o2-7WU"/>
+                <outlet property="createEventTableView" destination="WFm-Im-45b" id="OYC-Tb-GON"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WFm-Im-45b">
+                    <rect key="frame" x="0.0" y="90" width="375" height="577"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </tableView>
+                <button opaque="NO" clipsSubviews="YES" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8R-P4-eVQ">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="90" id="50p-0K-xcy"/>
+                    </constraints>
+                    <state key="normal" title="Create Event"/>
+                    <connections>
+                        <action selector="clickedCreateEvent:" destination="-1" eventType="touchUpInside" id="Qnd-5M-t4f"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.99942404029999998" green="0.98555368190000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="k8R-P4-eVQ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="1LE-iP-isk"/>
+                <constraint firstAttribute="trailing" secondItem="WFm-Im-45b" secondAttribute="trailing" id="3k2-VH-HLG"/>
+                <constraint firstItem="WFm-Im-45b" firstAttribute="bottom" secondItem="Q5M-cg-NOt" secondAttribute="bottom" id="I5L-Mb-cmf"/>
+                <constraint firstItem="WFm-Im-45b" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bmA-WS-fQR"/>
+                <constraint firstItem="k8R-P4-eVQ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="eWc-Jr-C6d"/>
+                <constraint firstAttribute="trailing" secondItem="k8R-P4-eVQ" secondAttribute="trailing" id="frX-JB-84I"/>
+                <constraint firstItem="WFm-Im-45b" firstAttribute="top" secondItem="k8R-P4-eVQ" secondAttribute="bottom" id="jdF-L3-Zrx"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <point key="canvasLocation" x="138.40000000000001" y="152.47376311844079"/>
+        </view>
+    </objects>
+</document>

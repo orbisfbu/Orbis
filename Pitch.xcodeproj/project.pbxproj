@@ -10,13 +10,21 @@
 		02AC025ECB2F25A725644A38 /* Pods_PitchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */; };
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
 		06A909B422E2300E00CD2969 /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B322E2300E00CD2969 /* Poll.m */; };
+		06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B622E6792300CD2969 /* EventTitleCell.m */; };
+		06A909B922E6792300CD2969 /* EventTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B722E6792300CD2969 /* EventTitleCell.xib */; };
+		06A909C222E67A0500CD2969 /* LocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909C022E67A0500CD2969 /* LocationCell.m */; };
+		06A909C322E67A0500CD2969 /* LocationCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A909C122E67A0500CD2969 /* LocationCell.xib */; };
+		06A909C722E67A2200CD2969 /* PollsTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909C522E67A2200CD2969 /* PollsTitleCell.m */; };
+		06A909C822E67A2200CD2969 /* PollsTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A909C622E67A2200CD2969 /* PollsTitleCell.xib */; };
+		06A909CC22E67A3500CD2969 /* CustomPollCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909CA22E67A3500CD2969 /* CustomPollCell.m */; };
+		06A909CD22E67A3500CD2969 /* CustomPollCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A909CB22E67A3500CD2969 /* CustomPollCell.xib */; };
+		06A909D322E7B5DC00CD2969 /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909D122E7B5DC00CD2969 /* CreateEventViewController.m */; };
+		06A909D422E7B5DC00CD2969 /* CreateEventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A909D222E7B5DC00CD2969 /* CreateEventViewController.xib */; };
 		181FEAF8C20A861EEE46EA31 /* Pods_Pitch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */; };
 		5E0564BD2DE1E80B0B62790F /* Pods_PitchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA7A4CB52FA959324F5E08BB /* Pods_PitchUITests.framework */; };
 		780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2DB22E6D02200B78516 /* DataHandling.m */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
 		78FC04B822E17C700049E0BD /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B722E17C700049E0BD /* Event.m */; };
-		C127D52222DFE684009963B0 /* CreateEventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52022DFE684009963B0 /* CreateEventViewController.m */; };
-		C127D52322DFE684009963B0 /* CreateEventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C127D52122DFE684009963B0 /* CreateEventViewController.xib */; };
 		C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52522DFE699009963B0 /* ExploreViewController.m */; };
 		C127D52822DFE699009963B0 /* ExploreViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C127D52622DFE699009963B0 /* ExploreViewController.xib */; };
 		C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52A22DFE6A3009963B0 /* UserViewController.m */; };
@@ -64,6 +72,21 @@
 		06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06A909B222E2300E00CD2969 /* Poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poll.h; sourceTree = "<group>"; };
 		06A909B322E2300E00CD2969 /* Poll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
+		06A909B522E6792300CD2969 /* EventTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventTitleCell.h; sourceTree = "<group>"; };
+		06A909B622E6792300CD2969 /* EventTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventTitleCell.m; sourceTree = "<group>"; };
+		06A909B722E6792300CD2969 /* EventTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventTitleCell.xib; sourceTree = "<group>"; };
+		06A909BF22E67A0500CD2969 /* LocationCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationCell.h; sourceTree = "<group>"; };
+		06A909C022E67A0500CD2969 /* LocationCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationCell.m; sourceTree = "<group>"; };
+		06A909C122E67A0500CD2969 /* LocationCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationCell.xib; sourceTree = "<group>"; };
+		06A909C422E67A2200CD2969 /* PollsTitleCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PollsTitleCell.h; sourceTree = "<group>"; };
+		06A909C522E67A2200CD2969 /* PollsTitleCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PollsTitleCell.m; sourceTree = "<group>"; };
+		06A909C622E67A2200CD2969 /* PollsTitleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PollsTitleCell.xib; sourceTree = "<group>"; };
+		06A909C922E67A3500CD2969 /* CustomPollCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomPollCell.h; sourceTree = "<group>"; };
+		06A909CA22E67A3500CD2969 /* CustomPollCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomPollCell.m; sourceTree = "<group>"; };
+		06A909CB22E67A3500CD2969 /* CustomPollCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomPollCell.xib; sourceTree = "<group>"; };
+		06A909D022E7B5DC00CD2969 /* CreateEventViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateEventViewController.h; sourceTree = "<group>"; };
+		06A909D122E7B5DC00CD2969 /* CreateEventViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateEventViewController.m; sourceTree = "<group>"; };
+		06A909D222E7B5DC00CD2969 /* CreateEventViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateEventViewController.xib; sourceTree = "<group>"; };
 		0D890758ED881E4EF92ED47C /* Pods-Pitch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.debug.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.debug.xcconfig"; sourceTree = "<group>"; };
 		0DA70478CF425F487B0CDAC3 /* Pods-PitchTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchTests.release.xcconfig"; path = "Target Support Files/Pods-PitchTests/Pods-PitchTests.release.xcconfig"; sourceTree = "<group>"; };
 		4A1CEDA789C916451CDD6B4A /* Pods-PitchTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchTests.debug.xcconfig"; path = "Target Support Files/Pods-PitchTests/Pods-PitchTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -74,9 +97,6 @@
 		78FC04B622E17C700049E0BD /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		78FC04B722E17C700049E0BD /* Event.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Event.m; sourceTree = "<group>"; };
 		AA7A4CB52FA959324F5E08BB /* Pods_PitchUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C127D51F22DFE684009963B0 /* CreateEventViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateEventViewController.h; sourceTree = "<group>"; };
-		C127D52022DFE684009963B0 /* CreateEventViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateEventViewController.m; sourceTree = "<group>"; };
-		C127D52122DFE684009963B0 /* CreateEventViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreateEventViewController.xib; sourceTree = "<group>"; };
 		C127D52422DFE699009963B0 /* ExploreViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExploreViewController.h; sourceTree = "<group>"; };
 		C127D52522DFE699009963B0 /* ExploreViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExploreViewController.m; sourceTree = "<group>"; };
 		C127D52622DFE699009963B0 /* ExploreViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExploreViewController.xib; sourceTree = "<group>"; };
@@ -160,6 +180,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		78FC04B122E16EBE0049E0BD /* API Manager */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "API Manager";
+			path = ..;
+			sourceTree = "<group>";
+		};
 		78FC04B222E16ECF0049E0BD /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,15 +208,15 @@
 			children = (
 				C138EDDD22DFAD9F00AAA0D0 /* MasterViewController.h */,
 				C138EDDE22DFAD9F00AAA0D0 /* MasterViewController.m */,
-				C127D51F22DFE684009963B0 /* CreateEventViewController.h */,
-				C127D52022DFE684009963B0 /* CreateEventViewController.m */,
-				C127D52122DFE684009963B0 /* CreateEventViewController.xib */,
 				C127D52422DFE699009963B0 /* ExploreViewController.h */,
 				C127D52522DFE699009963B0 /* ExploreViewController.m */,
 				C127D52622DFE699009963B0 /* ExploreViewController.xib */,
 				C127D52922DFE6A3009963B0 /* UserViewController.h */,
 				C127D52A22DFE6A3009963B0 /* UserViewController.m */,
 				C127D52B22DFE6A3009963B0 /* UserViewController.xib */,
+				06A909D022E7B5DC00CD2969 /* CreateEventViewController.h */,
+				06A909D122E7B5DC00CD2969 /* CreateEventViewController.m */,
+				06A909D222E7B5DC00CD2969 /* CreateEventViewController.xib */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -220,6 +248,7 @@
 			children = (
 				C14E19E922E23B5600883CFB /* View */,
 				78FC04B222E16ECF0049E0BD /* Models */,
+				78FC04B122E16EBE0049E0BD /* API Manager */,
 				C127D51E22DFE3CF009963B0 /* View Controllers */,
 				C138EDDA22DFAD9F00AAA0D0 /* AppDelegate.h */,
 				C138EDDB22DFAD9F00AAA0D0 /* AppDelegate.m */,
@@ -271,6 +300,18 @@
 				C14E1A0122E2768B00883CFB /* CustomCollectionViewCell.h */,
 				C14E1A0222E2768B00883CFB /* CustomCollectionViewCell.m */,
 				C14E1A0322E2768B00883CFB /* CustomCollectionViewCell.xib */,
+				06A909B522E6792300CD2969 /* EventTitleCell.h */,
+				06A909B622E6792300CD2969 /* EventTitleCell.m */,
+				06A909B722E6792300CD2969 /* EventTitleCell.xib */,
+				06A909BF22E67A0500CD2969 /* LocationCell.h */,
+				06A909C022E67A0500CD2969 /* LocationCell.m */,
+				06A909C122E67A0500CD2969 /* LocationCell.xib */,
+				06A909C422E67A2200CD2969 /* PollsTitleCell.h */,
+				06A909C522E67A2200CD2969 /* PollsTitleCell.m */,
+				06A909C622E67A2200CD2969 /* PollsTitleCell.xib */,
+				06A909C922E67A3500CD2969 /* CustomPollCell.h */,
+				06A909CA22E67A3500CD2969 /* CustomPollCell.m */,
+				06A909CB22E67A3500CD2969 /* CustomPollCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -396,18 +437,22 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06A909C322E67A0500CD2969 /* LocationCell.xib in Resources */,
 				C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */,
 				C127D52822DFE699009963B0 /* ExploreViewController.xib in Resources */,
 				C138EDE722DFAD9F00AAA0D0 /* LaunchScreen.storyboard in Resources */,
 				06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */,
+				06A909CD22E67A3500CD2969 /* CustomPollCell.xib in Resources */,
 				C138EDE422DFAD9F00AAA0D0 /* Assets.xcassets in Resources */,
-				C127D52322DFE684009963B0 /* CreateEventViewController.xib in Resources */,
 				C14E1A0022E23BF000883CFB /* AgeCell.xib in Resources */,
 				C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */,
+				06A909D422E7B5DC00CD2969 /* CreateEventViewController.xib in Resources */,
 				C138EDE222DFAD9F00AAA0D0 /* Main.storyboard in Resources */,
 				C14E19F622E23BD000883CFB /* DistanceCell.xib in Resources */,
 				C14E19FB22E23BE200883CFB /* NumberOfPeopleCell.xib in Resources */,
 				C14E19EE22E23B8B00883CFB /* VibesCell.xib in Resources */,
+				06A909B922E6792300CD2969 /* EventTitleCell.xib in Resources */,
+				06A909C822E67A2200CD2969 /* PollsTitleCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,22 +580,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06A909C222E67A0500CD2969 /* LocationCell.m in Sources */,
 				C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */,
 				C14E19F522E23BD000883CFB /* DistanceCell.m in Sources */,
 				C14E19FF22E23BF000883CFB /* AgeCell.m in Sources */,
 				C14E19ED22E23B8B00883CFB /* VibesCell.m in Sources */,
 				78FC04B522E17C640049E0BD /* User.m in Sources */,
 				C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */,
+				06A909C722E67A2200CD2969 /* PollsTitleCell.m in Sources */,
 				C138EDEA22DFAD9F00AAA0D0 /* main.m in Sources */,
 				78FC04B822E17C700049E0BD /* Event.m in Sources */,
 				780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */,
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
+				06A909D322E7B5DC00CD2969 /* CreateEventViewController.m in Sources */,
 				C14E1A0822E276F400883CFB /* Vibes.m in Sources */,
+				06A909CC22E67A3500CD2969 /* CustomPollCell.m in Sources */,
 				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,
 				C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */,
 				C14E1A0422E2768B00883CFB /* CustomCollectionViewCell.m in Sources */,
 				C14E19FA22E23BE200883CFB /* NumberOfPeopleCell.m in Sources */,
-				C127D52222DFE684009963B0 /* CreateEventViewController.m in Sources */,
+				06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
