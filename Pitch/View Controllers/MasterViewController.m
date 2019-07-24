@@ -57,6 +57,8 @@
     self.viewControllerScrollView.contentSize = CGSizeMake(self.view.frame.size.width*3, self.view.frame.size.height);
     
     [self.viewControllerScrollView setContentOffset:CGPointMake(self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    NSLog(@"Position of scroll view: %i", self.viewControllerScrollView.frame.origin.y);
+    NSLog(@"Height: %i", self.view.frame.size.height);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

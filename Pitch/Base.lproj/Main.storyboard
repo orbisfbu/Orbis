@@ -38,7 +38,6 @@
                     </view>
                     <connections>
                         <outlet property="backButton" destination="DnF-qo-7MZ" id="ojK-RA-djK"/>
-                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="goToMain3VCs" id="BPY-0S-uRg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k3y-ym-4qz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -48,7 +47,7 @@
         <!--Master View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MasterViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MasterViewController" id="BYZ-38-t0r" customClass="MasterViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -114,7 +113,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="155.07246376811597" y="20.758928571428569"/>
+            <point key="canvasLocation" x="1050" y="-729"/>
         </scene>
     </scenes>
     <resources>

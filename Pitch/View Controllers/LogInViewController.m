@@ -12,6 +12,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "FBSDKLoginManagerLoginResult.h"
 #import <FBSDKAccessToken.h>
+#import "MasterViewController.h"
 
 //Fields to be used when saving user to database
 static NSString * const DATABASE_USER_NODE = @"Users";
@@ -90,24 +91,29 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
     [self.backButton setEnabled:NO];
     self.backButton.alpha = 0;
-    [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    self.FBLoginButton.delegate = self;
-    self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
     
-    // Add touch gestures to dismiss keyboard
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    [self.view addGestureRecognizer:tapGesture];
-    
-    [self createPageObjects];
-    
+    if (![FBSDKAccessToken currentAccessToken]) {
+        NSLog(@"No user signed in... Creating sign in/up page");
+        [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        self.FBLoginButton.delegate = self;
+        self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
+        // Add touch gestures to dismiss keyboard
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+        [self.view addGestureRecognizer:tapGesture];
+        [self createPageObjects];
+        [self createContinuePage];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     if ([FBSDKAccessToken currentAccessToken]) {
         NSLog(@"User was already logged in... Creating user profile");
         [self segueToApp];
-    } else {
-        NSLog(@"No user signed in... Creating sign in/up page");
-        [self createContinuePage];
     }
-    self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
+}
+
+- (void) dismissKeyboard {
+    [self.view endEditing:YES];
 }
 
 - (void) createPageObjects {
@@ -219,7 +225,11 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) segueToApp {
-    [self performSegueWithIdentifier:@"goToMain3VCs" sender:self];
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    MasterViewController * vc = (MasterViewController *)[sb instantiateViewControllerWithIdentifier:@"MasterViewController"];
+    [self presentViewController:vc animated:YES completion:nil];
+    //[self performSegueWithIdentifier:@"goToMain3VCs" sender:self];
 }
 
 - (void) createContinuePage {
