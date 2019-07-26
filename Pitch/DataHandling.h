@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol DataHandlingDelegate
 - (void)updateEvents:(NSArray *)events;
-- (void)userInDatabase:(NSString *)userID;
 @end
 
 @interface DataHandling : NSObject

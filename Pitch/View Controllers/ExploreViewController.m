@@ -121,20 +121,39 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+//- (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
+//{
+//    UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
+//    EventDetailsViewController * detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"Details"];
+//    detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
+//    detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
+//    detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
+//    detailedEventVC.eventImageView.image = eventToPresent.eventImage;
+//    detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+//    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    [self presentViewController:detailedEventVC animated:YES completion:nil];
+//    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
+//    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
+//    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
+//}
+
+
 - (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
 {
-    EventDetailsViewController *detailedEventVC = [[EventDetailsViewController alloc] init];
+    UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
+    EventDetailsViewController * detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"Details"];
     detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
     detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
     detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
     detailedEventVC.eventImageView.image = eventToPresent.eventImage;
-    detailedEventVC.modalPresentationStyle = UIModalPresentationFormSheet;
-    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:detailedEventVC animated:YES completion: nil];
+    
+    
+    detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [self presentViewController:detailedEventVC animated:YES completion:nil];
     UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
-    
 }
 
 
@@ -167,15 +186,6 @@
     self.filterMenuIsShowing = !self.filterMenuIsShowing;
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell;
@@ -207,11 +217,6 @@
     //NSLog(@"--Size of events array is: %i--", events.count);
     [self populateMapWithEvents];
 }
-
-- (void)userInDatabase:(nonnull NSString *)userID {
-    <#code#>
-}
-
 
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {

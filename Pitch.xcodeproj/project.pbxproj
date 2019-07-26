@@ -26,7 +26,6 @@
 		780DB2E622E92FD700B78516 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 780DB2E522E92FD700B78516 /* CoreLocation.framework */; };
 		780DB2E922EA12D200B78516 /* EventAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2E822EA12D200B78516 /* EventAnnotation.m */; };
 		780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */; };
-		780DB2EE22EA24D800B78516 /* EventDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 780DB2EC22EA24D800B78516 /* EventDetailsViewController.xib */; };
 		780DB2F022EA6A8200B78516 /* EventDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
 		78FC04B822E17C700049E0BD /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B722E17C700049E0BD /* Event.m */; };
@@ -103,7 +102,6 @@
 		780DB2E822EA12D200B78516 /* EventAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventAnnotation.m; sourceTree = "<group>"; };
 		780DB2EA22EA24D800B78516 /* EventDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventDetailsViewController.h; sourceTree = "<group>"; };
 		780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventDetailsViewController.m; sourceTree = "<group>"; };
-		780DB2EC22EA24D800B78516 /* EventDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventDetailsViewController.xib; sourceTree = "<group>"; };
 		780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EventDetails.storyboard; sourceTree = "<group>"; };
 		78FC04B322E17C640049E0BD /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		78FC04B422E17C640049E0BD /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
@@ -230,7 +228,6 @@
 				C14E1A0C22E8D52E00883CFB /* LogInViewController.m */,
 				780DB2EA22EA24D800B78516 /* EventDetailsViewController.h */,
 				780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */,
-				780DB2EC22EA24D800B78516 /* EventDetailsViewController.xib */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -459,7 +456,6 @@
 				C138EDE722DFAD9F00AAA0D0 /* LaunchScreen.storyboard in Resources */,
 				06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */,
 				06A909CD22E67A3500CD2969 /* CustomPollCell.xib in Resources */,
-				780DB2EE22EA24D800B78516 /* EventDetailsViewController.xib in Resources */,
 				C138EDE422DFAD9F00AAA0D0 /* Assets.xcassets in Resources */,
 				C14E1A0022E23BF000883CFB /* AgeCell.xib in Resources */,
 				C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */,

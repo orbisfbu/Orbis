@@ -432,7 +432,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                          userID = authResult.user.uid;
                                          User *newUser = [[User alloc] initWithDictionary:userInfo];
                                          NSLog(@"New firebase user was created %@", authResult.user);
-                                         [self.delegate userWasCreated:newUser];
                                          [[DataHandling shared] addUserToDatabase:newUser withUserID:userID];
                                          [self dismissSignUpPage2:YES];
                                          [self segueToApp];
@@ -460,6 +459,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         self.confirmPasswordSignUpTextField.text = @"";
     }
 }
+
 
 - (void)loginButton:(FBSDKLoginButton *)loginButton
 didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
