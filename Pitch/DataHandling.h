@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DataHandling : NSObject
 + (instancetype)shared;
 - (void)getEventsArray;
-- (BOOL)doesAccountExist:(NSString *)inputtedEmail;
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (BOOL) isLoginCorrect:(NSString *)inputtedEmail withPassword:(NSString *)inputtedPassword;

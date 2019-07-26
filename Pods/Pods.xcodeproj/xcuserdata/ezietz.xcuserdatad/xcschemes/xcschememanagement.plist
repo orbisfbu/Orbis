@@ -11,6 +11,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>DOPDropDownMenu-Enhanced.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>21</integer>
+		</dict>
 		<key>DOPDropDownMenu-Enhanced.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -113,6 +118,16 @@
 			<false/>
 			<key>orderHint</key>
 			<integer>13</integer>
+		</dict>
+		<key>GoogleMaps.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>22</integer>
+		</dict>
+		<key>GooglePlaces.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>23</integer>
 		</dict>
 		<key>GoogleUtilities.xcscheme</key>
 		<dict>

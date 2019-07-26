@@ -118,7 +118,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     if ([FIRAuth auth].currentUser)
     {
         NSLog(@"USER NAME LABEL SHOULD CHANGE");
-        self.usernameLabel.text = [FIRAuth auth].currentUser.displayName;
+        //self.usernameLabel.text = [FIRAuth auth].currentUser.displayName;
     }
     [self.usernameLabel sizeToFit];
     [self.usernameLabel setCenter:CGPointMake(self.view.center.x, self.usernameLabel.center.y)];
