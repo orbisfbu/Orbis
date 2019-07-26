@@ -66,6 +66,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView setAllowsSelection:NO];
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
+    [self makeCreateEventButton];
     CGRect frame = CGRectMake(self.createEventButton.frame.origin.x, self.createEventButton.frame.origin.y + self.createEventButton.frame.size.height, self.createEventButton.frame.size.width, self.view.frame.size.height - self.createEventButton.frame.size.height);
     self.createEventTableView = [[UITableView alloc] initWithFrame:frame];
     self.createEventTableView.layer.cornerRadius = 10;
@@ -81,6 +82,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
+    NSLog(@"please");
 }
 
 - (void) createEventButtonPressed

@@ -208,10 +208,6 @@
     [self populateMapWithEvents];
 }
 
-- (void)userInDatabase:(nonnull NSString *)userID {
-    <#code#>
-}
-
 
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
