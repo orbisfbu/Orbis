@@ -20,6 +20,7 @@
 #import "User.h"
 #import "DataHandling.h"
 #import "VibesCell.h"
+#import "AgeCell.h"
 #import "EventTitleCell.h"
 #import "LocationCell.h"
 #import "PollsTitleCell.h"
@@ -96,24 +97,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.createEventTableView.dataSource = self;
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"EventTitleCell" bundle:nil] forCellReuseIdentifier:@"EventTitleCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"AgeCell" bundle:nil] forCellReuseIdentifier:@"AgeCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
     Event *newEvent = [[Event alloc] init];
-    
-    MKLocalSearchRequest *req = [[MKLocalSearchRequest alloc] init];
-    [req setNaturalLanguageQuery:@"San "];
-    
-    MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:req];
-    [search startWithCompletionHandler:^(MKLocalSearchResponse * _Nullable response, NSError * _Nullable error) {
-        NSLog(@"%@", response);
-    }];
-}
-
-- (void) myFunc {
-    
 }
 
 - (void) makeCreateEventButton{
@@ -139,8 +129,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 2) {
-        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"AgeCell"];
+        [cell awakeFromNib];
     } else if (indexPath.row == 3) {
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+    } else if (indexPath.row == 4) {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
     } else {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"CustomPollCell"];
@@ -149,7 +142,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (self.customPollCellsArray.count + 4);
+    return (self.customPollCellsArray.count + 5);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
