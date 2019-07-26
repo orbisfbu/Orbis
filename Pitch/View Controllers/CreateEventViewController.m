@@ -66,6 +66,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView setAllowsSelection:NO];
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
+    [self makeCreateEventButton];
     CGRect frame = CGRectMake(self.createEventButton.frame.origin.x, self.createEventButton.frame.origin.y + self.createEventButton.frame.size.height, self.createEventButton.frame.size.width, self.view.frame.size.height - self.createEventButton.frame.size.height);
     self.createEventTableView = [[UITableView alloc] initWithFrame:frame];
     self.createEventTableView.layer.cornerRadius = 10;
@@ -77,10 +78,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"AgeCell" bundle:nil] forCellReuseIdentifier:@"AgeCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"EventPictureCell" bundle:nil] forCellReuseIdentifier:@"EventPictureCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
+    NSLog(@"please");
 }
 
 - (void) createEventButtonPressed
@@ -129,6 +132,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } else if (indexPath.row == 3) {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
     } else if (indexPath.row == 4) {
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"EventPictureCell"];
+    } else if (indexPath.row == 5) {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
     } else {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"CustomPollCell"];
@@ -137,7 +142,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (self.customPollCellsArray.count + 5);
+//    int arrayCount = (int)self.customPollCellsArray.count;
+//    NSLog(@"value : %lu %d", (unsigned long)self.customPollCellsArray.count, arrayCount);
+    return (self.customPollCellsArray.count + 6);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ShowLoginScreenDelegate
+- (void)showLoginScreen;
+@end
+
 @interface MasterViewController : UIViewController
 
+@property (nonatomic, weak) id<ShowLoginScreenDelegate> delegate;
 
 @end
 

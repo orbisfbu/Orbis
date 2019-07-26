@@ -270,5 +270,4 @@
     NSLog(myLongitude);
 }
 
-
 @end
