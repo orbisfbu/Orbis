@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		02AC025ECB2F25A725644A38 /* Pods_PitchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */; };
+		066344D222EBB6A6001ACCC2 /* EventPictureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 066344D022EBB6A6001ACCC2 /* EventPictureCell.m */; };
+		066344D322EBB6A6001ACCC2 /* EventPictureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */; };
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
 		06A909B422E2300E00CD2969 /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B322E2300E00CD2969 /* Poll.m */; };
 		06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B622E6792300CD2969 /* EventTitleCell.m */; };
@@ -85,6 +87,9 @@
 
 /* Begin PBXFileReference section */
 		02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pitch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventPictureCell.h; sourceTree = "<group>"; };
+		066344D022EBB6A6001ACCC2 /* EventPictureCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventPictureCell.m; sourceTree = "<group>"; };
+		066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventPictureCell.xib; sourceTree = "<group>"; };
 		06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06A909B222E2300E00CD2969 /* Poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poll.h; sourceTree = "<group>"; };
 		06A909B322E2300E00CD2969 /* Poll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
@@ -368,6 +373,9 @@
 				C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */,
 				780DB2E722EA12D200B78516 /* EventAnnotation.h */,
 				780DB2E822EA12D200B78516 /* EventAnnotation.m */,
+				066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */,
+				066344D022EBB6A6001ACCC2 /* EventPictureCell.m */,
+				066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -496,6 +504,7 @@
 				C1616DFC22EB6C70004B536B /* BioCell.xib in Resources */,
 				C1616E0622EB920D004B536B /* EventListCell.xib in Resources */,
 				C1616E0122EB7322004B536B /* ProfileLinksCell.xib in Resources */,
+				066344D322EBB6A6001ACCC2 /* EventPictureCell.xib in Resources */,
 				06A909C322E67A0500CD2969 /* LocationCell.xib in Resources */,
 				C1616E1022EB98C8004B536B /* FirstLastNameCell.xib in Resources */,
 				C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */,
@@ -652,6 +661,7 @@
 				C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */,
 				C14E19ED22E23B8B00883CFB /* VibesCell.m in Sources */,
 				C1616E0022EB7322004B536B /* ProfileLinksCell.m in Sources */,
+				066344D222EBB6A6001ACCC2 /* EventPictureCell.m in Sources */,
 				78FC04B522E17C640049E0BD /* User.m in Sources */,
 				C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */,
 				06A909C722E67A2200CD2969 /* PollsTitleCell.m in Sources */,
