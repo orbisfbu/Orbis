@@ -23,7 +23,7 @@ static double const MAX_ICON_X_OFFSET = 60;
 static double const MIN_ICON_X_OFFSET = 30;
 
 
-@interface MasterViewController () <UIScrollViewDelegate>
+@interface MasterViewController () <UIScrollViewDelegate, DismissViewControllerDelegate>
 @property (strong, nonatomic) CreateEventViewController *createEventController;
 @property (strong, nonatomic) ExploreViewController *exploreController;
 @property (strong, nonatomic) UserViewController *userController;
@@ -73,6 +73,7 @@ static double const MIN_ICON_X_OFFSET = 30;
     self.createEventController = [[CreateEventViewController alloc] initWithNibName:@"CreateEventViewController" bundle:nil];
     self.exploreController = [[ExploreViewController alloc] initWithNibName:@"ExploreViewController" bundle:nil];
     self.userController = [[UserViewController alloc] initWithNibName:@"UserViewController" bundle:nil];
+    self.userController.delegate = self;
     // Add child view controllers
     [self addChildViewController:self.createEventController];
     [self addChildViewController:self.exploreController];
@@ -133,6 +134,12 @@ static double const MIN_ICON_X_OFFSET = 30;
 
 - (void) profileButtonPressed {
     [self.viewControllerScrollView setContentOffset:CGPointMake(self.userController.view.frame.origin.x, self.userController.view.frame.origin.y) animated:YES];
+}
+
+- (void)dismissViewController {
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self.delegate showLoginScreen];
+    }];
 }
 
 @end

@@ -37,7 +37,7 @@ static NSString * const SIGNIN_VIEW = @"SIGNIN_VIEW";
 static NSString * const SIGNUP_VIEW1 = @"SIGNUP_VIEW1";
 static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
-@interface LogInViewController () <FBSDKLoginButtonDelegate>
+@interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate>
 
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
@@ -225,6 +225,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 - (void) segueToApp {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     MasterViewController * vc = (MasterViewController *)[sb instantiateViewControllerWithIdentifier:@"MasterViewController"];
+    vc.delegate = self;
     [self presentViewController:vc animated:YES completion:nil];
 }
 
@@ -511,6 +512,10 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
     // add the OK action to the alert controller
     [alert addAction:okAction];
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)showLoginScreen {
+    [self createContinuePage];
 }
 
 @end

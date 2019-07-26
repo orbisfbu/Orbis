@@ -10,8 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UserViewController : UIViewController
+@protocol DismissViewControllerDelegate
+- (void) dismissViewController;
+@end
 
+@interface UserViewController : UIViewController
+@property (nonatomic, weak) id<DismissViewControllerDelegate> delegate;
 @end
 
 NS_ASSUME_NONNULL_END
