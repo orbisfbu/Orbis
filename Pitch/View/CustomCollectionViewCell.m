@@ -13,7 +13,6 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    NSLog(@"AHAHAHHAHAHAH");
     self.layer.cornerRadius = 12;
 }
 

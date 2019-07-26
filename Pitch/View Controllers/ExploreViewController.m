@@ -15,6 +15,8 @@
 #import "Event.h"
 #import "Datahandling.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
@@ -28,11 +30,9 @@
 @implementation ExploreViewController
 
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [self refreshEventsData];
 }
-
 
 - (void) viewDidLoad {
     [super viewDidLoad];
@@ -53,11 +53,12 @@
     self.filterMenuIsShowing = NO;
     
     // Set the delegate and datasource of the drop down table view
-    CGRect frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 0);
+    CGRect frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 30, 0);
     self.dropDownFilterTV = [[UITableView alloc] initWithFrame:frame];
     self.dropDownFilterTV.layer.cornerRadius = 10;
-    [self.view addSubview:self.dropDownFilterTV];
-    [self.dropDownFilterTV setFrame:frame];
+    [self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xc2f5e6)];
+    [self.dropDownFilterTV setScrollEnabled:NO];
+    [self.view insertSubview:self.dropDownFilterTV belowSubview:self.searchBar];
     self.dropDownFilterTV.delegate = self;
     self.dropDownFilterTV.dataSource = self;
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
@@ -131,18 +132,17 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell;
-    //[cell awakeFromNib];
     if (indexPath.row == 0) {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"VibesCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 1) {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"DistanceCell"];
-        [cell awakeFromNib];
     } else if (indexPath.row == 2) {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"NumberOfPeopleCell"];
     } else {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"AgeCell"];
     }
+    [cell setBackgroundColor:UIColorFromRGB(0xc2f5e6)];
     return cell;
 }
 
@@ -157,7 +157,7 @@
 
 - (void)updateEvents:(nonnull NSArray *)events {
     self.eventsArray = [NSMutableArray arrayWithArray:events];
-    NSLog(@"--Size of events array is: %i--", events.count);
+    //NSLog(@"--Size of events array is: %i--", events.count);
     [self populateMapWithEvents];
 }
 

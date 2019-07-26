@@ -55,60 +55,18 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UeD-SB-W7W">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </scrollView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" spacing="108" translatesAutoresizingMaskIntoConstraints="NO" id="JWa-FU-lnW">
-                                <rect key="frame" x="30" y="607" width="315" height="30"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28K-dE-5Xe">
-                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="dVZ-Lg-01i"/>
-                                            <constraint firstAttribute="height" constant="30" id="exq-Lk-o4D"/>
-                                        </constraints>
-                                        <state key="normal" title="Button" image="event"/>
-                                        <connections>
-                                            <action selector="createNewEventButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AsP-MM-Dok"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ghC-zz-jxN">
-                                        <rect key="frame" x="142.5" y="0.0" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="bSH-Tn-sOK"/>
-                                            <constraint firstAttribute="width" constant="30" id="t43-tn-JX6"/>
-                                        </constraints>
-                                        <state key="normal" title="Button" image="search"/>
-                                        <connections>
-                                            <action selector="exploreButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IQ8-Vs-sP8"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kh9-Qf-thG">
-                                        <rect key="frame" x="285" y="0.0" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="30" id="0KI-wZ-Zv2"/>
-                                            <constraint firstAttribute="height" constant="30" id="VVs-OU-LyC"/>
-                                        </constraints>
-                                        <state key="normal" title="Button" image="user"/>
-                                        <connections>
-                                            <action selector="profileButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="K46-aS-EWR"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="UeD-SB-W7W" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1g2-iu-uo1"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="JWa-FU-lnW" secondAttribute="trailing" constant="30" id="3Oh-L2-tnp"/>
                             <constraint firstItem="UeD-SB-W7W" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Hl1-7a-gr4"/>
-                            <constraint firstItem="JWa-FU-lnW" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="SCn-7I-Ud9"/>
-                            <constraint firstItem="JWa-FU-lnW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="SfI-sq-s9V"/>
                             <constraint firstAttribute="bottom" secondItem="UeD-SB-W7W" secondAttribute="bottom" id="btT-Y5-QjP"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="JWa-FU-lnW" secondAttribute="bottom" constant="30" id="fIq-sT-duE"/>
                             <constraint firstAttribute="trailing" secondItem="UeD-SB-W7W" secondAttribute="trailing" id="klq-Rk-8Zd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="viewControllerScrollView" destination="UeD-SB-W7W" id="f1c-wn-usm"/>
+                        <outlet property="viewControllerScrollView" destination="UeD-SB-W7W" id="ZAC-7s-FeY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -118,8 +76,5 @@
     </scenes>
     <resources>
         <image name="back" width="500" height="550"/>
-        <image name="event" width="563" height="530"/>
-        <image name="search" width="642" height="594"/>
-        <image name="user" width="691" height="610"/>
     </resources>
 </document>

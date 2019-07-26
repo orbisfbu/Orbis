@@ -77,7 +77,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
     
-    [[DataHandling shared] addEventToDatabase:eventToAdd];
+    //[[DataHandling shared] addEventToDatabase:eventToAdd];
     
     [self makeCreateEventButton];
     self.createEventTableView.delegate = self;
