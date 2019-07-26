@@ -13,6 +13,7 @@
 #import "FBSDKLoginManagerLoginResult.h"
 #import <FBSDKAccessToken.h>
 #import "MasterViewController.h"
+#import "DataHandling.h"
 
 //Fields to be used when saving user to database
 static NSString * const DATABASE_USER_NODE = @"Users";
@@ -41,20 +42,19 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
 //initially inputted email and password correspond to existing account
-@property (weak, nonatomic) NSString *inputtedUserEmail;
-@property (weak, nonatomic) NSString *inputtedPassword;
+@property (strong, nonatomic) NSString *inputtedUserEmail;
+@property (strong, nonatomic) NSString *inputtedPassword;
 //these registering properties are to be set if inputted email doesn't
 //correspond to an account
-@property (weak, nonatomic) NSString *registerFirstName;
-@property (weak, nonatomic) NSString *registerLastName;
-@property (weak, nonatomic) NSString *registerUsername;
+@property (strong, nonatomic) NSString *registerFirstName;
+@property (strong, nonatomic) NSString *registerLastName;
+@property (strong, nonatomic) NSString *registerUsername;
 //for the password confirm field later on, just make sure that
 //the text of that cofirm password field is the same registerPassword
-@property (weak, nonatomic) NSString *registerPassword;
+@property (strong, nonatomic) NSString *registerPassword;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
-@property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
 
 // To keep track of what screen we are on
 @property (strong, nonatomic) NSString *viewName;
@@ -87,12 +87,10 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-
     [self.backButton setEnabled:NO];
     self.backButton.alpha = 0;
     
-    if (![FBSDKAccessToken currentAccessToken]) {
+    if (![FIRAuth auth].currentUser) {
         NSLog(@"No user signed in... Creating sign in/up page");
         [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         self.FBLoginButton.delegate = self;
@@ -106,7 +104,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    if ([FBSDKAccessToken currentAccessToken]) {
+    if ([FIRAuth auth].currentUser) {
         NSLog(@"User was already logged in... Creating user profile");
         [self segueToApp];
     }
@@ -211,7 +209,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     
     // Add signup confirm password text field
     self.confirmPasswordSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.confirmPasswordSignUpTextField setPlaceholder:@"Conform Password"];
+    [self.confirmPasswordSignUpTextField setPlaceholder:@"Confirm Password"];
     [self.confirmPasswordSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [self.view addSubview:self.confirmPasswordSignUpTextField];
     
@@ -355,31 +353,49 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) continueButtonPressed {
-    BOOL emailExists = YES; // TODO: Implement later with Firebase code
-    [self dismissContinuePage];
     self.inputtedUserEmail = self.emailTextField.text;
-    if (emailExists) {
-        [self createSignInPage];
-    } else {
-        [self createSignUpPage1];
-    }
+    
+    [[FIRAuth auth] fetchSignInMethodsForEmail:_inputtedUserEmail completion:^(NSArray<NSString *> * _Nullable listOfMethods, NSError * _Nullable error) {
+        
+        if(listOfMethods){
+            [self dismissContinuePage];
+            [self createSignInPage];
+        }
+        else{
+            [self dismissContinuePage];
+            [self createSignUpPage1];
+        }
+    }];
 }
 
+
 - (void) logInButtonPressed {
-    BOOL loginIsCorrect = YES; // TODO: Implement later with Firebase code
-    if (loginIsCorrect) {
-        self.inputtedPassword = self.passwordTextField.text;
-        [self dismissSignInPage];
-        
-        [[FIRAuth auth] signInWithEmail: self.inputtedUserEmail
-                               password: self.inputtedPassword
-                             completion:^(FIRAuthDataResult * _Nullable authResult,
-                                          NSError * _Nullable error) {
-                                 NSLog(@"SUCCESSFULLY SIGNED IN REGULAR USER");
-                             }];
-        [self segueToApp];
-    }
+    self.inputtedPassword = self.passwordTextField.text;
+    [[FIRAuth auth] signInWithEmail:self.inputtedUserEmail
+                           password:self.inputtedPassword
+                         completion:^(FIRAuthDataResult * _Nullable authResult,
+                                      NSError * _Nullable error) {
+                             //if authresult is nill then check for error
+                             //non nill authresult means we can login
+                             if (authResult.user){
+                                 [self dismissSignInPage];
+                                 [self segueToApp];
+                                 User *retrievedUser = [[DataHandling shared] getUser:authResult.user.uid];
+                                 [self.delegate userWasCreated:retrievedUser];
+                             }
+                             else{
+                                 switch([error code]){
+                                     case 17009:
+                                         [self presentAlert:@"Wrong password" withMessage:@"Make sure password is correct"];
+                                         break;
+                                     case 17034:
+                                         [self presentAlert:@"Email not provided" withMessage:@"Please provide an email"];
+                                         break;
+                                 }
+                             }
+                         }];
 }
+
 
 - (void) nextButtonPressed {
     BOOL signupIsCorrect = YES; // TODO: Implement later with Firebase code
@@ -394,17 +410,49 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 - (void) signUpButtonPressed {
     BOOL signupIsCorrect = [self.passwordSignUpTextField.text isEqualToString:self.confirmPasswordSignUpTextField.text];
     if (signupIsCorrect) {
+        __block NSString *userID;
         self.registerUsername = self.usernameTextField.text;
         self.registerPassword = self.passwordSignUpTextField.text;
-        [self dismissSignUpPage2:YES];
+        NSDictionary *userInfo = @{
+                                   @"First Name": self.registerFirstName,
+                                   @"Last Name": self.registerLastName,
+                                   //use defaults for profile image url and other fixed fields
+                                   @"ProfileImageURL": @"random",
+                                   @"User Bio": @"Hi",
+                                   @"Screen Name": self.registerUsername,
+                                   @"BackgroundImageURL": @"testing",
+                                   @"Email": self.inputtedUserEmail,
+                                   @"Password": self.registerPassword
+                                   };
         [[FIRAuth auth] createUserWithEmail:self.inputtedUserEmail
                                    password:self.registerPassword
                                  completion:^(FIRAuthDataResult * _Nullable authResult,
                                               NSError * _Nullable error) {
-                                     NSLog(@"USER WAS CREATED SUCCESSFULLY");
+                                     if(authResult){
+                                         userID = authResult.user.uid;
+                                         User *newUser = [[User alloc] initWithDictionary:userInfo];
+                                         NSLog(@"New firebase user was created %@", authResult.user);
+                                         [self.delegate userWasCreated:newUser];
+                                         [[DataHandling shared] addUserToDatabase:newUser withUserID:userID];
+                                         [self dismissSignUpPage2:YES];
+                                         [self segueToApp];
+                                     }
+                                     else{
+                                         switch([error code]){
+                                                 
+                                             case 1707:
+                                                 [self presentAlert:@"Email already in use" withMessage:@"Pleae restart signup with another email"];
+                                                 break;
+                                             case 1708:
+                                                 [self presentAlert:@"Invalid Email" withMessage:@"Make sure email was in right format"];
+                                                 break;
+                                             case 17026:
+                                                 [self presentAlert:@"Password is too weak" withMessage:@"Please input a stronger password"];
+                                                 break;
+                                         }
+                                     }
                                  }];
         NSLog(@"USER WILL BE CREATED NOW");
-        [self segueToApp];
     }
     else{
         [self presentAlert:@"Passwords Don't Match" withMessage:@"Make sure your password fields match"];
@@ -413,33 +461,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     }
 }
 
-- (void) signoutButtonPressed
-{
-    NSLog(@"LOGOUT BUTTON WAS PRESSED");
-    NSError *signOutError;
-    BOOL status = [[FIRAuth auth] signOut:&signOutError];
-    if (!status) {
-        NSLog(@"Error signing out: %@", signOutError);
-        return;
-    }else{
-        NSLog(@"Successfully Signout");
-        NSLog(@"IS THE USER STILL IN SESSION? %@", [FIRAuth auth].currentUser);
-    }
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-//FacebookLoginButton methods
-//if user successfully logins with Facebook
-//they'll be added to the databse and their profile image will be set
 - (void)loginButton:(FBSDKLoginButton *)loginButton
 didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
     if (error == nil) {
@@ -450,15 +471,11 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
                 NSLog(AUTHENTICATION_ERROR);
             }
             // User successfully signed in
-            if (authResult == nil) { return; }
-            //will probably have to make a user locally?
-            //use the datahandling thing here
+            if (authResult == nil) {
+                NSLog(@"WAS NOT ABLE TO SIGN USER IN");
+                return;
+            }
             NSLog(@"SUCCESSFULLY AUTHENTICATED USER");
-            //                                      self.currentUser = authResult.user;
-            //have to create delegate to let other
-            //view controllers know when signin has occured
-            //and who is signed in
-            
         }];
     } else {
         NSLog(AUTHENTICATION_ERROR);
@@ -467,40 +484,18 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
 
 
 - (void)loginButtonDidLogOut:(nonnull FBSDKLoginButton *)loginButton {
+    NSLog(@"FACEBOOK LOGOUT WAS PRESSED");
     NSError *signOutError;
     BOOL status = [[FIRAuth auth] signOut:&signOutError];
     if (!status) {
         NSLog(SIGN_OUT_FAILURE);
         return;
     }
+    else
+    {
+        NSLog(@"FACEBOOK LOGOUT SUCCESSFUL");
+    }
 }
-
-- (void)addUserToDatabase:(FIRUser *)currentUser{
-    NSString *userID = [FIRAuth auth].currentUser.uid;
-    //Display name is a string of the full name
-    //Separating it below
-    NSString *fullName = currentUser.displayName;
-    NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
-    NSString *profileImageURLString = [currentUser.photoURL absoluteString];
-    NSDictionary *userInfo = @{ USER_FIRSTNAME: [nameArray objectAtIndex:0], USER_LASTNAME: [nameArray  objectAtIndex:1], USER_PROFILE_IMAGE_URLSTRING : profileImageURLString, USER_EMAIL: currentUser.email};
-    [[self.databaseUsersReference child:userID] setValue: userInfo];
-    NSLog(SUCCESSFUL_USER_SAVE);
-}
-
-//will be called whenever Facebook login/authentication is successful
-//OR the user has changed profile image in profileViewController
-- (void)setUserProfileImage {
-    NSString *userID = [FIRAuth auth].currentUser.uid;
-    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        NSString *retrievedURLString = snapshot.value[USER_PROFILE_IMAGE_URLSTRING];
-        NSURL *profileImageNSURL = [NSURL URLWithString:retrievedURLString];
-        //self.profilePicImageView.image = nil;
-        //[self.profilePicImageView setImageWithURL:profileImageNSURL];
-    } withCancelBlock:^(NSError * _Nonnull error) {
-        NSLog(DATA_FETCH_ERROR);
-    }];
-}
-
 
 - (void)presentAlert:(NSString *)alertTitle withMessage:(NSString *)alertMessage
 {

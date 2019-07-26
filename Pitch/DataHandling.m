@@ -8,7 +8,7 @@
 
 #import "DataHandling.h"
 #import "Event.h"
-#import "User.h"
+
 
 //constants for database access to nodes and their children
 static NSString * const DATABASE_USER_NODE = @"Users";
@@ -29,6 +29,7 @@ static NSString * const USER_EMAIL_KEY = @"Email";
 static NSString * const USER_PROFILE_IMAGE_KEY = @"Profile Image";
 static NSString * const USER_SCREEN_NAME_KEY = @"Screen Name";
 static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
+static NSString * const USER_PASSWORD_KEY = @"Password";
 
 @interface DataHandling()
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
@@ -48,16 +49,13 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 }
 
 - (instancetype)init {
-    
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USER_NODE];
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENT_NODE];
-    
     return self;
 }
 
 - (void) getEventsArray {
     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
-    
     [self.databaseEventsReference
      observeEventType:FIRDataEventTypeValue
      withBlock:^(FIRDataSnapshot *snapshot) {
@@ -103,21 +101,59 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 }
 
 
-- (void)addUserToDatabase:(FIRUser *)authFirebaseUser withUserName:(NSString *)userName{
-    NSString *userID = authFirebaseUser.uid;
-    NSString *fullName = authFirebaseUser.displayName;
+- (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID{
+    
+    NSString *fullName = thisUser.userNameString;
     NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
-    NSString *profileImageURLString = [authFirebaseUser.photoURL absoluteString];
+    NSString *profileImageURLString = thisUser.profileImageURLString;
+    NSMutableDictionary *userInfoDict = [NSMutableDictionary new];
+    if ([nameArray objectAtIndex:0]) {
+        [userInfoDict setObject:[nameArray objectAtIndex:0] forKey:USER_FIRSTNAME_KEY];
+    }
+    if ([nameArray objectAtIndex:1]) {
+        [userInfoDict setObject:[nameArray objectAtIndex:1] forKey:USER_LASTNAME_KEY];
+    }
     NSDictionary *userInfo = @{ USER_FIRSTNAME_KEY: [nameArray objectAtIndex:0],
                                 USER_LASTNAME_KEY: [nameArray  objectAtIndex:1],
                                 USER_PROFILE_IMAGE_KEY : profileImageURLString,
-                                USER_EMAIL_KEY: authFirebaseUser.email,
+                                USER_EMAIL_KEY: thisUser.email,
                                 USER_PROFILE_IMAGE_KEY: profileImageURLString,
-                                USER_SCREEN_NAME_KEY: userName,
-                                USER_BACKGROUND_KEY: @"some background image"
+                                USER_SCREEN_NAME_KEY: thisUser.screenNameString,
+                                USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString,
+                                USER_PASSWORD_KEY: thisUser.userPassword
                                 };
-    [[self.databaseUsersReference child:userID] setValue: userInfo];
+    [[self.databaseUsersReference child:createdUserID] setValue: userInfo];
 }
 
+//if the user is in database then we'll instantiate the object and pass it
+//to the login delegate
+- (User *)getUser:(NSString *)userID
+{
+    __block NSDictionary *userInfo = nil;
+    __block User *returnThisUser = nil;
+    [[self.databaseUsersReference child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        userInfo = snapshot.value;
+    } withCancelBlock:^(NSError * _Nonnull error) {
+        if (userInfo)
+        {
+            returnThisUser = [[User alloc] initWithDictionary:userInfo];
+        }
+    }];
+    //will be nill if a user with that email doesn't exist
+    return returnThisUser;
+}
+
+- (BOOL) isLoginCorrect:(NSString *)inputtedEmail withPassword:(NSString *)inputtedPassword
+{
+    __block bool loginIsCorrect = NO;
+    [[self.databaseUsersReference child:inputtedEmail] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        if ([snapshot.value[@"Password"] isEqualToString:inputtedPassword]){
+            loginIsCorrect = YES;
+        }
+    } withCancelBlock:^(NSError * _Nonnull error) {
+        NSLog(@"Error detecing if user was already made");
+    }];
+    return loginIsCorrect;
+}
 
 @end

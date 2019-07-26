@@ -56,28 +56,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //if NO, then user is prompted to sign-in/signup, and those views will be displayed
 @property (nonatomic) BOOL *userIsSignedIn;
 
-
 @end
 
 @implementation CreateEventViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    NSDictionary *eventDefinition = @{
-                                      @"Created By": @"Sebastian",
-                                      @"Event Name": @"TestName",
-                                      @"Has Music": @"YES",
-                                      @"Attendance": @"4",
-                                      @"ImageURL": @"testingURL",
-                                      @"Description": @"testing",
-                                      @"Age Restriction": @"18",
-                                      @"Location": @"37.777596 -122.458708"
-                                      };
-    
-    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
-    
-    [[DataHandling shared] addEventToDatabase:eventToAdd];
     
     [self makeCreateEventButton];
     self.createEventTableView.delegate = self;
@@ -99,7 +83,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
-    Event *newEvent = [[Event alloc] init];
 
 }
 
@@ -110,11 +93,27 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventButton setBackgroundColor:[UIColor greenColor]];
     self.createEventButton.layer.cornerRadius = 5;
     self.createEventButton.alpha = 1;
-    [self.createEventButton setEnabled:NO];
+    [self.createEventButton setEnabled:YES];
     [self.createEventButton addTarget:self action:@selector(createEventButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createEventButton];
 }
 
+- (void) createEventButtonPressed
+{
+    NSDictionary *eventDefinition = @{
+                                      @"Created By": @"Sebastian",
+                                      @"Event Name": @"TestName",
+                                      @"Has Music": @"YES",
+                                      @"Attendance": @"4",
+                                      @"ImageURL": @"testingURL",
+                                      @"Description": @"testing",
+                                      @"Age Restriction": @"18",
+                                      @"Location": @"37.806093 -122.435543"
+                                      };
+    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
+    [[DataHandling shared] addEventToDatabase:eventToAdd];
+    NSLog(@"THE EVENT WAS CREATED");
+}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell;

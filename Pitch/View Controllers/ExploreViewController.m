@@ -14,9 +14,13 @@
 #import "AgeCell.h"
 #import "Event.h"
 #import "Datahandling.h"
+#import "UIImageView+AFNetworking.h"
+#import "EventAnnotation.h"
+#import "EventDetailsViewController.h"
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
 @property (nonatomic) BOOL filterMenuIsShowing;
@@ -30,16 +34,31 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [self.locationManager startUpdatingLocation];
     [self refreshEventsData];
 }
-
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
+    self.photoMap.delegate = self;
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.photoMap setShowsUserLocation:YES];
+    
+    #ifdef __IPHONE_8_0
+    if(IS_OS_8_OR_LATER) {
+        // Use one or the other, not both. Depending on what you put in info.plist
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    #endif
+    [self.locationManager startUpdatingLocation];
+    
+    //retrieve events from database
     [self refreshEventsData];
-
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667), MKCoordinateSpanMake(0.1, 0.1));
     [self.photoMap setRegion:sfRegion animated:false];
     //self.photoMap.delegate = self;
@@ -81,12 +100,39 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            MKPointAnnotation *annotation = [MKPointAnnotation new];
-            annotation.coordinate = thisEvent.eventCoordinates;
-            annotation.title = thisEvent.eventName;
-            [self.photoMap addAnnotation:annotation];
+            //set the rest of the properties here
+            //will have to pass in this information to the modal that will be presented as a result of click
+            EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
+            newEventAnnotation.coordinate = thisEvent.eventCoordinates;
+            newEventAnnotation.eventName = thisEvent.eventName;
+            newEventAnnotation.eventCreator = thisEvent.eventCreator;
+            newEventAnnotation.eventDescription = thisEvent.eventDescription;
+            newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
+            newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
+            [self.photoMap addAnnotation:newEventAnnotation];
         }
     }
+}
+
+- (void)dismissEventDetails:(UISwipeGestureRecognizer *)recognizer
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
+{
+    EventDetailsViewController *detailedEventVC = [[EventDetailsViewController alloc] init];
+    detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
+    detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
+    detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
+    detailedEventVC.eventImageView.image = eventToPresent.eventImage;
+    detailedEventVC.modalPresentationStyle = UIModalPresentationFormSheet;
+    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self presentViewController:detailedEventVC animated:YES completion: nil];
+    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
+    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
+    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
+    
 }
 
 
@@ -159,6 +205,58 @@
     self.eventsArray = [NSMutableArray arrayWithArray:events];
     NSLog(@"--Size of events array is: %i--", events.count);
     [self populateMapWithEvents];
+}
+
+
+- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
+    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    
+    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
+    resizeImageView.image = image;
+    
+    UIGraphicsBeginImageContext(size);
+    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    if([annotation isKindOfClass:[MKUserLocation class]]){
+                return nil;
+            }
+    NSString *annotationIdentifier = @"Event";
+    MKPinAnnotationView *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
+    if (newEventAnnotationView == nil) {
+        newEventAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+        newEventAnnotationView.canShowCallout = NO;
+    }
+    //[newEventAnnotationView addSubview:[[UIImageView alloc] initWithImage:newEventAnnotationView.eventImage]];
+    return newEventAnnotationView;
+}
+
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    NSLog(@"THE METHOD DID GET CALLED!");
+    [mapView deselectAnnotation:view.annotation animated:YES];
+    [self presentEventDetailsView:view.annotation];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+    UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"There was an error retrieving your location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [errorAlert show];
+    NSLog(@"Error: %@",error.description);
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    CLLocation *crnLoc = [locations lastObject];
+    NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
+    NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
+    NSLog(mylatitude);
+    NSLog(myLongitude);
 }
 
 
