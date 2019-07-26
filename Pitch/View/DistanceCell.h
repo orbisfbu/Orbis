@@ -11,10 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DistanceCell : UITableViewCell <DOPDropDownMenuDelegate, DOPDropDownMenuDataSource>
+@interface DistanceCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (strong, nonatomic) NSArray *dataArray;
-@property (strong, nonatomic) DOPDropDownMenu *menu;
+@property (weak, nonatomic) IBOutlet UIButton *distanceToggleButton;
+@property (weak, nonatomic) IBOutlet UIView *bottomConstraint;
 //@property (weak, nonatomic) IBOutlet UIPickerView *distancePickerView;
 @end
 
