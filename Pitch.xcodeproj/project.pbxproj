@@ -49,6 +49,16 @@
 		C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C14E1A0322E2768B00883CFB /* CustomCollectionViewCell.xib */; };
 		C14E1A0822E276F400883CFB /* Vibes.m in Sources */ = {isa = PBXBuildFile; fileRef = C14E1A0722E276F400883CFB /* Vibes.m */; };
 		C14E1A0D22E8D52E00883CFB /* LogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C14E1A0C22E8D52E00883CFB /* LogInViewController.m */; };
+		C1616DFB22EB6C70004B536B /* BioCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616DF922EB6C70004B536B /* BioCell.m */; };
+		C1616DFC22EB6C70004B536B /* BioCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616DFA22EB6C70004B536B /* BioCell.xib */; };
+		C1616E0022EB7322004B536B /* ProfileLinksCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616DFE22EB7322004B536B /* ProfileLinksCell.m */; };
+		C1616E0122EB7322004B536B /* ProfileLinksCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */; };
+		C1616E0522EB920D004B536B /* EventListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0322EB920D004B536B /* EventListCell.m */; };
+		C1616E0622EB920D004B536B /* EventListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0422EB920D004B536B /* EventListCell.xib */; };
+		C1616E0A22EB931F004B536B /* EventsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */; };
+		C1616E0B22EB931F004B536B /* EventsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */; };
+		C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */; };
+		C1616E1022EB98C8004B536B /* FirstLastNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +149,21 @@
 		C14E1A0722E276F400883CFB /* Vibes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Vibes.m; sourceTree = "<group>"; };
 		C14E1A0B22E8D52E00883CFB /* LogInViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogInViewController.h; sourceTree = "<group>"; };
 		C14E1A0C22E8D52E00883CFB /* LogInViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogInViewController.m; sourceTree = "<group>"; };
+		C1616DF822EB6C70004B536B /* BioCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BioCell.h; sourceTree = "<group>"; };
+		C1616DF922EB6C70004B536B /* BioCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BioCell.m; sourceTree = "<group>"; };
+		C1616DFA22EB6C70004B536B /* BioCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BioCell.xib; sourceTree = "<group>"; };
+		C1616DFD22EB7322004B536B /* ProfileLinksCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileLinksCell.h; sourceTree = "<group>"; };
+		C1616DFE22EB7322004B536B /* ProfileLinksCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileLinksCell.m; sourceTree = "<group>"; };
+		C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileLinksCell.xib; sourceTree = "<group>"; };
+		C1616E0222EB920D004B536B /* EventListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventListCell.h; sourceTree = "<group>"; };
+		C1616E0322EB920D004B536B /* EventListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventListCell.m; sourceTree = "<group>"; };
+		C1616E0422EB920D004B536B /* EventListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListCell.xib; sourceTree = "<group>"; };
+		C1616E0722EB931F004B536B /* EventsCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventsCollectionViewCell.h; sourceTree = "<group>"; };
+		C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventsCollectionViewCell.m; sourceTree = "<group>"; };
+		C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventsCollectionViewCell.xib; sourceTree = "<group>"; };
+		C1616E0C22EB98C8004B536B /* FirstLastNameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstLastNameCell.h; sourceTree = "<group>"; };
+		C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstLastNameCell.m; sourceTree = "<group>"; };
+		C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FirstLastNameCell.xib; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -317,6 +342,21 @@
 				06A909C922E67A3500CD2969 /* CustomPollCell.h */,
 				06A909CA22E67A3500CD2969 /* CustomPollCell.m */,
 				06A909CB22E67A3500CD2969 /* CustomPollCell.xib */,
+				C1616DF822EB6C70004B536B /* BioCell.h */,
+				C1616DF922EB6C70004B536B /* BioCell.m */,
+				C1616DFA22EB6C70004B536B /* BioCell.xib */,
+				C1616DFD22EB7322004B536B /* ProfileLinksCell.h */,
+				C1616DFE22EB7322004B536B /* ProfileLinksCell.m */,
+				C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */,
+				C1616E0222EB920D004B536B /* EventListCell.h */,
+				C1616E0322EB920D004B536B /* EventListCell.m */,
+				C1616E0422EB920D004B536B /* EventListCell.xib */,
+				C1616E0722EB931F004B536B /* EventsCollectionViewCell.h */,
+				C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */,
+				C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */,
+				C1616E0C22EB98C8004B536B /* FirstLastNameCell.h */,
+				C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */,
+				C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -442,7 +482,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1616DFC22EB6C70004B536B /* BioCell.xib in Resources */,
+				C1616E0622EB920D004B536B /* EventListCell.xib in Resources */,
+				C1616E0122EB7322004B536B /* ProfileLinksCell.xib in Resources */,
 				06A909C322E67A0500CD2969 /* LocationCell.xib in Resources */,
+				C1616E1022EB98C8004B536B /* FirstLastNameCell.xib in Resources */,
 				C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */,
 				C127D52822DFE699009963B0 /* ExploreViewController.xib in Resources */,
 				C138EDE722DFAD9F00AAA0D0 /* LaunchScreen.storyboard in Resources */,
@@ -452,6 +496,7 @@
 				C14E1A0022E23BF000883CFB /* AgeCell.xib in Resources */,
 				C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */,
 				06A909D422E7B5DC00CD2969 /* CreateEventViewController.xib in Resources */,
+				C1616E0B22EB931F004B536B /* EventsCollectionViewCell.xib in Resources */,
 				C138EDE222DFAD9F00AAA0D0 /* Main.storyboard in Resources */,
 				C14E19F622E23BD000883CFB /* DistanceCell.xib in Resources */,
 				C14E19FB22E23BE200883CFB /* NumberOfPeopleCell.xib in Resources */,
@@ -585,11 +630,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1616E0522EB920D004B536B /* EventListCell.m in Sources */,
 				06A909C222E67A0500CD2969 /* LocationCell.m in Sources */,
 				C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */,
 				C14E19F522E23BD000883CFB /* DistanceCell.m in Sources */,
 				C14E19FF22E23BF000883CFB /* AgeCell.m in Sources */,
+				C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */,
 				C14E19ED22E23B8B00883CFB /* VibesCell.m in Sources */,
+				C1616E0022EB7322004B536B /* ProfileLinksCell.m in Sources */,
 				78FC04B522E17C640049E0BD /* User.m in Sources */,
 				C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */,
 				06A909C722E67A2200CD2969 /* PollsTitleCell.m in Sources */,
@@ -599,10 +647,12 @@
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
 				06A909D322E7B5DC00CD2969 /* CreateEventViewController.m in Sources */,
 				C14E1A0D22E8D52E00883CFB /* LogInViewController.m in Sources */,
+				C1616DFB22EB6C70004B536B /* BioCell.m in Sources */,
 				C14E1A0822E276F400883CFB /* Vibes.m in Sources */,
 				06A909CC22E67A3500CD2969 /* CustomPollCell.m in Sources */,
 				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,
 				C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */,
+				C1616E0A22EB931F004B536B /* EventsCollectionViewCell.m in Sources */,
 				C14E1A0422E2768B00883CFB /* CustomCollectionViewCell.m in Sources */,
 				C14E19FA22E23BE200883CFB /* NumberOfPeopleCell.m in Sources */,
 				06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */,

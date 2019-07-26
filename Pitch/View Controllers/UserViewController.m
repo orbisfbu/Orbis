@@ -7,6 +7,10 @@
 //
 
 #import "UserViewController.h"
+#import "BioCell.h"
+#import "ProfileLinksCell.h"
+#import "EventListCell.h"
+#import "FirstLastNameCell.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -87,13 +91,17 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     
     // Add profile scroll view
     self.userProfileTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.userBackgroundImageView.frame.size.height) style:UITableViewStylePlain];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"BioCell" bundle:nil] forCellReuseIdentifier:@"BioCell"];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"ProfileLinksCell" bundle:nil] forCellReuseIdentifier:@"ProfileLinksCell"];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventListCell" bundle:nil] forCellReuseIdentifier:@"EventListCell"];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"FirstLastNameCell" bundle:nil] forCellReuseIdentifier:@"FirstLastNameCell"];
     self.userProfileTableView.delegate = self;
     self.userProfileTableView.dataSource = self;
-    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
     [self.view addSubview:self.userProfileTableView];
     
     // Add user profile photo
     self.userProfileImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, self.view.frame.size.height, self.view.frame.size.width/3, self.view.frame.size.width/3)];
+    [self.userProfileImageView setClipsToBounds:YES];
     self.userProfileImageView.layer.cornerRadius = self.userProfileImageView.frame.size.width/2;
     [self.userProfileImageView setImage:[UIImage imageNamed:@"default_profile"]];
     [self.userProfileImageView setBackgroundColor:[UIColor redColor]];
@@ -159,8 +167,20 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
-    return cell;
+    long row = indexPath.row;
+    if (row == 0) {
+        FirstLastNameCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"FirstLastNameCell"];
+        return cell;
+    } else if (row == 1) {
+        BioCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"BioCell"];
+        return cell;
+    } else if (row == 2){
+        EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
+        return cell;
+    } else {
+        ProfileLinksCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"ProfileLinksCell"];
+        return cell;
+    }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
