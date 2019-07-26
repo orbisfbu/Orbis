@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EventListCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UILabel *title;
 @end
 
 NS_ASSUME_NONNULL_END

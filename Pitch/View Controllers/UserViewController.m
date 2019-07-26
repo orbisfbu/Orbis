@@ -13,6 +13,7 @@
 #import "EventListCell.h"
 #import "FirstLastNameCell.h"
 #import "LogInViewController.h"
+#import "LogoutCell.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -24,7 +25,7 @@
 static double const BACKGORUND_IMAGE_MIN_HEIGHT = 50.0;
 static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
-@interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LoginViewControllerDelegate>
+@interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LoginViewControllerDelegate, LogoutUserDelegate>
 
 //this is the user object to load once user gets to profile view
 @property (strong, nonatomic) User *userToLoad;
@@ -104,6 +105,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"ProfileLinksCell" bundle:nil] forCellReuseIdentifier:@"ProfileLinksCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventListCell" bundle:nil] forCellReuseIdentifier:@"EventListCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"FirstLastNameCell" bundle:nil] forCellReuseIdentifier:@"FirstLastNameCell"];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"LogoutCell" bundle:nil] forCellReuseIdentifier:@"LogoutCell"];
     self.userProfileTableView.delegate = self;
     self.userProfileTableView.dataSource = self;
     [self.view addSubview:self.userProfileTableView];
@@ -153,24 +155,23 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     }];
 }
 
-- (void) dismissUserProfile {
-    // Resize everything to original size, not the size it is modified to after scrolling
-}
-
-- (void) editButtonPressed {
-    
+- (void) logoutUser {
     NSLog(@"LOGOUT BUTTON WAS PRESSED");
     NSError *signOutError;
     BOOL status = [[FIRAuth auth] signOut:&signOutError];
     if (!status) {
         NSLog(@"Error signing out: %@", signOutError);
         return;
-    }else{
+    } else {
         NSLog(@"Successfully Signout");
-        NSLog(@"IS THE USER STILL IN SESSION? %@", [FIRAuth auth].currentUser);
+        NSLog(@"USER: %@", [FIRAuth auth].currentUser);
         [FBSDKAccessToken setCurrentAccessToken:nil];
         [FBSDKProfile setCurrentProfile:nil];
+        [self.delegate dismissViewController];
     }
+}
+
+- (void) editButtonPressed {
     
 }
 
@@ -185,14 +186,22 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     } else if (row == 2){
         EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
         return cell;
-    } else {
+    } else if (row == 3){
+        EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
+        [cell.title setText:@"Events Created"];
+        return cell;
+    } else if (row == 4){
         ProfileLinksCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"ProfileLinksCell"];
+        return cell;
+    } else {
+        LogoutCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"LogoutCell"];
+        [cell setDelegate:self];
         return cell;
     }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return 6;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
