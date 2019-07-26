@@ -20,10 +20,13 @@
 #import "User.h"
 #import "DataHandling.h"
 #import "VibesCell.h"
+#import "AgeCell.h"
 #import "EventTitleCell.h"
 #import "LocationCell.h"
 #import "PollsTitleCell.h"
 #import "CustomPollCell.h"
+#import <MapKit/MKLocalSearchRequest.h>
+#import <MapKit/MKLocalSearch.h>
 
 
 @import UIKit;
@@ -51,11 +54,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) User *makingUser;
 @property (strong, nonatomic) UITableView *createEventTableView;
 @property (strong, nonatomic) UIButton *createEventButton;
-//this flag will be used to trigger initial loading
-//if YES, then event is created
-//if NO, then user is prompted to sign-in/signup, and those views will be displayed
-@property (nonatomic) BOOL *userIsSignedIn;
-
 
 @end
 
@@ -63,28 +61,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    NSDictionary *eventDefinition = @{
-                                      @"Created By": @"Sebastian",
-                                      @"Event Name": @"TestName",
-                                      @"Has Music": @"YES",
-                                      @"Attendance": @"4",
-                                      @"ImageURL": @"testingURL",
-                                      @"Description": @"testing",
-                                      @"Age Restriction": @"18",
-                                      @"Location": @"37.777596 -122.458708"
-                                      };
-    
-    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
-    
-    //[[DataHandling shared] addEventToDatabase:eventToAdd];
-    
-    [self makeCreateEventButton];
     self.createEventTableView.delegate = self;
     self.createEventTableView.dataSource = self;
     [self.createEventTableView setAllowsSelection:NO];
     self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
     self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
+    [self makeCreateEventButton];
     CGRect frame = CGRectMake(self.createEventButton.frame.origin.x, self.createEventButton.frame.origin.y + self.createEventButton.frame.size.height, self.createEventButton.frame.size.width, self.view.frame.size.height - self.createEventButton.frame.size.height);
     self.createEventTableView = [[UITableView alloc] initWithFrame:frame];
     self.createEventTableView.layer.cornerRadius = 10;
@@ -94,14 +76,32 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.createEventTableView.dataSource = self;
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"EventTitleCell" bundle:nil] forCellReuseIdentifier:@"EventTitleCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"AgeCell" bundle:nil] forCellReuseIdentifier:@"AgeCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
-    Event *newEvent = [[Event alloc] init];
-
+    NSLog(@"please");
 }
+
+- (void) createEventButtonPressed
+{
+    NSDictionary *eventDefinition = @{
+                                      @"Created By": @"Sebastian",
+                                      @"Event Name": @"TestName",
+                                      @"Has Music": @"YES",
+                                      @"Attendance": @"4",
+                                      @"ImageURL": @"testingURL",
+                                      @"Description": @"testing",
+                                      @"Age Restriction": @"18",
+                                      @"Location": @"37.806093 -122.435543"
+                                      };
+    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
+    [[DataHandling shared] addEventToDatabase:eventToAdd];
+    NSLog(@"THE EVENT WAS CREATED");
+}
+
 
 - (void) makeCreateEventButton{
     // Add create event button
@@ -126,8 +126,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 2) {
-        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"AgeCell"];
+        [cell awakeFromNib];
     } else if (indexPath.row == 3) {
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+    } else if (indexPath.row == 4) {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
     } else {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"CustomPollCell"];
@@ -136,12 +139,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (self.customPollCellsArray.count + 4);
+    return (self.customPollCellsArray.count + 5);
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
-}
+    }
 
 @end
 

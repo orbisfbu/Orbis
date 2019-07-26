@@ -12,26 +12,40 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AgeCell" id="KGk-i7-Jjw" customClass="AgeCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AgeCell" rowHeight="102" id="KGk-i7-Jjw" customClass="AgeCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="178"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="177.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Age" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URi-Pk-aQi">
-                        <rect key="frame" x="5" y="5" width="28" height="18"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Age Restrictions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URi-Pk-aQi">
+                        <rect key="frame" x="5" y="5" width="117.5" height="119.5"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="List age restrictions or type  'None'" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="0KW-fU-Gng">
+                        <rect key="frame" x="10" y="132.5" width="300" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="AeE-fQ-7zW"/>
+                        </constraints>
+                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="0KW-fU-Gng" firstAttribute="top" secondItem="URi-Pk-aQi" secondAttribute="bottom" constant="8" id="Rb4-se-64A"/>
+                    <constraint firstAttribute="bottom" secondItem="0KW-fU-Gng" secondAttribute="bottom" constant="5" id="bFP-GP-FCv"/>
                     <constraint firstItem="URi-Pk-aQi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="hMl-T8-Xpr"/>
+                    <constraint firstAttribute="trailing" secondItem="0KW-fU-Gng" secondAttribute="trailing" constant="10" id="jxy-7s-BpQ"/>
+                    <constraint firstItem="0KW-fU-Gng" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="vSl-5u-Blc"/>
                     <constraint firstItem="URi-Pk-aQi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="zTp-RH-Ab7"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <point key="canvasLocation" x="137.59999999999999" y="172.26386806596702"/>
         </tableViewCell>
     </objects>
 </document>
