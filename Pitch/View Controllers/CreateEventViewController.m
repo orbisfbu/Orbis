@@ -54,11 +54,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) User *makingUser;
 @property (strong, nonatomic) UITableView *createEventTableView;
 @property (strong, nonatomic) UIButton *createEventButton;
-//this flag will be used to trigger initial loading
-//if YES, then event is created
-//if NO, then user is prompted to sign-in/signup, and those views will be displayed
-@property (nonatomic) BOOL *userIsSignedIn;
-
 
 @end
 
@@ -66,23 +61,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    NSDictionary *eventDefinition = @{
-                                      @"Created By": @"Sebastian",
-                                      @"Event Name": @"TestName",
-                                      @"Has Music": @"YES",
-                                      @"Attendance": @"4",
-                                      @"ImageURL": @"testingURL",
-                                      @"Description": @"testing",
-                                      @"Age Restriction": @"18",
-                                      @"Location": @"37.777596 -122.458708"
-                                      };
-    
-    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
-    
-    //[[DataHandling shared] addEventToDatabase:eventToAdd];
-    
-    [self makeCreateEventButton];
     self.createEventTableView.delegate = self;
     self.createEventTableView.dataSource = self;
     [self.createEventTableView setAllowsSelection:NO];
@@ -103,8 +81,25 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
-    Event *newEvent = [[Event alloc] init];
 }
+
+- (void) createEventButtonPressed
+{
+    NSDictionary *eventDefinition = @{
+                                      @"Created By": @"Sebastian",
+                                      @"Event Name": @"TestName",
+                                      @"Has Music": @"YES",
+                                      @"Attendance": @"4",
+                                      @"ImageURL": @"testingURL",
+                                      @"Description": @"testing",
+                                      @"Age Restriction": @"18",
+                                      @"Location": @"37.806093 -122.435543"
+                                      };
+    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
+    [[DataHandling shared] addEventToDatabase:eventToAdd];
+    NSLog(@"THE EVENT WAS CREATED");
+}
+
 
 - (void) makeCreateEventButton{
     // Add create event button
@@ -147,7 +142,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
-}
+    }
 
 @end
 
