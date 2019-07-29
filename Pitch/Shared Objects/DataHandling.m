@@ -125,17 +125,20 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 }
 
 
-- (void)loadUserInfoFromDatabase: (NSString *)userID
+- (void)loadUserInfoAndApp: (NSString *)userID{
 {
     [[[self.database collectionWithPath:@"users"] documentWithPath:userID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (snapshot.exists)
         {
             [[UserInSession shared] setCurrentUser:snapshot.data];
+            [self.sharedUserDelegate segueToAppUponLogin];
         }
         else{
             NSLog(@"THIS USER DOESNT EXIST");
-        }
-    }];
+            }
+        }];
+    
+    }
 }
 
 @end

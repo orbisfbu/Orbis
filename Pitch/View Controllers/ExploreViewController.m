@@ -38,9 +38,9 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-    [self.locationManager startUpdatingLocation];
+//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+//    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+//    [self.locationManager startUpdatingLocation];
     [self refreshEventsData];
 }
 
