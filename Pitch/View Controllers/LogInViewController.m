@@ -515,6 +515,8 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
 }
 
 - (void)showLoginScreen {
+    NSLog(@"HEREEEE");
+    [self createPageObjects];
     [self createContinuePage];
 }
 

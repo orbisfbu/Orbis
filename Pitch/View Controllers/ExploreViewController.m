@@ -76,7 +76,8 @@
     CGRect frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 30, 0);
     self.dropDownFilterTV = [[UITableView alloc] initWithFrame:frame];
     self.dropDownFilterTV.layer.cornerRadius = 10;
-    [self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xc2f5e6)];
+    //[self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xc2f5e6)];
+    [self.dropDownFilterTV setBackgroundColor:[UIColor lightGrayColor]];
     [self.dropDownFilterTV setScrollEnabled:NO];
     [self.view insertSubview:self.dropDownFilterTV belowSubview:self.searchBar];
     self.dropDownFilterTV.delegate = self;

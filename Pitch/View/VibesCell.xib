@@ -12,47 +12,57 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VibesCell" rowHeight="102" id="KGk-i7-Jjw" customClass="VibesCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="102"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VibesCell" rowHeight="122" id="KGk-i7-Jjw" customClass="VibesCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="122"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="101.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="121.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vibes/Themes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Vl-qf-gl5">
-                        <rect key="frame" x="5" y="15" width="103" height="33.5"/>
+                        <rect key="frame" x="5" y="15" width="103" height="26.5"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eY4-IR-WXg">
-                        <rect key="frame" x="10" y="56.5" width="300" height="40"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUI-Mf-DBM">
+                        <rect key="frame" x="10" y="51.5" width="300" height="60"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eY4-IR-WXg">
+                                <rect key="frame" x="10" y="10" width="280" height="40"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jWa-5B-Z7Q">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="40" id="7cZ-S2-fEi"/>
+                            <constraint firstAttribute="trailing" secondItem="eY4-IR-WXg" secondAttribute="trailing" constant="10" id="Q0T-2E-uDo"/>
+                            <constraint firstItem="eY4-IR-WXg" firstAttribute="leading" secondItem="dUI-Mf-DBM" secondAttribute="leading" constant="10" id="YCj-CF-DNj"/>
+                            <constraint firstAttribute="height" constant="60" id="eYo-TS-lbl"/>
+                            <constraint firstAttribute="bottom" secondItem="eY4-IR-WXg" secondAttribute="bottom" constant="10" id="fiZ-aB-5Fb"/>
+                            <constraint firstItem="eY4-IR-WXg" firstAttribute="top" secondItem="dUI-Mf-DBM" secondAttribute="top" constant="10" id="v3g-j1-4Dy"/>
                         </constraints>
-                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jWa-5B-Z7Q">
-                            <size key="itemSize" width="50" height="50"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                    </collectionView>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="eY4-IR-WXg" firstAttribute="top" secondItem="4Vl-qf-gl5" secondAttribute="bottom" constant="8" id="1Ld-9c-fjq"/>
-                    <constraint firstItem="eY4-IR-WXg" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="ZvI-v3-PRc"/>
-                    <constraint firstAttribute="bottom" secondItem="eY4-IR-WXg" secondAttribute="bottom" constant="5" id="ddG-jL-dTt"/>
+                    <constraint firstAttribute="bottom" secondItem="dUI-Mf-DBM" secondAttribute="bottom" constant="10" id="Byz-A9-Dga"/>
+                    <constraint firstItem="dUI-Mf-DBM" firstAttribute="top" secondItem="4Vl-qf-gl5" secondAttribute="bottom" constant="10" id="EJL-MF-JCR"/>
+                    <constraint firstAttribute="trailing" secondItem="dUI-Mf-DBM" secondAttribute="trailing" constant="10" id="Pnz-09-NCu"/>
+                    <constraint firstItem="dUI-Mf-DBM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="YTy-3i-eMz"/>
                     <constraint firstItem="4Vl-qf-gl5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="e8h-IJ-2lK"/>
                     <constraint firstItem="4Vl-qf-gl5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="fm9-41-Hdx"/>
-                    <constraint firstAttribute="trailing" secondItem="eY4-IR-WXg" secondAttribute="trailing" constant="10" id="qHT-aM-lOe"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
                 <outlet property="vibesCollectionView" destination="eY4-IR-WXg" id="1n6-Mx-7LX"/>
             </connections>
-            <point key="canvasLocation" x="139.13043478260872" y="169.41964285714286"/>
+            <point key="canvasLocation" x="137.59999999999999" y="178.11094452773614"/>
         </tableViewCell>
     </objects>
 </document>
