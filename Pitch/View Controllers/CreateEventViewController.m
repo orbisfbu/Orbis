@@ -35,7 +35,6 @@
 
 //Fields to be used when saving event to database
 static NSString * const NAME_OF_EVENT = @"Name of Event";
-static NSString * const GATHERING_TYPE_NAME = @"Gathering Type";
 static NSString * const EVENT_OWNER = @"Creator of the Event";
 static NSString * const EVENT_IMAGE_URLSTRING = @"Event Image";
 static NSString * const DATABASE_EVENTS_NODE = @"Events";
@@ -83,7 +82,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
     [self.createEventTableView setAllowsSelection:NO];
     [self.view addSubview:self.createEventTableView];
-    NSLog(@"please");
 }
 
 - (void) createEventButtonPressed
@@ -100,18 +98,16 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
                                       };
     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:eventToAdd];
-    NSLog(@"THE EVENT WAS CREATED");
 }
 
 
 - (void) makeCreateEventButton{
-    // Add create event button
     self.createEventButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
     [self.createEventButton setTitle:@"Create Event" forState:UIControlStateNormal];
     [self.createEventButton setBackgroundColor:[UIColor greenColor]];
     self.createEventButton.layer.cornerRadius = 5;
     self.createEventButton.alpha = 1;
-    [self.createEventButton setEnabled:NO];
+    [self.createEventButton setEnabled:YES];
     [self.createEventButton addTarget:self action:@selector(createEventButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.createEventButton];
 }

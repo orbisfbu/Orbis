@@ -14,6 +14,7 @@
 #import "FirstLastNameCell.h"
 #import "LogInViewController.h"
 #import "LogoutCell.h"
+#import "UserInSession.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -25,10 +26,8 @@
 static double const BACKGORUND_IMAGE_MIN_HEIGHT = 50.0;
 static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
-@interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LoginViewControllerDelegate, LogoutUserDelegate>
+@interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LogoutUserDelegate>
 
-//this is the user object to load once user gets to profile view
-@property (strong, nonatomic) User *userToLoad;
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
 //initially inputted email and password correspond to existing account
@@ -78,11 +77,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
 @implementation UserViewController
 
-//load correct user info
-- (void)userWasCreated:(nonnull User *)createdUser {
-    self.userToLoad = createdUser;
-}
-
 - (void)viewDidLoad {
     //user currentAccessToken to detect whether a Facebook user
     //is already logged-in; if so, automatically load the profile
@@ -123,13 +117,9 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.usernameLabel setFont:[UIFont fontWithName:@"roboto" size:20]];
     [self.usernameLabel setClipsToBounds:YES];
     self.usernameLabel.layer.cornerRadius = 5;
-    [self.usernameLabel setText:@" @user_name "];
     
-    if ([FIRAuth auth].currentUser)
-    {
-        NSLog(@"USER NAME LABEL SHOULD CHANGE");
-        //self.usernameLabel.text = [FIRAuth auth].currentUser.displayName;
-    }
+    
+    [self.usernameLabel setText:[UserInSession shared].sharedUser.screenNameString];
     [self.usernameLabel sizeToFit];
     [self.usernameLabel setCenter:CGPointMake(self.view.center.x, self.usernameLabel.center.y)];
     [self.usernameLabel setBackgroundColor:UIColorFromRGB(0x157f5f)];
@@ -156,15 +146,13 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 }
 
 - (void) logoutUser {
-    NSLog(@"LOGOUT BUTTON WAS PRESSED");
     NSError *signOutError;
     BOOL status = [[FIRAuth auth] signOut:&signOutError];
     if (!status) {
         NSLog(@"Error signing out: %@", signOutError);
         return;
     } else {
-        NSLog(@"Successfully Signout");
-        NSLog(@"USER: %@", [FIRAuth auth].currentUser);
+        NSLog(@"Successfully signedout user %@", [FIRAuth auth].currentUser);
         [FBSDKAccessToken setCurrentAccessToken:nil];
         [FBSDKProfile setCurrentProfile:nil];
         [self.delegate dismissViewController];
@@ -204,6 +192,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     return 6;
 }
 
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     int delta = scrollView.contentOffset.y;
     
@@ -214,7 +203,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         self.userBackgroundImageView.frame = CGRectMake(self.userBackgroundImageView.frame.origin.x, self.userBackgroundImageView.frame.origin.y, self.userBackgroundImageView.frame.size.width, BACKGORUND_IMAGE_MAX_HEIGHT);
         self.userProfileTableView.frame = CGRectMake(self.userProfileTableView.frame.origin.x, BACKGORUND_IMAGE_MAX_HEIGHT, self.userProfileTableView.frame.size.width, self.view.frame.size.height - BACKGORUND_IMAGE_MAX_HEIGHT);
     } else {
-        NSLog(@"%i", delta);
         // Reframe the background image
         self.userBackgroundImageView.frame = CGRectMake(0, 0, self.userBackgroundImageView.frame.size.width, self.userBackgroundImageView.frame.size.height-delta);
         self.userProfileTableView.frame = CGRectMake(0, self.userBackgroundImageView.frame.size.height-delta, self.userBackgroundImageView.frame.size.width, self.view.frame.size.height - self.userBackgroundImageView.frame.size.height);

@@ -16,7 +16,6 @@
         NSString *firstNameFormatted = [NSString stringWithFormat:@"%@ ", dictionary[@"First Name"]];
         self.userNameString = [firstNameFormatted stringByAppendingString: dictionary[@"Last Name"]];
         self.profileImageURLString = dictionary[@"ProfileImageURL"];
-        self.userPassword = dictionary[@"Password"];
         self.userBioString = dictionary[@"User Bio"];
         self.screenNameString = dictionary[@"Screen Name"];
         self.profileBackgroundImageURLString = dictionary[@"BackgroundImageURL"];
