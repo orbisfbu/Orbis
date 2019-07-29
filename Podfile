@@ -14,6 +14,7 @@ target 'Pitch' do
   pod 'Firebase/Analytics'
   pod 'AFNetworking'
   pod 'DOPDropDownMenu-Enhanced'
+  pod 'Firebase/Firestore'
  
 
   target 'PitchTests' do
