@@ -10,11 +10,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventDetailsViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UILabel *eventNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *eventCreatorLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *eventImageView;
-@property (weak, nonatomic) IBOutlet UILabel *eventDescription;
+@interface EventDetailsViewController : UIViewController{
+    NSString *eventNameLabel;
+    NSString *eventCreatorLabelText;
+    
+}
+
+@property (retain, nonatomic) IBOutlet UILabel *eventNameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *eventCreatorLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *eventImageView;
+@property (strong, nonatomic) IBOutlet UILabel *eventDescription;
 
 @end
 

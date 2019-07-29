@@ -10,21 +10,15 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "User.h"
-
 #import <UIKit/UIKit.h>
+
+@import FirebaseCore;
+@import FirebaseFirestore;
+
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol LoginViewControllerDelegate
-//check to see if the user was already in the database
-//do this by using firebase and checking is snapshot with object id is null
-//if it is, then pass the snapshot to self (self.delegate) after hasving instantiated
-//that user with initWithDictionary --> snapshot.value
-- (void)userWasCreated:(User*)createdUser;
-@end
-
 @interface LogInViewController : UIViewController
-@property (nonatomic, weak) id<LoginViewControllerDelegate> delegate;
 @end
 
 NS_ASSUME_NONNULL_END

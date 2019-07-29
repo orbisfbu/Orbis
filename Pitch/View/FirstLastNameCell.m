@@ -7,12 +7,13 @@
 //
 
 #import "FirstLastNameCell.h"
+#import "UserInSession.h"
 
 @implementation FirstLastNameCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    self.fullNameLabel.text = [UserInSession shared].sharedUser.userNameString;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

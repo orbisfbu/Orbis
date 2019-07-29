@@ -14,6 +14,7 @@
 #import <FBSDKAccessToken.h>
 #import "MasterViewController.h"
 #import "DataHandling.h"
+#import "UserInSession.h"
 
 //Fields to be used when saving user to database
 static NSString * const DATABASE_USER_NODE = @"Users";
@@ -50,7 +51,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 @property (strong, nonatomic) NSString *registerLastName;
 @property (strong, nonatomic) NSString *registerUsername;
 //for the password confirm field later on, just make sure that
-//the text of that cofirm password field is the same registerPassword
+//the text of that confirm password field is the same registerPassword
 @property (strong, nonatomic) NSString *registerPassword;
 
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -89,7 +90,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     [super viewDidLoad];
     [self.backButton setEnabled:NO];
     self.backButton.alpha = 0;
-    
     if (![FIRAuth auth].currentUser) {
         NSLog(@"No user signed in... Creating sign in/up page");
         [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -101,11 +101,13 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         [self createPageObjects];
         [self createContinuePage];
     }
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     if ([FIRAuth auth].currentUser) {
         NSLog(@"User was already logged in... Creating user profile");
+        [[DataHandling shared] loadUserInfoFromDatabase:[FIRAuth auth].currentUser.uid];
         [self segueToApp];
     }
 }
@@ -133,6 +135,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.emailTextField setPlaceholder:@"email"];
     [self.emailTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    self.emailTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.emailTextField];
     
     // Add continue button
@@ -159,12 +162,15 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.usernameTextField setPlaceholder:@"Username"];
     [self.usernameTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    self.usernameTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.usernameTextField];
     
     // Add password text field
     self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.passwordTextField setPlaceholder:@"Password"];
     [self.passwordTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    self.passwordTextField.secureTextEntry = YES;
+    self.passwordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.passwordTextField];
     
     // Add login button
@@ -199,18 +205,23 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     self.usernameSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.usernameSignUpTextField setPlaceholder:@"Username"];
     [self.usernameSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    self.usernameSignUpTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.usernameSignUpTextField];
     
     // Add signup password text field
     self.passwordSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.passwordSignUpTextField setPlaceholder:@"Password"];
     [self.passwordSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    self.passwordSignUpTextField.secureTextEntry = YES;
+    self.passwordSignUpTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.passwordSignUpTextField];
     
     // Add signup confirm password text field
     self.confirmPasswordSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.confirmPasswordSignUpTextField setPlaceholder:@"Confirm Password"];
     [self.confirmPasswordSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
+    self.confirmPasswordSignUpTextField.secureTextEntry = YES;
+    self.confirmPasswordSignUpTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.confirmPasswordSignUpTextField];
     
     // Add signup button
@@ -354,19 +365,23 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) continueButtonPressed {
-    self.inputtedUserEmail = self.emailTextField.text;
-    
-    [[FIRAuth auth] fetchSignInMethodsForEmail:_inputtedUserEmail completion:^(NSArray<NSString *> * _Nullable listOfMethods, NSError * _Nullable error) {
-        
-        if(listOfMethods){
-            [self dismissContinuePage];
-            [self createSignInPage];
-        }
-        else{
-            [self dismissContinuePage];
-            [self createSignUpPage1];
-        }
-    }];
+    if ([self.inputtedUserEmail isEqualToString:@""]){
+        [self presentAlert:@"Invalid email" withMessage:@"Don't leave email empty"];
+    }
+    else{
+        self.inputtedUserEmail = self.emailTextField.text;
+        [[FIRAuth auth] fetchSignInMethodsForEmail:_inputtedUserEmail completion:^(NSArray<NSString *> * _Nullable listOfMethods, NSError * _Nullable error) {
+            
+            if(listOfMethods){
+                [self dismissContinuePage];
+                [self createSignInPage];
+            }
+            else{
+                [self dismissContinuePage];
+                [self createSignUpPage1];
+            }
+        }];
+    }
 }
 
 
@@ -379,10 +394,9 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                              //if authresult is nill then check for error
                              //non nill authresult means we can login
                              if (authResult.user){
+                                 [[DataHandling shared] loadUserInfoFromDatabase:authResult.user.uid];
                                  [self dismissSignInPage];
                                  [self segueToApp];
-                                 User *retrievedUser = [[DataHandling shared] getUser:authResult.user.uid];
-                                 [self.delegate userWasCreated:retrievedUser];
                              }
                              else{
                                  switch([error code]){
@@ -399,20 +413,24 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
 
 - (void) nextButtonPressed {
-    BOOL signupIsCorrect = YES; // TODO: Implement later with Firebase code
+    BOOL signupIsCorrect = !([self.firstNameTextField.text isEqualToString:@""] && [self.lastNameTextField.text isEqualToString:@""]);
     if (signupIsCorrect) {
         self.registerFirstName = self.firstNameTextField.text;
         self.registerLastName = self.lastNameTextField.text;
         [self dismissSignUpPage1:YES];
         [self createSignUpPage2];
     }
+    else{
+        [self presentAlert:@"Empty field" withMessage:@"Don't leave a field empty!"];
+    }
 }
 
 - (void) signUpButtonPressed {
-    BOOL signupIsCorrect = [self.passwordSignUpTextField.text isEqualToString:self.confirmPasswordSignUpTextField.text];
-    if (signupIsCorrect) {
+    BOOL passwordsMatch = [self.passwordSignUpTextField.text isEqualToString:self.confirmPasswordSignUpTextField.text];
+    BOOL usernameIsValid =  ![self.usernameSignUpTextField.text isEqualToString:@""];
+    if (passwordsMatch && usernameIsValid) {
         __block NSString *userID;
-        self.registerUsername = self.usernameTextField.text;
+        self.registerUsername = self.usernameSignUpTextField.text;
         self.registerPassword = self.passwordSignUpTextField.text;
         NSDictionary *userInfo = @{
                                    @"First Name": self.registerFirstName,
@@ -431,10 +449,12 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                               NSError * _Nullable error) {
                                      if(authResult){
                                          userID = authResult.user.uid;
-                                         User *newUser = [[User alloc] initWithDictionary:userInfo];
-                                         NSLog(@"New firebase user was created %@", authResult.user);
-                                         [self.delegate userWasCreated:newUser];
-                                         [[DataHandling shared] addUserToDatabase:newUser withUserID:userID];
+                                         NSLog(@"New firebase user was created with userID %@", authResult.user);
+                                         //instead of instantiating user object,
+                                         //just load userInfo dictionary into UserInSession
+                                         
+                                         [[UserInSession shared] setCurrentUser:userInfo];
+                                         [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
                                          [self dismissSignUpPage2:YES];
                                          [self segueToApp];
                                      }
@@ -453,14 +473,19 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                          }
                                      }
                                  }];
-        NSLog(@"USER WILL BE CREATED NOW");
     }
     else{
-        [self presentAlert:@"Passwords Don't Match" withMessage:@"Make sure your password fields match"];
-        self.passwordSignUpTextField.text = @"";
-        self.confirmPasswordSignUpTextField.text = @"";
+        if (!usernameIsValid){
+            [self presentAlert:@"Username invalid" withMessage:@"Username cannot be empty"];
+        }
+        else if(!passwordsMatch){
+            [self presentAlert:@"Passwords Don't Match" withMessage:@"Make sure your password fields match"];
+            self.passwordSignUpTextField.text = @"";
+            self.confirmPasswordSignUpTextField.text = @"";
+        }
     }
 }
+
 
 - (void)loginButton:(FBSDKLoginButton *)loginButton
 didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
@@ -473,7 +498,7 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
             }
             // User successfully signed in
             if (authResult == nil) {
-                NSLog(@"WAS NOT ABLE TO SIGN USER IN");
+                NSLog(@"WAS NOT ABLE TO SIGN USER IN USING FACEBOOK");
                 return;
             }
             NSLog(@"SUCCESSFULLY AUTHENTICATED USER");
