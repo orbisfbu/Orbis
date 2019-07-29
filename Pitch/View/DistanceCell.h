@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (strong, nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UIButton *distanceToggleButton;
-@property (weak, nonatomic) IBOutlet UIView *bottomConstraint;
-//@property (weak, nonatomic) IBOutlet UIPickerView *distancePickerView;
+@property (weak, nonatomic) IBOutlet UIButton *unitButton;
+
 @end
 
 NS_ASSUME_NONNULL_END
