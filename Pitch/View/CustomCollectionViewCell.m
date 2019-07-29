@@ -13,7 +13,8 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    self.layer.cornerRadius = 12;
+    self.layer.cornerRadius = 10;
+    [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
 }
 
 - (void) setLabelText:(NSString *)text {

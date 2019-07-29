@@ -10,8 +10,11 @@
 #import "Vibes.h"
 #import "CustomCollectionViewCell.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface VibesCell ()
 @property (strong, nonatomic) NSArray *vibesArray;
+@property (strong, nonatomic) NSMutableSet *selectedVibesSet;
 @end
 
 @implementation VibesCell
@@ -19,10 +22,14 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.subview.layer.cornerRadius = 5;
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
+    [self.vibesCollectionView setAllowsMultipleSelection:YES];
     self.vibesCollectionView.dataSource = self;
     self.vibesCollectionView.delegate = self;
+    [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     self.vibesArray = [[Vibes sharedVibes] getVibesArray];
+    self.selectedVibesSet = [[NSMutableSet alloc] init];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -48,6 +55,24 @@
     [cell layoutIfNeeded];
     CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return CGSizeMake(size.width, 30);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    CustomCollectionViewCell *cell = (CustomCollectionViewCell *)[self.vibesCollectionView cellForItemAtIndexPath:indexPath];
+    [UIView animateWithDuration:0.3 animations:^{
+        cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
+    }];
+    [cell setBackgroundColor:UIColorFromRGB(0x157f5f)];
+    [self.selectedVibesSet addObject:cell.titleLabel.text];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    CustomCollectionViewCell *cell = (CustomCollectionViewCell *)[self.vibesCollectionView cellForItemAtIndexPath:indexPath];
+    [UIView animateWithDuration:0.3 animations:^{
+        cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
+    }];
+    [cell setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.selectedVibesSet removeObject:cell.titleLabel.text];
 }
 
 @end

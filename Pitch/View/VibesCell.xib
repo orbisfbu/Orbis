@@ -20,8 +20,8 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vibes/Themes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Vl-qf-gl5">
-                        <rect key="frame" x="5" y="15" width="103" height="26.5"/>
-                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                        <rect key="frame" x="5" y="15" width="108" height="26.5"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -60,6 +60,8 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
+                <outlet property="subview" destination="dUI-Mf-DBM" id="OJo-fb-Xmc"/>
+                <outlet property="titleLabel" destination="4Vl-qf-gl5" id="Rbd-80-ada"/>
                 <outlet property="vibesCollectionView" destination="eY4-IR-WXg" id="1n6-Mx-7LX"/>
             </connections>
             <point key="canvasLocation" x="137.59999999999999" y="178.11094452773614"/>

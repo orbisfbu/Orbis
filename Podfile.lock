@@ -135,6 +135,7 @@ PODS:
   - gRPC-Core/Interface (1.21.0)
   - GTMSessionFetcher/Core (1.2.2)
   - leveldb-library (1.20)
+  - MARKRangeSlider (1.1.1)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -152,6 +153,7 @@ DEPENDENCIES:
   - Firebase/Database
   - Firebase/Firestore
   - FirebaseUI/Facebook
+  - MARKRangeSlider
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -175,6 +177,7 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
+    - MARKRangeSlider
     - nanopb
     - Protobuf
 
@@ -199,9 +202,10 @@ SPEC CHECKSUMS:
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  MARKRangeSlider: ef7e1fe84d22996f47fd72dcb8de50b9410aac47
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
 
-PODFILE CHECKSUM: 669bc09e2fd5cbce1e0c7a57872342985226b6be
+PODFILE CHECKSUM: 888b6c4c9bd171404f7621da57a01e0a304873ae
 
 COCOAPODS: 1.7.2
