@@ -13,8 +13,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.dataArray = @[@"Less than ", @"Greater than "];
-    self.distanceToggleButton.layer.cornerRadius = 10;
+    self.distanceToggleButton.layer.cornerRadius = 5;
     [self.distanceToggleButton setContentEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
+    self.unitButton.layer.cornerRadius = 5;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -22,6 +23,7 @@
 
     // Configure the view for the selected state
 }
+
 - (IBAction)toggleButtonPressed:(id)sender {
     if ([self.distanceToggleButton.titleLabel.text isEqualToString:@"Less than"]) {
         [UIView animateWithDuration:0.3 animations:^{
@@ -30,6 +32,18 @@
     } else {
         [UIView animateWithDuration:0.3 animations:^{
             [self.distanceToggleButton setTitle:@"Less than" forState:UIControlStateNormal];
+        }];
+    }
+}
+
+- (IBAction)unitButtonPressed:(id)sender {
+    if ([self.unitButton.titleLabel.text isEqualToString:@"km"]) {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.unitButton setTitle:@"mi" forState:UIControlStateNormal];
+        }];
+    } else {
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.unitButton setTitle:@"km" forState:UIControlStateNormal];
         }];
     }
 }
