@@ -12,48 +12,140 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AgeCell" rowHeight="102" id="KGk-i7-Jjw" customClass="AgeCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="178"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AgeCell" rowHeight="76" id="KGk-i7-Jjw" customClass="AgeCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="152"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="177.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="151.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Indicate Age Restrictions, If Any" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URi-Pk-aQi">
-                        <rect key="frame" x="5" y="5" width="229" height="102"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Age Limits" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URi-Pk-aQi">
+                        <rect key="frame" x="5" y="5" width="75" height="36.5"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5R1-9t-Wfn">
-                        <rect key="frame" x="26" y="117" width="40" height="40"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="35S-PC-qJw">
+                        <rect key="frame" x="10" y="51.5" width="300" height="90"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsc-6a-hL2" customClass="MBCircularProgressBarView">
+                                <rect key="frame" x="50" y="10" width="70" height="70"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qnT-bY-BbY">
+                                        <rect key="frame" x="20" y="20" width="30" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="18+">
+                                            <color key="titleColor" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="eighteenPlusButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3QS-t3-hKo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="qnT-bY-BbY" firstAttribute="centerX" secondItem="tsc-6a-hL2" secondAttribute="centerX" id="BYr-4F-PYI"/>
+                                    <constraint firstAttribute="height" constant="70" id="Md1-mP-UG8"/>
+                                    <constraint firstItem="qnT-bY-BbY" firstAttribute="centerY" secondItem="tsc-6a-hL2" secondAttribute="centerY" id="mjA-Ij-Ctb"/>
+                                    <constraint firstAttribute="width" constant="70" id="x1R-cW-FAN"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="value">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="fontColor">
+                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
+                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="progressStrokeColor">
+                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maxValue">
+                                        <real key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="progressAngle">
+                                        <real key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="progressLineWidth">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LDJ-zA-a2R" customClass="MBCircularProgressBarView">
+                                <rect key="frame" x="170" y="10" width="70" height="70"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCm-wK-a3S">
+                                        <rect key="frame" x="20" y="20" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="21+">
+                                            <color key="titleColor" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="twentyOnePlusButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eoP-gw-PQr"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="8kE-pU-fAj"/>
+                                    <constraint firstAttribute="width" constant="70" id="ulT-ah-wpR"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="value">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="fontColor">
+                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
+                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="progressStrokeColor">
+                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maxValue">
+                                        <real key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="progressAngle">
+                                        <real key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="progressLineWidth">
+                                        <real key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="40" id="7Vx-2f-HQr"/>
-                            <constraint firstAttribute="width" constant="40" id="flA-sf-9fl"/>
+                            <constraint firstItem="tsc-6a-hL2" firstAttribute="centerY" secondItem="35S-PC-qJw" secondAttribute="centerY" id="0u1-1n-hyL"/>
+                            <constraint firstItem="tsc-6a-hL2" firstAttribute="top" secondItem="35S-PC-qJw" secondAttribute="top" constant="10" id="B0B-uu-g6C"/>
+                            <constraint firstItem="LDJ-zA-a2R" firstAttribute="leading" secondItem="tsc-6a-hL2" secondAttribute="trailing" constant="50" id="B1w-lI-QNH"/>
+                            <constraint firstItem="LDJ-zA-a2R" firstAttribute="centerY" secondItem="tsc-6a-hL2" secondAttribute="centerY" id="Dhb-th-7JI"/>
+                            <constraint firstItem="tsc-6a-hL2" firstAttribute="leading" secondItem="35S-PC-qJw" secondAttribute="leading" constant="50" id="Jen-Ty-7ZL"/>
+                            <constraint firstItem="LDJ-zA-a2R" firstAttribute="centerY" secondItem="tsc-6a-hL2" secondAttribute="centerY" id="tMK-dP-kS1"/>
                         </constraints>
-                        <state key="normal" title="18+"/>
-                    </button>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VHW-rA-XtS">
-                        <rect key="frame" x="106" y="117" width="40" height="40"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="40" id="CZq-FN-cUT"/>
-                            <constraint firstAttribute="width" constant="40" id="GlK-xE-IeW"/>
-                        </constraints>
-                        <state key="normal" title="21+"/>
-                    </button>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="VHW-rA-XtS" firstAttribute="leading" secondItem="5R1-9t-Wfn" secondAttribute="trailing" constant="40" id="1Yz-hT-Icr"/>
-                    <constraint firstItem="5R1-9t-Wfn" firstAttribute="top" secondItem="URi-Pk-aQi" secondAttribute="bottom" constant="10" id="60z-RN-65d"/>
-                    <constraint firstItem="VHW-rA-XtS" firstAttribute="centerY" secondItem="5R1-9t-Wfn" secondAttribute="centerY" id="DJs-2C-PU6"/>
-                    <constraint firstItem="5R1-9t-Wfn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="emx-7X-VQQ"/>
+                    <constraint firstAttribute="bottom" secondItem="35S-PC-qJw" secondAttribute="bottom" constant="10" id="1sv-gp-lEO"/>
+                    <constraint firstItem="35S-PC-qJw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="2Ik-0Q-LfV"/>
+                    <constraint firstItem="35S-PC-qJw" firstAttribute="top" secondItem="URi-Pk-aQi" secondAttribute="bottom" constant="10" id="Qzg-rU-SEX"/>
                     <constraint firstItem="URi-Pk-aQi" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="hMl-T8-Xpr"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="5R1-9t-Wfn" secondAttribute="bottom" constant="10" id="ic5-ur-gMG"/>
+                    <constraint firstAttribute="trailing" secondItem="35S-PC-qJw" secondAttribute="trailing" constant="10" id="kfQ-dQ-Yg9"/>
                     <constraint firstItem="URi-Pk-aQi" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="zTp-RH-Ab7"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
-            <point key="canvasLocation" x="137.59999999999999" y="171.81409295352324"/>
+            <connections>
+                <outlet property="leftCircularView" destination="tsc-6a-hL2" id="yp5-PY-ks8"/>
+                <outlet property="rightCircularView" destination="LDJ-zA-a2R" id="RdA-xF-1i7"/>
+                <outlet property="subview" destination="35S-PC-qJw" id="nxm-8x-Tdb"/>
+                <outlet property="titleLabel" destination="URi-Pk-aQi" id="V5e-Ir-ePW"/>
+            </connections>
+            <point key="canvasLocation" x="137.59999999999999" y="160.11994002998503"/>
         </tableViewCell>
     </objects>
 </document>

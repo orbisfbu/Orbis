@@ -16,6 +16,7 @@ target 'Pitch' do
   pod 'DOPDropDownMenu-Enhanced'
   pod 'Firebase/Firestore'
   pod 'MARKRangeSlider'
+  pod "MBCircularProgressBar"
  
 
   target 'PitchTests' do

@@ -23,7 +23,7 @@
     [self.rangeSlider addTarget:self action:@selector(rangeSliderValueDidChange:)
                forControlEvents:UIControlEventValueChanged];
     [self.rangeSlider setMinValue:1 maxValue:501];
-    [self.rangeSlider setLeftValue:10 rightValue:100];
+    [self.rangeSlider setLeftValue:10 rightValue:150];
     
     NSArray *arrayOfImages = self.rangeSlider.subviews;
     UIImageView *imageView = arrayOfImages[1];

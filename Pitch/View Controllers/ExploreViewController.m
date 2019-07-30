@@ -153,7 +153,7 @@
 - (void) addFilterMenu {
     [UIView animateWithDuration:0.5 animations:^{
         [self.filterButton setTransform:CGAffineTransformMakeRotation((CGFloat)M_PI_2)];
-        self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 2*self.view.frame.size.height/3);
+        self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 456);
     }];
 }
 
