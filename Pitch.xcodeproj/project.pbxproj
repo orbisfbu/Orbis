@@ -71,6 +71,7 @@
 		C1616E3822EF8A7A004B536B /* GothamRounded-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C1616E3722EF8A7A004B536B /* GothamRounded-Bold.otf */; };
 		C1616E3C22F09E9F004B536B /* ApplyFiltersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E3A22F09E9F004B536B /* ApplyFiltersCell.m */; };
 		C1616E3D22F09E9F004B536B /* ApplyFiltersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E3B22F09E9F004B536B /* ApplyFiltersCell.xib */; };
+		C1616E4022F0A7D2004B536B /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E3F22F0A7D2004B536B /* Filters.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,6 +195,8 @@
 		C1616E3922F09E9F004B536B /* ApplyFiltersCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApplyFiltersCell.h; sourceTree = "<group>"; };
 		C1616E3A22F09E9F004B536B /* ApplyFiltersCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApplyFiltersCell.m; sourceTree = "<group>"; };
 		C1616E3B22F09E9F004B536B /* ApplyFiltersCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ApplyFiltersCell.xib; sourceTree = "<group>"; };
+		C1616E3E22F0A7D2004B536B /* Filters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Filters.h; sourceTree = "<group>"; };
+		C1616E3F22F0A7D2004B536B /* Filters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Filters.m; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -272,6 +275,8 @@
 				06A909B322E2300E00CD2969 /* Poll.m */,
 				C14E1A0622E276F400883CFB /* Vibes.h */,
 				C14E1A0722E276F400883CFB /* Vibes.m */,
+				C1616E3E22F0A7D2004B536B /* Filters.h */,
+				C1616E3F22F0A7D2004B536B /* Filters.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -700,6 +705,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1616E0522EB920D004B536B /* EventListCell.m in Sources */,
+				C1616E4022F0A7D2004B536B /* Filters.m in Sources */,
 				06A909C222E67A0500CD2969 /* LocationCell.m in Sources */,
 				780DB2E922EA12D200B78516 /* EventAnnotation.m in Sources */,
 				C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */,

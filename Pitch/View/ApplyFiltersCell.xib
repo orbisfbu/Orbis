@@ -20,7 +20,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uuT-SV-sC3">
-                        <rect key="frame" x="10" y="10" width="300" height="47.5"/>
+                        <rect key="frame" x="10" y="15" width="300" height="42.5"/>
                         <color key="backgroundColor" red="0.38259750599999998" green="0.79456412789999997" blue="0.61566519740000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <state key="normal" title="Apply Filters">
                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -33,7 +33,7 @@
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="uuT-SV-sC3" secondAttribute="trailing" constant="10" id="Dfc-xV-YO0"/>
                     <constraint firstItem="uuT-SV-sC3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Rcb-9k-d9E"/>
-                    <constraint firstItem="uuT-SV-sC3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="U53-k6-lPc"/>
+                    <constraint firstItem="uuT-SV-sC3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="U53-k6-lPc"/>
                     <constraint firstAttribute="bottom" secondItem="uuT-SV-sC3" secondAttribute="bottom" constant="5" id="Uou-Jv-s4z"/>
                 </constraints>
             </tableViewCellContentView>

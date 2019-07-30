@@ -7,6 +7,7 @@
 //
 
 #import "AgeCell.h"
+#import "Filters.h"
 
 @implementation AgeCell
 

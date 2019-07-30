@@ -20,13 +20,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vibes/Themes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Vl-qf-gl5">
-                        <rect key="frame" x="5" y="15" width="108" height="31.5"/>
+                        <rect key="frame" x="5" y="15" width="108" height="36.5"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUI-Mf-DBM">
-                        <rect key="frame" x="5" y="51.5" width="310" height="60"/>
+                        <rect key="frame" x="5" y="56.5" width="310" height="60"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eY4-IR-WXg">
                                 <rect key="frame" x="5" y="5" width="300" height="55"/>
@@ -50,7 +50,7 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="dUI-Mf-DBM" secondAttribute="bottom" constant="10" id="Byz-A9-Dga"/>
+                    <constraint firstAttribute="bottom" secondItem="dUI-Mf-DBM" secondAttribute="bottom" constant="5" id="Byz-A9-Dga"/>
                     <constraint firstItem="dUI-Mf-DBM" firstAttribute="top" secondItem="4Vl-qf-gl5" secondAttribute="bottom" constant="5" id="EJL-MF-JCR"/>
                     <constraint firstAttribute="trailing" secondItem="dUI-Mf-DBM" secondAttribute="trailing" constant="5" id="Pnz-09-NCu"/>
                     <constraint firstItem="dUI-Mf-DBM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="YTy-3i-eMz"/>
