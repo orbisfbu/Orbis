@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ApplyFiltersCell" rowHeight="63" id="KGk-i7-Jjw" customClass="ApplyFiltersCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="63"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="62.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uuT-SV-sC3">
+                        <rect key="frame" x="10" y="15" width="300" height="42.5"/>
+                        <color key="backgroundColor" red="0.38259750599999998" green="0.79456412789999997" blue="0.61566519740000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <state key="normal" title="Apply Filters">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <connections>
+                            <action selector="applyfiltersButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="0PW-xZ-hF5"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="uuT-SV-sC3" secondAttribute="trailing" constant="10" id="Dfc-xV-YO0"/>
+                    <constraint firstItem="uuT-SV-sC3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Rcb-9k-d9E"/>
+                    <constraint firstItem="uuT-SV-sC3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="U53-k6-lPc"/>
+                    <constraint firstAttribute="bottom" secondItem="uuT-SV-sC3" secondAttribute="bottom" constant="5" id="Uou-Jv-s4z"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="applyFiltersButton" destination="uuT-SV-sC3" id="vlY-bt-3Dj"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="120.87053571428571"/>
+        </tableViewCell>
+    </objects>
+</document>

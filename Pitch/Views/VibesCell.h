@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VibesCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (weak, nonatomic) IBOutlet UICollectionView *vibesCollectionView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIView *subview;
 
 @end
 

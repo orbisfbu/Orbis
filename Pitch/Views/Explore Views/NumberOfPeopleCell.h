@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MARKRangeSlider.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface NumberOfPeopleCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIButton *toggleButton;
-@property (weak, nonatomic) IBOutlet UISlider *slider;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIView *subview;
+@property (weak, nonatomic) IBOutlet UILabel *numberLabel;
+@property (strong, nonatomic) MARKRangeSlider *rangeSlider;
 @end
 
 NS_ASSUME_NONNULL_END

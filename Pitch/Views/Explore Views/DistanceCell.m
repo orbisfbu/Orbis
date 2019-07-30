@@ -7,15 +7,21 @@
 //
 
 #import "DistanceCell.h"
+#import "Filters.h"
+
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @implementation DistanceCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.dataArray = @[@"Less than ", @"Greater than "];
-    self.distanceToggleButton.layer.cornerRadius = 5;
-    [self.distanceToggleButton setContentEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-    self.unitButton.layer.cornerRadius = 5;
+    self.subview.layer.cornerRadius = 5;
+    [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+    [self.distanceLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+    [self.slider setMaximumValue:50];
+    [self.slider setMinimumValue:1];
+    [self.slider setValue:5];
+    [self.slider setMinimumTrackTintColor:UIColorFromRGB(0x21ce99)];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -23,43 +29,8 @@
 
     // Configure the view for the selected state
 }
-
-- (IBAction)toggleButtonPressed:(id)sender {
-    if ([self.distanceToggleButton.titleLabel.text isEqualToString:@"Less than"]) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.distanceToggleButton setTitle:@"Greater than" forState:UIControlStateNormal];
-        }];
-    } else {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.distanceToggleButton setTitle:@"Less than" forState:UIControlStateNormal];
-        }];
-    }
+- (IBAction)sliderDidSlide:(id)sender {
+    [self.distanceLabel setText:[NSString stringWithFormat:@"%i km", (int)self.slider.value]];
 }
-
-- (IBAction)unitButtonPressed:(id)sender {
-    if ([self.unitButton.titleLabel.text isEqualToString:@"km"]) {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.unitButton setTitle:@"mi" forState:UIControlStateNormal];
-        }];
-    } else {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.unitButton setTitle:@"km" forState:UIControlStateNormal];
-        }];
-    }
-}
-
-//- (NSInteger)menu:(DOPDropDownMenu *)menu numberOfRowsInColumn:(NSInteger)column {
-//    return 2;
-//}
-//
-//- (NSString *)menu:(DOPDropDownMenu *)menu titleForItemsInRowAtIndexPath:(DOPIndexPath *)indexPath {
-//    NSLog(@"HERE BOIIIIIII");
-//    return self.dataArray[indexPath.item];
-//}
-//
-//- (NSString *)menu:(DOPDropDownMenu *)menu titleForRowAtIndexPath:(DOPIndexPath *)indexPath {
-//    NSLog(@"HERE BOIIIIIII");
-//    return self.dataArray[indexPath.row];
-//}
 
 @end

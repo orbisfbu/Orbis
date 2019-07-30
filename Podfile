@@ -15,6 +15,8 @@ target 'Pitch' do
   pod 'AFNetworking'
   pod 'DOPDropDownMenu-Enhanced'
   pod 'Firebase/Firestore'
+  pod 'MARKRangeSlider'
+  pod "MBCircularProgressBar"
  
 
   target 'PitchTests' do

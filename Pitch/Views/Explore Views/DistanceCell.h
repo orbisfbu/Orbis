@@ -12,11 +12,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DistanceCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
-@property (strong, nonatomic) NSArray *dataArray;
-@property (weak, nonatomic) IBOutlet UIButton *distanceToggleButton;
-@property (weak, nonatomic) IBOutlet UIButton *unitButton;
 
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+@property (weak, nonatomic) IBOutlet UIView *subview;
+@property (weak, nonatomic) IBOutlet UISlider *slider;
 @end
 
 NS_ASSUME_NONNULL_END

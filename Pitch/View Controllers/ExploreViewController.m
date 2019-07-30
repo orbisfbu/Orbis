@@ -74,8 +74,8 @@
     CGRect frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 30, 0);
     self.dropDownFilterTV = [[UITableView alloc] initWithFrame:frame];
     self.dropDownFilterTV.layer.cornerRadius = 10;
-    //[self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xc2f5e6)];
-    [self.dropDownFilterTV setBackgroundColor:[UIColor lightGrayColor]];
+    [self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.dropDownFilterTV setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.dropDownFilterTV setScrollEnabled:NO];
     [self.view insertSubview:self.dropDownFilterTV belowSubview:self.searchBar];
     self.dropDownFilterTV.delegate = self;
@@ -84,6 +84,7 @@
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"DistanceCell" bundle:nil] forCellReuseIdentifier:@"DistanceCell"];
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"AgeCell" bundle:nil] forCellReuseIdentifier:@"AgeCell"];
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"NumberOfPeopleCell" bundle:nil] forCellReuseIdentifier:@"NumberOfPeopleCell"];
+    [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"ApplyFiltersCell" bundle:nil] forCellReuseIdentifier:@"ApplyFiltersCell"];
     [self.dropDownFilterTV setAllowsSelection:NO];
     //[self.dropDownFilterTV setRowHeight:UITableViewAutomaticDimension];
 }
@@ -129,7 +130,6 @@
     detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
     detailedEventVC.eventImageView.image = eventToPresent.eventImage;
     
-    
     detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     [self presentViewController:detailedEventVC animated:YES completion:nil];
@@ -155,7 +155,7 @@
 - (void) addFilterMenu {
     [UIView animateWithDuration:0.5 animations:^{
         [self.filterButton setTransform:CGAffineTransformMakeRotation((CGFloat)M_PI_2)];
-        self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 2*self.view.frame.size.height/3);
+        self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 435);
     }];
 }
 
@@ -168,7 +168,6 @@
     self.filterMenuIsShowing = !self.filterMenuIsShowing;
 }
 
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell;
     if (indexPath.row == 0) {
@@ -178,15 +177,17 @@
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"DistanceCell"];
     } else if (indexPath.row == 2) {
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"NumberOfPeopleCell"];
-    } else {
+    } else if (indexPath.row == 3){
         cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"AgeCell"];
+    } else {
+        cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"ApplyFiltersCell"];
     }
-    [cell setBackgroundColor:UIColorFromRGB(0xc2f5e6)];
+    [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return 5;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
