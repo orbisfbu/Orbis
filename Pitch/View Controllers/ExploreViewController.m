@@ -18,6 +18,7 @@
 #import "EventAnnotation.h"
 #import "EventDetailsViewController.h"
 #import "ApplyFiltersCell.h"
+#import "DragCell.h"
 
 
 @interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, ApplyFiltersDelegate>
@@ -38,6 +39,9 @@
 @property (strong, nonatomic) NumberOfPeopleCell *numberOfPeopleCell;
 @property (strong, nonatomic) AgeCell *ageCell;
 @property (strong, nonatomic) ApplyFiltersCell *applyFiltersCell;
+
+@property BOOL isScrollingTVUp;
+
 @end
 
 @implementation ExploreViewController
@@ -81,7 +85,7 @@
     self.dropDownFilterTV.layer.cornerRadius = 10;
     [self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.dropDownFilterTV setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self.dropDownFilterTV setScrollEnabled:NO];
+    [self.dropDownFilterTV setScrollEnabled:YES];
     [self.view insertSubview:self.dropDownFilterTV belowSubview:self.searchBar];
     self.dropDownFilterTV.delegate = self;
     self.dropDownFilterTV.dataSource = self;
@@ -91,7 +95,11 @@
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"NumberOfPeopleCell" bundle:nil] forCellReuseIdentifier:@"NumberOfPeopleCell"];
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"ApplyFiltersCell" bundle:nil] forCellReuseIdentifier:@"ApplyFiltersCell"];
     [self.dropDownFilterTV setAllowsSelection:NO];
+    [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"DragCell" bundle:nil] forCellReuseIdentifier:@"DragCell"];
+    [self.dropDownFilterTV setAllowsSelection:NO];
     //[self.dropDownFilterTV setRowHeight:UITableViewAutomaticDimension];
+    
+    self.isScrollingTVUp = NO;
 }
 
 
@@ -149,16 +157,22 @@
 }
 
 - (void) removeFilterMenu {
+    [self.dropDownFilterTV setScrollEnabled:NO];
     [UIView animateWithDuration:0.5 animations:^{
         [self.filterButton setTransform:CGAffineTransformMakeRotation((CGFloat)0)];
         self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 0);
+    } completion:^(BOOL finished) {
+        [self.dropDownFilterTV setScrollEnabled:YES];
     }];
 }
 
 - (void) addFilterMenu {
+    [self.dropDownFilterTV setScrollEnabled:NO];
     [UIView animateWithDuration:0.5 animations:^{
         [self.filterButton setTransform:CGAffineTransformMakeRotation((CGFloat)M_PI_2)];
-        self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 435);
+        self.dropDownFilterTV.frame = CGRectMake(self.searchBar.frame.origin.x + 15, self.searchBar.frame.origin.y + self.searchBar.frame.size.height - 18, self.searchBar.frame.size.width - 35, 450);
+    } completion:^(BOOL finished) {
+        [self.dropDownFilterTV setScrollEnabled:YES];
     }];
 }
 
@@ -189,28 +203,53 @@
         self.ageCell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"AgeCell"];
         [self.ageCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
         return self.ageCell;
-    } else {
+    } else if (indexPath.row == 4){
         self.applyFiltersCell = (ApplyFiltersCell *)[self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"ApplyFiltersCell"];
         [self.applyFiltersCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
         self.applyFiltersCell.delegate = self;
         return self.applyFiltersCell;
+    } else {
+        DragCell *cell = (DragCell *)[self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"DragCell"];
+        [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        return cell;
     }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return 6;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentOffset.y != 0) {
+        if (scrollView.contentOffset.y > 0) {
+            self.isScrollingTVUp = YES;
+        } else {
+            self.isScrollingTVUp = NO;
+        }
+    }
+    if (self.dropDownFilterTV.frame.size.height - scrollView.contentOffset.y > 0) {
+        self.dropDownFilterTV.frame = CGRectMake(self.dropDownFilterTV.frame.origin.x, self.dropDownFilterTV.frame.origin.y, self.dropDownFilterTV.frame.size.width, self.dropDownFilterTV.frame.size.height - scrollView.contentOffset.y);
+        scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (self.isScrollingTVUp) {
+        [self removeFilterMenu];
+    } else {
+        [self addFilterMenu];
+    }
+    self.filterMenuIsShowing = !self.filterMenuIsShowing;
+}
 
 - (void)updateEvents:(nonnull NSArray *)events {
     self.eventsArray = [NSMutableArray arrayWithArray:events];
     [self populateMapWithEvents];
 }
-
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
     UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
@@ -222,7 +261,6 @@
     UIGraphicsEndImageContext();
     return newImage;
 }
-
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
     if([annotation isKindOfClass:[MKUserLocation class]]){
@@ -238,7 +276,6 @@
     return newEventAnnotationView;
 }
 
-
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [mapView deselectAnnotation:view.annotation animated:YES];
     [self presentEventDetailsView:view.annotation];
@@ -250,8 +287,7 @@
     NSLog(@"Error: %@",error.description);
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *crnLoc = [locations lastObject];
     NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
     NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
