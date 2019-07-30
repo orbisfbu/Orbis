@@ -22,10 +22,10 @@
         //self.eventVibesArray = snapshotDictionary[@"Vibes"];
         //self.eventPollsArray = snapshotDictionary[@"Polls"] ;
         self.eventHasMusic = snapshotDictionary[@"Has Music"];
-        self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
+        self.eventAttendanceCount = snapshotDictionary[@"Attendance"];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
-        self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
+        self.eventAgeRestriction = snapshotDictionary[@"Age Restriction"];
         //location in the data base will be a string with latitude and longitude string separated with a space character
         self.eventLocationString = snapshotDictionary[@"Location"];
         NSArray *locationComponents = [self.eventLocationString componentsSeparatedByString:@" "];

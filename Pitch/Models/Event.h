@@ -14,15 +14,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Event : NSObject
 
+// Add max and min number of people
+@property int *minNumPeople;
+@property int *maxNumPeople;
+
+// Add array of Vibes
+
 @property (nonatomic, strong) NSString *eventCreator;
 @property (nonatomic, strong) NSString *eventName;
 @property (nonatomic, strong) NSArray *eventVibesArray;
 @property (nonatomic, strong) NSArray *eventPollsArray;
 @property (nonatomic) NSString *eventHasMusic;
-@property (nonatomic) int *eventAttendanceCount;
+@property (nonatomic) NSInteger eventAttendanceCount;
 @property (nonatomic, strong) NSString *eventImageURLString;
 @property (nonatomic) NSString *eventDescription;
-@property (nonatomic) int *eventAgeRestriction;
+@property (nonatomic) NSInteger eventAgeRestriction;
 @property (nonatomic, strong) NSString *eventLocationString;
 //going to use google maps api and then createEvent method to correctly
 //save the event coordinates

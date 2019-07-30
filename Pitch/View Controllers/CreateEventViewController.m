@@ -88,11 +88,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
                                       @"Created By": @"Sebastian",
                                       @"Event Name": @"TestName",
                                       @"Has Music": @"YES",
-                                      @"Attendance": @"4",
+                                      @"Attendance": @(4),
                                       @"ImageURL": @"testingURL",
                                       @"Description": @"testing",
-                                      @"Age Restriction": @"18",
-                                      @"Location": @"37.806093 -122.435543"
+                                      @"Age Restriction": @(18),
+                                      @"Location": @"37.806093 -122.435543",
+                                      @"MinNumPeople": @(50),
+                                      @"MaxNumPeople": @(200)
                                       };
     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:eventToAdd];

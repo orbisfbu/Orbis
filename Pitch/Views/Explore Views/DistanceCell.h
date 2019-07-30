@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UISlider *slider;
 
 - (void) resetDistance;
+- (int) getDistance;
 
 @end
 

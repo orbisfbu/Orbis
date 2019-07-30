@@ -17,6 +17,7 @@ static int const MIN_DISTANCE = 1;
 
 @interface DistanceCell ()
 @property (strong, nonatomic) Filters *filter;
+@property int currentDistance;
 @end
 
 @implementation DistanceCell
@@ -31,6 +32,7 @@ static int const MIN_DISTANCE = 1;
     [self.slider setMinimumValue:MIN_DISTANCE];
     [self.slider setValue:DEFAULT_DISTANCE];
     [self.slider setMinimumTrackTintColor:UIColorFromRGB(0x21ce99)];
+    self.currentDistance = INFINITY;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -40,13 +42,19 @@ static int const MIN_DISTANCE = 1;
 }
 - (IBAction)sliderDidSlide:(id)sender {
     [self.distanceLabel setText:[NSString stringWithFormat:@"%i km", (int)self.slider.value]];
-    [self.filter setDistance:self.slider.value];
+//    [self.filter setDistance:self.slider.value];
+    self.currentDistance = self.slider.value;
 }
 
 - (void) resetDistance {
     self.slider.value = DEFAULT_DISTANCE;
     [self.distanceLabel setText:[NSString stringWithFormat:@"%i km", (int)self.slider.value]];
-    [self.filter setDistance:self.slider.value];
+//    [self.filter setDistance:self.slider.value];
+    self.currentDistance = self.slider.value;
+}
+
+- (int) getDistance {
+    return self.currentDistance;
 }
 
 @end

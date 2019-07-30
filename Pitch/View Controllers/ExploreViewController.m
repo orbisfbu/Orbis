@@ -86,6 +86,7 @@
     [self.dropDownFilterTV setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.dropDownFilterTV setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.dropDownFilterTV setScrollEnabled:YES];
+    [self.dropDownFilterTV setShowsVerticalScrollIndicator:NO];
     [self.view insertSubview:self.dropDownFilterTV belowSubview:self.searchBar];
     self.dropDownFilterTV.delegate = self;
     self.dropDownFilterTV.dataSource = self;
@@ -309,6 +310,15 @@
 
 - (void) filterAnnotations {
     
+    int ageRestriction = [self.ageCell getAgeRestrictions];
+    NSMutableSet *vibesSet = [self.vibesCell getSelectedVibes];
+    int distance = [self.distanceCell getDistance];
+    int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
+    int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
+    
+    // Filter array of events
+    
+    // Refresh map
 }
 
 @end

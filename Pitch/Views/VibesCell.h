@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIView *subview;
 
 - (void) resetVibes;
+- (NSMutableSet *) getSelectedVibes;
 
 @end
 

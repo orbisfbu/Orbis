@@ -94,4 +94,8 @@
     [self.filter setSelectedVibes:[NSMutableArray arrayWithObjects:[self.selectedVibesSet allObjects], nil]];
 }
 
+- (NSMutableSet *) getSelectedVibes {
+    return self.selectedVibesSet;
+}
+
 @end

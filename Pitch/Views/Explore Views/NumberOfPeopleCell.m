@@ -18,6 +18,8 @@ static int const DEFAULT_MIN_PEOPLE = 1;
 
 @interface NumberOfPeopleCell ()
 @property (strong, nonatomic) Filters *filter;
+@property int minNumPeople;
+@property int maxNumPeople;
 @end
 
 @implementation NumberOfPeopleCell
@@ -41,6 +43,8 @@ static int const DEFAULT_MIN_PEOPLE = 1;
     [imageView setTintColor: UIColorFromRGB(0x21ce99)];
     
     [self.subview addSubview:self.rangeSlider];
+    self.maxNumPeople = INFINITY;
+    self.minNumPeople = 0;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -52,19 +56,32 @@ static int const DEFAULT_MIN_PEOPLE = 1;
 - (void)rangeSliderValueDidChange:(MARKRangeSlider *)slider {
     if (slider.rightValue == slider.maximumValue) {
         [self.numberLabel setText:[NSString stringWithFormat:@"%i-%i+", (int)self.rangeSlider.leftValue, (int)self.rangeSlider.rightValue - 1]];
-        [self.filter setMaxNumPeople:INFINITY];
+//        [self.filter setMaxNumPeople:INFINITY];
+        self.maxNumPeople = INFINITY;
     } else {
         [self.numberLabel setText:[NSString stringWithFormat:@"%i-%i", (int)self.rangeSlider.leftValue, (int)self.rangeSlider.rightValue]];
-        [self.filter setMaxNumPeople:self.rangeSlider.rightValue];
+//        [self.filter setMaxNumPeople:self.rangeSlider.rightValue];
+        self.maxNumPeople = self.rangeSlider.rightValue;
     }
-    [self.filter setMinNumPeople:self.rangeSlider.leftValue];
+//    [self.filter setMinNumPeople:self.rangeSlider.leftValue];
+    self.minNumPeople = self.rangeSlider.leftValue;
 }
 
 - (void) resetNumberOfPeople {
     [self.rangeSlider setLeftValue:DEFAULT_LEFT_PEOPLE rightValue:DEFAULT_RIGHT_PEOPLE];
     [self.numberLabel setText:[NSString stringWithFormat:@"%i-%i", (int)self.rangeSlider.leftValue, (int)self.rangeSlider.rightValue]];
-    [self.filter setMaxNumPeople:self.rangeSlider.rightValue];
-    [self.filter setMinNumPeople:self.rangeSlider.leftValue];
+//    [self.filter setMaxNumPeople:self.rangeSlider.rightValue];
+//    [self.filter setMinNumPeople:self.rangeSlider.leftValue];
+    self.maxNumPeople = self.rangeSlider.rightValue;
+    self.minNumPeople = self.rangeSlider.leftValue;
+}
+
+- (int) getMinNumPeople {
+    return self.minNumPeople;
+}
+
+- (int) getMaxNumPeople {
+    return self.maxNumPeople;
 }
 
 @end
