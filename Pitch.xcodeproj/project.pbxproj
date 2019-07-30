@@ -294,17 +294,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		781A941322ECB12C002966B5 /* Shared Objects */ = {
-			isa = PBXGroup;
-			children = (
-				780DB2DA22E6D02200B78516 /* DataHandling.h */,
-				780DB2DB22E6D02200B78516 /* DataHandling.m */,
-				781A941422ECB184002966B5 /* UserInSession.h */,
-				781A941522ECB184002966B5 /* UserInSession.m */,
-			);
-			path = "Shared Objects";
-			sourceTree = "<group>";
-		};
 		781A941722ECB1B1002966B5 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +307,10 @@
 		78FC04B222E16ECF0049E0BD /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				780DB2DA22E6D02200B78516 /* DataHandling.h */,
+				780DB2DB22E6D02200B78516 /* DataHandling.m */,
+				781A941422ECB184002966B5 /* UserInSession.h */,
+				781A941522ECB184002966B5 /* UserInSession.m */,
 				78FC04B322E17C640049E0BD /* User.h */,
 				78FC04B422E17C640049E0BD /* User.m */,
 				78FC04B622E17C700049E0BD /* Event.h */,
@@ -381,7 +374,6 @@
 			children = (
 				C1616E3622EF8A6C004B536B /* Resources */,
 				781A941722ECB1B1002966B5 /* Storyboards */,
-				781A941322ECB12C002966B5 /* Shared Objects */,
 				C14E19E922E23B5600883CFB /* Views */,
 				78FC04B222E16ECF0049E0BD /* Models */,
 				C127D51E22DFE3CF009963B0 /* View Controllers */,

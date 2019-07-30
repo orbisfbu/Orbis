@@ -42,11 +42,11 @@
 }
 
 - (NSMutableArray *) getSelectedVibes {
-    if (self.filtersEnabled) {
+//    if (self.filtersEnabled) {
         return self.selectedVibesMArray;
-    } else {
-        return nil;
-    }
+//    } else {
+//        return nil;
+//    }
 }
 
 - (void) setSelectedVibes:(NSMutableArray *)selectedVibesMArray {
@@ -54,11 +54,11 @@
 }
 
 - (NSInteger) getSelectedDistance {
-    if (self.filtersEnabled) {
+//    if (self.filtersEnabled) {
         return self.selectedDistance;
-    } else {
-        return 0;
-    }
+//    } else {
+//        return 0;
+//    }
 }
 
 - (void) setDistance:(NSInteger)selectedDistance {
@@ -66,11 +66,11 @@
 }
 
 - (NSInteger) getSelectedMinPeople {
-    if (self.filtersEnabled) {
+//    if (self.filtersEnabled) {
         return self.selectedMinPeople;
-    } else {
-        return 0;
-    }
+//    } else {
+//        return 0;
+//    }
 }
 
 - (void) setMinNumPeople:(NSInteger)minNumPeople {
@@ -78,11 +78,11 @@
 }
 
 - (NSInteger) getSelectedMaxPeople {
-    if (self.filtersEnabled) {
+//    if (self.filtersEnabled) {
         return self.selectedMaxPeople;
-    } else {
-        return INFINITY;
-    }
+//    } else {
+//        return INFINITY;
+//    }
 }
 
 - (void) setMaxNumPeople:(NSInteger)maxNumPeople {
@@ -90,11 +90,11 @@
 }
 
 - (NSInteger) getSelectedAgeRestriction {
-    if (self.filtersEnabled) {
+//    if (self.filtersEnabled) {
         return self.selectedAgeLimit;
-    } else {
-        return 0;
-    }
+//    } else {
+//        return 0;
+//    }
 }
 
 - (void)setSelectedAgeRestriction:(NSInteger)selectedAgeLimit {

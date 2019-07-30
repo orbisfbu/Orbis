@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIView *subview;
 @property (weak, nonatomic) IBOutlet UILabel *numberLabel;
 @property (strong, nonatomic) MARKRangeSlider *rangeSlider;
+
+- (void) resetNumberOfPeople;
+
 @end
 
 NS_ASSUME_NONNULL_END

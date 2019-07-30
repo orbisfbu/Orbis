@@ -11,20 +11,29 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
+static int const DEFAULT_LEFT_PEOPLE = 10;
+static int const DEFAULT_RIGHT_PEOPLE = 100;
+static int const DEFAULT_MAX_PEOPLE = 501;
+static int const DEFAULT_MIN_PEOPLE = 1;
+
+@interface NumberOfPeopleCell ()
+@property (strong, nonatomic) Filters *filter;
+@end
 
 @implementation NumberOfPeopleCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.filter = [Filters sharedFilters];
     self.subview.layer.cornerRadius = 5;
     [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     [self.numberLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     self.rangeSlider = [[MARKRangeSlider alloc] initWithFrame:CGRectMake(5, 5, self.subview.frame.size.width - 10, self.subview.frame.size.height - 10)];
     [self.rangeSlider addTarget:self action:@selector(rangeSliderValueDidChange:)
                forControlEvents:UIControlEventValueChanged];
-    [self.rangeSlider setMinValue:1 maxValue:501];
-    [self.rangeSlider setLeftValue:10 rightValue:150];
+    [self.rangeSlider setMinValue:DEFAULT_MIN_PEOPLE maxValue:DEFAULT_MAX_PEOPLE];
+    [self.rangeSlider setLeftValue:DEFAULT_LEFT_PEOPLE rightValue:DEFAULT_RIGHT_PEOPLE];
     
     NSArray *arrayOfImages = self.rangeSlider.subviews;
     UIImageView *imageView = arrayOfImages[1];
@@ -43,9 +52,19 @@
 - (void)rangeSliderValueDidChange:(MARKRangeSlider *)slider {
     if (slider.rightValue == slider.maximumValue) {
         [self.numberLabel setText:[NSString stringWithFormat:@"%i-%i+", (int)self.rangeSlider.leftValue, (int)self.rangeSlider.rightValue - 1]];
+        [self.filter setMaxNumPeople:INFINITY];
     } else {
         [self.numberLabel setText:[NSString stringWithFormat:@"%i-%i", (int)self.rangeSlider.leftValue, (int)self.rangeSlider.rightValue]];
+        [self.filter setMaxNumPeople:self.rangeSlider.rightValue];
     }
+    [self.filter setMinNumPeople:self.rangeSlider.leftValue];
+}
+
+- (void) resetNumberOfPeople {
+    [self.rangeSlider setLeftValue:DEFAULT_LEFT_PEOPLE rightValue:DEFAULT_RIGHT_PEOPLE];
+    [self.numberLabel setText:[NSString stringWithFormat:@"%i-%i", (int)self.rangeSlider.leftValue, (int)self.rangeSlider.rightValue]];
+    [self.filter setMaxNumPeople:self.rangeSlider.rightValue];
+    [self.filter setMinNumPeople:self.rangeSlider.leftValue];
 }
 
 @end

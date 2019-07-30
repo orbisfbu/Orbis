@@ -16,6 +16,7 @@
 @interface VibesCell ()
 @property (strong, nonatomic) NSArray *vibesArray;
 @property (strong, nonatomic) NSMutableSet *selectedVibesSet;
+@property (strong, nonatomic) Filters *filter;
 @end
 
 @implementation VibesCell
@@ -23,6 +24,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.filter = [Filters sharedFilters];
     self.subview.layer.cornerRadius = 5;
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     [self.vibesCollectionView setAllowsMultipleSelection:YES];
@@ -65,6 +67,7 @@
     }];
     [cell setBackgroundColor:UIColorFromRGB(0x157f5f)];
     [self.selectedVibesSet addObject:cell.titleLabel.text];
+    [self.filter setSelectedVibes:[NSMutableArray arrayWithObjects:[self.selectedVibesSet allObjects], nil]];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -74,6 +77,21 @@
     }];
     [cell setBackgroundColor:UIColorFromRGB(0x21ce99)];
     [self.selectedVibesSet removeObject:cell.titleLabel.text];
+    [self.filter setSelectedVibes:[NSMutableArray arrayWithObjects:[self.selectedVibesSet allObjects], nil]];
+}
+
+- (void) resetVibes {
+    NSArray *pathArray = [self.vibesCollectionView indexPathsForSelectedItems];
+    for (NSIndexPath *indexPath in pathArray) {
+        [self.vibesCollectionView deselectItemAtIndexPath:indexPath animated:YES];
+        CustomCollectionViewCell *cell = (CustomCollectionViewCell *)[self.vibesCollectionView cellForItemAtIndexPath:indexPath];
+        [UIView animateWithDuration:0.3 animations:^{
+            cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
+        }];
+        [cell setBackgroundColor:UIColorFromRGB(0x21ce99)];
+        [self.selectedVibesSet removeObject:cell.titleLabel.text];
+    }
+    [self.filter setSelectedVibes:[NSMutableArray arrayWithObjects:[self.selectedVibesSet allObjects], nil]];
 }
 
 @end

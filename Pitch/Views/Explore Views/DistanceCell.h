@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (weak, nonatomic) IBOutlet UIView *subview;
 @property (weak, nonatomic) IBOutlet UISlider *slider;
+
+- (void) resetDistance;
+
 @end
 
 NS_ASSUME_NONNULL_END

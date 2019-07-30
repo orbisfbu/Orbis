@@ -17,9 +17,10 @@
 #import "UIImageView+AFNetworking.h"
 #import "EventAnnotation.h"
 #import "EventDetailsViewController.h"
+#import "ApplyFiltersCell.h"
 
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, ApplyFiltersDelegate>
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -32,12 +33,16 @@
 @property (strong, nonatomic) NSMutableArray <Event *> *eventsArray;
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
 @property (nonatomic, readwrite) FIRFirestore *db;
+@property (strong, nonatomic) VibesCell *vibesCell;
+@property (strong, nonatomic) DistanceCell *distanceCell;
+@property (strong, nonatomic) NumberOfPeopleCell *numberOfPeopleCell;
+@property (strong, nonatomic) AgeCell *ageCell;
+@property (strong, nonatomic) ApplyFiltersCell *applyFiltersCell;
 @end
 
 @implementation ExploreViewController
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
     [self.locationManager startUpdatingLocation];
@@ -90,13 +95,11 @@
 }
 
 
-- (void)refreshEventsData
-{
+- (void)refreshEventsData {
     [self.dataHandlingObject getEventsArray];
 }
 
-- (void)populateMapWithEvents
-{
+- (void)populateMapWithEvents {
     if (self.eventsArray.count > 0)
     {
         for (Event *thisEvent in self.eventsArray)
@@ -169,21 +172,29 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell;
     if (indexPath.row == 0) {
-        cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"VibesCell"];
-        [cell awakeFromNib];
+        self.vibesCell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"VibesCell"];
+        [self.vibesCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        [self.vibesCell awakeFromNib];
+        return self.vibesCell;
     } else if (indexPath.row == 1) {
-        cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"DistanceCell"];
+        self.distanceCell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"DistanceCell"];
+        [self.distanceCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        return self.distanceCell;
     } else if (indexPath.row == 2) {
-        cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"NumberOfPeopleCell"];
+        self.numberOfPeopleCell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"NumberOfPeopleCell"];
+        [self.numberOfPeopleCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        return self.numberOfPeopleCell;
     } else if (indexPath.row == 3){
-        cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"AgeCell"];
+        self.ageCell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"AgeCell"];
+        [self.ageCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        return self.ageCell;
     } else {
-        cell = [self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"ApplyFiltersCell"];
+        self.applyFiltersCell = (ApplyFiltersCell *)[self.dropDownFilterTV dequeueReusableCellWithIdentifier:@"ApplyFiltersCell"];
+        [self.applyFiltersCell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        self.applyFiltersCell.delegate = self;
+        return self.applyFiltersCell;
     }
-    [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
-    return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -244,8 +255,24 @@
     CLLocation *crnLoc = [locations lastObject];
     NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
     NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
-    NSLog(mylatitude);
-    NSLog(myLongitude);
+}
+
+- (void)applyFiltersButtonWasPressed {
+    NSLog(@"Applying Filters...");
+    [self filterAnnotations];
+}
+
+- (void)resetFiltersButtonWasPressed {
+    NSLog(@"Resetting Filters...");
+    [self.vibesCell resetVibes];
+    [self.distanceCell resetDistance];
+    [self.numberOfPeopleCell resetNumberOfPeople];
+    [self.ageCell resetAgeRestrictions];
+    [self filterAnnotations];
+}
+
+- (void) filterAnnotations {
+    
 }
 
 @end
