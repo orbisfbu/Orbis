@@ -28,7 +28,8 @@ int cont = 0;
 }
 
 - (void) makeCreateLocationDropDownTableView {
-    CGRect frame = CGRectMake(self.locationCellSearchBar.frame.origin.x + 15, self.locationCellSearchBar.frame.origin.y + self.locationCellSearchBar.frame.size.height, self.locationCellSearchBar.frame.size.width - 30, self.createLocationDropDownTableView.contentSize.height); // last was 0
+    CGRect frame = CGRectMake(self.locationCellSearchBar.frame.origin.x + 15, self.locationCellSearchBar.frame.origin.y + self.locationCellSearchBar.frame.size.height - 90, self.locationCellSearchBar.frame.size.width + 15, self.createLocationDropDownTableView.contentSize.height); // last was 0// TESTING
+//     CGRect frame = CGRectMake(self.locationCellSearchBar.frame.origin.x + 15, self.locationCellSearchBar.frame.origin.y + self.locationCellSearchBar.frame.size.height, self.locationCellSearchBar.frame.size.width - 30, self.createLocationDropDownTableView.contentSize.height); // original
     self.createLocationDropDownTableView = [[UITableView alloc] initWithFrame:frame];
     self.createLocationDropDownTableView.layer.cornerRadius = 10;
     [self.createLocationDropDownTableView setBackgroundColor:[UIColor clearColor]];
@@ -120,6 +121,9 @@ int cont = 0;
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     [UIView animateWithDuration:0.2 animations:^{
         self.createLocationDropDownTableView.frame = CGRectMake(self.createLocationDropDownTableView.frame.origin.x,self.createLocationDropDownTableView.frame.origin.y, self.createLocationDropDownTableView.frame.size.width, self.createLocationDropDownTableView.contentSize.height); }]; // last coordinate waspreviously 0
+    if ([self.mapItems count] > 4){
+        return 4;
+    }
     return [_mapItems count];
 }
 

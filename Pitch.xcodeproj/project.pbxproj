@@ -222,6 +222,63 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0602C1AB22EF8181004BBC74 /* Create Event Views */ = {
+			isa = PBXGroup;
+			children = (
+				06A909B522E6792300CD2969 /* EventTitleCell.h */,
+				06A909B622E6792300CD2969 /* EventTitleCell.m */,
+				06A909B722E6792300CD2969 /* EventTitleCell.xib */,
+				06A909BF22E67A0500CD2969 /* LocationCell.h */,
+				06A909C022E67A0500CD2969 /* LocationCell.m */,
+				06A909C122E67A0500CD2969 /* LocationCell.xib */,
+				066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */,
+				066344D022EBB6A6001ACCC2 /* EventPictureCell.m */,
+				066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */,
+				06A909C422E67A2200CD2969 /* PollsTitleCell.h */,
+				06A909C522E67A2200CD2969 /* PollsTitleCell.m */,
+				06A909C622E67A2200CD2969 /* PollsTitleCell.xib */,
+				06A909C922E67A3500CD2969 /* CustomPollCell.h */,
+				06A909CA22E67A3500CD2969 /* CustomPollCell.m */,
+				06A909CB22E67A3500CD2969 /* CustomPollCell.xib */,
+			);
+			path = "Create Event Views";
+			sourceTree = "<group>";
+		};
+		0602C1AC22EF82AA004BBC74 /* User Profile Views */ = {
+			isa = PBXGroup;
+			children = (
+				C1616DF822EB6C70004B536B /* BioCell.h */,
+				C1616DF922EB6C70004B536B /* BioCell.m */,
+				C1616DFA22EB6C70004B536B /* BioCell.xib */,
+				C1616E0222EB920D004B536B /* EventListCell.h */,
+				C1616E0322EB920D004B536B /* EventListCell.m */,
+				C1616E0422EB920D004B536B /* EventListCell.xib */,
+				C1616E0722EB931F004B536B /* EventsCollectionViewCell.h */,
+				C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */,
+				C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */,
+				C1616DFD22EB7322004B536B /* ProfileLinksCell.h */,
+				C1616DFE22EB7322004B536B /* ProfileLinksCell.m */,
+				C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */,
+				C1616E1122EBB3A3004B536B /* LogoutCell.h */,
+				C1616E1222EBB3A3004B536B /* LogoutCell.m */,
+				C1616E1322EBB3A3004B536B /* LogoutCell.xib */,
+			);
+			path = "User Profile Views";
+			sourceTree = "<group>";
+		};
+		0602C1AD22EF836B004BBC74 /* Explore Views */ = {
+			isa = PBXGroup;
+			children = (
+				C14E19F222E23BD000883CFB /* DistanceCell.h */,
+				C14E19F322E23BD000883CFB /* DistanceCell.m */,
+				C14E19F422E23BD000883CFB /* DistanceCell.xib */,
+				C14E19F722E23BE200883CFB /* NumberOfPeopleCell.h */,
+				C14E19F822E23BE200883CFB /* NumberOfPeopleCell.m */,
+				C14E19F922E23BE200883CFB /* NumberOfPeopleCell.xib */,
+			);
+			path = "Explore Views";
+			sourceTree = "<group>";
+		};
 		36D5806393B8D5F00D57D58A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,7 +375,7 @@
 			children = (
 				781A941722ECB1B1002966B5 /* Storyboards */,
 				781A941322ECB12C002966B5 /* Shared Objects */,
-				C14E19E922E23B5600883CFB /* View */,
+				C14E19E922E23B5600883CFB /* Views */,
 				78FC04B222E16ECF0049E0BD /* Models */,
 				C127D51E22DFE3CF009963B0 /* View Controllers */,
 				C138EDDA22DFAD9F00AAA0D0 /* AppDelegate.h */,
@@ -349,61 +406,28 @@
 			path = PitchUITests;
 			sourceTree = "<group>";
 		};
-		C14E19E922E23B5600883CFB /* View */ = {
+		C14E19E922E23B5600883CFB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0602C1AB22EF8181004BBC74 /* Create Event Views */,
+				0602C1AD22EF836B004BBC74 /* Explore Views */,
+				0602C1AC22EF82AA004BBC74 /* User Profile Views */,
 				C14E19EA22E23B8B00883CFB /* VibesCell.h */,
 				C14E19EB22E23B8B00883CFB /* VibesCell.m */,
 				C14E19EC22E23B8B00883CFB /* VibesCell.xib */,
-				C14E19F222E23BD000883CFB /* DistanceCell.h */,
-				C14E19F322E23BD000883CFB /* DistanceCell.m */,
-				C14E19F422E23BD000883CFB /* DistanceCell.xib */,
-				C14E19F722E23BE200883CFB /* NumberOfPeopleCell.h */,
-				C14E19F822E23BE200883CFB /* NumberOfPeopleCell.m */,
-				C14E19F922E23BE200883CFB /* NumberOfPeopleCell.xib */,
 				C14E19FC22E23BF000883CFB /* AgeCell.h */,
 				C14E19FD22E23BF000883CFB /* AgeCell.m */,
 				C14E19FE22E23BF000883CFB /* AgeCell.xib */,
 				C14E1A0122E2768B00883CFB /* CustomCollectionViewCell.h */,
 				C14E1A0222E2768B00883CFB /* CustomCollectionViewCell.m */,
 				C14E1A0322E2768B00883CFB /* CustomCollectionViewCell.xib */,
-				06A909B522E6792300CD2969 /* EventTitleCell.h */,
-				06A909B622E6792300CD2969 /* EventTitleCell.m */,
-				06A909B722E6792300CD2969 /* EventTitleCell.xib */,
-				06A909BF22E67A0500CD2969 /* LocationCell.h */,
-				06A909C022E67A0500CD2969 /* LocationCell.m */,
-				06A909C122E67A0500CD2969 /* LocationCell.xib */,
-				06A909C422E67A2200CD2969 /* PollsTitleCell.h */,
-				06A909C522E67A2200CD2969 /* PollsTitleCell.m */,
-				06A909C622E67A2200CD2969 /* PollsTitleCell.xib */,
-				06A909C922E67A3500CD2969 /* CustomPollCell.h */,
-				06A909CA22E67A3500CD2969 /* CustomPollCell.m */,
-				06A909CB22E67A3500CD2969 /* CustomPollCell.xib */,
-				C1616DF822EB6C70004B536B /* BioCell.h */,
-				C1616DF922EB6C70004B536B /* BioCell.m */,
-				C1616DFA22EB6C70004B536B /* BioCell.xib */,
-				C1616DFD22EB7322004B536B /* ProfileLinksCell.h */,
-				C1616DFE22EB7322004B536B /* ProfileLinksCell.m */,
-				C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */,
-				C1616E0222EB920D004B536B /* EventListCell.h */,
-				C1616E0322EB920D004B536B /* EventListCell.m */,
-				C1616E0422EB920D004B536B /* EventListCell.xib */,
-				C1616E0722EB931F004B536B /* EventsCollectionViewCell.h */,
-				C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */,
-				C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */,
 				C1616E0C22EB98C8004B536B /* FirstLastNameCell.h */,
 				C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */,
 				C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */,
 				780DB2E722EA12D200B78516 /* EventAnnotation.h */,
 				780DB2E822EA12D200B78516 /* EventAnnotation.m */,
-				066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */,
-				066344D022EBB6A6001ACCC2 /* EventPictureCell.m */,
-				066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */,
-				C1616E1122EBB3A3004B536B /* LogoutCell.h */,
-				C1616E1222EBB3A3004B536B /* LogoutCell.m */,
-				C1616E1322EBB3A3004B536B /* LogoutCell.xib */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		DBEA5F48AA5A7A8577D3C475 /* Pods */ = {

@@ -63,8 +63,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.createEventTableView.delegate = self;
     self.createEventTableView.dataSource = self;
     [self.createEventTableView setAllowsSelection:NO];
-    self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
-    self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
     [self makeCreateEventButton];
     CGRect frame = CGRectMake(self.createEventButton.frame.origin.x, self.createEventButton.frame.origin.y + self.createEventButton.frame.size.height, self.createEventButton.frame.size.width, self.view.frame.size.height - self.createEventButton.frame.size.height);
     self.createEventTableView = [[UITableView alloc] initWithFrame:frame];
@@ -74,9 +72,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.createEventTableView.delegate = self;
     self.createEventTableView.dataSource = self;
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"EventTitleCell" bundle:nil] forCellReuseIdentifier:@"EventTitleCell"];
+    [self.createEventTableView registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"VibesCell" bundle:nil] forCellReuseIdentifier:@"VibesCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"AgeCell" bundle:nil] forCellReuseIdentifier:@"AgeCell"];
-    [self.createEventTableView registerNib:[UINib nibWithNibName:@"LocationCell" bundle:nil] forCellReuseIdentifier:@"LocationCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"EventPictureCell" bundle:nil] forCellReuseIdentifier:@"EventPictureCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"PollsTitleCell" bundle:nil] forCellReuseIdentifier:@"PollsTitleCell"];
     [self.createEventTableView registerNib:[UINib nibWithNibName:@"CustomPollCell" bundle:nil] forCellReuseIdentifier:@"CustomPollCell"];
@@ -104,7 +102,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void) makeCreateEventButton{
     self.createEventButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
     [self.createEventButton setTitle:@"Create Event" forState:UIControlStateNormal];
-    [self.createEventButton setBackgroundColor:[UIColor greenColor]];
+    [self.createEventButton setBackgroundColor:[UIColor clearColor]];
+    self.createEventButton.layer.borderWidth = 1.0f;
+    self.createEventButton.layer.borderColor = [UIColor greenColor].CGColor;
+    [self.createEventButton setTitleColor:[UIColor colorWithRed:36/255.0 green:71/255.0 blue:113/255.0 alpha:1.0] forState:UIControlStateNormal];
     self.createEventButton.layer.cornerRadius = 5;
     self.createEventButton.alpha = 1;
     [self.createEventButton setEnabled:YES];
@@ -120,13 +121,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"EventTitleCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 1) {
-        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
+//        [self.createEventTableView beginUpdates];
+//        [self.createEventTableView endUpdates];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 2) {
-        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"AgeCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
         [cell awakeFromNib];
     } else if (indexPath.row == 3) {
-        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"AgeCell"];
     } else if (indexPath.row == 4) {
         cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"EventPictureCell"];
     } else if (indexPath.row == 5) {
@@ -145,7 +148,35 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
-    }
+}
+
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([indexPath row] == 1) {
+//        return 300;
+//    }
+//    return UITableViewAutomaticDimension;
+//}
+
+
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    // Deselect cell
+//    [tableView deselectRowAtIndexPath:indexPath animated:TRUE];
+//
+//    // Toggle 'selected' state
+//    BOOL isSelected = ![self cellIsSelected:indexPath];
+//
+//    // Store cell 'selected' state keyed on indexPath
+//    NSNumber *selectedIndex = [NSNumber numberWithBool:isSelected];
+//    [selectedIndexes setObject:1 forKey:indexPath];
+//
+//    [self.createEventTableView beginUpdates];
+//    [self.createEventTableView endUpdates];
+//}
+//-(void) tableView: (UITableView *) tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+//    if ([indexPath row] == 1) {
+//    [self.createEventTableView beginUpdates];
+//        [self.createEventTableView endUpdates]; }
+//}
 
 @end
-

@@ -8,6 +8,10 @@
 
 #import "CustomPollCell.h"
 
+@interface CustomPollCell () <UITableViewDelegate, UITableViewDataSource>
+
+@end
+
 @implementation CustomPollCell
 
 - (void)awakeFromNib {
@@ -20,5 +24,13 @@
 
     // Configure the view for the selected state
 }
+
+//- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+//    <#code#>
+//}
+//
+//- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//    <#code#>
+//}
 
 @end

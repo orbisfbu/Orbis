@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PollsTitleCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

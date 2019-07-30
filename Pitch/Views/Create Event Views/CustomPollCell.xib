@@ -19,20 +19,30 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="177.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Poll" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Qa-Mf-j4n">
-                        <rect key="frame" x="5" y="5" width="63" height="18"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Poll Question" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Qa-Mf-j4n">
+                        <rect key="frame" x="5" y="5" width="95" height="18"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pbF-oA-BnF">
+                        <rect key="frame" x="5" y="33" width="310" height="139.5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tableView>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="pbF-oA-BnF" secondAttribute="trailing" constant="5" id="06I-cW-EIT"/>
+                    <constraint firstItem="pbF-oA-BnF" firstAttribute="top" secondItem="1Qa-Mf-j4n" secondAttribute="bottom" constant="10" id="Fcy-tA-6H3"/>
                     <constraint firstItem="1Qa-Mf-j4n" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="Qry-YN-TFr"/>
+                    <constraint firstItem="1Qa-Mf-j4n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="eif-Ag-mvq"/>
+                    <constraint firstAttribute="bottom" secondItem="pbF-oA-BnF" secondAttribute="bottom" constant="5" id="kV8-KF-kTT"/>
+                    <constraint firstItem="pbF-oA-BnF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="ljw-jJ-GkY"/>
                     <constraint firstItem="1Qa-Mf-j4n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="q3c-fK-N1G"/>
+                    <constraint firstItem="1Qa-Mf-j4n" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="z70-m3-RF5"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
-            <point key="canvasLocation" x="47.826086956521742" y="80.357142857142847"/>
+            <point key="canvasLocation" x="46.399999999999999" y="80.059970014992516"/>
         </tableViewCell>
     </objects>
 </document>
