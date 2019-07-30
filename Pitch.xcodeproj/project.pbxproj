@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		02AC025ECB2F25A725644A38 /* Pods_PitchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */; };
-		066344D222EBB6A6001ACCC2 /* EventPictureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 066344D022EBB6A6001ACCC2 /* EventPictureCell.m */; };
-		066344D322EBB6A6001ACCC2 /* EventPictureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */; };
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
 		06A909B422E2300E00CD2969 /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B322E2300E00CD2969 /* Poll.m */; };
 		06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B622E6792300CD2969 /* EventTitleCell.m */; };
@@ -66,12 +64,14 @@
 		C1616E0B22EB931F004B536B /* EventsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */; };
 		C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */; };
 		C1616E1022EB98C8004B536B /* FirstLastNameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */; };
-		C1616E1422EBB3A3004B536B /* LogoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E1222EBB3A3004B536B /* LogoutCell.m */; };
-		C1616E1522EBB3A3004B536B /* LogoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E1322EBB3A3004B536B /* LogoutCell.xib */; };
 		C1616E3822EF8A7A004B536B /* GothamRounded-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = C1616E3722EF8A7A004B536B /* GothamRounded-Bold.otf */; };
-		C1616E3C22F09E9F004B536B /* ApplyFiltersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E3A22F09E9F004B536B /* ApplyFiltersCell.m */; };
-		C1616E3D22F09E9F004B536B /* ApplyFiltersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E3B22F09E9F004B536B /* ApplyFiltersCell.xib */; };
 		C1616E4022F0A7D2004B536B /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E3F22F0A7D2004B536B /* Filters.m */; };
+		C1C3416422F0C21900A09666 /* ApplyFiltersCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3415B22F0C21800A09666 /* ApplyFiltersCell.m */; };
+		C1C3416522F0C21900A09666 /* ApplyFiltersCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3415C22F0C21800A09666 /* ApplyFiltersCell.xib */; };
+		C1C3416622F0C21900A09666 /* LogoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3415D22F0C21800A09666 /* LogoutCell.m */; };
+		C1C3416722F0C21900A09666 /* LogoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3415E22F0C21800A09666 /* LogoutCell.xib */; };
+		C1C3416822F0C21900A09666 /* EventPictureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3415F22F0C21800A09666 /* EventPictureCell.m */; };
+		C1C3416922F0C21900A09666 /* EventPictureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3416022F0C21800A09666 /* EventPictureCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,9 +93,6 @@
 
 /* Begin PBXFileReference section */
 		02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pitch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventPictureCell.h; sourceTree = "<group>"; };
-		066344D022EBB6A6001ACCC2 /* EventPictureCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventPictureCell.m; sourceTree = "<group>"; };
-		066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventPictureCell.xib; sourceTree = "<group>"; };
 		06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06A909B222E2300E00CD2969 /* Poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poll.h; sourceTree = "<group>"; };
 		06A909B322E2300E00CD2969 /* Poll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
@@ -188,15 +185,18 @@
 		C1616E0C22EB98C8004B536B /* FirstLastNameCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstLastNameCell.h; sourceTree = "<group>"; };
 		C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstLastNameCell.m; sourceTree = "<group>"; };
 		C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FirstLastNameCell.xib; sourceTree = "<group>"; };
-		C1616E1122EBB3A3004B536B /* LogoutCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogoutCell.h; sourceTree = "<group>"; };
-		C1616E1222EBB3A3004B536B /* LogoutCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogoutCell.m; sourceTree = "<group>"; };
-		C1616E1322EBB3A3004B536B /* LogoutCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogoutCell.xib; sourceTree = "<group>"; };
 		C1616E3722EF8A7A004B536B /* GothamRounded-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GothamRounded-Bold.otf"; sourceTree = "<group>"; };
-		C1616E3922F09E9F004B536B /* ApplyFiltersCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ApplyFiltersCell.h; sourceTree = "<group>"; };
-		C1616E3A22F09E9F004B536B /* ApplyFiltersCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ApplyFiltersCell.m; sourceTree = "<group>"; };
-		C1616E3B22F09E9F004B536B /* ApplyFiltersCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ApplyFiltersCell.xib; sourceTree = "<group>"; };
 		C1616E3E22F0A7D2004B536B /* Filters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Filters.h; sourceTree = "<group>"; };
 		C1616E3F22F0A7D2004B536B /* Filters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Filters.m; sourceTree = "<group>"; };
+		C1C3415B22F0C21800A09666 /* ApplyFiltersCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplyFiltersCell.m; sourceTree = "<group>"; };
+		C1C3415C22F0C21800A09666 /* ApplyFiltersCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ApplyFiltersCell.xib; sourceTree = "<group>"; };
+		C1C3415D22F0C21800A09666 /* LogoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogoutCell.m; sourceTree = "<group>"; };
+		C1C3415E22F0C21800A09666 /* LogoutCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogoutCell.xib; sourceTree = "<group>"; };
+		C1C3415F22F0C21800A09666 /* EventPictureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventPictureCell.m; sourceTree = "<group>"; };
+		C1C3416022F0C21800A09666 /* EventPictureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventPictureCell.xib; sourceTree = "<group>"; };
+		C1C3416122F0C21800A09666 /* LogoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogoutCell.h; sourceTree = "<group>"; };
+		C1C3416222F0C21800A09666 /* ApplyFiltersCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplyFiltersCell.h; sourceTree = "<group>"; };
+		C1C3416322F0C21800A09666 /* EventPictureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventPictureCell.h; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -241,9 +241,6 @@
 				06A909BF22E67A0500CD2969 /* LocationCell.h */,
 				06A909C022E67A0500CD2969 /* LocationCell.m */,
 				06A909C122E67A0500CD2969 /* LocationCell.xib */,
-				066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */,
-				066344D022EBB6A6001ACCC2 /* EventPictureCell.m */,
-				066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */,
 				06A909C422E67A2200CD2969 /* PollsTitleCell.h */,
 				06A909C522E67A2200CD2969 /* PollsTitleCell.m */,
 				06A909C622E67A2200CD2969 /* PollsTitleCell.xib */,
@@ -269,9 +266,6 @@
 				C1616DFD22EB7322004B536B /* ProfileLinksCell.h */,
 				C1616DFE22EB7322004B536B /* ProfileLinksCell.m */,
 				C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */,
-				C1616E1122EBB3A3004B536B /* LogoutCell.h */,
-				C1616E1222EBB3A3004B536B /* LogoutCell.m */,
-				C1616E1322EBB3A3004B536B /* LogoutCell.xib */,
 			);
 			path = "User Profile Views";
 			sourceTree = "<group>";
@@ -439,15 +433,15 @@
 				C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */,
 				780DB2E722EA12D200B78516 /* EventAnnotation.h */,
 				780DB2E822EA12D200B78516 /* EventAnnotation.m */,
-				066344CF22EBB6A6001ACCC2 /* EventPictureCell.h */,
-				066344D022EBB6A6001ACCC2 /* EventPictureCell.m */,
-				066344D122EBB6A6001ACCC2 /* EventPictureCell.xib */,
-				C1616E1122EBB3A3004B536B /* LogoutCell.h */,
-				C1616E1222EBB3A3004B536B /* LogoutCell.m */,
-				C1616E1322EBB3A3004B536B /* LogoutCell.xib */,
-				C1616E3922F09E9F004B536B /* ApplyFiltersCell.h */,
-				C1616E3A22F09E9F004B536B /* ApplyFiltersCell.m */,
-				C1616E3B22F09E9F004B536B /* ApplyFiltersCell.xib */,
+				C1C3416222F0C21800A09666 /* ApplyFiltersCell.h */,
+				C1C3415B22F0C21800A09666 /* ApplyFiltersCell.m */,
+				C1C3415C22F0C21800A09666 /* ApplyFiltersCell.xib */,
+				C1C3416322F0C21800A09666 /* EventPictureCell.h */,
+				C1C3415F22F0C21800A09666 /* EventPictureCell.m */,
+				C1C3416022F0C21800A09666 /* EventPictureCell.xib */,
+				C1C3416122F0C21800A09666 /* LogoutCell.h */,
+				C1C3415D22F0C21800A09666 /* LogoutCell.m */,
+				C1C3415E22F0C21800A09666 /* LogoutCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -584,12 +578,13 @@
 				C1616DFC22EB6C70004B536B /* BioCell.xib in Resources */,
 				C1616E0622EB920D004B536B /* EventListCell.xib in Resources */,
 				C1616E0122EB7322004B536B /* ProfileLinksCell.xib in Resources */,
+				C1C3416722F0C21900A09666 /* LogoutCell.xib in Resources */,
 				C1616E3822EF8A7A004B536B /* GothamRounded-Bold.otf in Resources */,
-				C1616E3D22F09E9F004B536B /* ApplyFiltersCell.xib in Resources */,
-				066344D322EBB6A6001ACCC2 /* EventPictureCell.xib in Resources */,
+				C1C3416522F0C21900A09666 /* ApplyFiltersCell.xib in Resources */,
 				06A909C322E67A0500CD2969 /* LocationCell.xib in Resources */,
 				C1616E1022EB98C8004B536B /* FirstLastNameCell.xib in Resources */,
 				C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */,
+				C1C3416922F0C21900A09666 /* EventPictureCell.xib in Resources */,
 				C127D52822DFE699009963B0 /* ExploreViewController.xib in Resources */,
 				C138EDE722DFAD9F00AAA0D0 /* LaunchScreen.storyboard in Resources */,
 				06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */,
@@ -600,7 +595,6 @@
 				06A909D422E7B5DC00CD2969 /* CreateEventViewController.xib in Resources */,
 				C1616E0B22EB931F004B536B /* EventsCollectionViewCell.xib in Resources */,
 				C138EDE222DFAD9F00AAA0D0 /* Main.storyboard in Resources */,
-				C1616E1522EBB3A3004B536B /* LogoutCell.xib in Resources */,
 				780DB2F022EA6A8200B78516 /* EventDetails.storyboard in Resources */,
 				C14E19F622E23BD000883CFB /* DistanceCell.xib in Resources */,
 				C14E19FB22E23BE200883CFB /* NumberOfPeopleCell.xib in Resources */,
@@ -735,19 +729,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1616E0522EB920D004B536B /* EventListCell.m in Sources */,
+				C1C3416622F0C21900A09666 /* LogoutCell.m in Sources */,
 				C1616E4022F0A7D2004B536B /* Filters.m in Sources */,
 				06A909C222E67A0500CD2969 /* LocationCell.m in Sources */,
 				780DB2E922EA12D200B78516 /* EventAnnotation.m in Sources */,
 				C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */,
 				C14E19F522E23BD000883CFB /* DistanceCell.m in Sources */,
+				C1C3416822F0C21900A09666 /* EventPictureCell.m in Sources */,
 				C14E19FF22E23BF000883CFB /* AgeCell.m in Sources */,
 				C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */,
 				C14E19ED22E23B8B00883CFB /* VibesCell.m in Sources */,
-				C1616E1422EBB3A3004B536B /* LogoutCell.m in Sources */,
+				C1C3416422F0C21900A09666 /* ApplyFiltersCell.m in Sources */,
 				C1616E0022EB7322004B536B /* ProfileLinksCell.m in Sources */,
-				066344D222EBB6A6001ACCC2 /* EventPictureCell.m in Sources */,
 				78FC04B522E17C640049E0BD /* User.m in Sources */,
-				C1616E3C22F09E9F004B536B /* ApplyFiltersCell.m in Sources */,
 				C138EDDF22DFAD9F00AAA0D0 /* MasterViewController.m in Sources */,
 				06A909C722E67A2200CD2969 /* PollsTitleCell.m in Sources */,
 				C138EDEA22DFAD9F00AAA0D0 /* main.m in Sources */,
