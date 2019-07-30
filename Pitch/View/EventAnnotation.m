@@ -27,10 +27,7 @@
 - (instancetype)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
-        //wont need to set the image here when retrieving imageURL from the Event object
-        UIImage *resizedImage = [self resizeImage:[UIImage imageNamed:@"eventImage"] withSize:CGSizeMake(40.0, 40.0)];
-        self.eventImage = resizedImage;
-        self.title = @"Random Title";
+        self.title = @"This title doesn't matter";
     }
     return self;
 }

@@ -17,9 +17,11 @@
 #import "UIImageView+AFNetworking.h"
 #import "EventAnnotation.h"
 #import "EventDetailsViewController.h"
+#import "CreateEventViewController.h"
+#import "MusicQueueViewController.h"
+#import "EventGalleryViewController.h"
 
-
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventAnnotationToMapDelegate>
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -38,10 +40,10 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    //this is for the
 //    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
 //    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
 //    [self.locationManager startUpdatingLocation];
-    [self refreshEventsData];
 }
 
 - (void) viewDidLoad {
@@ -100,8 +102,6 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            //set the rest of the properties here
-            //will have to pass in this information to the modal that will be presented as a result of click
             EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
             newEventAnnotation.coordinate = thisEvent.eventCoordinates;
             newEventAnnotation.eventName = thisEvent.eventName;
@@ -109,6 +109,7 @@
             newEventAnnotation.eventDescription = thisEvent.eventDescription;
             newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
             newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
+            newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
             [self.photoMap addAnnotation:newEventAnnotation];
         }
     }
@@ -123,19 +124,31 @@
 - (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
 {
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
-    EventDetailsViewController * detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"Details"];
-    detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
-    detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
-    detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
-    detailedEventVC.eventImageView.image = eventToPresent.eventImage;
+    EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
+    MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
+    EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
+    UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
+    [eventSelectedTabBarController.tabBar setBackgroundColor:[UIColor clearColor]];
+    eventSelectedTabBarController.tabBar.translucent = YES;
+    eventSelectedTabBarController.selectedIndex = 1;
+    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    detailedEventVC.eventNameString = eventToPresent.eventName;
+    detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
+    detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
+    detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
+    //somewhere here set the detailedEventVC.distanceFromUser by finding the distance between user location and eventToPresent coordinates
+    detailedEventVC.eventAgeRestrictionString = [NSString stringWithFormat:@"%d", eventToPresent.eventAgeRestriction];
+    detailedEventVC.eventAttendancCountString = [NSString stringWithFormat:@"%d", eventToPresent.eventAttendanceCount];
+    detailedEventVC.distanceFromUser = 5;
+    eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
+    [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
     
-    
-    detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self presentViewController:detailedEventVC animated:YES completion:nil];
-    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
-    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
-    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
+    //have to edit this swipe down closing functionality later
+//    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
+//    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
+//    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
 }
 
 
@@ -246,5 +259,13 @@
     NSLog(mylatitude);
     NSLog(myLongitude);
 }
+
+- (void)addThisAnnotationToMap:(nonnull EventAnnotation *)newEventAnnotation {
+    
+    [self.photoMap addAnnotation:newEventAnnotation.annotation];
+
+}
+
+
 
 @end

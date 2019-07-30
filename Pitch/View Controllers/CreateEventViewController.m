@@ -37,8 +37,7 @@
 static NSString * const NAME_OF_EVENT = @"Name of Event";
 static NSString * const EVENT_OWNER = @"Creator of the Event";
 static NSString * const EVENT_IMAGE_URLSTRING = @"Event Image";
-static NSString * const DATABASE_EVENTS_NODE = @"Events";
-static NSString * const DATABASE_USERS_NODE = @"Users";
+
 
 //Debugging/Error Messages
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
@@ -63,8 +62,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.createEventTableView.delegate = self;
     self.createEventTableView.dataSource = self;
     [self.createEventTableView setAllowsSelection:NO];
-    self.databaseEventsReference = [[[FIRDatabase database] reference] child:DATABASE_EVENTS_NODE];
-    self.databaseUsersReference = [[[FIRDatabase database] reference] child:DATABASE_USERS_NODE];
     [self makeCreateEventButton];
     CGRect frame = CGRectMake(self.createEventButton.frame.origin.x, self.createEventButton.frame.origin.y + self.createEventButton.frame.size.height, self.createEventButton.frame.size.width, self.view.frame.size.height - self.createEventButton.frame.size.height);
     self.createEventTableView = [[UITableView alloc] initWithFrame:frame];
@@ -88,16 +85,24 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 {
     NSDictionary *eventDefinition = @{
                                       @"Created By": @"Elizabeth",
-                                      @"Event Name": @"Rolling Loud",
+                                      @"Event Name": @"Hulu",
                                       @"Has Music": @"YES",
                                       @"Attendance": @"8",
-                                      @"ImageURL": @"testingURL",
+                                      @"ImageURL": @"https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwj_15rNj9vjAhVFu54KHQWyDXAQjRx6BAgBEAU&url=https%3A%2F%2Fwww.festicket.com%2Fmagazine%2Fdiscover%2Ftop-20-music-festivals-Europe%2F&psig=AOvVaw2JAA6zSvLSfHHv1W1_awOl&ust=1564523774410326",
                                       @"Description": @"testing",
                                       @"Age Restriction": @"21",
-                                      @"Location": @"37.801885 -122.405827"
+                                      @"Location": @"37.717795 -122.398328"
                                       };
     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:eventToAdd];
+    EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
+    newEventAnnotation.coordinate = eventToAdd.eventCoordinates;
+    newEventAnnotation.eventName = eventToAdd.eventName;
+    newEventAnnotation.eventCreator = eventToAdd.eventCreator;
+    newEventAnnotation.eventDescription = eventToAdd.eventDescription;
+    newEventAnnotation.eventAgeRestriction = eventToAdd.eventAgeRestriction;
+    newEventAnnotation.eventAttendanceCount = eventToAdd.eventAttendanceCount;
+    [self.delegate addThisAnnotationToMap:newEventAnnotation];
 }
 
 
@@ -146,6 +151,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewAutomaticDimension;
     }
+
+
 
 @end
 

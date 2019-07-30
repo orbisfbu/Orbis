@@ -72,6 +72,7 @@ static double const MIN_ICON_X_OFFSET = 30;
     // Initiate instances of view controllers of class View1 and View2
     self.createEventController = [[CreateEventViewController alloc] initWithNibName:@"CreateEventViewController" bundle:nil];
     self.exploreController = [[ExploreViewController alloc] initWithNibName:@"ExploreViewController" bundle:nil];
+    self.createEventController.delegate = self.exploreController;
     self.userController = [[UserViewController alloc] initWithNibName:@"UserViewController" bundle:nil];
     self.userController.delegate = self;
     // Add child view controllers

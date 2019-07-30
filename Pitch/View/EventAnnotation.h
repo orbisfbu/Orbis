@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EventAnnotation : MKPinAnnotationView
 
-@property (nonatomic, strong) UIImage *eventImage;
+@property (nonatomic, strong) NSString *eventImageURLString;
 @property (nonatomic, strong) NSString *eventName;
 @property (nonatomic, strong) NSString *eventCreator;
 @property (nonatomic, strong) NSString *eventDescription;
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
 
-- (instancetype)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier;
+-(instancetype)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier;
 
 @end
 

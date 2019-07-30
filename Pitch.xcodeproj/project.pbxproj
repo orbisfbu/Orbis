@@ -30,6 +30,8 @@
 		780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */; };
 		780DB2F022EA6A8200B78516 /* EventDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */; };
 		781A941622ECB184002966B5 /* UserInSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 781A941522ECB184002966B5 /* UserInSession.m */; };
+		781A941A22EFBA28002966B5 /* MusicQueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 781A941922EFBA28002966B5 /* MusicQueueViewController.m */; };
+		781A941E22EFC0AE002966B5 /* EventGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 781A941D22EFC0AE002966B5 /* EventGalleryViewController.m */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
 		78FC04B822E17C700049E0BD /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B722E17C700049E0BD /* Event.m */; };
 		C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52522DFE699009963B0 /* ExploreViewController.m */; };
@@ -123,6 +125,10 @@
 		780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EventDetails.storyboard; sourceTree = "<group>"; };
 		781A941422ECB184002966B5 /* UserInSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInSession.h; sourceTree = "<group>"; };
 		781A941522ECB184002966B5 /* UserInSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInSession.m; sourceTree = "<group>"; };
+		781A941822EFBA28002966B5 /* MusicQueueViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicQueueViewController.h; sourceTree = "<group>"; };
+		781A941922EFBA28002966B5 /* MusicQueueViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicQueueViewController.m; sourceTree = "<group>"; };
+		781A941C22EFC0AE002966B5 /* EventGalleryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGalleryViewController.h; sourceTree = "<group>"; };
+		781A941D22EFC0AE002966B5 /* EventGalleryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventGalleryViewController.m; sourceTree = "<group>"; };
 		78FC04B322E17C640049E0BD /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		78FC04B422E17C640049E0BD /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		78FC04B622E17C700049E0BD /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -254,6 +260,19 @@
 			path = Storyboards;
 			sourceTree = "<group>";
 		};
+		781A941B22EFC03D002966B5 /* EventTabBarViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				781A941822EFBA28002966B5 /* MusicQueueViewController.h */,
+				781A941922EFBA28002966B5 /* MusicQueueViewController.m */,
+				780DB2EA22EA24D800B78516 /* EventDetailsViewController.h */,
+				780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */,
+				781A941C22EFC0AE002966B5 /* EventGalleryViewController.h */,
+				781A941D22EFC0AE002966B5 /* EventGalleryViewController.m */,
+			);
+			path = EventTabBarViewControllers;
+			sourceTree = "<group>";
+		};
 		78FC04B222E16ECF0049E0BD /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +291,7 @@
 		C127D51E22DFE3CF009963B0 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				781A941B22EFC03D002966B5 /* EventTabBarViewControllers */,
 				C138EDDD22DFAD9F00AAA0D0 /* MasterViewController.h */,
 				C138EDDE22DFAD9F00AAA0D0 /* MasterViewController.m */,
 				C127D52422DFE699009963B0 /* ExploreViewController.h */,
@@ -285,8 +305,6 @@
 				06A909D222E7B5DC00CD2969 /* CreateEventViewController.xib */,
 				C14E1A0B22E8D52E00883CFB /* LogInViewController.h */,
 				C14E1A0C22E8D52E00883CFB /* LogInViewController.m */,
-				780DB2EA22EA24D800B78516 /* EventDetailsViewController.h */,
-				780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -704,6 +722,8 @@
 				C14E1A0822E276F400883CFB /* Vibes.m in Sources */,
 				06A909CC22E67A3500CD2969 /* CustomPollCell.m in Sources */,
 				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,
+				781A941A22EFBA28002966B5 /* MusicQueueViewController.m in Sources */,
+				781A941E22EFC0AE002966B5 /* EventGalleryViewController.m in Sources */,
 				C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */,
 				C1616E0A22EB931F004B536B /* EventsCollectionViewCell.m in Sources */,
 				C14E1A0422E2768B00883CFB /* CustomCollectionViewCell.m in Sources */,

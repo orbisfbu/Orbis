@@ -19,8 +19,6 @@
     if (self) {
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
-        //self.eventVibesArray = snapshotDictionary[@"Vibes"];
-        //self.eventPollsArray = snapshotDictionary[@"Polls"] ;
         self.eventHasMusic = snapshotDictionary[@"Has Music"];
         self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
