@@ -20,34 +20,34 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of People" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m0Y-az-m6n">
-                        <rect key="frame" x="5" y="5" width="129" height="27.5"/>
+                        <rect key="frame" x="5" y="5" width="129" height="42.5"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CMi-Nj-dmt">
-                        <rect key="frame" x="10" y="42.5" width="315" height="60"/>
+                        <rect key="frame" x="5" y="52.5" width="325" height="60"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="60" id="CrL-K5-xMd"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10-100" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fmj-ST-68e">
-                        <rect key="frame" x="271" y="5" width="54" height="21"/>
+                        <rect key="frame" x="276" y="5" width="54" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="CMi-Nj-dmt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="4vB-bc-Vnx"/>
+                    <constraint firstItem="CMi-Nj-dmt" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="4vB-bc-Vnx"/>
                     <constraint firstItem="m0Y-az-m6n" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="Ct2-aW-L7E"/>
                     <constraint firstItem="m0Y-az-m6n" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="DOj-wS-Muf"/>
                     <constraint firstItem="fmj-ST-68e" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="OO2-Y0-PNN"/>
-                    <constraint firstAttribute="bottom" secondItem="CMi-Nj-dmt" secondAttribute="bottom" constant="10" id="SXw-8z-PNS"/>
-                    <constraint firstItem="CMi-Nj-dmt" firstAttribute="top" secondItem="m0Y-az-m6n" secondAttribute="bottom" constant="10" id="USY-Aq-eta"/>
-                    <constraint firstAttribute="trailing" secondItem="fmj-ST-68e" secondAttribute="trailing" constant="10" id="hHo-mt-CmA"/>
-                    <constraint firstAttribute="trailing" secondItem="CMi-Nj-dmt" secondAttribute="trailing" constant="10" id="nFY-sR-C8w"/>
+                    <constraint firstAttribute="bottom" secondItem="CMi-Nj-dmt" secondAttribute="bottom" id="SXw-8z-PNS"/>
+                    <constraint firstItem="CMi-Nj-dmt" firstAttribute="top" secondItem="m0Y-az-m6n" secondAttribute="bottom" constant="5" id="USY-Aq-eta"/>
+                    <constraint firstAttribute="trailing" secondItem="fmj-ST-68e" secondAttribute="trailing" constant="5" id="hHo-mt-CmA"/>
+                    <constraint firstAttribute="trailing" secondItem="CMi-Nj-dmt" secondAttribute="trailing" constant="5" id="nFY-sR-C8w"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
