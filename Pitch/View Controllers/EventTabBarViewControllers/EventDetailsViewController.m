@@ -17,17 +17,18 @@
 @implementation EventDetailsViewController
 
 - (void)viewDidLoad {
-    //self.scrollViewOutlet.delegate = self;
     self.scrollViewOutlet.clipsToBounds = YES;
     self.eventNameViewOutlet.layer.cornerRadius = 30;
     self.swipeIndicatorOutlet.layer.cornerRadius = self.swipeIndicatorOutlet.frame.size.height/2;
     self.eventNameViewOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;;
     [self.scrollViewOutlet setShowsVerticalScrollIndicator:NO];
+    [self.swipeIndicatorOutlet setBackgroundColor:[UIColor lightGrayColor]];
     [self.eventNameViewOutlet setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
-    NSLog(NSStringFromCGSize(self.scrollViewOutlet.contentSize));
-    self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
+self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
     [super viewDidLoad];
+    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
+    [self.clickableMapViewOutlet addGestureRecognizer:tapMap];
     UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [self.eventNameViewOutlet addGestureRecognizer: downGestureRecognizer];

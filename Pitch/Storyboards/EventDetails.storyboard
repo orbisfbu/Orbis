@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Details-->
+        <!--Event Details View Controller-->
         <scene sceneID="dAd-SO-LZY">
             <objects>
                 <viewController storyboardIdentifier="DetailedEventView" modalPresentationStyle="formSheet" id="mAu-0e-4D9" customClass="EventDetailsViewController" sceneMemberID="viewController">
@@ -110,7 +110,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cpc-Ku-ued"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Details" image="infoIcon" id="TiS-74-5UN"/>
+                    <tabBarItem key="tabBarItem" title="" image="resizedInfoIcon" id="TiS-74-5UN"/>
                     <size key="freeformSize" width="414" height="896"/>
                     <connections>
                         <outlet property="clickableMapViewOutlet" destination="2jH-61-mET" id="9eR-K1-yc9"/>
@@ -125,7 +125,7 @@
             </objects>
             <point key="canvasLocation" x="-64" y="1051.5742128935533"/>
         </scene>
-        <!--Queue-->
+        <!--Music Queue View Controller-->
         <scene sceneID="Ptt-Ub-j2o">
             <objects>
                 <viewController storyboardIdentifier="MusicQueueView" id="u8I-DL-IzW" customClass="MusicQueueViewController" sceneMemberID="viewController">
@@ -134,7 +134,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BcO-bC-QDB">
-                                <rect key="frame" x="0.0" y="50" width="375" height="616"/>
+                                <rect key="frame" x="0.0" y="50" width="375" height="568"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is the music queue" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hi-sh-k5S">
                                         <rect key="frame" x="97" y="167" width="181" height="21"/>
@@ -151,11 +151,11 @@
                             <constraint firstAttribute="trailing" secondItem="BcO-bC-QDB" secondAttribute="trailing" id="7co-Qj-4qq"/>
                             <constraint firstItem="BcO-bC-QDB" firstAttribute="top" secondItem="FB4-6R-2im" secondAttribute="top" constant="50" id="aoc-Zr-tOI"/>
                             <constraint firstItem="BcO-bC-QDB" firstAttribute="leading" secondItem="FB4-6R-2im" secondAttribute="leading" id="qIq-6E-5kd"/>
-                            <constraint firstAttribute="bottom" secondItem="BcO-bC-QDB" secondAttribute="bottom" constant="1" id="sVR-Ip-SBm"/>
+                            <constraint firstItem="t87-dB-111" firstAttribute="bottom" secondItem="BcO-bC-QDB" secondAttribute="bottom" id="sri-6a-ha1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="t87-dB-111"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Queue" image="queueIcon" id="Bcn-jf-1O1"/>
+                    <tabBarItem key="tabBarItem" title="" image="resizedQueueIcon" id="Bcn-jf-1O1"/>
                     <connections>
                         <outlet property="roundedCornersView" destination="BcO-bC-QDB" id="gCL-M3-boC"/>
                     </connections>
@@ -164,7 +164,7 @@
             </objects>
             <point key="canvasLocation" x="922.39999999999998" y="948.57571214392806"/>
         </scene>
-        <!--Gallery-->
+        <!--Event Gallery View Controller-->
         <scene sceneID="xe3-Nb-Mne">
             <objects>
                 <viewController storyboardIdentifier="EventGalleryView" id="yX8-f3-6I5" customClass="EventGalleryViewController" sceneMemberID="viewController">
@@ -172,8 +172,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kTo-DJ-2na">
-                                <rect key="frame" x="0.0" y="50" width="375" height="614"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kTo-DJ-2na">
+                                <rect key="frame" x="0.0" y="50" width="375" height="568"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This is the event gallery" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jIF-6H-Dcs">
                                         <rect key="frame" x="97" y="188" width="181" height="21"/>
@@ -188,13 +188,13 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="kTo-DJ-2na" firstAttribute="leading" secondItem="Nu5-GA-Zop" secondAttribute="leading" id="BD1-Zk-iqJ"/>
-                            <constraint firstAttribute="bottom" secondItem="kTo-DJ-2na" secondAttribute="bottom" id="OfK-rX-tZU"/>
-                            <constraint firstItem="kTo-DJ-2na" firstAttribute="top" secondItem="Nu5-GA-Zop" secondAttribute="top" id="UM1-XS-PPA"/>
+                            <constraint firstItem="kTo-DJ-2na" firstAttribute="top" secondItem="Nu5-GA-Zop" secondAttribute="top" constant="50" id="UM1-XS-PPA"/>
                             <constraint firstAttribute="trailing" secondItem="kTo-DJ-2na" secondAttribute="trailing" id="fSp-LD-czj"/>
+                            <constraint firstItem="XMq-IH-yOT" firstAttribute="bottom" secondItem="kTo-DJ-2na" secondAttribute="bottom" id="q1h-zc-zSB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="XMq-IH-yOT"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Gallery" image="galleryIcon" id="dP3-Dd-1d4"/>
+                    <tabBarItem key="tabBarItem" title="" image="resizedGalleryIcon" id="dP3-Dd-1d4"/>
                     <connections>
                         <outlet property="roundedCornersView" destination="kTo-DJ-2na" id="I3i-Zy-jL9"/>
                     </connections>
@@ -206,7 +206,6 @@
         <!--Tab Bar Controller-->
         <scene sceneID="s6i-Sd-l2t">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="CWd-kH-Exg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController storyboardIdentifier="DetailsTabBarController" id="Qou-bw-sp2" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VgF-WJ-s7Y">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -219,13 +218,14 @@
                         <segue destination="yX8-f3-6I5" kind="relationship" relationship="viewControllers" id="eqe-B2-n9I"/>
                     </connections>
                 </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CWd-kH-Exg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="916" y="22"/>
         </scene>
     </scenes>
     <resources>
-        <image name="galleryIcon" width="40" height="32"/>
-        <image name="infoIcon" width="40" height="34"/>
-        <image name="queueIcon" width="40" height="34"/>
+        <image name="resizedGalleryIcon" width="40" height="33"/>
+        <image name="resizedInfoIcon" width="40" height="40"/>
+        <image name="resizedQueueIcon" width="40" height="39"/>
     </resources>
 </document>

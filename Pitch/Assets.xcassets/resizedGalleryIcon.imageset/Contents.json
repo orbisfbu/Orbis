@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "queueIcon.png",
+      "filename" : "resizedGalleryIcon.png",
       "scale" : "1x"
     },
     {

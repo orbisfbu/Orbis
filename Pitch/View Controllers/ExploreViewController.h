@@ -14,7 +14,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ExploreViewController : UIViewController
-- (void)dismissEventDetails: (UISwipeGestureRecognizer *)recognizer;
 @end
 
 NS_ASSUME_NONNULL_END

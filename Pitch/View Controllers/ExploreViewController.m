@@ -50,7 +50,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    //this is for the
+    //this is for the user location
 //    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
 //    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
 //    [self.locationManager startUpdatingLocation];
