@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EventDetailsViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIView *clickableMapViewOutlet;
 @property (retain, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *eventCreatorLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *eventImageView;
@@ -20,7 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *ageRestrictionLabel;
 @property (weak, nonatomic) IBOutlet UILabel *distanceFromUserLabel;
 @property (weak, nonatomic) IBOutlet UILabel *attendanceCountLabel;
-@property (weak, nonatomic) IBOutlet UIView *roundedCornersView;
+@property (weak, nonatomic) IBOutlet UIView *roundedCornersViewOutlet;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollViewOutlet;
+@property (weak, nonatomic) IBOutlet UIView *eventNameViewOutlet;
+@property (weak, nonatomic) IBOutlet UIView *swipeIndicatorOutlet;
 
 
 //calculate this distance using difference in coordinates or something

@@ -21,6 +21,8 @@
 #import "MusicQueueViewController.h"
 #import "EventGalleryViewController.h"
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventAnnotationToMapDelegate>
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
@@ -115,11 +117,6 @@
     }
 }
 
-- (void)dismissEventDetails:(UISwipeGestureRecognizer *)recognizer
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 
 - (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
 {
@@ -128,7 +125,7 @@
     MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
     EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
     UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
-    [eventSelectedTabBarController.tabBar setBackgroundColor:[UIColor clearColor]];
+    [eventSelectedTabBarController.tabBar setBackgroundColor:UIColorFromRGB(0x21ce99)];
     eventSelectedTabBarController.tabBar.translucent = YES;
     eventSelectedTabBarController.selectedIndex = 1;
     eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
@@ -144,11 +141,6 @@
     detailedEventVC.distanceFromUser = 5;
     eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
     [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
-    
-    //have to edit this swipe down closing functionality later
-//    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
-//    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
-//    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
 }
 
 
@@ -261,9 +253,7 @@
 }
 
 - (void)addThisAnnotationToMap:(nonnull EventAnnotation *)newEventAnnotation {
-    
     [self.photoMap addAnnotation:newEventAnnotation.annotation];
-
 }
 
 
