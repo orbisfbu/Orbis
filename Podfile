@@ -18,6 +18,7 @@ target 'Pitch' do
   pod 'AFNetworking'
   pod 'MARKRangeSlider'
   pod 'MBCircularProgressBar'
+  pod 'UITextView+Placeholder'
   
   target 'PitchTests' do
     inherit! :search_paths
