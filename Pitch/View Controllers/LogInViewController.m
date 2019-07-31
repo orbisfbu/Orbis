@@ -41,7 +41,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 @interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate, InstantiateSharedUserDelegate>
 
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
-
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
 //initially inputted email and password correspond to existing account
@@ -105,14 +104,12 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         [self createPageObjects];
         [self createContinuePage];
     }
-    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     if ([FIRAuth auth].currentUser) {
         NSLog(@"User was already logged in... Creating user profile");
-        [[DataHandling shared] loadUserInfoFromDatabase:[FIRAuth auth].currentUser.uid];
-        //[self segueToApp];
+        [[DataHandling shared] loadUserInfoAndApp:[FIRAuth auth].currentUser.uid];
     }
 }
 
@@ -398,9 +395,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                              //if authresult is nill then check for error
                              //non nill authresult means we can login
                              if (authResult.user){
-                                 [[DataHandling shared] loadUserInfoFromDatabase:authResult.user.uid];
-//                                 [self dismissSignInPage];
-//                                 [self segueToApp];
+                                 [[DataHandling shared] loadUserInfoAndApp:authResult.user.uid];
                              }
                              else{
                                  switch([error code]){

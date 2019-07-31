@@ -76,6 +76,7 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
     NSString *newEventAgeRestriction = [NSString stringWithFormat:@"%d", definedEvent.eventAgeRestriction];
     NSString *newEventDescription = definedEvent.eventDescription;
     NSString *newEventLocation = definedEvent.eventLocationString;
+    NSString *newEventName = definedEvent.eventName;
     NSDictionary *eventInfo = @{
                                 EVENT_CREATOR_KEY: newEventCreator,
                                 EVENT_HAS_MUSIC_KEY: newEventHasMusic,
@@ -83,9 +84,10 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
                                 EVENT_IMAGE_URL_KEY: newEventImageURLString,
                                 EVENT_AGE_RESTRICTION_KEY: newEventAgeRestriction,
                                 EVENT_LOCATION_KEY: newEventLocation,
-                                EVENT_DESCRIPTION_KEY: newEventDescription
+                                EVENT_DESCRIPTION_KEY: newEventDescription,
+                                EVENT_NAME_KEY:newEventName
                                 };
-    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:definedEvent.eventName] setData:eventInfo
+    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:newEventName] setData:eventInfo
          completion:^(NSError * _Nullable error) {
        if (error != nil) {
            NSLog(@"Error adding event: %@", error);
@@ -125,7 +127,7 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 }
 
 
-- (void)loadUserInfoFromDatabase: (NSString *)userID
+- (void)loadUserInfoAndApp: (NSString *)userID{
 {
     [[[self.database collectionWithPath:@"users"] documentWithPath:userID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (snapshot.exists)
@@ -138,6 +140,8 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
             NSLog(@"THIS USER DOESNT EXIST, ERROR IS: %@", error);
         }
     }];
+}
+    
 }
 
 @end

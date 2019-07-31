@@ -17,17 +17,18 @@
 #import "UIImageView+AFNetworking.h"
 #import "EventAnnotation.h"
 #import "EventDetailsViewController.h"
+#import "CreateEventViewController.h"
+#import "MusicQueueViewController.h"
+#import "EventGalleryViewController.h"
 #import "ApplyFiltersCell.h"
 #import "DragCell.h"
-
 #import "CreateEventViewController.h"
 #import "MusicQueueViewController.h"
 #import "EventGalleryViewController.h"
 
-
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, ApplyFiltersDelegate>
-
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventAnnotationToMapDelegate, ApplyFiltersDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -50,11 +51,12 @@
 
 @implementation ExploreViewController
 
-- (void)viewDidAppear:(BOOL)animated {
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-    [self.locationManager startUpdatingLocation];
-    [self refreshEventsData];
+- (void)viewDidAppear:(BOOL)animated
+{
+    //this is for the user location
+//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+//    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+//    [self.locationManager startUpdatingLocation];
 }
 
 - (void) viewDidLoad {
@@ -117,8 +119,6 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            //set the rest of the properties here
-            //will have to pass in this information to the modal that will be presented as a result of click
             EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
             newEventAnnotation.coordinate = thisEvent.eventCoordinates;
             newEventAnnotation.eventName = thisEvent.eventName;
@@ -126,14 +126,10 @@
             newEventAnnotation.eventDescription = thisEvent.eventDescription;
             newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
             newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
+            newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
             [self.photoMap addAnnotation:newEventAnnotation];
         }
     }
-}
-
-- (void)dismissEventDetails:(UISwipeGestureRecognizer *)recognizer
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -345,5 +341,11 @@
     
     // Refresh map
 }
+
+- (void)addThisAnnotationToMap:(nonnull EventAnnotation *)newEventAnnotation {
+    [self.photoMap addAnnotation:newEventAnnotation.annotation];
+}
+
+
 
 @end

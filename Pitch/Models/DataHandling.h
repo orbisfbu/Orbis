@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getEventsArray;
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
-- (void)loadUserInfoFromDatabase: (NSString *)userID;
+- (void)loadUserInfoAndApp: (NSString *)userID;
 @property (nonatomic, weak) id<DataHandlingDelegate> delegate;
 @property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
 @end

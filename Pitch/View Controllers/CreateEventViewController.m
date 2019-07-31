@@ -37,8 +37,7 @@
 static NSString * const NAME_OF_EVENT = @"Name of Event";
 static NSString * const EVENT_OWNER = @"Creator of the Event";
 static NSString * const EVENT_IMAGE_URLSTRING = @"Event Image";
-static NSString * const DATABASE_EVENTS_NODE = @"Events";
-static NSString * const DATABASE_USERS_NODE = @"Users";
+
 
 //Debugging/Error Messages
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
@@ -85,19 +84,25 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void) createEventButtonPressed
 {
     NSDictionary *eventDefinition = @{
-                                      @"Created By": @"Sebastian",
-                                      @"Event Name": @"TestName",
+                                      @"Created By": @"Elizabeth",
+                                      @"Event Name": @"Event after eventDetails",
                                       @"Has Music": @"YES",
-                                      @"Attendance": @(4),
-                                      @"ImageURL": @"testingURL",
+                                      @"Attendance": @"8",
+                                      @"ImageURL": @"https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwj_15rNj9vjAhVFu54KHQWyDXAQjRx6BAgBEAU&url=https%3A%2F%2Fwww.festicket.com%2Fmagazine%2Fdiscover%2Ftop-20-music-festivals-Europe%2F&psig=AOvVaw2JAA6zSvLSfHHv1W1_awOl&ust=1564523774410326",
                                       @"Description": @"testing",
-                                      @"Age Restriction": @(18),
-                                      @"Location": @"37.806093 -122.435543",
-                                      @"MinNumPeople": @(50),
-                                      @"MaxNumPeople": @(200)
+                                      @"Age Restriction": @"21",
+                                      @"Location": @"37.735390 -122.501310"
                                       };
     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:eventToAdd];
+    EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
+    newEventAnnotation.coordinate = eventToAdd.eventCoordinates;
+    newEventAnnotation.eventName = eventToAdd.eventName;
+    newEventAnnotation.eventCreator = eventToAdd.eventCreator;
+    newEventAnnotation.eventDescription = eventToAdd.eventDescription;
+    newEventAnnotation.eventAgeRestriction = eventToAdd.eventAgeRestriction;
+    newEventAnnotation.eventAttendanceCount = eventToAdd.eventAttendanceCount;
+    [self.delegate addThisAnnotationToMap:newEventAnnotation];
 }
 
 
