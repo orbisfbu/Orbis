@@ -26,17 +26,19 @@
     [self.eventNameViewOutlet setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
 self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
+    self.registerButtonOutlet.layer.cornerRadius = self.registerButtonOutlet.frame.size.height/2;
+    [self.registerButtonOutlet.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [super viewDidLoad];
     UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
     [self.clickableMapViewOutlet addGestureRecognizer:tapMap];
     UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [self.eventNameViewOutlet addGestureRecognizer: downGestureRecognizer];
-//    self.eventNameLabel.text = self.eventNameString;
-//    NSURL *imageNSURL = [NSURL URLWithString:self.eventImageURLString];
-//    NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
-//    UIImage *eventImage = [UIImage imageWithData:imageData];
-//    [self.eventImageView setImage:eventImage];
+    self.eventNameLabel.text = self.eventNameString;
+    NSURL *imageNSURL = [NSURL URLWithString:self.eventImageURLString];
+    NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
+    UIImage *eventImage = [UIImage imageWithData:imageData];
+    [self.eventImageView setImage:eventImage];
 //    self.eventCreatorLabel.text = self.eventCreatorString;
 //    self.eventDescriptionLabel.text = self.eventDescriptionString;
 //    self.distanceFromUserLabel.text = [NSString stringWithFormat:@"%d", self.distanceFromUser];
@@ -44,9 +46,11 @@ self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
 //    self.attendanceCountLabel.text = self.eventAttendancCountString;
 }
 
-- (void)dismissEventDetails:(UISwipeGestureRecognizer *)recognizer
+-(void)dismissEventDetails:(UISwipeGestureRecognizer *)recognizer
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)registerButtonAction:(id)sender {
+}
 @end

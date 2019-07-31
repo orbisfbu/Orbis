@@ -16,11 +16,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIView *clickableMapViewOutlet;
 @property (retain, nonatomic) IBOutlet UILabel *eventNameLabel;
 //@property (strong, nonatomic) IBOutlet UILabel *eventCreatorLabel;
-//@property (strong, nonatomic) IBOutlet UIImageView *eventImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *eventImageView;
 //@property (strong, nonatomic) IBOutlet UILabel *eventDescriptionLabel;
 //@property (weak, nonatomic) IBOutlet UILabel *ageRestrictionLabel;
 //@property (weak, nonatomic) IBOutlet UILabel *distanceFromUserLabel;
 //@property (weak, nonatomic) IBOutlet UILabel *attendanceCountLabel;
+- (IBAction)registerButtonAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *registerButtonOutlet;
 @property (weak, nonatomic) IBOutlet UIView *roundedCornersViewOutlet;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewOutlet;
 @property (weak, nonatomic) IBOutlet UIView *eventNameViewOutlet;
