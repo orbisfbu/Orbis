@@ -16,8 +16,9 @@ target 'Pitch' do
   pod 'DOPDropDownMenu-Enhanced'
   pod 'Firebase/Firestore'
   pod 'AFNetworking'
- 
-
+  pod 'MARKRangeSlider'
+  pod 'MBCircularProgressBar'
+  
   target 'PitchTests' do
     inherit! :search_paths
     # Pods for testing

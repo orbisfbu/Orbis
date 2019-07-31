@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="VibesCell" rowHeight="122" id="KGk-i7-Jjw" customClass="VibesCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="122"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="121.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vibes/Themes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Vl-qf-gl5">
+                        <rect key="frame" x="5" y="15" width="108" height="36.5"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dUI-Mf-DBM">
+                        <rect key="frame" x="5" y="56.5" width="310" height="60"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eY4-IR-WXg">
+                                <rect key="frame" x="5" y="5" width="300" height="55"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="jWa-5B-Z7Q">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="eY4-IR-WXg" secondAttribute="trailing" constant="5" id="aNh-RU-Por"/>
+                            <constraint firstAttribute="height" constant="60" id="eYo-TS-lbl"/>
+                            <constraint firstAttribute="bottom" secondItem="eY4-IR-WXg" secondAttribute="bottom" id="fiZ-aB-5Fb"/>
+                            <constraint firstItem="eY4-IR-WXg" firstAttribute="leading" secondItem="dUI-Mf-DBM" secondAttribute="leading" constant="5" id="fx6-9m-Mhl"/>
+                            <constraint firstItem="eY4-IR-WXg" firstAttribute="top" secondItem="dUI-Mf-DBM" secondAttribute="top" constant="5" id="v3g-j1-4Dy"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="dUI-Mf-DBM" secondAttribute="bottom" constant="5" id="Byz-A9-Dga"/>
+                    <constraint firstItem="dUI-Mf-DBM" firstAttribute="top" secondItem="4Vl-qf-gl5" secondAttribute="bottom" constant="5" id="EJL-MF-JCR"/>
+                    <constraint firstAttribute="trailing" secondItem="dUI-Mf-DBM" secondAttribute="trailing" constant="5" id="Pnz-09-NCu"/>
+                    <constraint firstItem="dUI-Mf-DBM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="YTy-3i-eMz"/>
+                    <constraint firstItem="4Vl-qf-gl5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="e8h-IJ-2lK"/>
+                    <constraint firstItem="4Vl-qf-gl5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="fm9-41-Hdx"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="subview" destination="dUI-Mf-DBM" id="OJo-fb-Xmc"/>
+                <outlet property="titleLabel" destination="4Vl-qf-gl5" id="Rbd-80-ada"/>
+                <outlet property="vibesCollectionView" destination="eY4-IR-WXg" id="1n6-Mx-7LX"/>
+            </connections>
+            <point key="canvasLocation" x="137.59999999999999" y="178.11094452773614"/>
+        </tableViewCell>
+    </objects>
+</document>
