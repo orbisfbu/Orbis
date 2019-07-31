@@ -117,11 +117,10 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.usernameLabel setFont:[UIFont fontWithName:@"roboto" size:20]];
     [self.usernameLabel setClipsToBounds:YES];
     self.usernameLabel.layer.cornerRadius = 5;
-    
-    
-    [self.usernameLabel setText:[UserInSession shared].sharedUser.screenNameString];
+    [self.usernameLabel setText:[NSString stringWithFormat:@"@%@", [UserInSession shared].sharedUser.screenNameString]];
     [self.usernameLabel sizeToFit];
     [self.usernameLabel setCenter:CGPointMake(self.view.center.x, self.usernameLabel.center.y)];
+    [self.usernameLabel setLayoutMargins:UIEdgeInsetsMake(5, 10, 5, 10)];
     [self.usernameLabel setBackgroundColor:UIColorFromRGB(0x157f5f)];
     [self.view addSubview:self.usernameLabel];
     

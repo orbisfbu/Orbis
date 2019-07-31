@@ -20,6 +20,10 @@
 #import "ApplyFiltersCell.h"
 #import "DragCell.h"
 
+#import "CreateEventViewController.h"
+#import "MusicQueueViewController.h"
+#import "EventGalleryViewController.h"
+
 
 @interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, ApplyFiltersDelegate>
 
@@ -135,19 +139,40 @@
 
 - (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
 {
+//    UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
+//    EventDetailsViewController * detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"Details"];
+//    detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
+//    detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
+//    detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
+//    detailedEventVC.eventImageView.image = eventToPresent.eventImage;
+//
+//    detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+//    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    [self presentViewController:detailedEventVC animated:YES completion:nil];
+//    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
+//    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
+//    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
-    EventDetailsViewController * detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"Details"];
-    detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
-    detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
-    detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
-    detailedEventVC.eventImageView.image = eventToPresent.eventImage;
-    
-    detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    [self presentViewController:detailedEventVC animated:YES completion:nil];
-    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
-    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
-    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
+    EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
+    MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
+    EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
+    UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
+    [eventSelectedTabBarController.tabBar setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    eventSelectedTabBarController.tabBar.translucent = YES;
+    eventSelectedTabBarController.selectedIndex = 1;
+    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    detailedEventVC.eventNameString = eventToPresent.eventName;
+    detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
+    detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
+    detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
+    //somewhere here set the detailedEventVC.distanceFromUser by finding the distance between user location and eventToPresent coordinates
+    detailedEventVC.eventAgeRestrictionString = [NSString stringWithFormat:@"%d", eventToPresent.eventAgeRestriction];
+    detailedEventVC.eventAttendancCountString = [NSString stringWithFormat:@"%d", eventToPresent.eventAttendanceCount];
+    detailedEventVC.distanceFromUser = 5;
+    eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
+    [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
 }
 
 

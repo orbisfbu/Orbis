@@ -17,7 +17,7 @@
         self.userNameString = [firstNameFormatted stringByAppendingString: dictionary[@"Last Name"]];
         self.profileImageURLString = dictionary[@"ProfileImageURL"];
         self.userBioString = dictionary[@"User Bio"];
-        self.screenNameString = dictionary[@"Screen Name"];
+        self.screenNameString = dictionary[@"Username"];
         self.profileBackgroundImageURLString = dictionary[@"BackgroundImageURL"];
         self.email = dictionary[@"Email"];
     }

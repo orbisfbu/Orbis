@@ -24,6 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateEvents:(NSArray *)events;
 @end
 
+@protocol InstantiateSharedUserDelegate
+- (void)segueToAppUponLogin;
+@end
+
 @interface DataHandling : NSObject
 + (instancetype)shared;
 - (void)getEventsArray;
@@ -31,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoFromDatabase: (NSString *)userID;
 @property (nonatomic, weak) id<DataHandlingDelegate> delegate;
+@property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
 @end
 
 NS_ASSUME_NONNULL_END

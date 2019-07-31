@@ -28,6 +28,9 @@
                              didFinishLaunchingWithOptions:launchOptions];
     [FBSDKSettings setAppID:@"2401394480184040"];
     
+    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+    
     return YES;
 }
 

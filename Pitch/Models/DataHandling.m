@@ -27,7 +27,7 @@ static NSString * const USER_FIRSTNAME_KEY = @"First Name";
 static NSString * const USER_LASTNAME_KEY = @"Last Name";
 static NSString * const USER_EMAIL_KEY = @"Email";
 static NSString * const USER_PROFILE_IMAGE_KEY = @"Profile Image";
-static NSString * const USER_SCREEN_NAME_KEY = @"Screen Name";
+static NSString * const USER_SCREEN_NAME_KEY = @"Username";
 static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 
 @interface DataHandling()
@@ -59,7 +59,7 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
          } else {
              for (FIRDocumentSnapshot *document in snapshot.documents) {
                  Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
-                 NSLog(@"THIS IS AN ATTEMPT, %@", document.data[@"polls"][@"poll1"][@"OptionName1"]);
+                 //NSLog(@"THIS IS AN ATTEMPT, %@", document.data[@"polls"][@"poll1"][@"OptionName1"]);
                  [eventsArray addObject:eventToAdd];
              }
          }
@@ -130,10 +130,12 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
     [[[self.database collectionWithPath:@"users"] documentWithPath:userID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (snapshot.exists)
         {
+            NSLog(@"USER DOES EXIST");
             [[UserInSession shared] setCurrentUser:snapshot.data];
+            [self.sharedUserDelegate segueToAppUponLogin];
         }
         else{
-            NSLog(@"THIS USER DOESNT EXIST");
+            NSLog(@"THIS USER DOESNT EXIST, ERROR IS: %@", error);
         }
     }];
 }

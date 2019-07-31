@@ -38,7 +38,9 @@ static NSString * const SIGNIN_VIEW = @"SIGNIN_VIEW";
 static NSString * const SIGNUP_VIEW1 = @"SIGNUP_VIEW1";
 static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
-@interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate>
+@interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate, InstantiateSharedUserDelegate>
+
+@property (strong, nonatomic) DataHandling *dataHandlingObject;
 
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
@@ -88,6 +90,8 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataHandlingObject = [DataHandling shared];
+    self.dataHandlingObject.sharedUserDelegate = self;
     [self.backButton setEnabled:NO];
     self.backButton.alpha = 0;
     if (![FIRAuth auth].currentUser) {
@@ -108,7 +112,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     if ([FIRAuth auth].currentUser) {
         NSLog(@"User was already logged in... Creating user profile");
         [[DataHandling shared] loadUserInfoFromDatabase:[FIRAuth auth].currentUser.uid];
-        [self segueToApp];
+        //[self segueToApp];
     }
 }
 
@@ -395,8 +399,8 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                              //non nill authresult means we can login
                              if (authResult.user){
                                  [[DataHandling shared] loadUserInfoFromDatabase:authResult.user.uid];
-                                 [self dismissSignInPage];
-                                 [self segueToApp];
+//                                 [self dismissSignInPage];
+//                                 [self segueToApp];
                              }
                              else{
                                  switch([error code]){
@@ -455,8 +459,8 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                          
                                          [[UserInSession shared] setCurrentUser:userInfo];
                                          [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
-                                         [self dismissSignUpPage2:YES];
-                                         [self segueToApp];
+                                         //[self dismissSignUpPage2:YES];
+                                         //[self segueToApp];
                                      }
                                      else{
                                          switch([error code]){
@@ -543,6 +547,13 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
     NSLog(@"HEREEEE");
     [self createPageObjects];
     [self createContinuePage];
+}
+
+- (void) segueToAppUponLogin {
+    NSLog(@"LOGGING IN...");
+    [self dismissSignInPage];
+    [self dismissSignUpPage2:YES];
+    [self segueToApp];
 }
 
 @end

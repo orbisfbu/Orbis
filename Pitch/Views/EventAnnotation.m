@@ -29,7 +29,7 @@
     if (self) {
         //wont need to set the image here when retrieving imageURL from the Event object
         UIImage *resizedImage = [self resizeImage:[UIImage imageNamed:@"eventImage"] withSize:CGSizeMake(40.0, 40.0)];
-        self.eventImage = resizedImage;
+        //self.eventImage = resizedImage;
         self.title = @"Random Title";
     }
     return self;

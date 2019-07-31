@@ -33,7 +33,6 @@
         NSString *longitudeString = [locationComponents objectAtIndex:1];
         NSNumber  *latitudeNum = [NSNumber numberWithFloat: [latitudeString floatValue]];
         NSNumber  *longitudeNum = [NSNumber numberWithFloat: [longitudeString floatValue]];
-        NSLog([NSString stringWithFormat:@"This is the latitude and longitude: %@, %@", latitudeNum, longitudeNum]);
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
     }
     return self;
