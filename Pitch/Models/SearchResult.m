@@ -20,11 +20,7 @@
 
 @implementation SearchResult
 
-<<<<<<< HEAD
 - (instancetype) initWithDictionary: (NSDictionary *) dict {
-=======
-- (instancetype)initWithDictionary:(NSDictionary *) dict {
->>>>>>> 4faef3201c7be2f1f839c350cb582e334ed7968c
     self = [super init];
     if (self) {
         self.name = dict[@"name"];
