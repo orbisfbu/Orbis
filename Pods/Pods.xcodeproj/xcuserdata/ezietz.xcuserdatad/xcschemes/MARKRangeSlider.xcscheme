@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E5B4BBC6DD552AC8943C7E22772FC1D3"
-               BuildableName = "GoogleMaps"
-               BlueprintName = "GoogleMaps"
+               BlueprintIdentifier = "93854076506B721988C9A4271D400E99"
+               BuildableName = "MARKRangeSlider.framework"
+               BlueprintName = "MARKRangeSlider"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

@@ -76,6 +76,7 @@
 		C1C3416E22F0E36500A09666 /* DragCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3416C22F0E36500A09666 /* DragCell.xib */; };
 		C1C3417122F207BA00A09666 /* MusicQueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417022F207BA00A09666 /* MusicQueueViewController.m */; };
 		C1C3417422F2083B00A09666 /* EventGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417322F2083B00A09666 /* EventGalleryViewController.m */; };
+		C1C3417722F3533D00A09666 /* SearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417622F3533D00A09666 /* SearchResult.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,6 +209,8 @@
 		C1C3417022F207BA00A09666 /* MusicQueueViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicQueueViewController.m; sourceTree = "<group>"; };
 		C1C3417222F2083B00A09666 /* EventGalleryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGalleryViewController.h; sourceTree = "<group>"; };
 		C1C3417322F2083B00A09666 /* EventGalleryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventGalleryViewController.m; sourceTree = "<group>"; };
+		C1C3417522F3533D00A09666 /* SearchResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchResult.h; sourceTree = "<group>"; };
+		C1C3417622F3533D00A09666 /* SearchResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchResult.m; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -332,6 +335,8 @@
 				C14E1A0722E276F400883CFB /* Vibes.m */,
 				C1616E3E22F0A7D2004B536B /* Filters.h */,
 				C1616E3F22F0A7D2004B536B /* Filters.m */,
+				C1C3417522F3533D00A09666 /* SearchResult.h */,
+				C1C3417622F3533D00A09666 /* SearchResult.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -763,6 +768,7 @@
 				780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */,
 				780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */,
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
+				C1C3417722F3533D00A09666 /* SearchResult.m in Sources */,
 				06A909D322E7B5DC00CD2969 /* CreateEventViewController.m in Sources */,
 				C14E1A0D22E8D52E00883CFB /* LogInViewController.m in Sources */,
 				781A941622ECB184002966B5 /* UserInSession.m in Sources */,
