@@ -29,6 +29,7 @@
 #import <MapKit/MKLocalSearch.h>
 #import <UITextView+Placeholder.h>
 
+
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
 static NSString * const LOCATION_VIEW = @"LOCATION_VIEW";
@@ -37,10 +38,9 @@ static NSString * const MEDIA_VIEW = @"MEDIA_VIEW";
 static NSString * const MUSIC_VIEW = @"MUSIC_VIEW";
 static NSString * const POLL_VIEW = @"POLL_VIEW";
 
-// Constant sizes
+// Constant Sizes
 static int const LABEL_HEIGHT = 30;
 static int const X_OFFSET = 30;
-
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -49,14 +49,12 @@ static int const X_OFFSET = 30;
 @import FirebaseAuth;
 @import UITextView_Placeholder;
 
-//Fields to be used when saving event to database
-
 
 //Debugging/Error Messages
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
 
-@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface CreateEventViewController () // <UITableViewDelegate, UITableViewDataSource>
 
 //@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
@@ -109,6 +107,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addGestureRecognizer:tap];
     [self createPageObjects];
     [self displayInitialPage];
+
 //    self.createEventTableView.delegate = self;
 //    self.createEventTableView.dataSource = self;
 //    [self.createEventTableView setAllowsSelection:NO];
@@ -142,6 +141,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.eventTitleTextField];
     
     // Create a pin image view
+
     self.pinImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
     [self.pinImageView setImage:[UIImage imageNamed:@"pin"]];
     [self.view addSubview:self.pinImageView];
@@ -174,6 +174,18 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Next Button
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 3 * X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+
+//    // Create Event Title Textfield
+//    self.searchLocationTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, self.view.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT)];
+//    [self.searchLocationTextField setPlaceholder:@"Location"];
+//    [self.view addSubview:self.searchLocationTextField];
+//
+//    // Create Date Picker
+//    self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width -  2*X_OFFSET, 150)];
+//    [self.view addSubview:self.datePicker];
+//
+//    // Create Next Button
+//    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 3*X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nextButton];
@@ -185,11 +197,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.searchResultsTableView.dataSource = self;
     [self.view addSubview:self.searchResultsTableView];
     
+
     // Create Description Label
     self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.descriptionLabel setText:@"Description"];
     [self.view addSubview:self.descriptionLabel];
-    // Create Description Text View
+
+    
+    // Create Description text Field
     self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event" attributes:nil];
     [self.view addSubview:self.descriptionTextView];
@@ -200,6 +215,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.vibesLabel];
     // Create Vibes Sub View
     self.vibesSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
+
     [self.view addSubview:self.vibesSubview];
     
     // Create Age Label
@@ -209,6 +225,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Age Sub View
     self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
+
     [self.view addSubview:self.ageSubview];
     
     // Create Cover Image Label
@@ -218,6 +235,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Cover Image View
     self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
+
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
@@ -225,12 +243,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.additionalMediaLabel setText:@"Additional Media"];
     [self.view addSubview:self.additionalMediaLabel];
 
-    // Create Additional Media Subview
-    self.additionalMediaSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
+    // Create Additional Meida Subview
+    self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     [self.view addSubview:self.additionalMediaSubview];
-
 }
-
 
 - (void) displayInitialPage {
     self.pageName = INITIAL_VIEW;
@@ -241,12 +257,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height + 10, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(self.pinImageView.frame.origin.x, self.searchLocationTextField.frame.origin.y, self.pinImageView.frame.size.width, self.pinImageView.frame.size.height);
 }];
+
 }
 
 - (void) dismissInitialPage {
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, -self.eventTitleTextField.frame.size.height, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
+
         self.searchLocationPlaceholderLabel.frame = CGRectMake(self.searchLocationPlaceholderLabel.frame.origin.x, -self.searchLocationPlaceholderLabel.frame.size.height, self.searchLocationPlaceholderLabel.frame.size.width, self.searchLocationPlaceholderLabel.frame.size.height);
+
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, -self.searchLocationTextField.frame.size.height, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, -self.datePicker.frame.size.height, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(self.pinImageView.frame.origin.x, -self.pinImageView.frame.size.height, self.pinImageView.frame.size.width, self.pinImageView.frame.size.height);
@@ -294,6 +313,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }];
 }
 
+
 - (void) displayDetailsPage {
     self.pageName = DETAILS_VIEW;
     [UIView animateWithDuration:0.5 animations:^{
@@ -303,7 +323,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.vibesSubview.frame = CGRectMake(self.vibesSubview.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.vibesSubview.frame.size.width, self.vibesSubview.frame.size.height);
         self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.vibesSubview.frame.origin.y + self.vibesSubview.frame.size.height + 10, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
         self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
-      
+
     }];
 }
 
@@ -316,7 +336,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, -self.ageLabel.frame.size.height, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
         self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, -self.ageSubview.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
 
-        
     } completion:^(BOOL finished) {
         self.descriptionLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, self.view.frame.size.height, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
         self.descriptionTextView.frame = CGRectMake(self.descriptionTextView.frame.origin.x, self.view.frame.size.height, self.descriptionTextView.frame.size.width, self.descriptionTextView.frame.size.height);
@@ -328,28 +347,29 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }];
 }
 
-- (void) displayMediaPage{
+- (void) displayMediaPage {
     self.pageName = MEDIA_VIEW;
     [UIView animateWithDuration:0.5 animations:^{
-        self.coverImageLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
+        self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
         self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, self.coverImageLabel.frame.origin.y + self.coverImageLabel.frame.size.height + 10, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
         self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, self.coverImageView.frame.origin.y + self.coverImageView.frame.size.height + 10, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
         self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, self.additionalMediaLabel.frame.origin.y + self.additionalMediaLabel.frame.size.height + 10, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
     }];
 }
 
-- (void) dismissMediaPage{
+
+- (void) dismissMediaPage {
     [UIView animateWithDuration:0.5 animations:^{
-        self.coverImageLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, -self.coverImageLabel.frame.size.height, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
+        self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, -self.coverImageLabel.frame.size.height, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
         self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, -self.coverImageView.frame.size.height, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
         self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, -self.additionalMediaLabel.frame.size.height, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
         self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, -self.additionalMediaSubview.frame.size.height, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
     } completion:^(BOOL finished) {
-        self.coverImageLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, self.view.frame.size.height, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
+       
+        self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, self.view.frame.size.height, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
         self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, self.view.frame.size.height, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
         self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, self.view.frame.size.height, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
         self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, self.view.frame.size.height, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
-        
     }];
 }
 
@@ -376,8 +396,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.delegate addThisAnnotationToMap:newEventAnnotation];
 }
 
-
-- (void) makeCreateEventButton{
+- (void) makeCreateEventButton {
 //    self.createEventButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
 //    [self.createEventButton setTitle:@"Create Event" forState:UIControlStateNormal];
 //    [self.createEventButton setBackgroundColor:[UIColor clearColor]];
@@ -393,6 +412,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 
 //- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+
 //    UITableViewCell *cell;
 //    //[cell awakeFromNib];
 //    if (indexPath.row == 0) {
@@ -424,6 +444,37 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //    return (self.customPollCellsArray.count + 6);
 //}
 //
+
+////    UITableViewCell *cell;
+////    //[cell awakeFromNib];
+////    if (indexPath.row == 0) {
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"EventTitleCell"];
+////        [cell awakeFromNib];
+////    } else if (indexPath.row == 1) {
+//////        [self.createEventTableView beginUpdates];
+//////        [self.createEventTableView endUpdates];
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"LocationCell"];
+////        [cell awakeFromNib];
+////    } else if (indexPath.row == 2) {
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"VibesCell"];
+////        [cell awakeFromNib];
+////    } else if (indexPath.row == 3) {
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"AgeCell"];
+////    } else if (indexPath.row == 4) {
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"EventPictureCell"];
+////    } else if (indexPath.row == 5) {
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"PollsTitleCell"];
+////    } else {
+////        cell = [self.createEventTableView dequeueReusableCellWithIdentifier:@"CustomPollCell"];
+////    }
+////    return cell;
+//}
+
+//- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+////    int arrayCount = (int)self.customPollCellsArray.count;
+////    NSLog(@"value : %lu %d", (unsigned long)self.customPollCellsArray.count, arrayCount);
+////    return (self.customPollCellsArray.count + 6);
+//}
 //- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    return UITableViewAutomaticDimension;
 //}
@@ -457,6 +508,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //        [self.createEventTableView endUpdates]; }
 //}
 
+
+- (void) nextButtonPressed {
+    if ([self.pageName isEqualToString:INITIAL_VIEW]) {
+        [self dismissInitialPage];
+        [self displayDetailsPage];
+    } else if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+        [self dismissDetailsPage];
+        [self displayMediaPage];
+    }
+}
+
 - (IBAction)backButtonPressed:(id)sender {
     if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         [UIView animateWithDuration:0.5 animations:^{
@@ -464,21 +526,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         }];
         [self dismissDetailsPage];
         [self displayInitialPage];
+
     }
     else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+
         [self dismissMediaPage];
         [self displayDetailsPage];
-    }
-}
-
-- (void) nextButtonPressed {
-    if ([self.pageName isEqualToString:INITIAL_VIEW]) {
-        [self dismissInitialPage];
-        [self displayDetailsPage];
-    }
-    else if ([self.pageName isEqualToString:DETAILS_VIEW]) {
-        [self dismissDetailsPage];
-        [self displayMediaPage];
     }
 }
 
@@ -490,6 +543,5 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 7;
 }
-
 
 @end
