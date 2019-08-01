@@ -81,6 +81,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.createEventTableView];
 }
 
+
 - (void) createEventButtonPressed
 {
     NSDictionary *eventDefinition = @{

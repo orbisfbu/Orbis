@@ -33,7 +33,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sfi-ss-WHh">
-                                        <rect key="frame" x="154.5" y="19" width="105" height="24"/>
+                                        <rect key="frame" x="154.5" y="21" width="105" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -44,7 +44,7 @@
                                     <constraint firstItem="qJ0-uT-ZIL" firstAttribute="centerX" secondItem="lm5-WC-XOP" secondAttribute="centerX" id="TfJ-Yk-6VC"/>
                                     <constraint firstItem="qJ0-uT-ZIL" firstAttribute="top" secondItem="3eY-M1-iWJ" secondAttribute="top" constant="8" id="bPa-HY-j6G"/>
                                     <constraint firstItem="sfi-ss-WHh" firstAttribute="centerX" secondItem="lm5-WC-XOP" secondAttribute="centerX" id="niX-Xn-kUc"/>
-                                    <constraint firstItem="sfi-ss-WHh" firstAttribute="top" secondItem="qJ0-uT-ZIL" secondAttribute="bottom" constant="4" id="nnN-I6-76N"/>
+                                    <constraint firstItem="sfi-ss-WHh" firstAttribute="top" secondItem="qJ0-uT-ZIL" secondAttribute="bottom" constant="6" id="nnN-I6-76N"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="3eY-M1-iWJ"/>
                             </view>
@@ -61,24 +61,6 @@
                                                     <constraint firstAttribute="width" constant="414" id="WAp-cH-rIJ"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Vibes/Themes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X3P-mK-evL">
-                                                <rect key="frame" x="32" y="366" width="110" height="21"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iQe-Zw-eRN">
-                                                <rect key="frame" x="142" y="305" width="130" height="53"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Register">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="registerButtonAction:" destination="mAu-0e-4D9" eventType="touchUpInside" id="G3q-1g-m9Q"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.99143940210000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -122,7 +104,6 @@
                         <outlet property="eventImageView" destination="zw7-lc-7jF" id="B9z-4m-oKc"/>
                         <outlet property="eventNameLabel" destination="sfi-ss-WHh" id="0Gf-x3-H2R"/>
                         <outlet property="eventNameViewOutlet" destination="lm5-WC-XOP" id="dH0-Rs-d5S"/>
-                        <outlet property="registerButtonOutlet" destination="iQe-Zw-eRN" id="I1V-gI-Acf"/>
                         <outlet property="roundedCornersViewOutlet" destination="ebe-Te-dUN" id="zFh-Lh-3MM"/>
                         <outlet property="scrollViewOutlet" destination="zbG-d9-6Zp" id="306-dF-Pmd"/>
                         <outlet property="swipeIndicatorOutlet" destination="qJ0-uT-ZIL" id="KEi-Rd-cln"/>
