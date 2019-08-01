@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		02AC025ECB2F25A725644A38 /* Pods_PitchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */; };
+		0602C1B222F3533E004BBC74 /* SearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 0602C1B122F3533E004BBC74 /* SearchResult.m */; };
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
 		06A909B422E2300E00CD2969 /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B322E2300E00CD2969 /* Poll.m */; };
 		06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B622E6792300CD2969 /* EventTitleCell.m */; };
@@ -97,6 +98,8 @@
 
 /* Begin PBXFileReference section */
 		02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pitch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0602C1B022F3533E004BBC74 /* SearchResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchResult.h; sourceTree = "<group>"; };
+		0602C1B122F3533E004BBC74 /* SearchResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchResult.m; sourceTree = "<group>"; };
 		06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06A909B222E2300E00CD2969 /* Poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poll.h; sourceTree = "<group>"; };
 		06A909B322E2300E00CD2969 /* Poll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
@@ -332,6 +335,8 @@
 				C14E1A0722E276F400883CFB /* Vibes.m */,
 				C1616E3E22F0A7D2004B536B /* Filters.h */,
 				C1616E3F22F0A7D2004B536B /* Filters.m */,
+				0602C1B022F3533E004BBC74 /* SearchResult.h */,
+				0602C1B122F3533E004BBC74 /* SearchResult.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -763,6 +768,7 @@
 				780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */,
 				780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */,
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
+				0602C1B222F3533E004BBC74 /* SearchResult.m in Sources */,
 				06A909D322E7B5DC00CD2969 /* CreateEventViewController.m in Sources */,
 				C14E1A0D22E8D52E00883CFB /* LogInViewController.m in Sources */,
 				781A941622ECB184002966B5 /* UserInSession.m in Sources */,

@@ -28,6 +28,7 @@
 #import <MapKit/MKLocalSearchRequest.h>
 #import <MapKit/MKLocalSearch.h>
 #import <UITextView+Placeholder.h>
+#import "SearchResult.h"
 
 
 // Constant View Names
@@ -63,6 +64,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //@property (strong, nonatomic) User *makingUser;
 //@property (strong, nonatomic) UITableView *createEventTableView;
 @property (strong, nonatomic) UIButton *createEventButton;
+
+// BOOL to check whether to call Foursquare API
+@property BOOL shouldFireGETRequest;
+@property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
 
 // PAGE NAME
 @property (strong, nonatomic) NSString *pageName;
@@ -101,6 +106,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.shouldFireGETRequest = NO;
     [self.view setBackgroundColor:UIColorFromRGB(0x21ce99)];
     [self.backButton setAlpha:0];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
@@ -158,6 +164,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
    // [self.searchLocationTextField setPlaceholder:@"Location"];
     [self.searchLocationTextField addTarget:self action:@selector(displayLocationView) forControlEvents:UIControlEventEditingDidBegin];
     [self.searchLocationTextField addTarget:self action:@selector(dismissLocationView) forControlEvents:UIControlEventEditingDidEnd];
+    [self.searchLocationTextField addTarget:self action:@selector(refreshResultsTableView) forControlEvents:UIControlEventEditingChanged];
+
     [self.view addSubview:self.searchLocationTextField];
     // Create date picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 150)];
@@ -204,7 +212,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.descriptionLabel];
 
     
-    // Create Description text Field
+    // Create Description Text Field
     self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event" attributes:nil];
     [self.view addSubview:self.descriptionTextView];
@@ -213,7 +221,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.vibesLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.vibesLabel setText:@"Vibes/Themes"];
     [self.view addSubview:self.vibesLabel];
-    // Create Vibes Sub View
+    
+    // Create Vibes Subview
     self.vibesSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
 
     [self.view addSubview:self.vibesSubview];
@@ -223,7 +232,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.ageLabel setText:@"Age Restrictions"];
     [self.view addSubview:self.ageLabel];
     
-    // Create Age Sub View
+    // Create Age Subview
     self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
 
     [self.view addSubview:self.ageSubview];
@@ -235,7 +244,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Cover Image View
     self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
-
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
@@ -535,13 +543,48 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
+- (void) refreshResultsTableView {
+    NSString *coordinates = @"37.77,-122.41";
+    NSString *query = self.searchLocationTextField.text;
+    NSString *CLIENT_ID = @"3NZPO204JPDCJW0XJWY5AFCWCLXNZWDNIOHTQYHHOP0ARXRI";
+    NSString *CLIENT_SECRET = @"ASWMRXJPXFIX0D3NWMOWSVHKID52USWCSA402SQLWD0CQHFS";
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyyMMdd"];
+    NSString *date = [dateFormatter stringFromDate:[NSDate date]];
+    NSString *URLString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/suggestcompletion?ll=%@&query=%@&client_id=%@&client_secret=%@&v=%@", coordinates, query, CLIENT_ID, CLIENT_SECRET, date];
+    NSLog(@"%@", URLString);
+    NSURL *url = [NSURL URLWithString:URLString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error != nil) {
+            NSLog(@"ERROR RETRIEVING SEARCH RESULTS: %@", error);
+        }
+        else {
+            NSDictionary *dataDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            NSDictionary *responseDict = dataDict[@"response"];
+            NSDictionary *venuesDict = responseDict[@"minivenues"];
+            self.recentSearchResults = [[NSMutableArray alloc] init];
+            for (NSDictionary *venueDict in venuesDict) {
+                NSLog(@"INSIDE FOR LOOP");
+                SearchResult *result = [[SearchResult alloc] initWithDictionary:venueDict];
+                [self.recentSearchResults addObject:result];
+            }
+            
+        [self.searchResultsTableView reloadData];
+        }
+    }];
+    [task resume];
+}
+
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] init];
+    [cell.textLabel setText:[NSString stringWithFormat:@"%@", [(SearchResult *)self.recentSearchResults[indexPath.row] getName]]];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 7;
+    return self.recentSearchResults.count;
 }
 
 @end
