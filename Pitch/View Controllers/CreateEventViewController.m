@@ -30,7 +30,6 @@
 #import <UITextView+Placeholder.h>
 #import "SearchResult.h"
 
-
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
 static NSString * const LOCATION_VIEW = @"LOCATION_VIEW";
@@ -55,7 +54,7 @@ static int const X_OFFSET = 30;
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
 
-@interface CreateEventViewController () // <UITableViewDelegate, UITableViewDataSource>
+@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource>
 
 //@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
@@ -64,10 +63,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 //@property (strong, nonatomic) User *makingUser;
 //@property (strong, nonatomic) UITableView *createEventTableView;
 @property (strong, nonatomic) UIButton *createEventButton;
-
-// BOOL to check whether to call Foursquare API
-@property BOOL shouldFireGETRequest;
-@property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
 
 // PAGE NAME
 @property (strong, nonatomic) NSString *pageName;
@@ -85,6 +80,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 // Location View
 @property (strong, nonatomic) UIButton *cancelButton;
 @property (strong, nonatomic) UITableView *searchResultsTableView;
+@property BOOL shouldFireGETRequest; // BOOL for checking whether to call Foursquare API
+@property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
 
 // Details View
 @property (strong, nonatomic) UILabel *descriptionLabel;
@@ -141,18 +138,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) createPageObjects {
-    // Create event title text field
+    // Create Event Title Text Field
     self.eventTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, 2*LABEL_HEIGHT)];
     [self.eventTitleTextField setPlaceholder:@"Event Title"];
     [self.view addSubview:self.eventTitleTextField];
     
-    // Create a pin image view
-
+    // Create a Pin Image View
     self.pinImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
     [self.pinImageView setImage:[UIImage imageNamed:@"pin"]];
     [self.view addSubview:self.pinImageView];
     
-    // Create search location placeholder label
+    // Create Search Location Placeholder Label
     self.searchLocationPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, self.view.frame.size.height, 100, LABEL_HEIGHT)];
     [self.searchLocationPlaceholderLabel setText:@"Location"];
     [self.searchLocationPlaceholderLabel setAlpha:0.2];
@@ -161,39 +157,25 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Search Location Text Field
     self.searchLocationTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, self.view.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT)];
-   // [self.searchLocationTextField setPlaceholder:@"Location"];
     [self.searchLocationTextField addTarget:self action:@selector(displayLocationView) forControlEvents:UIControlEventEditingDidBegin];
     [self.searchLocationTextField addTarget:self action:@selector(dismissLocationView) forControlEvents:UIControlEventEditingDidEnd];
     [self.searchLocationTextField addTarget:self action:@selector(refreshResultsTableView) forControlEvents:UIControlEventEditingChanged];
-
     [self.view addSubview:self.searchLocationTextField];
+    
     // Create date picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 150)];
     [self.view addSubview:self.datePicker];
     
     // Create Cancel Button
     CGSize size = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
-    self.cancelButton =[[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - size.width - 15, self.view.frame.size.height, size.width, LABEL_HEIGHT)];
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - size.width - 15, self.view.frame.size.height, size.width, LABEL_HEIGHT)];
     [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.cancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.cancelButton addTarget:self action:@selector(dismissKeyboard) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.cancelButton];
     
-    
     // Create Next Button
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 3 * X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-
-//    // Create Event Title Textfield
-//    self.searchLocationTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, self.view.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT)];
-//    [self.searchLocationTextField setPlaceholder:@"Location"];
-//    [self.view addSubview:self.searchLocationTextField];
-//
-//    // Create Date Picker
-//    self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width -  2*X_OFFSET, 150)];
-//    [self.view addSubview:self.datePicker];
-//
-//    // Create Next Button
-//    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 3*X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nextButton];
@@ -205,12 +187,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.searchResultsTableView.dataSource = self;
     [self.view addSubview:self.searchResultsTableView];
     
-
     // Create Description Label
     self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.descriptionLabel setText:@"Description"];
     [self.view addSubview:self.descriptionLabel];
-
     
     // Create Description Text Field
     self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
@@ -222,9 +202,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.vibesLabel setText:@"Vibes/Themes"];
     [self.view addSubview:self.vibesLabel];
     
-    // Create Vibes Subview
+    // Create Vibes Sub View
     self.vibesSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
-
     [self.view addSubview:self.vibesSubview];
     
     // Create Age Label
@@ -264,16 +243,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, self.eventTitleTextField.frame.origin.y + self.eventTitleTextField.frame.size.height + 10, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height + 10, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(self.pinImageView.frame.origin.x, self.searchLocationTextField.frame.origin.y, self.pinImageView.frame.size.width, self.pinImageView.frame.size.height);
-}];
-
+    }];
 }
 
 - (void) dismissInitialPage {
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, -self.eventTitleTextField.frame.size.height, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
-
         self.searchLocationPlaceholderLabel.frame = CGRectMake(self.searchLocationPlaceholderLabel.frame.origin.x, -self.searchLocationPlaceholderLabel.frame.size.height, self.searchLocationPlaceholderLabel.frame.size.width, self.searchLocationPlaceholderLabel.frame.size.height);
-
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, -self.searchLocationTextField.frame.size.height, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, -self.datePicker.frame.size.height, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(self.pinImageView.frame.origin.x, -self.pinImageView.frame.size.height, self.pinImageView.frame.size.width, self.pinImageView.frame.size.height);
@@ -294,9 +270,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, -self.eventTitleTextField.frame.size.height, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, -self.datePicker.frame.size.height, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(0, 2*X_OFFSET/3, 1.65*LABEL_HEIGHT, 1.65*LABEL_HEIGHT);
-        self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, 2 * X_OFFSET/3, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width), 2 * LABEL_HEIGHT);
-       self.searchLocationPlaceholderLabel.frame = self.searchLocationTextField.frame;
-       [self.searchLocationTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
+        self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width), 2*LABEL_HEIGHT);
+        self.searchLocationPlaceholderLabel.frame = self.searchLocationTextField.frame;
+        [self.searchLocationTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
         self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, 1.2*X_OFFSET, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
     }];
@@ -310,17 +286,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.pinImageView.frame = CGRectMake(X_OFFSET, self.searchLocationTextField.frame.origin.y, LABEL_HEIGHT, LABEL_HEIGHT);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height + 10, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.view.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
-        if ([self.searchLocationTextField.text isEqualToString:@""]){
+        if ([self.searchLocationTextField.text isEqualToString:@""]) {
             [self.searchLocationPlaceholderLabel setText:@"Location"];
             [self.searchLocationPlaceholderLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
             self.searchLocationPlaceholderLabel.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, self.eventTitleTextField.frame.origin.y + self.eventTitleTextField.frame.size.height + 15, 100, LABEL_HEIGHT);
         }
     } completion:^(BOOL finished) {
         self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.view.frame.size.height, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
-        
     }];
 }
-
 
 - (void) displayDetailsPage {
     self.pageName = DETAILS_VIEW;
@@ -373,7 +347,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, -self.additionalMediaLabel.frame.size.height, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
         self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, -self.additionalMediaSubview.frame.size.height, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
     } completion:^(BOOL finished) {
-       
         self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, self.view.frame.size.height, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
         self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, self.view.frame.size.height, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
         self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, self.view.frame.size.height, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
@@ -554,13 +527,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     NSString *URLString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/suggestcompletion?ll=%@&query=%@&client_id=%@&client_secret=%@&v=%@", coordinates, query, CLIENT_ID, CLIENT_SECRET, date];
     NSLog(@"%@", URLString);
     NSURL *url = [NSURL URLWithString:URLString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10.0];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"ERROR RETRIEVING SEARCH RESULTS: %@", error);
-        }
-        else {
+        } else {
             NSDictionary *dataDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             NSDictionary *responseDict = dataDict[@"response"];
             NSDictionary *venuesDict = responseDict[@"minivenues"];
@@ -570,8 +542,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
                 SearchResult *result = [[SearchResult alloc] initWithDictionary:venueDict];
                 [self.recentSearchResults addObject:result];
             }
-            
-        [self.searchResultsTableView reloadData];
+            [self.searchResultsTableView reloadData];
         }
     }];
     [task resume];

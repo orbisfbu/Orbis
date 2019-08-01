@@ -1,13 +1,8 @@
 //
 //  SearchResult.m
 //  Pitch
-//
-//  Created by ezietz on 8/1/19.
-//  Copyright © 2019 PitchFBU. All rights reserved.
-//
 
 #import "SearchResult.h"
-#import <MapKit/MapKit.h>
 
 @interface SearchResult ()
 
@@ -21,12 +16,15 @@
 @property int iconSize;
 @property (strong, nonatomic) NSString *iconURLStringSuffix;
 
-
 @end
 
 @implementation SearchResult
 
+<<<<<<< HEAD
 - (instancetype) initWithDictionary: (NSDictionary *) dict {
+=======
+- (instancetype)initWithDictionary:(NSDictionary *) dict {
+>>>>>>> 4faef3201c7be2f1f839c350cb582e334ed7968c
     self = [super init];
     if (self) {
         self.name = dict[@"name"];
@@ -40,17 +38,12 @@
 //        self.iconURLStringPrefix = dict[@"categories"][0][@"icon"][@"prefix"];
 //        self.iconSize = 64;
 //        self.iconURLStringSuffix = dict[@"categories"][0][@"icon"][@"suffix"];
-
     }
     return self;
 }
 
 - (NSString *) getName {
     return self.name;
-}
-
-- (CLLocationCoordinate2D) getCoordinates {
-    return self.coordinates;
 }
 
 - (NSString *) getAddress {
@@ -72,6 +65,10 @@
 - (NSString *) getIconURLString {
     NSString *URLString = [NSString stringWithFormat:@"%@%d%@", self.iconURLStringPrefix, self.iconSize, self.iconURLStringSuffix];
     return URLString;
+}
+
+- (CLLocationCoordinate2D) getCoordinates {
+    return self.coordinates;
 }
 
 @end
