@@ -21,7 +21,13 @@ static NSString * const DATABASE_USER_NODE = @"Users";
 static NSString * const USER_FIRSTNAME = @"First Name";
 static NSString * const USER_LASTNAME = @"Last Name";
 static NSString * const USER_EMAIL = @"Email";
-static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"Profile Image";
+static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImageURL";
+static NSString * const USER_BACKGROUND_IMG_URLSTRING = @"BackgroundImageURL";
+static NSString * const USERNAME_KEY = @"Username";
+static NSString * const USER_BIO_KEY = @"Bio";
+static NSString * const DEFAULT_BIO = @"Let people know more about you!";
+static NSString * const DEFAULT_BACKGROUNDIMAGE_URLSTRING = @"https://bit.ly/2KmzJch";
+static NSString * const DEFAULT_PROFILEIMAGE_URLSTRING = @"";
 //Required permissions for user info
 static NSString * const PUBLIC_PROFILE_PERMISSION = @"public_profile";
 static NSString * const EMAIL_PERSMISSION = @"email";
@@ -88,6 +94,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 @implementation LogInViewController
 
 - (void)viewDidLoad {
+
     [super viewDidLoad];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.sharedUserDelegate = self;
@@ -432,15 +439,13 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         self.registerUsername = self.usernameSignUpTextField.text;
         self.registerPassword = self.passwordSignUpTextField.text;
         NSDictionary *userInfo = @{
-                                   @"First Name": self.registerFirstName,
-                                   @"Last Name": self.registerLastName,
-                                   //use defaults for profile image url and other fixed fields
-                                   @"ProfileImageURL": @"random",
-                                   @"User Bio": @"Hi",
-                                   @"Screen Name": self.registerUsername,
-                                   @"BackgroundImageURL": @"testing",
-                                   @"Email": self.inputtedUserEmail,
-                                   @"Password": self.registerPassword
+                                   USER_FIRSTNAME: self.registerFirstName,
+                                   USER_LASTNAME: self.registerLastName,
+                                   USER_PROFILE_IMAGE_URLSTRING: DEFAULT_BACKGROUNDIMAGE_URLSTRING,
+                                   USER_BIO_KEY: DEFAULT_BIO,
+                                   USERNAME_KEY: self.registerUsername,
+                                   USER_BACKGROUND_IMG_URLSTRING: DEFAULT_BACKGROUNDIMAGE_URLSTRING,
+                                   USER_EMAIL: self.inputtedUserEmail,
                                    };
         [[FIRAuth auth] createUserWithEmail:self.inputtedUserEmail
                                    password:self.registerPassword
@@ -449,14 +454,14 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                      if(authResult){
                                          userID = authResult.user.uid;
                                          NSLog(@"New firebase user was created with userID %@", authResult.user);
-                                         //instead of instantiating user object,
-                                         //just load userInfo dictionary into UserInSession
-                                         
+                                
                                          [[UserInSession shared] setCurrentUser:userInfo];
                                          [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
-                                         //[self dismissSignUpPage2:YES];
-                                         //[self segueToApp];
+                                         [self dismissSignInPage];
+                                         [self dismissSignUpPage2:YES];
+                                         [self segueToApp];
                                      }
+                                     
                                      else{
                                          switch([error code]){
                                                  
@@ -539,15 +544,11 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
 }
 
 - (void)showLoginScreen {
-    NSLog(@"HEREEEE");
     [self createPageObjects];
     [self createContinuePage];
 }
 
 - (void) segueToAppUponLogin {
-    NSLog(@"LOGGING IN...");
-    [self dismissSignInPage];
-    [self dismissSignUpPage2:YES];
     [self segueToApp];
 }
 

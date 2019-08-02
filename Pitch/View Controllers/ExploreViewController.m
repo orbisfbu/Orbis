@@ -28,7 +28,7 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventAnnotationToMapDelegate, ApplyFiltersDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -45,6 +45,11 @@
 @property (strong, nonatomic) AgeCell *ageCell;
 @property (strong, nonatomic) ApplyFiltersCell *applyFiltersCell;
 
+@property (nonatomic) UIStoryboard *detailsSB;
+@property (nonatomic) EventDetailsViewController *detailedEventVC;
+@property (nonatomic) MusicQueueViewController *musicQueueVC;
+@property (nonatomic) EventGalleryViewController *eventGalleryVC;
+@property (nonatomic) UITabBarController *eventSelectedTabBarController;
 @property BOOL isScrollingTVUp;
 
 @end
@@ -61,6 +66,7 @@
 
 - (void) viewDidLoad {
     [super viewDidLoad];
+    [self createTabBarControllerAndItems];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
     self.photoMap.delegate = self;
@@ -75,7 +81,7 @@
     #endif
     [self.locationManager startUpdatingLocation];
     //retrieve events from database
-    [self refreshEventsData];
+    [self refreshEventsArray];
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667), MKCoordinateSpanMake(0.1, 0.1));
     [self.photoMap setRegion:sfRegion animated:false];
     // Eliminate the gray background color of the search bar
@@ -105,13 +111,27 @@
     [self.dropDownFilterTV registerNib:[UINib nibWithNibName:@"DragCell" bundle:nil] forCellReuseIdentifier:@"DragCell"];
     [self.dropDownFilterTV setAllowsSelection:NO];
     //[self.dropDownFilterTV setRowHeight:UITableViewAutomaticDimension];
-    
     self.isScrollingTVUp = NO;
 }
 
 
-- (void)refreshEventsData {
-    [self.dataHandlingObject getEventsArray];
+- (void)createTabBarControllerAndItems{
+    self.detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
+    self.detailedEventVC = (EventDetailsViewController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
+    self.musicQueueVC = (MusicQueueViewController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
+    self.eventGalleryVC = (EventGalleryViewController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
+    self.eventSelectedTabBarController = (UITabBarController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
+    [self.eventSelectedTabBarController.tabBar setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    self.eventSelectedTabBarController.tabBar.translucent = YES;
+    self.eventSelectedTabBarController.selectedIndex = 1;
+    self.eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    self.eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    self.eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+}
+
+
+- (void)refreshEventsArray {
+    [self.dataHandlingObject getEventsFromDatabase];
 }
 
 - (void)populateMapWithEvents {
@@ -132,45 +152,19 @@
     }
 }
 
-
 - (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
 {
-//    UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
-//    EventDetailsViewController * detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"Details"];
-//    detailedEventVC.eventNameLabel.text = eventToPresent.eventName;
-//    detailedEventVC.eventCreatorLabel.text = eventToPresent.eventCreator;
-//    detailedEventVC.eventDescription.text = eventToPresent.eventDescription;
-//    detailedEventVC.eventImageView.image = eventToPresent.eventImage;
-//
-//    detailedEventVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-//    detailedEventVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//    [self presentViewController:detailedEventVC animated:YES completion:nil];
-//    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissEventDetails:)];
-//    [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
-//    [detailedEventVC.view addGestureRecognizer: downGestureRecognizer];
-    UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
-    EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
-    MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
-    EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
-    UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
-    [eventSelectedTabBarController.tabBar setBackgroundColor:UIColorFromRGB(0x21ce99)];
-    eventSelectedTabBarController.tabBar.translucent = YES;
-    eventSelectedTabBarController.selectedIndex = 1;
-    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    detailedEventVC.eventNameString = eventToPresent.eventName;
-    detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
-    detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
-    detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
+    self.detailedEventVC.eventNameString = eventToPresent.eventName;
+    self.detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
+    self.detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
+    self.detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
     //somewhere here set the detailedEventVC.distanceFromUser by finding the distance between user location and eventToPresent coordinates
-    detailedEventVC.eventAgeRestrictionString = [NSString stringWithFormat:@"%d", eventToPresent.eventAgeRestriction];
-    detailedEventVC.eventAttendancCountString = [NSString stringWithFormat:@"%d", eventToPresent.eventAttendanceCount];
-    detailedEventVC.distanceFromUser = 5;
-    eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
-    [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
+    self.detailedEventVC.eventAgeRestrictionInt = eventToPresent.eventAgeRestriction;
+    self.detailedEventVC.eventAttendancCountInt = eventToPresent.eventAttendanceCount;
+    self.detailedEventVC.distanceFromUserInt = 5;
+    self.eventSelectedTabBarController.viewControllers = @[self.musicQueueVC,self.detailedEventVC,self.eventGalleryVC];
+    [self presentViewController:self.eventSelectedTabBarController animated:YES completion:nil];
 }
-
 
 - (void) dismissKeyboardAndRemoveFilters {
     [self.view endEditing:YES];
@@ -268,7 +262,7 @@
     self.filterMenuIsShowing = !self.filterMenuIsShowing;
 }
 
-- (void)updateEvents:(nonnull NSArray *)events {
+- (void)refreshEventsDelegateMethod:(nonnull NSArray *)events {
     self.eventsArray = [NSMutableArray arrayWithArray:events];
     [self populateMapWithEvents];
 }
@@ -300,7 +294,7 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [mapView deselectAnnotation:view.annotation animated:YES];
-    [self presentEventDetailsView:view.annotation];
+    [self presentEventDetailsView:(EventAnnotation *)view.annotation];
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
@@ -311,8 +305,8 @@
 
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *crnLoc = [locations lastObject];
-    NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
-    NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
+    //NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
+    //NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
 }
 
 - (void)applyFiltersButtonWasPressed {
@@ -326,26 +320,32 @@
     [self.distanceCell resetDistance];
     [self.numberOfPeopleCell resetNumberOfPeople];
     [self.ageCell resetAgeRestrictions];
-    [self filterAnnotations];
+
+    
+    ///upon resetting filters, empty the filtered events array
+    //remove all the annotations on map and
+    //add the events in the events array 
+    
 }
 
 - (void) filterAnnotations {
-    
     int ageRestriction = [self.ageCell getAgeRestrictions];
     NSMutableSet *vibesSet = [self.vibesCell getSelectedVibes];
     int distance = [self.distanceCell getDistance];
     int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
     int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
+
+    //create an NSMutable filteredEvents property
+    //iterate through local events array; if that event doesn't match these parameters
+    //then don't add them to the filtered array
     
-    // Filter array of events
-    
-    // Refresh map
+    //now iterate through the current annotations on map and remove them all
+    //then just add the annotations that are in the filtered events array
 }
 
-- (void)addThisAnnotationToMap:(nonnull EventAnnotation *)newEventAnnotation {
-    [self.photoMap addAnnotation:newEventAnnotation.annotation];
+- (void)refreshAfterEventCreation {
+    [self refreshEventsArray];
 }
-
 
 
 @end

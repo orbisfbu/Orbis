@@ -38,7 +38,6 @@ static double const MIN_ICON_X_OFFSET = 30;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.createEventButton = [[UIButton alloc] initWithFrame: CGRectMake(MAX_ICON_X_OFFSET, self.view.frame.size.height - MIN_ICON_HEIGHT_AND_WIDTH - MIN_ICON_Y_OFFSET, MIN_ICON_HEIGHT_AND_WIDTH, MIN_ICON_HEIGHT_AND_WIDTH)];
     [self.createEventButton setImage:[UIImage imageNamed:@"event"] forState:UIControlStateNormal];
     [self.createEventButton addTarget:self action:@selector(createNewEventButtonPressed) forControlEvents:UIControlEventTouchDown];

@@ -7,17 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EventAnnotation.h"
+#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol AddEventAnnotationToMapDelegate
--(void)addThisAnnotationToMap:(EventAnnotation *)newEventAnnotation;
+@protocol AddEventToMapDelegate
+-(void)refreshAfterEventCreation;
 @end
 
 @interface CreateEventViewController : UIViewController
+
+@property (nonatomic, weak) id<AddEventToMapDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
-@property (nonatomic, weak) id<AddEventAnnotationToMapDelegate> delegate;
+
 @end
 
 NS_ASSUME_NONNULL_END
