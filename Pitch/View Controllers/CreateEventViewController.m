@@ -80,7 +80,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UIImageView *pinImageView;
 
 // Location View
-@property (strong, nonatomic) UIButton *cancelButton;
+@property (strong, nonatomic) UIButton *locationCancelButton;
 @property (strong, nonatomic) UITableView *searchResultsTableView;
 @property BOOL shouldFireGETRequest; // BOOL for checking whether to call Foursquare API
 @property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
@@ -98,6 +98,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UIImageView *coverImageView;
 @property (strong, nonatomic) UILabel *additionalMediaLabel;
 @property (strong, nonatomic) UIView *additionalMediaSubview;
+
+// Music View
+@property (strong, nonatomic) UILabel *musicPageDescriptionLabel;
+@property (strong, nonatomic) UITextField *searchMusicTextField;
+@property (strong, nonatomic) UIImageView *musicNoteImageView;
+@property (strong, nonatomic) UILabel *musicQueueLabel;
+@property (strong, nonatomic) UIView *musicQueueSubview;
+@property (strong, nonatomic) UITableView *musicResultsTableView;
+@property (strong, nonatomic) UIButton *musicCancelButton;
 
 @end
 
@@ -132,7 +141,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.eventTitleTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:40]];
     [self.eventTitleTextField setMinimumFontSize:30];
     [self.eventTitleTextField setAdjustsFontSizeToFitWidth:YES];
-    [self.eventTitleTextField setPlaceholder:@"E.g Yika's Bday"];
+    [self.eventTitleTextField setPlaceholder:@"E.g Yike's Bday"];
     [self.view addSubview:self.eventTitleTextField];
     
     // Create Search Label
@@ -160,17 +169,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.searchLocationTextField addTarget:self action:@selector(refreshResultsTableView) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.searchLocationTextField];
     
-    // Create date picker
+    // Create Date Picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 150)];
     [self.view addSubview:self.datePicker];
     
-    // Create Cancel Button
-    CGSize size = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - size.width - 15, self.view.frame.size.height, size.width, LABEL_HEIGHT)];
-    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [self.cancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
-    [self.cancelButton addTarget:self action:@selector(dismissKeyboard) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.cancelButton];
+    // Create Location Cancel Button
+    CGSize locationCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    self.locationCancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - locationCancelButtonSize.width - 15, self.view.frame.size.height, locationCancelButtonSize.width, LABEL_HEIGHT)];
+    [self.locationCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.locationCancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    [self.locationCancelButton addTarget:self action:@selector(locationCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.locationCancelButton];
     
     // Create Next Button
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 3 * X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
@@ -188,6 +197,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Description Label
     self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.descriptionLabel setText:@"Description"];
+    [self.descriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.descriptionLabel];
     
     // Create Description Text Field
@@ -198,6 +208,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Vibes Label
     self.vibesLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.vibesLabel setText:@"Vibes/Themes"];
+    [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.vibesLabel];
     
     // Create Vibes Sub View
@@ -207,6 +218,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Age Label
     self.ageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.ageLabel setText:@"Age Restrictions"];
+    [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.ageLabel];
     
     // Create Age Subview
@@ -217,20 +229,70 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Cover Image Label
     self.coverImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.coverImageLabel setText:@"Cover Image"];
+    [self.coverImageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.coverImageLabel];
     
     // Create Cover Image View
-    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
+    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 7 * LABEL_HEIGHT)];
+    [self.coverImageView setImage:[UIImage imageNamed:@"addpic"]];
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
     self.additionalMediaLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.additionalMediaLabel setText:@"Additional Media"];
+    [self.additionalMediaLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.additionalMediaLabel];
 
-    // Create Additional Meida Subview
+    // Create Additional Media Subview
     self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     [self.view addSubview:self.additionalMediaSubview];
+    
+    // Create Music Page Description Label
+    self.musicPageDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
+    [self.musicPageDescriptionLabel setText:@"Add Music For Your Event"];
+    [self.musicPageDescriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    [self.view addSubview:self.musicPageDescriptionLabel];
+    
+    // Create Music Note Image View
+    self.musicNoteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.8*X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
+    [self.musicNoteImageView setImage:[UIImage imageNamed:@"note"]];
+    [self.view addSubview:self.musicNoteImageView];
+    
+    // Create Search Music Text Field
+    self.searchMusicTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
+    [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
+    [self.searchMusicTextField setMinimumFontSize:30];
+    [self.searchMusicTextField setAdjustsFontSizeToFitWidth:YES];
+    [self.searchMusicTextField setPlaceholder:@"E.g Song or Artist..."];
+    [self.searchMusicTextField addTarget:self action:@selector(displayMusicSearchView) forControlEvents:UIControlEventEditingDidBegin];
+    [self.searchMusicTextField addTarget:self action:@selector(dismissMusicSearchView) forControlEvents:UIControlEventEditingDidEnd];
+//    [self.searchMusicTextField addTarget:self action:@selector(refreshResultsTableView) forControlEvents:UIControlEventEditingChanged];
+    [self.view addSubview:self.searchMusicTextField];
+
+    // Create Music Queue Label
+    self.musicQueueLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    [self.musicQueueLabel setText:@"Your Music"];
+    [self.musicQueueLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    [self.view addSubview:self.musicQueueLabel];
+    
+    // Create Music Queue Subview
+    self.musicQueueSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
+    [self.view addSubview:self.musicQueueSubview];
+    
+    // Create Music Cancel Button
+    CGSize musicCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    self.musicCancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - musicCancelButtonSize.width - 15, self.view.frame.size.height, musicCancelButtonSize.width, LABEL_HEIGHT)];
+    [self.musicCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.musicCancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    [self.musicCancelButton addTarget:self action:@selector(musicCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.musicCancelButton];
+    
+    // Create Music Results Table View
+    self.musicResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
+    self.musicResultsTableView.layer.cornerRadius = 5;
+    self.musicResultsTableView.delegate = self;
+    self.musicResultsTableView.dataSource = self;
+    [self.view addSubview:self.musicResultsTableView];
 }
 
 - (void) displayInitialPage {
@@ -270,7 +332,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width), 2*LABEL_HEIGHT);
         self.searchLocationPlaceholderLabel.frame = self.searchLocationTextField.frame;
         [self.searchLocationTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, 1.2*X_OFFSET, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, 1.2*X_OFFSET, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
     }];
     self.datePicker.alpha = 0;
@@ -279,7 +341,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void) dismissLocationView {
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleLabel.frame = CGRectMake(self.eventTitleLabel.frame.origin.x, 3*X_OFFSET, self.eventTitleLabel.frame.size.width, self.eventTitleLabel.frame.size.height);
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, -self.cancelButton.frame.size.height, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, -self.locationCancelButton.frame.size.height, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, self.eventTitleLabel.frame.origin.y + self.eventTitleLabel.frame.size.height - 10, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
         self.searchLabel.frame = CGRectMake(X_OFFSET, self.eventTitleTextField.frame.origin.y + self.eventTitleTextField.frame.size.height + 30, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT);
         self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, self.searchLabel.frame.origin.y + self.searchLabel.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT);
@@ -292,7 +354,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         }
         self.datePicker.alpha = 1;
     } completion:^(BOOL finished) {
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.view.frame.size.height, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, self.view.frame.size.height, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
     }];
 }
 
@@ -341,7 +403,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }];
 }
 
-
 - (void) dismissMediaPage {
     if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         [UIView animateWithDuration:0.5 animations:^{
@@ -360,6 +421,75 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
+- (void) displayMusicPage {
+    self.pageName = MUSIC_VIEW;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
+        self.musicNoteImageView.frame = CGRectMake(self.musicNoteImageView.frame.origin.x, self.musicPageDescriptionLabel.frame.origin.y + self.musicPageDescriptionLabel.frame.size.height + 10, self.musicNoteImageView.frame.size.width, self.musicNoteImageView.frame.size.height);
+         self.searchMusicTextField.frame = CGRectMake(self.searchMusicTextField.frame.origin.x, self.musicNoteImageView.frame.origin.y + 5, self.searchMusicTextField.frame.size.width, self.searchMusicTextField.frame.size.height);
+        self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height + 30, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
+        self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+    }];
+}
+
+- (void) dismissMusicPage {
+    if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, self.view.frame.size.height, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
+            self.searchMusicTextField.frame = CGRectMake(self.searchMusicTextField.frame.origin.x, self.view.frame.size.height, self.searchMusicTextField.frame.size.width, self.searchMusicTextField.frame.size.height);
+            self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.view.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
+            self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, self.view.frame.size.height, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+            self.musicNoteImageView.frame = CGRectMake(0.8*X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT);
+            self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.view.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
+        }];
+    } else {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, -self.musicPageDescriptionLabel.frame.size.height, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
+            self.searchMusicTextField.frame = CGRectMake(self.searchMusicTextField.frame.origin.x, -self.searchMusicTextField.frame.size.height, self.searchMusicTextField.frame.size.width, self.searchMusicTextField.frame.size.height);
+            self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, -self.musicQueueLabel.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
+            self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, -self.musicQueueSubview.frame.size.height, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+            self.musicNoteImageView.frame = CGRectMake(self.musicNoteImageView.frame.origin.x, -self.musicNoteImageView.frame.size.height, self.musicNoteImageView.frame.size.width, self.musicNoteImageView.frame.size.height);
+            self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, -self.musicResultsTableView.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
+        }];
+    }
+}
+
+- (void) displayMusicSearchView {
+    [self.backButton setAlpha:0];
+    [self.searchMusicTextField setPlaceholder:@""];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, -self.musicPageDescriptionLabel.frame.size.height, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
+        self.musicNoteImageView.frame = CGRectMake(0, 2*X_OFFSET/3, 1.65*LABEL_HEIGHT, 1.65*LABEL_HEIGHT);
+        self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + X_OFFSET), 2*LABEL_HEIGHT);
+        [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
+        self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, -self.musicQueueLabel.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
+        self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, -self.musicQueueSubview.frame.size.height, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+        self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, 1.2*X_OFFSET, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
+        self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
+    }];
+}
+
+- (void) dismissMusicSearchView {
+    [self.backButton setAlpha:1];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
+        self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, -self.musicCancelButton.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
+        self.musicNoteImageView.frame = CGRectMake(0.8*X_OFFSET, self.musicPageDescriptionLabel.frame.origin.y + self.musicPageDescriptionLabel.frame.size.height + 10, LABEL_HEIGHT, LABEL_HEIGHT);
+        self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, self.musicNoteImageView.frame.origin.y + 5, self.view.frame.size.width - (self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width) - X_OFFSET, LABEL_HEIGHT);
+        self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height + 30, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
+        self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+        self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.view.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
+        
+        if ([self.searchMusicTextField.text isEqualToString:@""]) {
+            [self.searchMusicTextField setPlaceholder:@"E.g Song or Artist..."];
+            [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
+            //self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width, self.searchMusicTextField.frame.origin.y + 5, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT);
+        }
+    } completion:^(BOOL finished) {
+        self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, self.view.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
+    }];
+}
+//
 - (void) createEventButtonPressed {
     NSDictionary *eventDefinition = @{
                                       @"Created By": @"Elizabeth",
@@ -390,6 +520,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } else if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         [self dismissDetailsPage];
         [self displayMediaPage];
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+        [self dismissMediaPage];
+        [self displayMusicPage];
     }
 }
 
@@ -404,6 +537,20 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self displayDetailsPage];
         [self dismissMediaPage];
     }
+    else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        [self displayMediaPage];
+        [self dismissMusicPage];
+    }
+}
+
+- (void) locationCancelButtonPressed {
+    [self.searchLocationTextField setText:@""];
+    [self dismissKeyboard];
+}
+
+- (void) musicCancelButtonPressed {
+    [self.searchMusicTextField setText:@""];
+    [self dismissKeyboard];
 }
 
 - (void) refreshResultsTableView {
@@ -448,4 +595,5 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     return self.recentSearchResults.count;
 }
 
-@end
+    @end
+    
