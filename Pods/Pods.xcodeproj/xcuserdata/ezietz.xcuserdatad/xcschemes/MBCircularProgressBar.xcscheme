@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0C1885900810601510E0C632060FAF26"
-               BuildableName = "GooglePlaces"
-               BlueprintName = "GooglePlaces"
+               BlueprintIdentifier = "46FA1E1D7ABC29B96888E2D9085D474F"
+               BuildableName = "MBCircularProgressBar.framework"
+               BlueprintName = "MBCircularProgressBar"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
