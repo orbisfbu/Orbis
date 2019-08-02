@@ -31,6 +31,7 @@
 #import "SearchResult.h"
 #import "Vibes.h"
 #import "CustomCollectionViewCell.h"
+#import "MBCircularProgressBarView.h"
 
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
@@ -100,6 +101,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UICollectionView *vibesCollectionView;
 @property (strong, nonatomic) UILabel *ageLabel;
 @property (strong, nonatomic) UIView *ageSubview;
+@property int ageRestriction;
+@property (strong, nonatomic) MBCircularProgressBarView *leftAgeRestriction;
+@property (strong, nonatomic) MBCircularProgressBarView *rightAgeRestriction;
 
 // Media View
 @property (strong, nonatomic) UILabel *coverImageLabel;
@@ -122,6 +126,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.ageRestriction = 0;
     self.shouldFireGETRequest = NO;
     [self.view setBackgroundColor:UIColorFromRGB(0x21ce99)];
     [self.backButton setAlpha:0];
@@ -249,7 +254,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Vibes Collection View
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT) collectionViewLayout:layout];
+    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT) collectionViewLayout:layout];
     self.vibesCollectionView.layer.cornerRadius = 5;
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     self.vibesCollectionView.delegate = self;
@@ -267,11 +272,39 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.ageLabel];
     
-    // Create Age Subview
-    self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
-    self.ageSubview.layer.cornerRadius = 5;
+    // Create Age Restrictions
+    self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     [self.ageSubview setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.view addSubview:self.ageSubview];
+    self.ageSubview.layer.cornerRadius = 5;
+    self.leftAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 9*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
+    [self.leftAgeRestriction setProgressColor:UIColorFromRGB(0x21ce99)];
+    [self.leftAgeRestriction setProgressLineWidth:5];
+    [self.leftAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x21ce99)];
+    [self.leftAgeRestriction setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.ageSubview addSubview:self.leftAgeRestriction];
+    UIButton *leftLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.leftAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.leftAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
+    [leftLabel setTitle:@"18+" forState:UIControlStateNormal];
+    [leftLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
+    [leftLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftLabel setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    leftLabel.layer.cornerRadius = 10;
+    [leftLabel addTarget:self action:@selector(leftAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.ageSubview addSubview:leftLabel];
+    self.rightAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 5*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
+    [self.rightAgeRestriction setProgressColor:UIColorFromRGB(0x21ce99)];
+    [self.rightAgeRestriction setProgressLineWidth:5];
+    [self.rightAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x21ce99)];
+    [self.rightAgeRestriction setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.ageSubview addSubview:self.rightAgeRestriction];
+    UIButton *rightLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.rightAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.rightAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
+    [rightLabel setTitle:@"21+" forState:UIControlStateNormal];
+    [rightLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
+    [rightLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [rightLabel setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    rightLabel.layer.cornerRadius = 10;
+    [rightLabel addTarget:self action:@selector(rightAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.ageSubview addSubview:rightLabel];
     
     // Create Cover Image Label
     self.coverImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
@@ -424,6 +457,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
         self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y + self.vibesCollectionView.frame.size.height + 10, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
         self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
+//        self.leftAgeRestriction.frame = CGRectMake(self.leftAgeRestriction.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.leftAgeRestriction.frame.size.width, self.leftAgeRestriction.frame.size.height);
+//        self.rightAgeRestriction.frame = CGRectMake(self.rightAgeRestriction.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.rightAgeRestriction.frame.size.width, self.rightAgeRestriction.frame.size.height);
+        NSLog(@"%f", self.ageSubview.frame.origin.x);
+        NSLog(@"%f", self.ageSubview.frame.origin.y);
+        NSLog(@"%f", self.ageSubview.frame.size.width);
+        NSLog(@"%f", self.ageSubview.frame.size.height);
     }];
 }
 
@@ -445,7 +484,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, -self.vibesCollectionView.frame.size.height, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
             self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, -self.ageLabel.frame.size.height, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
             self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, -self.ageSubview.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
-            
         }];
     }
 }
@@ -606,9 +644,30 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self dismissKeyboard];
 }
 
-- (void) cancelButtonPressed {
-    [self.searchLocationTextField setText:@""];
-    [self dismissKeyboard];
+- (void) leftAgeButtonPressed {
+    [UIView animateWithDuration:1 animations:^{
+        if (self.leftAgeRestriction.value == 100) {
+            self.leftAgeRestriction.value = 0;
+            self.ageRestriction = 0;
+        } else {
+            self.leftAgeRestriction.value = 100;
+            self.rightAgeRestriction.value = 0;
+            self.ageRestriction = 18;
+        }
+    }];
+}
+
+- (void) rightAgeButtonPressed {
+    [UIView animateWithDuration:1 animations:^{
+        if (self.rightAgeRestriction.value == 100) {
+            self.rightAgeRestriction.value = 0;
+            self.ageRestriction = 0;
+        } else {
+            self.rightAgeRestriction.value = 100;
+            self.leftAgeRestriction.value = 0;
+            self.ageRestriction = 21;
+        }
+    }];
 }
 
 - (void) pickerValueChanged {

@@ -356,8 +356,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     }];
 }
 
-
-
 - (void) backButtonPressed {
     if ([self.viewName isEqualToString:SIGNIN_VIEW]) {
         [self dismissSignInPage];
@@ -400,8 +398,9 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                       NSError * _Nullable error) {
                              //if authresult is nill then check for error
                              //non nill authresult means we can login
-                             if (authResult.user){
+                             if (authResult.user) {
                                  [[DataHandling shared] loadUserInfoAndApp:authResult.user.uid];
+                                 
                              }
                              else{
                                  switch([error code]){
@@ -415,7 +414,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                              }
                          }];
 }
-
 
 - (void) nextButtonPressed {
     BOOL signupIsCorrect = !([self.firstNameTextField.text isEqualToString:@""] && [self.lastNameTextField.text isEqualToString:@""]);
