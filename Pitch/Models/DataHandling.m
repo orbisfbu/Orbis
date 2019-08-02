@@ -22,11 +22,14 @@ static NSString * const EVENT_AGE_RESTRICTION_KEY = @"Age Restriction";
 static NSString * const EVENT_ATTENDANCE_KEY = @"Attendance";
 static NSString * const EVENT_LOCATION_KEY = @"Location";
 static NSString * const EVENT_DESCRIPTION_KEY = @"Description";
+static NSString * const EVENT_VIBES_KEY = @"Vibes";
+static NSString * const EVENT_MINPEOPLE_KEY = @"MinPeople";
+static NSString * const EVENT_MAXPEOPLE_KEY = @"MaxPeople";
 //constants for user addition to database
 static NSString * const USER_FIRSTNAME_KEY = @"First Name";
 static NSString * const USER_LASTNAME_KEY = @"Last Name";
 static NSString * const USER_EMAIL_KEY = @"Email";
-static NSString * const USER_PROFILE_IMAGE_KEY = @"Profile Image";
+static NSString * const USER_PROFILE_IMAGE_KEY = @"ProfileImageURL";
 static NSString * const USER_SCREEN_NAME_KEY = @"Username";
 static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 
@@ -50,7 +53,7 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
     return self;
 }
 
-- (void)getEventsArray {
+- (void)getEventsFromDatabase {
     NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
     [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
      getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
@@ -63,31 +66,25 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
                  [eventsArray addObject:eventToAdd];
              }
          }
-         [self.delegate updateEvents:eventsArray];
+         [self.delegate refreshEventsDelegateMethod:eventsArray];
      }];
 }
 
 - (void)addEventToDatabase:(Event *)definedEvent{
-    //here you can use the current user class to just set the eventCreator name
-    NSString *newEventCreator = @"Sebastian";
-    NSString *newEventHasMusic = definedEvent.eventHasMusic;
-    NSString *newEventAttendanceCount = [NSString stringWithFormat:@"%d", definedEvent.eventAttendanceCount];
-    NSString *newEventImageURLString = definedEvent.eventImageURLString;
-    NSString *newEventAgeRestriction = [NSString stringWithFormat:@"%d", definedEvent.eventAgeRestriction];
-    NSString *newEventDescription = definedEvent.eventDescription;
-    NSString *newEventLocation = definedEvent.eventLocationString;
-    NSString *newEventName = definedEvent.eventName;
     NSDictionary *eventInfo = @{
-                                EVENT_CREATOR_KEY: newEventCreator,
-                                EVENT_HAS_MUSIC_KEY: newEventHasMusic,
-                                EVENT_ATTENDANCE_KEY: newEventAttendanceCount,
-                                EVENT_IMAGE_URL_KEY: newEventImageURLString,
-                                EVENT_AGE_RESTRICTION_KEY: newEventAgeRestriction,
-                                EVENT_LOCATION_KEY: newEventLocation,
-                                EVENT_DESCRIPTION_KEY: newEventDescription,
-                                EVENT_NAME_KEY:newEventName
+                                EVENT_CREATOR_KEY: [UserInSession shared].sharedUser.userNameString,
+                                EVENT_HAS_MUSIC_KEY: definedEvent.eventHasMusic,
+                                EVENT_ATTENDANCE_KEY: @(definedEvent.eventAttendanceCount),
+                                EVENT_IMAGE_URL_KEY: definedEvent.eventImageURLString,
+                                EVENT_AGE_RESTRICTION_KEY: @(definedEvent.eventAgeRestriction),
+                                EVENT_MINPEOPLE_KEY: [NSString stringWithFormat:@"%d", definedEvent.minNumPeople],
+                                EVENT_MAXPEOPLE_KEY: [NSString stringWithFormat:@"%d", definedEvent.maxNumPeople],
+                                EVENT_LOCATION_KEY: definedEvent.eventLocationString,
+                                EVENT_DESCRIPTION_KEY: definedEvent.eventDescription,
+                                EVENT_NAME_KEY: definedEvent.eventName,
+                                EVENT_VIBES_KEY: definedEvent.eventVibesArray
                                 };
-    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:newEventName] setData:eventInfo
+    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithAutoID] setData:eventInfo
          completion:^(NSError * _Nullable error) {
        if (error != nil) {
            NSLog(@"Error adding event: %@", error);
@@ -138,10 +135,84 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
         }
         else{
             NSLog(@"THIS USER DOESNT EXIST, ERROR IS: %@", error);
+            }
+        }];
+    }
+}
+
+
+- (void)registrationCheck: (NSString *)eventName withUserID:(NSString *)userID
+{
+    __block BOOL wasRegistered = NO;
+    FIRCollectionReference *eventsCollectionRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
+    FIRQuery *queryToGetCurrentEvent = [eventsCollectionRef queryWhereField:@"Registered Users" arrayContains:userID];
+    
+    [queryToGetCurrentEvent getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if(error != nil){
+            NSLog(@"Error retrieving event that has this array of registered users");
+        }
+        else{
+            for (FIRDocumentSnapshot *document in snapshot.documents){
+                
+                if ([document.data[@"Event Name"] isEqualToString:eventName]){
+                    wasRegistered = YES;
+                    [self.registrationDelegate checkForUserRegistrationDelegateMethod:wasRegistered];
+                    
+                }
+            }
         }
     }];
 }
+
+
+
+- (void)userRegisteredForEvent: (NSString *)eventName
+{
+    __block FIRDocumentReference *eventToEditReference;
+    FIRQuery *eventsQuery =
+    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:eventName];
     
+    [eventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil){
+            NSLog(@"Erorr getting the event user registered for");
+        }
+        else{
+            for (FIRDocumentSnapshot *document in snapshot.documents) {
+                eventToEditReference = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:document.documentID];
+            }
+            [eventToEditReference updateData:@{
+                                        @"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:1],
+                                        @"Registered Users": [FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]
+                                        }];
+            NSLog(@"Successfully registered, increased attendance count, and added to registered users array");
+        }
+    }];
 }
+
+
+- (void)unregisterUser: (NSString *)eventName
+{
+    __block FIRDocumentReference *eventToEditReference;
+    FIRQuery *eventsQuery =
+    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:eventName];
+    
+    [eventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil){
+            NSLog(@"Erorr getting the event user registered for");
+        }
+        else{
+            for (FIRDocumentSnapshot *document in snapshot.documents) {
+                eventToEditReference = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:document.documentID];
+            }
+            [eventToEditReference updateData:@{
+                                               @"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:-1],
+                                               @"Registered Users": [FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]
+                                               }];
+            NSLog(@"Successfully unregistered, decreased attendance count, and removed user from registered users");
+        }
+    }];
+}
+
+
 
 @end

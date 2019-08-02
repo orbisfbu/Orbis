@@ -20,12 +20,15 @@
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
         self.eventHasMusic = snapshotDictionary[@"Has Music"];
-        self.eventAttendanceCount = snapshotDictionary[@"Attendance"];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
-        self.eventAgeRestriction = snapshotDictionary[@"Age Restriction"];
-        //location in the data base will be a string with latitude and longitude string separated with a space character
         self.eventLocationString = snapshotDictionary[@"Location"];
+        self.eventVibesArray = [NSMutableArray arrayWithArray:snapshotDictionary[@"Vibes"]];
+        self.minNumPeople = [snapshotDictionary[@"MinPeople"] intValue];
+        self.maxNumPeople = [snapshotDictionary[@"MaxPeople"] intValue];
+        self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
+        self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
+        //formatting location string
         NSArray *locationComponents = [self.eventLocationString componentsSeparatedByString:@" "];
         NSString *latitudeString = [locationComponents objectAtIndex:0];
         NSString *longitudeString = [locationComponents objectAtIndex:1];

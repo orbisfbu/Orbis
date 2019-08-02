@@ -15,10 +15,12 @@
     // Initialization code
     self.layer.cornerRadius = 10;
     [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+    
 }
 
 - (void) setLabelText:(NSString *)text {
     self.titleLabel.text = text;
+    
 }
 
 @end
