@@ -93,6 +93,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UITableView *searchResultsTableView;
 @property BOOL shouldFireGETRequest; // BOOL for checking whether to call Foursquare API
 @property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
+@property (nonatomic) CLLocationCoordinate2D coordinates;
 
 // Details View
 @property (strong, nonatomic) UILabel *descriptionLabel;
@@ -104,6 +105,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property int ageRestriction;
 @property (strong, nonatomic) MBCircularProgressBarView *leftAgeRestriction;
 @property (strong, nonatomic) MBCircularProgressBarView *rightAgeRestriction;
+@property (strong, nonatomic) NSMutableSet *vibesSet;
 
 // Media View
 @property (strong, nonatomic) UILabel *coverImageLabel;
@@ -126,6 +128,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.vibesSet = [[NSMutableSet alloc] init];
     self.ageRestriction = 0;
     self.shouldFireGETRequest = NO;
     [self.view setBackgroundColor:UIColorFromRGB(0x21ce99)];
@@ -457,12 +460,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
         self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y + self.vibesCollectionView.frame.size.height + 10, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
         self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
-//        self.leftAgeRestriction.frame = CGRectMake(self.leftAgeRestriction.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.leftAgeRestriction.frame.size.width, self.leftAgeRestriction.frame.size.height);
-//        self.rightAgeRestriction.frame = CGRectMake(self.rightAgeRestriction.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.rightAgeRestriction.frame.size.width, self.rightAgeRestriction.frame.size.height);
-        NSLog(@"%f", self.ageSubview.frame.origin.x);
-        NSLog(@"%f", self.ageSubview.frame.origin.y);
-        NSLog(@"%f", self.ageSubview.frame.size.width);
-        NSLog(@"%f", self.ageSubview.frame.size.height);
     }];
 }
 
@@ -518,6 +515,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void) displayMusicPage {
     self.pageName = MUSIC_VIEW;
+    [self.nextButton setTitle:@"Publish Event" forState:UIControlStateNormal];
     [UIView animateWithDuration:0.5 animations:^{
         self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
         self.musicNoteImageView.frame = CGRectMake(self.musicNoteImageView.frame.origin.x, self.musicPageDescriptionLabel.frame.origin.y + self.musicPageDescriptionLabel.frame.size.height + 10, self.musicNoteImageView.frame.size.width, self.musicNoteImageView.frame.size.height);
@@ -584,25 +582,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, self.view.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
     }];
 }
-//
-- (void) createEventButtonPressed {
-    NSDictionary *eventDefinition = @{
-                                      @"Created By": @"Sebastian Bernal",
-                                      @"Event Name": @"Testing with integers",
-                                      @"Has Music": @"YES",
-                                      @"Attendance": @56,
-                                      @"ImageURL": @"https://bit.ly/2SYp8Za",
-                                      @"Description": @"Another cool description",
-                                      @"Age Restriction": @69,
-                                      @"Location": @"37.777937 -122.415954",
-                                      @"Vibes": @[@"Vibe1",@"Vibe2",@"Vibe3"],
-                                      @"MinPeople":@"1",
-                                      @"MaxPeople":@"500"
-                                      };
-    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
-    [[DataHandling shared] addEventToDatabase:eventToAdd];
-    [self.delegate refreshAfterEventCreation];
-}
 
 - (void) nextButtonPressed {
     if ([self.pageName isEqualToString:INITIAL_VIEW]) {
@@ -614,6 +593,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
         [self dismissMediaPage];
         [self displayMusicPage];
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        [self publishEvent];
     }
 }
 
@@ -629,9 +610,31 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self dismissMediaPage];
     }
     else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
         [self displayMediaPage];
         [self dismissMusicPage];
     }
+}
+
+- (void) publishEvent {
+    NSDictionary *eventDefinition = @{
+        @"Created By": [[[UserInSession shared] sharedUser] nameString],
+        @"Event Name": self.eventTitleTextField.text,
+        @"Has Music": @"YES",
+        @"Attendance": @(1),
+        @"ImageURL": @"https://bit.ly/2SYp8Za",
+        @"Description": self.descriptionTextView.text,
+        @"Age Restriction": @(self.ageRestriction),
+        @"Location": [NSString stringWithFormat:@"%f %f", self.coordinates.latitude, self.coordinates.longitude],
+        @"Vibes": [self.vibesSet allObjects],
+        @"MinPeople":@(1),
+        @"MaxPeople":@(500)
+    };
+    NSLog(@"HILO");
+    Event *event = [[Event alloc] initWithDictionary:eventDefinition];
+    NSLog(@"HILO");
+    [[DataHandling shared] addEventToDatabase:event];
+    [self.delegate refreshAfterEventCreation];
 }
 
 - (void) locationCancelButtonPressed {
@@ -687,7 +690,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [dateFormatter setDateFormat:@"yyyyMMdd"];
     NSString *date = [dateFormatter stringFromDate:[NSDate date]];
     NSString *URLString = [NSString stringWithFormat:@"https://api.foursquare.com/v2/venues/suggestcompletion?ll=%@&query=%@&client_id=%@&client_secret=%@&v=%@", coordinates, query, CLIENT_ID, CLIENT_SECRET, date];
-    NSLog(@"%@", URLString);
     NSURL *url = [NSURL URLWithString:URLString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:10.0];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
@@ -722,6 +724,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self dismissKeyboard];
     [self.searchLocationTextField setText:[self.recentSearchResults[indexPath.row] getName]];
+    self.coordinates = [self.recentSearchResults[indexPath.row] getCoordinates];
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -750,6 +753,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
         }];
         [cell setBackgroundColor:[UIColor grayColor]];
+    [self.vibesSet addObject:cell.titleLabel.text];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -759,6 +763,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
         }];
         [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        [self.vibesSet removeObject:cell.titleLabel.text];
     }
 }
 

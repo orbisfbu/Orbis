@@ -14,10 +14,10 @@
     self = [super init];
     if (self) {
         NSString *firstNameFormatted = [NSString stringWithFormat:@"%@ ", dictionary[@"First Name"]];
-        self.userNameString = [firstNameFormatted stringByAppendingString: dictionary[@"Last Name"]];
+        self.nameString = [firstNameFormatted stringByAppendingString: dictionary[@"Last Name"]];
         self.profileImageURLString = dictionary[@"ProfileImageURL"];
         self.userBioString = dictionary[@"User Bio"];
-        self.screenNameString = dictionary[@"Username"];
+        self.usernameString = dictionary[@"Username"];
         self.profileBackgroundImageURLString = dictionary[@"BackgroundImageURL"];
         self.email = dictionary[@"Email"];
     }
