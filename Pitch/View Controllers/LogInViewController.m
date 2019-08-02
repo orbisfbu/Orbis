@@ -94,7 +94,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 @implementation LogInViewController
 
 - (void)viewDidLoad {
-
     [super viewDidLoad];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.sharedUserDelegate = self;
