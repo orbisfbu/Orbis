@@ -31,6 +31,7 @@
 #import "SearchResult.h"
 #import "Vibes.h"
 #import "CustomCollectionViewCell.h"
+#import "MBCircularProgressBarView.h"
 
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
@@ -88,7 +89,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UIImageView *pinImageView;
 
 // Location View
-@property (strong, nonatomic) UIButton *cancelButton;
+@property (strong, nonatomic) UIButton *locationCancelButton;
 @property (strong, nonatomic) UITableView *searchResultsTableView;
 @property BOOL shouldFireGETRequest; // BOOL for checking whether to call Foursquare API
 @property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
@@ -100,12 +101,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UICollectionView *vibesCollectionView;
 @property (strong, nonatomic) UILabel *ageLabel;
 @property (strong, nonatomic) UIView *ageSubview;
+@property (strong, nonatomic) MBCircularProgressBarView *leftAgeRestriction;
+@property (strong, nonatomic) MBCircularProgressBarView *rightAgeRestriction;
 
 // Media View
 @property (strong, nonatomic) UILabel *coverImageLabel;
 @property (strong, nonatomic) UIImageView *coverImageView;
 @property (strong, nonatomic) UILabel *additionalMediaLabel;
 @property (strong, nonatomic) UIView *additionalMediaSubview;
+
 
 @end
 
@@ -193,11 +197,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Cancel Button
     size = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - size.width - 15, self.view.frame.size.height, size.width, LABEL_HEIGHT)];
-    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
-    [self.cancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
-    [self.cancelButton addTarget:self action:@selector(cancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.cancelButton];
+    self.locationCancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - size.width - 15, self.view.frame.size.height, size.width, LABEL_HEIGHT)];
+    [self.locationCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.locationCancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    [self.locationCancelButton addTarget:self action:@selector(locationCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.locationCancelButton];
     
     // Create Next Button
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 4*X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
@@ -238,7 +242,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Vibes Collection View
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT) collectionViewLayout:layout];
+    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT) collectionViewLayout:layout];
     self.vibesCollectionView.layer.cornerRadius = 5;
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     self.vibesCollectionView.delegate = self;
@@ -255,11 +259,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.ageLabel setText:@"Age Restrictions"];
     [self.view addSubview:self.ageLabel];
     
-    // Create Age Sub View
-    self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
-    self.ageSubview.layer.cornerRadius = 5;
+    // Create Age Restrictions
+    self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     [self.ageSubview setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
-    [self.view addSubview:self.ageSubview];
+    self.leftAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake((self.leftAgeRestriction.superview.frame.size.width - 4*X_OFFSET - 50)/2, self.view.frame.size.height/2, 2*X_OFFSET, 2*X_OFFSET)];
+    [self.ageSubview addSubview:self.leftAgeRestriction];
+    self.rightAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.rightAgeRestriction.superview.frame.size.width - 2*X_OFFSET - self.leftAgeRestriction.frame.origin.x, self.view.frame.size.height, 2*X_OFFSET, 2*X_OFFSET)];
+    [self.ageSubview addSubview:self.rightAgeRestriction];
     
     // Create Cover Image Label
     self.coverImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
@@ -324,7 +330,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width), 2*LABEL_HEIGHT);
         self.searchLocationPlaceholderLabel.frame = self.searchLocationTextField.frame;
         [self.searchLocationTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, 1.2*X_OFFSET, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, 1.2*X_OFFSET, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
     }];
     self.datePicker.alpha = 0;
@@ -334,7 +340,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addGestureRecognizer:self.tap];
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleLabel.frame = CGRectMake(self.eventTitleLabel.frame.origin.x, 3*X_OFFSET, self.eventTitleLabel.frame.size.width, self.eventTitleLabel.frame.size.height);
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, -self.cancelButton.frame.size.height, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, -self.locationCancelButton.frame.size.height, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, self.eventTitleLabel.frame.origin.y + self.eventTitleLabel.frame.size.height - 10, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
         self.searchLabel.frame = CGRectMake(X_OFFSET, self.eventTitleTextField.frame.origin.y + self.eventTitleTextField.frame.size.height + 30, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT);
         self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, self.searchLabel.frame.origin.y + self.searchLabel.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT);
@@ -349,7 +355,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         }
         self.datePicker.alpha = 1;
     } completion:^(BOOL finished) {
-        self.cancelButton.frame = CGRectMake(self.cancelButton.frame.origin.x, self.view.frame.size.height, self.cancelButton.frame.size.width, self.cancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, self.view.frame.size.height, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
     }];
 }
 
@@ -362,6 +368,19 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
         self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y + self.vibesCollectionView.frame.size.height + 10, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
         self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
+//        self.leftAgeRestriction.frame = CGRectMake(self.leftAgeRestriction.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.leftAgeRestriction.frame.size.width, self.leftAgeRestriction.frame.size.height);
+//        self.rightAgeRestriction.frame = CGRectMake(self.rightAgeRestriction.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.rightAgeRestriction.frame.size.width, self.rightAgeRestriction.frame.size.height);
+        NSLog(@"%f", self.leftAgeRestriction.frame.origin.x);
+        NSLog(@"%f", self.leftAgeRestriction.frame.origin.y);
+        NSLog(@"%f", self.leftAgeRestriction.frame.size.width);
+        NSLog(@"%f", self.leftAgeRestriction.frame.size.height);
+        NSLog(@"%f", self.view.frame.size.width);
+    } completion:^(BOOL finished) {
+        NSLog(@"%f", self.leftAgeRestriction.frame.origin.x);
+        NSLog(@"%f", self.leftAgeRestriction.frame.origin.y);
+        NSLog(@"%f", self.leftAgeRestriction.frame.size.width);
+        NSLog(@"%f", self.leftAgeRestriction.frame.size.height);
+        NSLog(@"%f", self.view.frame.size.width);
     }];
 }
 
@@ -373,7 +392,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.vibesLabel.frame = CGRectMake(self.vibesLabel.frame.origin.x, self.view.frame.size.height, self.vibesLabel.frame.size.width, self.vibesLabel.frame.size.height);
             self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, self.view.frame.size.height, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
             self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.view.frame.size.height, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
-            self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.view.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
+            //self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.view.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
         }];
     } else {
         [UIView animateWithDuration:0.5 animations:^{
@@ -382,7 +401,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.vibesLabel.frame = CGRectMake(self.vibesLabel.frame.origin.x, -self.vibesLabel.frame.size.height, self.vibesLabel.frame.size.width, self.vibesLabel.frame.size.height);
             self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, -self.vibesCollectionView.frame.size.height, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
             self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, -self.ageLabel.frame.size.height, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
-            self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, -self.ageSubview.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
+            //self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, -self.ageSubview.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
             
         }];
     }
@@ -459,7 +478,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
-- (void) cancelButtonPressed {
+- (void) locationCancelButtonPressed {
     [self.searchLocationTextField setText:@""];
     [self dismissKeyboard];
 }
