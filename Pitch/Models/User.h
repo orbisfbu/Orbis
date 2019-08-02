@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface User : NSObject
 
-@property (nonatomic, strong) NSString *nameString;
-@property (nonatomic, strong) NSString *usernameString;
+@property (nonatomic, strong) NSString *userNameString;
+@property (nonatomic, strong) NSString *screenNameString;
 @property (nonatomic, strong) NSString *userBioString;
 @property (nonatomic, strong) NSString *profileImageURLString;
 @property (nonatomic, strong) NSString *profileBackgroundImageURLString;
