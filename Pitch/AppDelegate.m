@@ -26,11 +26,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [FIRApp configure];
-<<<<<<< HEAD
     //[FBSDKLoginButton class];
-=======
-    [FBSDKLoginButton class];
->>>>>>> parent of 7600d92... Remove a useless line
     [[FBSDKApplicationDelegate sharedInstance] application:application
                              didFinishLaunchingWithOptions:launchOptions];
     [FBSDKSettings setAppID:@"2401394480184040"];
