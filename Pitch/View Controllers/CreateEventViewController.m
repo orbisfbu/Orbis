@@ -32,6 +32,8 @@
 #import "Vibes.h"
 #import "CustomCollectionViewCell.h"
 #import "MBCircularProgressBarView.h"
+#import "MusicQueueCollectionViewCell.h"
+#import "Song.h"
 
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
@@ -118,9 +120,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UITextField *searchMusicTextField;
 @property (strong, nonatomic) UIImageView *musicNoteImageView;
 @property (strong, nonatomic) UILabel *musicQueueLabel;
-@property (strong, nonatomic) UIView *musicQueueSubview;
 @property (strong, nonatomic) UITableView *musicResultsTableView;
 @property (strong, nonatomic) UIButton *musicCancelButton;
+@property (strong, nonatomic) UICollectionView *musicQueueCollectionView;
+@property (strong, nonatomic) NSMutableArray *songsArray;
+@property (strong, nonatomic) NSMutableArray *queuedUpSongsArray;
 
 @end
 
@@ -129,6 +133,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.vibesSet = [[NSMutableSet alloc] init];
+    [self createSongsArray];
     self.ageRestriction = 0;
     self.shouldFireGETRequest = NO;
     [self.view setBackgroundColor:UIColorFromRGB(0x21ce99)];
@@ -140,6 +145,48 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.vibesArray = [[Vibes sharedVibes] getVibesArray];
     [self createPageObjects];
     [self displayInitialPage];
+}
+
+- (void) createSongsArray {
+    
+    self.songsArray = [[NSMutableArray alloc] init];
+    
+    Song *song = [[Song alloc] init];
+    [song setTitle:@"Jocelyn Flores"];
+    [song setArtistName:@"XXXTENTACION"];
+    [song setAlbumName:@"17"];
+    [self.songsArray addObject:song];
+
+    song = [[Song alloc] init];
+    [song setTitle:@"Saviers Road"];
+    [song setArtistName:@"Anderson .Paak"];
+    [song setAlbumName:@"Oxnard"];
+    [self.songsArray addObject:song];
+    
+    song = [[Song alloc] init];
+    [song setTitle:@"Bound 2"];
+    [song setArtistName:@"Kanye West"];
+    [song setAlbumName:@"Yeezus"];
+    [self.songsArray addObject:song];
+    
+    song = [[Song alloc] init];
+    [song setTitle:@"Stepping Stone"];
+    [song setArtistName:@"Eminem"];
+    [song setAlbumName:@"Kamikaze"];
+    [self.songsArray addObject:song];
+    
+    song = [[Song alloc] init];
+    [song setTitle:@"Lucy In The Sky With Diamonds"];
+    [song setArtistName:@"The Beatles"];
+    [song setAlbumName:@"Sgt. Pepper's Lonely Hearts Club"];
+    [self.songsArray addObject:song];
+    
+    self.queuedUpSongsArray = [[NSMutableArray alloc] init];
+    song = [[Song alloc] init];
+    [song setTitle:@"Title"];
+    [song setArtistName:@"Artist"];
+    [song setAlbumName:@"default_album"];
+    [self.queuedUpSongsArray addObject:song];
 }
 
 - (void) dismissKeyboard {
@@ -358,10 +405,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.musicQueueLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.musicQueueLabel];
     
-    // Create Music Queue Subview
-    self.musicQueueSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
-    [self.view addSubview:self.musicQueueSubview];
-    
     // Create Music Cancel Button
     CGSize musicCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
     self.musicCancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - musicCancelButtonSize.width - 15, self.view.frame.size.height, musicCancelButtonSize.width, LABEL_HEIGHT)];
@@ -376,6 +419,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicResultsTableView.delegate = self;
     self.musicResultsTableView.dataSource = self;
     [self.view addSubview:self.musicResultsTableView];
+    
+    // Create Music Queue Collection View
+    UICollectionViewFlowLayout *musicCVLayout = [[UICollectionViewFlowLayout alloc] init];
+    [musicCVLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.musicQueueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET/2, self.view.frame.size.height, self.view.frame.size.width - X_OFFSET, 4*LABEL_HEIGHT) collectionViewLayout:musicCVLayout];
+    [self.musicQueueCollectionView setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    self.musicQueueCollectionView.layer.cornerRadius = 5;
+    [self.musicQueueCollectionView registerNib:[UINib nibWithNibName:@"MusicQueueCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MusicQueueCollectionViewCell"];
+    self.musicQueueCollectionView.delegate = self;
+    self.musicQueueCollectionView.dataSource = self;
+    [self.view addSubview:self.musicQueueCollectionView];
 }
 
 - (void) displayInitialPage {
@@ -453,6 +507,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void) displayDetailsPage {
     self.pageName = DETAILS_VIEW;
+    [self.vibesCollectionView reloadData];
     [UIView animateWithDuration:0.5 animations:^{
         self.descriptionLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
         self.descriptionTextView.frame = CGRectMake(self.descriptionTextView.frame.origin.x, self.descriptionLabel.frame.origin.y + self.descriptionLabel.frame.size.height + 10, self.descriptionTextView.frame.size.width, self.descriptionTextView.frame.size.height);
@@ -515,13 +570,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void) displayMusicPage {
     self.pageName = MUSIC_VIEW;
+    [self.musicQueueCollectionView reloadData];
+    [self.musicResultsTableView reloadData];
     [self.nextButton setTitle:@"Publish Event" forState:UIControlStateNormal];
     [UIView animateWithDuration:0.5 animations:^{
         self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
         self.musicNoteImageView.frame = CGRectMake(self.musicNoteImageView.frame.origin.x, self.musicPageDescriptionLabel.frame.origin.y + self.musicPageDescriptionLabel.frame.size.height + 10, self.musicNoteImageView.frame.size.width, self.musicNoteImageView.frame.size.height);
          self.searchMusicTextField.frame = CGRectMake(self.searchMusicTextField.frame.origin.x, self.musicNoteImageView.frame.origin.y + 5, self.searchMusicTextField.frame.size.width, self.searchMusicTextField.frame.size.height);
         self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height + 30, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
-        self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+        self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
     }];
 }
 
@@ -531,7 +588,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, self.view.frame.size.height, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
             self.searchMusicTextField.frame = CGRectMake(self.searchMusicTextField.frame.origin.x, self.view.frame.size.height, self.searchMusicTextField.frame.size.width, self.searchMusicTextField.frame.size.height);
             self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.view.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
-            self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, self.view.frame.size.height, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+            self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, self.view.frame.size.height, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
             self.musicNoteImageView.frame = CGRectMake(0.8*X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT);
             self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.view.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
         }];
@@ -540,7 +597,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, -self.musicPageDescriptionLabel.frame.size.height, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
             self.searchMusicTextField.frame = CGRectMake(self.searchMusicTextField.frame.origin.x, -self.searchMusicTextField.frame.size.height, self.searchMusicTextField.frame.size.width, self.searchMusicTextField.frame.size.height);
             self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, -self.musicQueueLabel.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
-            self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, -self.musicQueueSubview.frame.size.height, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+            self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, -self.musicQueueCollectionView.frame.size.height, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
             self.musicNoteImageView.frame = CGRectMake(self.musicNoteImageView.frame.origin.x, -self.musicNoteImageView.frame.size.height, self.musicNoteImageView.frame.size.width, self.musicNoteImageView.frame.size.height);
             self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, -self.musicResultsTableView.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
         }];
@@ -556,7 +613,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + X_OFFSET), 2*LABEL_HEIGHT);
         [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
         self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, -self.musicQueueLabel.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
-        self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, -self.musicQueueSubview.frame.size.height, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+        self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, -self.musicQueueCollectionView.frame.size.height, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
         self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, 1.2*X_OFFSET, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
         self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
     }];
@@ -570,7 +627,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.musicNoteImageView.frame = CGRectMake(0.8*X_OFFSET, self.musicPageDescriptionLabel.frame.origin.y + self.musicPageDescriptionLabel.frame.size.height + 10, LABEL_HEIGHT, LABEL_HEIGHT);
         self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, self.musicNoteImageView.frame.origin.y + 5, self.view.frame.size.width - (self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width) - X_OFFSET, LABEL_HEIGHT);
         self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height + 30, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
-        self.musicQueueSubview.frame = CGRectMake(self.musicQueueSubview.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueSubview.frame.size.width, self.musicQueueSubview.frame.size.height);
+        self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
         self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.view.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
         
         if ([self.searchMusicTextField.text isEqualToString:@""]) {
@@ -630,9 +687,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"MinPeople":@(1),
         @"MaxPeople":@(500)
     };
-    NSLog(@"HILO");
     Event *event = [[Event alloc] initWithDictionary:eventDefinition];
-    NSLog(@"HILO");
     [[DataHandling shared] addEventToDatabase:event];
     [self.delegate refreshAfterEventCreation];
 }
@@ -712,48 +767,95 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
-    [cell.textLabel setText:[NSString stringWithFormat:@"%@", [(SearchResult *)self.recentSearchResults[indexPath.row] getName]]];
-    return cell;
+    if ([self.pageName isEqualToString:INITIAL_VIEW]) {
+        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        [cell.textLabel setText:[NSString stringWithFormat:@"%@", [(SearchResult *)self.recentSearchResults[indexPath.row] getName]]];
+        return cell;
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        [cell.textLabel setText:[NSString stringWithFormat:@"%@", ((Song *)self.songsArray[indexPath.row]).title]];
+        return cell;
+    } else {
+        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        return cell;
+    }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.recentSearchResults.count;
+    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+        return self.recentSearchResults.count;
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        return self.songsArray.count;
+    } else {
+        return 0;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self dismissKeyboard];
-    [self.searchLocationTextField setText:[self.recentSearchResults[indexPath.row] getName]];
-    self.coordinates = [self.recentSearchResults[indexPath.row] getCoordinates];
+    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+        [self.searchLocationTextField setText:[self.recentSearchResults[indexPath.row] getName]];
+        self.coordinates = [self.recentSearchResults[indexPath.row] getCoordinates];
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        Song *song = self.songsArray[indexPath.row];
+        [self.queuedUpSongsArray insertObject:song atIndex:self.queuedUpSongsArray.count - 1];
+        [self.musicQueueCollectionView reloadData];
+    }
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
         [cell setLabelText:self.vibesArray[indexPath.item]];
         [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
         return cell;
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        MusicQueueCollectionViewCell *cell = [self.musicQueueCollectionView dequeueReusableCellWithReuseIdentifier:@"MusicQueueCollectionViewCell" forIndexPath:indexPath];
+        [cell initWithSong:self.queuedUpSongsArray[indexPath.row]];
+        cell.layer.cornerRadius = 5;
+        [cell.nameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+        [cell.artistNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:10]];
+        return cell;
+    } else {
+        UICollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
+        return cell;
+    }
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         return self.vibesArray.count;
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        return self.queuedUpSongsArray.count;
+    } else {
+        return 10;
+    }
 }
     
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
         [cell setLabelText:self.vibesArray[indexPath.row]];
         [cell setNeedsLayout];
         [cell layoutIfNeeded];
         CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
         return CGSizeMake(size.width, 30);
+    } else {
+        return CGSizeMake(90, 120);
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         CustomCollectionViewCell *cell = (CustomCollectionViewCell *)[self.vibesCollectionView cellForItemAtIndexPath:indexPath];
         [UIView animateWithDuration:0.3 animations:^{
             cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
         }];
         [cell setBackgroundColor:[UIColor grayColor]];
-    [self.vibesSet addObject:cell.titleLabel.text];
+        [self.vibesSet addObject:cell.titleLabel.text];
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && indexPath.row == self.queuedUpSongsArray.count - 1) {
+        [self.searchMusicTextField becomeFirstResponder];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
