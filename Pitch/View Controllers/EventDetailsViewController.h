@@ -11,8 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventDetailsViewController : UIViewController
+@protocol UpdateAnnotationInfoDelegate
+- (void)updateAnnotationInfo;
+@end
 
+@interface EventDetailsViewController : UIViewController
+@property (nonatomic, weak) id<UpdateAnnotationInfoDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UIView *clickableMapViewOutlet;
 @property (retain, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *eventImageView;

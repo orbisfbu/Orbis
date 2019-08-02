@@ -11,7 +11,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MusicQueueViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *roundedCornersView;
+@property (weak, nonatomic) IBOutlet UIView *clickableMapViewOutlet;
+@property (weak, nonatomic) IBOutlet UIView *roundedCornersViewOutlet;
+@property (weak, nonatomic) IBOutlet UIView *queueSectionTabOutlet;
+@property (weak, nonatomic) IBOutlet UIView *swipeIndicatorOutlet;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollViewOutlet;
+@property (weak, nonatomic) IBOutlet UILabel *queueSectionTitleLabel;
+
 @end
 
 NS_ASSUME_NONNULL_END

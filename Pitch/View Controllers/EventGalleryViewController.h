@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EventGalleryViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *roundedCornersView;
+
 @end
 
 NS_ASSUME_NONNULL_END

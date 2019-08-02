@@ -112,6 +112,24 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @implementation CreateEventViewController
 
 - (void)viewDidLoad {
+//
+//    NSDictionary *eventDefinition = @{
+//                                      @"Created By": @"Elizabeth Ziets",
+//                                      @"Event Name": @"Test for name change",
+//                                      @"Attendance": @20,
+//                                      @"ImageURL": @"https://bit.ly/2SYp8Za",
+//                                      @"Description": @"Another cool description",
+//                                      @"Age Restriction": @21,
+//                                      @"Location": @"37.802482 -122.420052",
+//                                      @"Vibes": @[@"Vibe1",@"Vibe2",@"Vibe3"],
+//                                      @"MinPeople":@"20",
+//                                      @"MaxPeople":@"40"
+//                                      };
+//    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
+//    [[DataHandling shared] addEventToDatabase:eventToAdd];
+//    [self.delegate refreshAfterEventCreation];
+////
+    
     [super viewDidLoad];
     self.shouldFireGETRequest = NO;
     [self.view setBackgroundColor:UIColorFromRGB(0x21ce99)];
@@ -420,13 +438,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void) createEventButtonPressed {
     NSDictionary *eventDefinition = @{
                                       @"Created By": @"Sebastian Bernal",
-                                      @"Event Name": @"Testing with integers",
+                                      @"Event Name": @"Testing annotations",
                                       @"Has Music": @"YES",
                                       @"Attendance": @56,
                                       @"ImageURL": @"https://bit.ly/2SYp8Za",
                                       @"Description": @"Another cool description",
                                       @"Age Restriction": @69,
-                                      @"Location": @"37.777937 -122.415954",
+                                      @"Location": @"37.788321 -122.422058",
                                       @"Vibes": @[@"Vibe1",@"Vibe2",@"Vibe3"],
                                       @"MinPeople":@"1",
                                       @"MaxPeople":@"500"

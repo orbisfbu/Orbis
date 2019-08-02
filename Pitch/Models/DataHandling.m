@@ -75,7 +75,6 @@ static NSString * const USER_BIO_KEY = @"Bio";
 - (void)addEventToDatabase:(Event *)definedEvent{
     NSDictionary *eventInfo = @{
                                 EVENT_CREATOR_KEY: [UserInSession shared].sharedUser.userNameString,
-                                EVENT_HAS_MUSIC_KEY: definedEvent.eventHasMusic,
                                 EVENT_ATTENDANCE_KEY: @(definedEvent.eventAttendanceCount),
                                 EVENT_IMAGE_URL_KEY: definedEvent.eventImageURLString,
                                 EVENT_AGE_RESTRICTION_KEY: @(definedEvent.eventAgeRestriction),

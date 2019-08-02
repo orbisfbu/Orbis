@@ -19,7 +19,6 @@
     if (self) {
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
-        self.eventHasMusic = snapshotDictionary[@"Has Music"];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
         self.eventLocationString = snapshotDictionary[@"Location"];
@@ -35,6 +34,7 @@
         NSNumber  *latitudeNum = [NSNumber numberWithFloat: [latitudeString floatValue]];
         NSNumber  *longitudeNum = [NSNumber numberWithFloat: [longitudeString floatValue]];
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
+        
     }
     return self;
 }
