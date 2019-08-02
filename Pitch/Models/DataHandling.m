@@ -30,8 +30,10 @@ static NSString * const USER_FIRSTNAME_KEY = @"First Name";
 static NSString * const USER_LASTNAME_KEY = @"Last Name";
 static NSString * const USER_EMAIL_KEY = @"Email";
 static NSString * const USER_PROFILE_IMAGE_KEY = @"ProfileImageURL";
-static NSString * const USER_SCREEN_NAME_KEY = @"Username";
+static NSString * const USERNAME_KEY = @"Username";
 static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
+//set this text to some default text or something like "change bio now!"
+static NSString * const USER_BIO_KEY = @"Bio";
 
 @interface DataHandling()
 @property (nonatomic, readwrite) FIRFirestore *database;
@@ -97,7 +99,6 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID{
     NSString *fullName = thisUser.userNameString;
     NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
-    NSString *profileImageURLString = thisUser.profileImageURLString;
     NSMutableDictionary *userInfoDict = [NSMutableDictionary new];
     if ([nameArray objectAtIndex:0]) {
         [userInfoDict setObject:[nameArray objectAtIndex:0] forKey:USER_FIRSTNAME_KEY];
@@ -107,10 +108,10 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
     }
     NSDictionary *userInfo = @{ USER_FIRSTNAME_KEY: [nameArray objectAtIndex:0],
                                 USER_LASTNAME_KEY: [nameArray  objectAtIndex:1],
-                                USER_PROFILE_IMAGE_KEY : profileImageURLString,
+                                USER_PROFILE_IMAGE_KEY : thisUser.profileImageURLString,
                                 USER_EMAIL_KEY: thisUser.email,
-                                USER_PROFILE_IMAGE_KEY: profileImageURLString,
-                                USER_SCREEN_NAME_KEY: thisUser.screenNameString,
+                                USER_PROFILE_IMAGE_KEY: thisUser.profileImageURLString,
+                                USERNAME_KEY: thisUser.screenNameString,
                                 USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString
                                 };
     [[[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:createdUserID] setData:userInfo
