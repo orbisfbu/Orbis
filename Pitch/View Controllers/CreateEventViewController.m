@@ -85,25 +85,21 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void) createEventButtonPressed
 {
     NSDictionary *eventDefinition = @{
-                                      @"Created By": @"Elizabeth",
-                                      @"Event Name": @"Event after eventDetails",
+                                      @"Created By": @"Sebastian Bernal",
+                                      @"Event Name": @"Testing with integers",
                                       @"Has Music": @"YES",
-                                      @"Attendance": @"8",
-                                      @"ImageURL": @"https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwj_15rNj9vjAhVFu54KHQWyDXAQjRx6BAgBEAU&url=https%3A%2F%2Fwww.festicket.com%2Fmagazine%2Fdiscover%2Ftop-20-music-festivals-Europe%2F&psig=AOvVaw2JAA6zSvLSfHHv1W1_awOl&ust=1564523774410326",
-                                      @"Description": @"testing",
-                                      @"Age Restriction": @"21",
-                                      @"Location": @"37.735390 -122.501310"
+                                      @"Attendance": @56,
+                                      @"ImageURL": @"https://bit.ly/2SYp8Za",
+                                      @"Description": @"Another cool description",
+                                      @"Age Restriction": @69,
+                                      @"Location": @"37.777937 -122.415954",
+                                      @"Vibes": @[@"Vibe1",@"Vibe2",@"Vibe3"],
+                                      @"MinPeople":@"1",
+                                      @"MaxPeople":@"500"
                                       };
     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:eventToAdd];
-    EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
-    newEventAnnotation.coordinate = eventToAdd.eventCoordinates;
-    newEventAnnotation.eventName = eventToAdd.eventName;
-    newEventAnnotation.eventCreator = eventToAdd.eventCreator;
-    newEventAnnotation.eventDescription = eventToAdd.eventDescription;
-    newEventAnnotation.eventAgeRestriction = eventToAdd.eventAgeRestriction;
-    newEventAnnotation.eventAttendanceCount = eventToAdd.eventAttendanceCount;
-    [self.delegate addThisAnnotationToMap:newEventAnnotation];
+    [self.delegate refreshAfterEventCreation];
 }
 
 

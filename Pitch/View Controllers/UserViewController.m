@@ -144,20 +144,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     }];
 }
 
-- (void) logoutUser {
-    NSError *signOutError;
-    BOOL status = [[FIRAuth auth] signOut:&signOutError];
-    if (!status) {
-        NSLog(@"Error signing out: %@", signOutError);
-        return;
-    } else {
-        NSLog(@"Successfully signedout user %@", [FIRAuth auth].currentUser);
-        [FBSDKAccessToken setCurrentAccessToken:nil];
-        [FBSDKProfile setCurrentProfile:nil];
-        [self.delegate dismissViewController];
-    }
-}
-
 - (void) editButtonPressed {
     
 }
@@ -216,5 +202,19 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     }
 }
 
+
+- (void) logoutUser {
+    NSError *signOutError;
+    BOOL status = [[FIRAuth auth] signOut:&signOutError];
+    if (!status) {
+        NSLog(@"Error signing out: %@", signOutError);
+        return;
+    } else {
+        NSLog(@"Successfully signedout user %@", [FIRAuth auth].currentUser);
+        [FBSDKAccessToken setCurrentAccessToken:nil];
+        [FBSDKProfile setCurrentProfile:nil];
+        [self.delegate dismissViewController];
+    }
+}
 
 @end

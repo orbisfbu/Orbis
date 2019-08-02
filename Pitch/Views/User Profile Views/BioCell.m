@@ -7,19 +7,18 @@
 //
 
 #import "BioCell.h"
+#import "UserInSession.h"
 
 @implementation BioCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    [self.userBioLabel setText:@"This is an example bio that is been used for the purposes of showing how a bio would look like. 😏︎"];
+    [self.userBioLabel setText:[UserInSession shared].sharedUser.userBioString];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 @end

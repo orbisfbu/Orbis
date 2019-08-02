@@ -36,14 +36,14 @@ NS_ASSUME_NONNULL_BEGIN
 //calculate this distance using difference in coordinates or something
 //this distance should be set in explore view controller with the user's
 //current location on the map
-@property (nonatomic) int distanceFromUser;
+@property (nonatomic) int distanceFromUserInt;
+@property (nonatomic) int eventAgeRestrictionInt;
+@property (nonatomic) int eventAttendancCountInt;
 @property (strong, nonatomic) UIImage *eventImage;
 @property (strong, nonatomic) NSString *eventNameString;
 @property (strong, nonatomic) NSString *eventCreatorString;
 @property (strong, nonatomic) NSString *eventDescriptionString;
 @property (strong, nonatomic) NSString *eventImageURLString;
-@property (strong, nonatomic) NSString *eventAgeRestrictionString;
-@property (strong, nonatomic) NSString *eventAttendancCountString;
 @property (strong, nonatomic) NSArray *vibesArray;
 @property (strong, nonatomic) NSDictionary *pollsDictionary;
 

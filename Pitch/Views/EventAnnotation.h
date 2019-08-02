@@ -17,12 +17,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *eventName;
 @property (nonatomic, strong) NSString *eventCreator;
 @property (nonatomic, strong) NSString *eventDescription;
-@property (nonatomic) int *eventAgeRestriction;
-@property (nonatomic) int *eventAttendanceCount;
+@property (nonatomic) int eventAgeRestriction;
+@property (nonatomic) int eventAttendanceCount;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
 
--(instancetype)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier;
+- (instancetype)initWithAnnotation:(nullable id <MKAnnotation>)annotation reuseIdentifier:(nullable NSString *)reuseIdentifier;
 
 @end
 
