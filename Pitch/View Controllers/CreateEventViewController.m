@@ -29,6 +29,8 @@
 #import <MapKit/MKLocalSearch.h>
 #import <UITextView+Placeholder.h>
 #import "SearchResult.h"
+#import "Vibes.h"
+#import "CustomCollectionViewCell.h"
 
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
@@ -54,7 +56,7 @@ static int const X_OFFSET = 30;
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
 
-@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 //@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
@@ -65,6 +67,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UIButton *createEventButton;
 
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
+
+@property (strong, nonatomic) NSArray *vibesArray;
 
 // PAGE NAME
 @property (strong, nonatomic) NSString *pageName;
@@ -93,7 +97,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UILabel *descriptionLabel;
 @property (strong, nonatomic) UITextView *descriptionTextView;
 @property (strong, nonatomic) UILabel *vibesLabel;
-@property (strong, nonatomic) UIView *vibesSubview;
+@property (strong, nonatomic) UICollectionView *vibesCollectionView;
 @property (strong, nonatomic) UILabel *ageLabel;
 @property (strong, nonatomic) UIView *ageSubview;
 
@@ -114,7 +118,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.backButton setAlpha:0];
     [self.backButton setTransform:CGAffineTransformMakeRotation(M_PI_2)];
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+    [self.tap setCancelsTouchesInView:NO];
     [self.view addGestureRecognizer:self.tap];
+    self.vibesArray = [[Vibes sharedVibes] getVibesArray];
     [self createPageObjects];
     [self displayInitialPage];
 }
@@ -212,31 +218,47 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Description Label
     self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    [self.descriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.descriptionLabel setText:@"Description"];
     [self.view addSubview:self.descriptionLabel];
 
     // Create Description text Field
-    self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
+    self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event" attributes:nil];
+    self.descriptionTextView.layer.cornerRadius = 5;
+    [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.view addSubview:self.descriptionTextView];
     
     // Create Vibes Label
     self.vibesLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.vibesLabel setText:@"Vibes/Themes"];
     [self.view addSubview:self.vibesLabel];
     
-    // Create Vibes Sub View
-    self.vibesSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
-    [self.view addSubview:self.vibesSubview];
+    // Create Vibes Collection View
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT) collectionViewLayout:layout];
+    self.vibesCollectionView.layer.cornerRadius = 5;
+    [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
+    self.vibesCollectionView.delegate = self;
+    self.vibesCollectionView.dataSource = self;
+    [self.vibesCollectionView setAlwaysBounceHorizontal:YES];
+    [self.vibesCollectionView setShowsHorizontalScrollIndicator:NO];
+    [self.vibesCollectionView setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.vibesCollectionView setAllowsMultipleSelection:YES];
+    [self.view addSubview:self.vibesCollectionView];
     
     // Create Age Label
     self.ageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.ageLabel setText:@"Age Restrictions"];
     [self.view addSubview:self.ageLabel];
     
     // Create Age Sub View
     self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.5 * LABEL_HEIGHT)];
-
+    self.ageSubview.layer.cornerRadius = 5;
+    [self.ageSubview setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.view addSubview:self.ageSubview];
     
     // Create Cover Image Label
@@ -337,8 +359,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.descriptionLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
         self.descriptionTextView.frame = CGRectMake(self.descriptionTextView.frame.origin.x, self.descriptionLabel.frame.origin.y + self.descriptionLabel.frame.size.height + 10, self.descriptionTextView.frame.size.width, self.descriptionTextView.frame.size.height);
         self.vibesLabel.frame = CGRectMake(self.vibesLabel.frame.origin.x, self.descriptionTextView.frame.origin.y + self.descriptionTextView.frame.size.height + 10, self.vibesLabel.frame.size.width, self.vibesLabel.frame.size.height);
-        self.vibesSubview.frame = CGRectMake(self.vibesSubview.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.vibesSubview.frame.size.width, self.vibesSubview.frame.size.height);
-        self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.vibesSubview.frame.origin.y + self.vibesSubview.frame.size.height + 10, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
+        self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
+        self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y + self.vibesCollectionView.frame.size.height + 10, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
         self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.ageLabel.frame.origin.y + self.ageLabel.frame.size.height + 10, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
     }];
 }
@@ -349,7 +371,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.descriptionLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, self.view.frame.size.height, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
             self.descriptionTextView.frame = CGRectMake(self.descriptionTextView.frame.origin.x, self.view.frame.size.height, self.descriptionTextView.frame.size.width, self.descriptionTextView.frame.size.height);
             self.vibesLabel.frame = CGRectMake(self.vibesLabel.frame.origin.x, self.view.frame.size.height, self.vibesLabel.frame.size.width, self.vibesLabel.frame.size.height);
-            self.vibesSubview.frame = CGRectMake(self.vibesSubview.frame.origin.x, self.view.frame.size.height, self.vibesSubview.frame.size.width, self.vibesSubview.frame.size.height);
+            self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, self.view.frame.size.height, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
             self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, self.view.frame.size.height, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
             self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, self.view.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
         }];
@@ -358,7 +380,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.descriptionLabel.frame = CGRectMake(self.descriptionLabel.frame.origin.x, -self.descriptionLabel.frame.size.height, self.descriptionLabel.frame.size.width, self.descriptionLabel.frame.size.height);
             self.descriptionTextView.frame = CGRectMake(self.descriptionTextView.frame.origin.x, -self.descriptionTextView.frame.size.height, self.descriptionTextView.frame.size.width, self.descriptionTextView.frame.size.height);
             self.vibesLabel.frame = CGRectMake(self.vibesLabel.frame.origin.x, -self.vibesLabel.frame.size.height, self.vibesLabel.frame.size.width, self.vibesLabel.frame.size.height);
-            self.vibesSubview.frame = CGRectMake(self.vibesSubview.frame.origin.x, -self.vibesSubview.frame.size.height, self.vibesSubview.frame.size.width, self.vibesSubview.frame.size.height);
+            self.vibesCollectionView.frame = CGRectMake(self.vibesCollectionView.frame.origin.x, -self.vibesCollectionView.frame.size.height, self.vibesCollectionView.frame.size.width, self.vibesCollectionView.frame.size.height);
             self.ageLabel.frame = CGRectMake(self.ageLabel.frame.origin.x, -self.ageLabel.frame.size.height, self.ageLabel.frame.size.width, self.ageLabel.frame.size.height);
             self.ageSubview.frame = CGRectMake(self.ageSubview.frame.origin.x, -self.ageSubview.frame.size.height, self.ageSubview.frame.size.width, self.ageSubview.frame.size.height);
             
@@ -499,6 +521,42 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self dismissKeyboard];
     [self.searchLocationTextField setText:[self.recentSearchResults[indexPath.row] getName]];
+}
+
+- (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
+    [cell setLabelText:self.vibesArray[indexPath.item]];
+    [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    return cell;
+}
+
+- (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.vibesArray.count;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
+    [cell setLabelText:self.vibesArray[indexPath.row]];
+    [cell setNeedsLayout];
+    [cell layoutIfNeeded];
+    CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return CGSizeMake(size.width, 30);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    CustomCollectionViewCell *cell = (CustomCollectionViewCell *)[self.vibesCollectionView cellForItemAtIndexPath:indexPath];
+    [UIView animateWithDuration:0.3 animations:^{
+        cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
+    }];
+    [cell setBackgroundColor:[UIColor grayColor]];
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath {
+    CustomCollectionViewCell *cell = (CustomCollectionViewCell *)[self.vibesCollectionView cellForItemAtIndexPath:indexPath];
+    [UIView animateWithDuration:0.3 animations:^{
+        cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
+    }];
+    [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
 }
 
 @end
