@@ -64,7 +64,6 @@ static NSString * const USER_BIO_KEY = @"Bio";
          } else {
              for (FIRDocumentSnapshot *document in snapshot.documents) {
                  Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
-                 //NSLog(@"THIS IS AN ATTEMPT, %@", document.data[@"polls"][@"poll1"][@"OptionName1"]);
                  [eventsArray addObject:eventToAdd];
              }
          }
@@ -74,7 +73,7 @@ static NSString * const USER_BIO_KEY = @"Bio";
 
 - (void)addEventToDatabase:(Event *)definedEvent{
     NSDictionary *eventInfo = @{
-                                EVENT_CREATOR_KEY: [UserInSession shared].sharedUser.userNameString,
+                                EVENT_CREATOR_KEY: [UserInSession shared].sharedUser.nameString,
                                 EVENT_ATTENDANCE_KEY: @(definedEvent.eventAttendanceCount),
                                 EVENT_IMAGE_URL_KEY: definedEvent.eventImageURLString,
                                 EVENT_AGE_RESTRICTION_KEY: @(definedEvent.eventAgeRestriction),
@@ -96,7 +95,7 @@ static NSString * const USER_BIO_KEY = @"Bio";
 }
 
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID{
-    NSString *fullName = thisUser.userNameString;
+    NSString *fullName = thisUser.nameString;
     NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
     NSMutableDictionary *userInfoDict = [NSMutableDictionary new];
     if ([nameArray objectAtIndex:0]) {
@@ -110,7 +109,7 @@ static NSString * const USER_BIO_KEY = @"Bio";
                                 USER_PROFILE_IMAGE_KEY : thisUser.profileImageURLString,
                                 USER_EMAIL_KEY: thisUser.email,
                                 USER_PROFILE_IMAGE_KEY: thisUser.profileImageURLString,
-                                USERNAME_KEY: thisUser.screenNameString,
+                                USERNAME_KEY: thisUser.usernameString,
                                 USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString
                                 };
     [[[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:createdUserID] setData:userInfo

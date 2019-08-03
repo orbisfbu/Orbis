@@ -1,10 +1,6 @@
 //
 //  SearchResult.m
 //  Pitch
-//
-//  Created by mariobaxter on 8/1/19.
-//  Copyright © 2019 PitchFBU. All rights reserved.
-//
 
 #import "SearchResult.h"
 
@@ -24,7 +20,7 @@
 
 @implementation SearchResult
 
-- (instancetype)initWithDictionary:(NSDictionary *) dict {
+- (instancetype) initWithDictionary: (NSDictionary *) dict {
     self = [super init];
     if (self) {
         self.name = dict[@"name"];

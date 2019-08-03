@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MusicQueueCollectionViewCell" id="gTV-IL-0wX" customClass="MusicQueueCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="90" height="120"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="90" height="120"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Sgt. Pepper's Lonely Hearts Club" translatesAutoresizingMaskIntoConstraints="NO" id="Bac-4g-ikj">
+                        <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="90" id="RZD-sG-U0m"/>
+                            <constraint firstAttribute="height" constant="90" id="b0U-C5-hkO"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="JUMP!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JS8-oO-SLM">
+                        <rect key="frame" x="5" y="83" width="80" height="21"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Beatles" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n5G-nd-hsM">
+                        <rect key="frame" x="5" y="104" width="80" height="16"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="Bac-4g-ikj" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="54F-Ph-MOn"/>
+                <constraint firstItem="JS8-oO-SLM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="H1T-zb-2rY"/>
+                <constraint firstAttribute="trailing" secondItem="Bac-4g-ikj" secondAttribute="trailing" id="Mh1-mi-tcC"/>
+                <constraint firstItem="n5G-nd-hsM" firstAttribute="top" secondItem="JS8-oO-SLM" secondAttribute="bottom" id="O91-iZ-skz"/>
+                <constraint firstAttribute="bottom" secondItem="n5G-nd-hsM" secondAttribute="bottom" id="foh-Eb-N3w"/>
+                <constraint firstItem="Bac-4g-ikj" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="gGO-ku-zrK"/>
+                <constraint firstAttribute="trailing" secondItem="n5G-nd-hsM" secondAttribute="trailing" constant="5" id="uN4-XO-Ktx"/>
+                <constraint firstItem="n5G-nd-hsM" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="xpk-vC-Nkl"/>
+                <constraint firstAttribute="trailing" secondItem="JS8-oO-SLM" secondAttribute="trailing" constant="5" id="ynh-rg-T5I"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <size key="customSize" width="90" height="120"/>
+            <connections>
+                <outlet property="albumImageView" destination="Bac-4g-ikj" id="DTd-wV-IpE"/>
+                <outlet property="artistNameLabel" destination="n5G-nd-hsM" id="Lw7-RI-kcU"/>
+                <outlet property="nameLabel" destination="JS8-oO-SLM" id="3zr-by-iKS"/>
+            </connections>
+            <point key="canvasLocation" x="166.66666666666669" y="163.39285714285714"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="Sgt. Pepper's Lonely Hearts Club" width="1000" height="1000"/>
+    </resources>
+</document>

@@ -77,6 +77,9 @@
 		C1C3417122F207BA00A09666 /* MusicQueueViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417022F207BA00A09666 /* MusicQueueViewController.m */; };
 		C1C3417422F2083B00A09666 /* EventGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417322F2083B00A09666 /* EventGalleryViewController.m */; };
 		C1C3417722F3533D00A09666 /* SearchResult.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417622F3533D00A09666 /* SearchResult.m */; };
+		C1C3417E22F4E40800A09666 /* MusicQueueCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3417C22F4E40800A09666 /* MusicQueueCollectionViewCell.m */; };
+		C1C3417F22F4E40800A09666 /* MusicQueueCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3417D22F4E40800A09666 /* MusicQueueCollectionViewCell.xib */; };
+		C1C3418222F4E60400A09666 /* Song.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3418122F4E60400A09666 /* Song.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,6 +214,11 @@
 		C1C3417322F2083B00A09666 /* EventGalleryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventGalleryViewController.m; sourceTree = "<group>"; };
 		C1C3417522F3533D00A09666 /* SearchResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchResult.h; sourceTree = "<group>"; };
 		C1C3417622F3533D00A09666 /* SearchResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchResult.m; sourceTree = "<group>"; };
+		C1C3417B22F4E40800A09666 /* MusicQueueCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicQueueCollectionViewCell.h; sourceTree = "<group>"; };
+		C1C3417C22F4E40800A09666 /* MusicQueueCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicQueueCollectionViewCell.m; sourceTree = "<group>"; };
+		C1C3417D22F4E40800A09666 /* MusicQueueCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MusicQueueCollectionViewCell.xib; sourceTree = "<group>"; };
+		C1C3418022F4E60400A09666 /* Song.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Song.h; sourceTree = "<group>"; };
+		C1C3418122F4E60400A09666 /* Song.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Song.m; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -337,6 +345,8 @@
 				781A941522ECB184002966B5 /* UserInSession.m */,
 				C1C3417522F3533D00A09666 /* SearchResult.h */,
 				C1C3417622F3533D00A09666 /* SearchResult.m */,
+				C1C3418022F4E60400A09666 /* Song.h */,
+				C1C3418122F4E60400A09666 /* Song.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -457,6 +467,9 @@
 				C1C3416A22F0E36500A09666 /* DragCell.h */,
 				C1C3416B22F0E36500A09666 /* DragCell.m */,
 				C1C3416C22F0E36500A09666 /* DragCell.xib */,
+				C1C3417B22F4E40800A09666 /* MusicQueueCollectionViewCell.h */,
+				C1C3417C22F4E40800A09666 /* MusicQueueCollectionViewCell.m */,
+				C1C3417D22F4E40800A09666 /* MusicQueueCollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -598,6 +611,7 @@
 				C1616E3822EF8A7A004B536B /* GothamRounded-Bold.otf in Resources */,
 				C1C3416522F0C21900A09666 /* ApplyFiltersCell.xib in Resources */,
 				06A909C322E67A0500CD2969 /* LocationCell.xib in Resources */,
+				C1C3417F22F4E40800A09666 /* MusicQueueCollectionViewCell.xib in Resources */,
 				C1616E1022EB98C8004B536B /* FirstLastNameCell.xib in Resources */,
 				C127D52D22DFE6A3009963B0 /* UserViewController.xib in Resources */,
 				C1C3416922F0C21900A09666 /* EventPictureCell.xib in Resources */,
@@ -744,6 +758,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C1C3418222F4E60400A09666 /* Song.m in Sources */,
 				C1616E0522EB920D004B536B /* EventListCell.m in Sources */,
 				C1C3416622F0C21900A09666 /* LogoutCell.m in Sources */,
 				C1616E4022F0A7D2004B536B /* Filters.m in Sources */,
@@ -778,6 +793,7 @@
 				C127D52C22DFE6A3009963B0 /* UserViewController.m in Sources */,
 				C138EDDC22DFAD9F00AAA0D0 /* AppDelegate.m in Sources */,
 				C1616E0A22EB931F004B536B /* EventsCollectionViewCell.m in Sources */,
+				C1C3417E22F4E40800A09666 /* MusicQueueCollectionViewCell.m in Sources */,
 				C14E1A0422E2768B00883CFB /* CustomCollectionViewCell.m in Sources */,
 				C14E19FA22E23BE200883CFB /* NumberOfPeopleCell.m in Sources */,
 				06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */,

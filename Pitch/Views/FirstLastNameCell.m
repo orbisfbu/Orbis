@@ -13,7 +13,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    self.fullNameLabel.text = [UserInSession shared].sharedUser.userNameString;
+    self.fullNameLabel.text = [UserInSession shared].sharedUser.nameString;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
