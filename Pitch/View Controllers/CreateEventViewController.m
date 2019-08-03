@@ -759,6 +759,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             for (NSDictionary *venueDict in venuesDict) {
                 SearchResult *result = [[SearchResult alloc] initWithDictionary:venueDict];
                 [self.recentSearchResults addObject:result];
+                NSLog(@"%@", [result getName]);
             }
             [self.searchResultsTableView reloadData];
         }
@@ -768,6 +769,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if ([self.pageName isEqualToString:INITIAL_VIEW]) {
+        NSLog(@"IN CFRAIP");
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         [cell.textLabel setText:[NSString stringWithFormat:@"%@", [(SearchResult *)self.recentSearchResults[indexPath.row] getName]]];
         return cell;
@@ -782,7 +784,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+    if ([self.pageName isEqualToString:INITIAL_VIEW]) {
         return self.recentSearchResults.count;
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         return self.songsArray.count;
