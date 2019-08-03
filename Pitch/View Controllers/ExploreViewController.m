@@ -28,7 +28,7 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate, UpdateAnnotationInfoDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -37,6 +37,7 @@
 @property (nonatomic) BOOL filterMenuIsShowing;
 @property (strong, nonatomic) UITableView *dropDownFilterTV;
 @property (strong, nonatomic) NSMutableArray <Event *> *eventsArray;
+@property (strong, nonatomic) NSMutableArray <Event *> *filteredEventsArray;
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
 @property (nonatomic, readwrite) FIRFirestore *db;
 @property (strong, nonatomic) VibesCell *vibesCell;
@@ -44,13 +45,8 @@
 @property (strong, nonatomic) NumberOfPeopleCell *numberOfPeopleCell;
 @property (strong, nonatomic) AgeCell *ageCell;
 @property (strong, nonatomic) ApplyFiltersCell *applyFiltersCell;
-
-@property (nonatomic) UIStoryboard *detailsSB;
-@property (nonatomic) EventDetailsViewController *detailedEventVC;
-@property (nonatomic) MusicQueueViewController *musicQueueVC;
-@property (nonatomic) EventGalleryViewController *eventGalleryVC;
-@property (nonatomic) UITabBarController *eventSelectedTabBarController;
 @property BOOL isScrollingTVUp;
+@property BOOL filtersWereSet;
 
 @end
 
@@ -58,15 +54,14 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    //this is for the user location
-//    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-//    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-//    [self.locationManager startUpdatingLocation];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
-    [self createTabBarControllerAndItems];
+    self.filtersWereSet = NO;
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
     self.photoMap.delegate = self;
@@ -114,28 +109,17 @@
     self.isScrollingTVUp = NO;
 }
 
-
-- (void)createTabBarControllerAndItems{
-    self.detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
-    self.detailedEventVC = (EventDetailsViewController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
-    self.musicQueueVC = (MusicQueueViewController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
-    self.eventGalleryVC = (EventGalleryViewController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
-    self.eventSelectedTabBarController = (UITabBarController *)[self.detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
-    [self.eventSelectedTabBarController.tabBar setBackgroundColor:UIColorFromRGB(0x21ce99)];
-    self.eventSelectedTabBarController.tabBar.translucent = YES;
-    self.eventSelectedTabBarController.selectedIndex = 1;
-    self.eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    self.eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    self.eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-}
-
-
 - (void)refreshEventsArray {
     [self.dataHandlingObject getEventsFromDatabase];
 }
 
-- (void)populateMapWithEvents {
-    if (self.eventsArray.count > 0)
+- (void)populateMapWithEventswithFilter:(BOOL)filterValue{
+    if (self.photoMap.annotations.count != 0){
+        [self.photoMap removeAnnotations: self.photoMap.annotations];
+        
+    }
+    
+    if (self.eventsArray.count > 0 && !self.filtersWereSet)
     {
         for (Event *thisEvent in self.eventsArray)
         {
@@ -148,22 +132,53 @@
             newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
             newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
             [self.photoMap addAnnotation:newEventAnnotation];
+            //NSLog(@"NUMBER OF ANNOTATIONS RENDERED ON MAP: %lu", self.photoMap.annotations.count);
+        }
+    }
+    
+    else if (self.filteredEventsArray > 0 && self.filtersWereSet){
+        NSLog(@"Filtered events array is populated since filters were applied");
+        for (Event *thisEvent in self.filteredEventsArray)
+        {
+            EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
+            newEventAnnotation.coordinate = thisEvent.eventCoordinates;
+            newEventAnnotation.eventName = thisEvent.eventName;
+            newEventAnnotation.eventCreator = thisEvent.eventCreator;
+            newEventAnnotation.eventDescription = thisEvent.eventDescription;
+            newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
+            newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
+            newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
+            [self.photoMap addAnnotation:newEventAnnotation];
+            //NSLog(@"NUMBER OF ANNOTATIONS RENDERED ON MAP: %lu", self.photoMap.annotations.count);
         }
     }
 }
 
+
 - (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
 {
-    self.detailedEventVC.eventNameString = eventToPresent.eventName;
-    self.detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
-    self.detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
-    self.detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
+    UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
+    EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
+    detailedEventVC.delegate = self;
+    MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
+    EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
+    UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
+    [eventSelectedTabBarController.tabBar setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    eventSelectedTabBarController.tabBar.translucent = YES;
+    eventSelectedTabBarController.selectedIndex = 1;
+    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    detailedEventVC.eventNameString = eventToPresent.eventName;
+    detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
+    detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
+    detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
     //somewhere here set the detailedEventVC.distanceFromUser by finding the distance between user location and eventToPresent coordinates
-    self.detailedEventVC.eventAgeRestrictionInt = eventToPresent.eventAgeRestriction;
-    self.detailedEventVC.eventAttendancCountInt = eventToPresent.eventAttendanceCount;
-    self.detailedEventVC.distanceFromUserInt = 5;
-    self.eventSelectedTabBarController.viewControllers = @[self.musicQueueVC,self.detailedEventVC,self.eventGalleryVC];
-    [self presentViewController:self.eventSelectedTabBarController animated:YES completion:nil];
+    detailedEventVC.eventAgeRestrictionInt = eventToPresent.eventAgeRestriction;
+    detailedEventVC.eventAttendancCountInt = eventToPresent.eventAttendanceCount;
+    detailedEventVC.distanceFromUserInt = 5;
+    eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
+    [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
 }
 
 - (void) dismissKeyboardAndRemoveFilters {
@@ -193,6 +208,7 @@
 }
 
 - (IBAction) filterButtonPressed:(id)sender {
+    self.filtersWereSet = YES;
     if (!self.filterMenuIsShowing) {
         [self addFilterMenu];
     } else {
@@ -264,7 +280,7 @@
 
 - (void)refreshEventsDelegateMethod:(nonnull NSArray *)events {
     self.eventsArray = [NSMutableArray arrayWithArray:events];
-    [self populateMapWithEvents];
+    [self populateMapWithEventswithFilter:self.filtersWereSet];
 }
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
@@ -294,6 +310,7 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [mapView deselectAnnotation:view.annotation animated:YES];
+    
     [self presentEventDetailsView:(EventAnnotation *)view.annotation];
 }
 
@@ -316,6 +333,7 @@
 
 - (void)resetFiltersButtonWasPressed {
     NSLog(@"Resetting Filters...");
+    self.filtersWereSet = NO;
     [self.vibesCell resetVibes];
     [self.distanceCell resetDistance];
     [self.numberOfPeopleCell resetNumberOfPeople];
@@ -347,5 +365,11 @@
     [self refreshEventsArray];
 }
 
+
+- (void)updateAnnotationInfo {
+    
+    NSLog(@"UPDATED ANNOTATION WITH DATABASE INFORMATION");
+    [self refreshEventsArray];
+}
 
 @end

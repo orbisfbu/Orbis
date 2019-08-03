@@ -17,10 +17,8 @@
 - (instancetype)initWithDictionary:(NSDictionary *)snapshotDictionary {
     self = [super init];
     if (self) {
-        NSLog(@"BRUHHHHHH");
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
-        self.eventHasMusic = snapshotDictionary[@"Has Music"];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
         self.eventLocationString = snapshotDictionary[@"Location"];
@@ -29,7 +27,6 @@
         self.maxNumPeople = [snapshotDictionary[@"MaxPeople"] intValue];
         self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
         self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
-        NSLog(@"BRUHHHHHH");
         //formatting location string
         NSArray *locationComponents = [self.eventLocationString componentsSeparatedByString:@" "];
         NSString *latitudeString = [locationComponents objectAtIndex:0];
@@ -37,6 +34,7 @@
         NSNumber  *latitudeNum = [NSNumber numberWithFloat: [latitudeString floatValue]];
         NSNumber  *longitudeNum = [NSNumber numberWithFloat: [longitudeString floatValue]];
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
+        
     }
     return self;
 }

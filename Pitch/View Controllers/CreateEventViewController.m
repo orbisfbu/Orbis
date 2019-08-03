@@ -131,6 +131,24 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @implementation CreateEventViewController
 
 - (void)viewDidLoad {
+//
+//    NSDictionary *eventDefinition = @{
+//                                      @"Created By": @"Elizabeth Ziets",
+//                                      @"Event Name": @"Test for name change",
+//                                      @"Attendance": @20,
+//                                      @"ImageURL": @"https://bit.ly/2SYp8Za",
+//                                      @"Description": @"Another cool description",
+//                                      @"Age Restriction": @21,
+//                                      @"Location": @"37.802482 -122.420052",
+//                                      @"Vibes": @[@"Vibe1",@"Vibe2",@"Vibe3"],
+//                                      @"MinPeople":@"20",
+//                                      @"MaxPeople":@"40"
+//                                      };
+//    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
+//    [[DataHandling shared] addEventToDatabase:eventToAdd];
+//    [self.delegate refreshAfterEventCreation];
+////
+    
     [super viewDidLoad];
     self.vibesSet = [[NSMutableSet alloc] init];
     [self createSongsArray];
@@ -568,6 +586,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
+
 - (void) displayMusicPage {
     self.pageName = MUSIC_VIEW;
     [self.musicQueueCollectionView reloadData];
@@ -638,6 +657,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } completion:^(BOOL finished) {
         self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, self.view.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
     }];
+
 }
 
 - (void) nextButtonPressed {
@@ -677,7 +697,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     NSDictionary *eventDefinition = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
         @"Event Name": self.eventTitleTextField.text,
-        @"Has Music": @"YES",
         @"Attendance": @(1),
         @"ImageURL": @"https://bit.ly/2SYp8Za",
         @"Description": self.descriptionTextView.text,

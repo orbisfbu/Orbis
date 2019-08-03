@@ -16,9 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.roundedCornersView.layer.cornerRadius = 30;
-    self.roundedCornersView.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;;
+    
 }
 
 /*

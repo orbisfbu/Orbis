@@ -20,8 +20,10 @@
 @implementation EventDetailsViewController
 
 - (void)viewDidLoad {
+    
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.registrationDelegate = self;
+     [self.dataHandlingObject registrationCheck:self.eventNameString withUserID:[FIRAuth auth].currentUser.uid];
     //line below will disable scrolling until the user registers for the event
     //[self.scrollViewOutlet setContentOffset:self.scrollViewOutlet.contentOffset animated:NO];
     self.vibesArray = [NSArray arrayWithObjects:@"Vibe1",@"Vibe2",@"Vibe3",nil];
@@ -69,9 +71,6 @@
     self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 90, self.eventImageView.frame.size.height + 10, 180, 40)];
     [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
     [self.registerButton setTitle:@"Registered" forState:UIControlStateSelected];
-    [self.dataHandlingObject registrationCheck:self.eventNameString withUserID:[FIRAuth auth].currentUser.uid];
-    
-    
     [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
     [self.registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.registerButton.layer.cornerRadius = self.registerButton.frame.size.height/2;
@@ -80,7 +79,6 @@
     [self.registerButton setEnabled:YES];
     if (self.registrationStatusForEvent){
         [self.registerButton setSelected:YES];
-        
     }
     [self.registerButton addTarget:self action:@selector(registerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.roundedCornersViewOutlet addSubview:self.registerButton];
@@ -176,12 +174,15 @@
     if (self.registerButton.selected){
         [self.registerButton setSelected:NO];
         self.eventAttendancCountInt -= 1;
+        [[DataHandling shared] unregisterUser:self.eventNameString];
         [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
+        
     }
     else{
         [self.registerButton setSelected:YES];
-        NSLog(@"User has registered");
         self.eventAttendancCountInt += 1;
+        NSLog(@"Registered user; now in registered users array");
+        [[DataHandling shared] userRegisteredForEvent:self.eventNameString];
         [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
     }
     
@@ -190,16 +191,12 @@
 
 -(void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer
 {
-    if (self.registerButton.selected && self.registrationStatusForEvent == NO){
-        NSLog(@"Registered user since he/she wasn't already registered");
-        [[DataHandling shared] userRegisteredForEvent:self.eventNameString];
-        //self.registrationStatusForEvent = YES;
-    }
-    else if (!self.registerButton.selected && self.registrationStatusForEvent == YES){
-        [[DataHandling shared] unregisterUser:self.eventNameString];
-    }
+    
+    [self.delegate updateAnnotationInfo];
     
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
