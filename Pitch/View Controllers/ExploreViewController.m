@@ -155,9 +155,7 @@
     }
 }
 
-
-- (void)presentEventDetailsView: (EventAnnotation *)eventToPresent
-{
+- (void)presentEventDetailsView: (EventAnnotation *)eventToPresent {
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
     detailedEventVC.delegate = self;

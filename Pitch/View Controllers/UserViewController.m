@@ -23,7 +23,7 @@
 @import FirebaseAuth;
 
 // Constant max and min heights of profile background image view
-static double const BACKGORUND_IMAGE_MIN_HEIGHT = 50.0;
+static double const BACKGORUND_IMAGE_MIN_HEIGHT = 70.0;
 static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
 @interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LogoutUserDelegate>
@@ -89,12 +89,23 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 - (void) createPageObjects {
     // Add user background photo
     self.userBackgroundImageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 200)];
+    [self.view addSubview:self.userBackgroundImageView];
+    [self.userBackgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [[self.userBackgroundImageView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:YES];
+    [[self.userBackgroundImageView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:YES];
+    [[self.userBackgroundImageView.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:YES];
+    [[self.userBackgroundImageView.heightAnchor constraintEqualToConstant:200] setActive:YES];
     [self.userBackgroundImageView setImage:[UIImage imageNamed:@"default_background"]];
     [self.userBackgroundImageView setBackgroundColor:[UIColor blueColor]];
-    [self.view addSubview:self.userBackgroundImageView];
     
     // Add profile scroll view
     self.userProfileTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.userBackgroundImageView.frame.size.height) style:UITableViewStylePlain];
+    [self.view addSubview:self.userProfileTableView];
+    [self.userProfileTableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [[self.userProfileTableView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:YES];
+    [[self.userProfileTableView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:YES];
+    [[self.userProfileTableView.topAnchor constraintEqualToAnchor:self.userBackgroundImageView.bottomAnchor] setActive:YES];
+    [[self.userProfileTableView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor] setActive:YES];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"BioCell" bundle:nil] forCellReuseIdentifier:@"BioCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"ProfileLinksCell" bundle:nil] forCellReuseIdentifier:@"ProfileLinksCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventListCell" bundle:nil] forCellReuseIdentifier:@"EventListCell"];
@@ -102,7 +113,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"LogoutCell" bundle:nil] forCellReuseIdentifier:@"LogoutCell"];
     self.userProfileTableView.delegate = self;
     self.userProfileTableView.dataSource = self;
-    [self.view addSubview:self.userProfileTableView];
     
     // Add user profile photo
     self.userProfileImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, self.view.frame.size.height, self.view.frame.size.width/3, self.view.frame.size.width/3)];
@@ -114,6 +124,11 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     
     // Add username label
     self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 50, self.view.frame.size.height, 100, 20)];
+    [self.view addSubview:self.usernameLabel];
+    [self.usernameLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [[self.usernameLabel.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor] setActive:YES];
+    [[self.usernameLabel.topAnchor constraintEqualToAnchor:self.view.layoutMarginsGuide.topAnchor] setActive:YES];
+    [[self.usernameLabel.heightAnchor constraintEqualToConstant:20] setActive:YES];
     [self.usernameLabel setFont:[UIFont fontWithName:@"roboto" size:20]];
     [self.usernameLabel setClipsToBounds:YES];
     self.usernameLabel.layer.cornerRadius = 5;
@@ -122,16 +137,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.usernameLabel setCenter:CGPointMake(self.view.center.x, self.usernameLabel.center.y)];
     [self.usernameLabel setLayoutMargins:UIEdgeInsetsMake(5, 10, 5, 10)];
     [self.usernameLabel setBackgroundColor:UIColorFromRGB(0x157f5f)];
-    [self.view addSubview:self.usernameLabel];
-    
-    // Add edit profile button
-    self.editProfileButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 10 - 30, self.view.frame.size.height, 30, 30)];
-    [self.editProfileButton setImage:[UIImage imageNamed:@"edit"] forState:UIControlStateNormal];
-    [self.editProfileButton setBackgroundColor:UIColorFromRGB(0x157f5f)];
-    self.editProfileButton.layer.cornerRadius = 5;
-    [self.editProfileButton setContentEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
-    [self.editProfileButton addTarget:self action:@selector(editButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.editProfileButton];
 }
 
 - (void) createUserProfile {
@@ -142,10 +147,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         self.usernameLabel.frame = CGRectMake(self.usernameLabel.frame.origin.x, 15, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height);
         self.editProfileButton.frame = CGRectMake(self.editProfileButton.frame.origin.x, 15, self.editProfileButton.frame.size.width, self.editProfileButton.frame.size.height);
     }];
-}
-
-- (void) editButtonPressed {
-    
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
