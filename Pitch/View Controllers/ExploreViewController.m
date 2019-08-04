@@ -208,7 +208,7 @@
 }
 
 - (IBAction) filterButtonPressed:(id)sender {
-    self.filtersWereSet = YES;
+    // self.filtersWereSet = YES;
     if (!self.filterMenuIsShowing) {
         [self addFilterMenu];
     } else {
