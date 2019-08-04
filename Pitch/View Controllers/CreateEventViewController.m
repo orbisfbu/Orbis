@@ -814,7 +814,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self dismissKeyboard];
-    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+    if ([self.pageName isEqualToString:INITIAL_VIEW]) {
         [self.searchLocationTextField setText:[self.recentSearchResults[indexPath.row] getName]];
         self.coordinates = [self.recentSearchResults[indexPath.row] getCoordinates];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
