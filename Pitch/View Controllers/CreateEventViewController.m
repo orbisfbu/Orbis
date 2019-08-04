@@ -94,7 +94,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UIButton *locationCancelButton;
 @property (strong, nonatomic) UITableView *searchResultsTableView;
 @property BOOL shouldFireGETRequest; // BOOL for checking whether to call Foursquare API
-@property (strong, nonatomic) NSMutableArray<SearchResult *> *recentSearchResults;
+@property (strong, nonatomic) NSMutableArray <SearchResult *> *recentSearchResults;
 @property (nonatomic) CLLocationCoordinate2D coordinates;
 
 // Details View
@@ -702,9 +702,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Description": self.descriptionTextView.text,
         @"Age Restriction": @(self.ageRestriction),
         @"Location": [NSString stringWithFormat:@"%f %f", self.coordinates.latitude, self.coordinates.longitude],
-        @"Vibes": [self.vibesSet allObjects],
-        @"MinPeople":@(1),
-        @"MaxPeople":@(500)
+        @"Vibes": [self.vibesSet allObjects]
     };
     Event *event = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:event];

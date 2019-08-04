@@ -28,6 +28,7 @@
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
         self.title = @"This title doesn't matter";
+        self.photo = [UIImage imageNamed:@"eventImage"];
     }
     return self;
 }

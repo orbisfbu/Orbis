@@ -57,6 +57,7 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
     [self.locationManager startUpdatingLocation];
+
 }
 
 - (void) viewDidLoad {
@@ -208,7 +209,7 @@
 }
 
 - (IBAction) filterButtonPressed:(id)sender {
-    self.filtersWereSet = YES;
+    //self.filtersWereSet = YES;
     if (!self.filterMenuIsShowing) {
         [self addFilterMenu];
     } else {
@@ -302,7 +303,7 @@
     MKPinAnnotationView *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if (newEventAnnotationView == nil) {
         newEventAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
-        newEventAnnotationView.canShowCallout = NO;
+        newEventAnnotationView.canShowCallout = YES;
     }
     //[newEventAnnotationView addSubview:[[UIImageView alloc] initWithImage:newEventAnnotationView.eventImage]];
     return newEventAnnotationView;
@@ -360,6 +361,7 @@
     //now iterate through the current annotations on map and remove them all
     //then just add the annotations that are in the filtered events array
 }
+
 
 - (void)refreshAfterEventCreation {
     [self refreshEventsArray];
