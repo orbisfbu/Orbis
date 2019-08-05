@@ -54,9 +54,11 @@
         [cell.textLabel setText:@"Register to Edit Queue"];
         [cell.textLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:17]];
         [cell.textLabel setTextColor:UIColorFromRGB(0xf45532)];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     }
 }
