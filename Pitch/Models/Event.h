@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *eventLocationString;
 @property (nonatomic, strong) NSMutableArray *eventVibesArray;
 @property (nonatomic) CLLocationCoordinate2D eventCoordinates;
+@property (nonatomic, strong) NSMutableArray <NSString *> *registeredUsersArray;
 @property (nonatomic) int eventAttendanceCount;
 @property (nonatomic) int eventAgeRestriction;
 @property (nonatomic) int minNumPeople;

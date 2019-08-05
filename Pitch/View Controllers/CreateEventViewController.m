@@ -685,7 +685,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"ImageURL": @"https://bit.ly/2SYp8Za",
         @"Description": self.descriptionTextView.text,
         @"Age Restriction": @(self.ageRestriction),
-        @"Location": [NSString stringWithFormat:@"%f %f", self.coordinates.latitude, self.coordinates.longitude],
+        @"Location": [NSString stringWithFormat:@"%.5f %.5f", self.coordinates.latitude, self.coordinates.longitude],
         @"Vibes": [self.vibesSet allObjects]
     };
     Event *event = [[Event alloc] initWithDictionary:eventDefinition];

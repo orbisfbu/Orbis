@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIView *swipeIndicatorOutlet;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollViewOutlet;
 @property (weak, nonatomic) IBOutlet UILabel *queueSectionTitleLabel;
-
+@property (nonatomic) BOOL registrationStatusForEvent;
 @end
 
 NS_ASSUME_NONNULL_END

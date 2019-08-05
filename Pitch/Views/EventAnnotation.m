@@ -12,12 +12,8 @@
 @implementation EventAnnotation
 @dynamic image;
 
-- (id)initWithAnnotationWithImageWithEvent:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier withEvent:(Event *)thisEvent {
+- (instancetype)initWithAnnotation:(nullable id <MKAnnotation>)annotation reuseIdentifier:(nullable NSString *)reuseIdentifier{
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
-    if (self) {
-        self.image
-        
-    }
     return self;
 }
 
