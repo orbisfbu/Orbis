@@ -45,6 +45,7 @@
     self.eventNameViewOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;;
     [self.scrollViewOutlet setShowsVerticalScrollIndicator:NO];
     self.scrollViewOutlet.contentSize = CGSizeMake(self.view.frame.size.width, self.roundedCornersViewOutlet.frame.size.height + 500);
+    [self.scrollViewOutlet setBackgroundColor: UIColorFromRGB(0x21ce99)];
     [self.swipeIndicatorOutlet setBackgroundColor:[UIColor lightGrayColor]];
     [self.eventNameViewOutlet setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
