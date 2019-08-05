@@ -19,7 +19,6 @@
 @implementation EventDetailsViewController
 
 - (void)viewDidLoad {
-    
     self.dataHandlingObject = [DataHandling shared];
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
@@ -28,13 +27,11 @@
     [self createRegisterButton];
     [self createVibesLabelAndVibesCollection];
     [self createDistanceLabel];
-    //Mario --> going to have to init the scroll view with a content size that depends on the number of polls and poll options
     //that the event has; it might be "fixed" in the storyboard but I'm pretty sure the code will overwrite it
     [self createdAttendanceCountLabel];
     [self createAgeRestrictionLabel];
     [self createdPollSectionLabel];
     [self createExtraLabel];
-    
   
 }
 
@@ -62,20 +59,20 @@
     [self.eventImageView setImage:eventImage];
 }
 
--(void)createRegisterButton
-{
+- (void)createRegisterButton {
     self.registerButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2 - 90, self.eventImageView.frame.size.height + 10, 180, 40)];
-    [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
-    [self.registerButton setTitle:@"Registered" forState:UIControlStateSelected];
-    [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
+    if ([self.event.registeredUsersArray containsObject:[FIRAuth auth].currentUser.uid]) {
+        [self.registerButton setTitle:@"Registered" forState:UIControlStateNormal];
+        [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
+    } else {
+        [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
+        [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
+    }
     [self.registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.registerButton.layer.cornerRadius = self.registerButton.frame.size.height/2;
     [self.registerButton.titleLabel  setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     self.registerButton.alpha = 1;
     [self.registerButton setEnabled:YES];
-    if (self.registrationStatusForEvent){
-        [self.registerButton setSelected:YES];
-    }
     [self.registerButton addTarget:self action:@selector(registerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.roundedCornersViewOutlet addSubview:self.registerButton];
 }
@@ -165,27 +162,25 @@
     //[self.extraLabel.centerXAnchor constraintEqualToAnchor:self.roundedCornersViewOutlet.centerXAnchor].active = YES;
 }
 
--(void)registerButtonPressed
-{
-    if (self.registerButton.selected){
-        [self.registerButton setSelected:NO];
+- (void)registerButtonPressed {
+    if ([self.registerButton.titleLabel.text isEqualToString:@"Register"]){
+        [self.registerButton setSelected:YES];
+        [self.registerButton setTitle:@"Registered" forState:UIControlStateNormal];
+        self.eventAttendancCountInt += 1;
+        [[DataHandling shared] userRegisteredForEvent:self.event.eventName];
+        [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
+        NSLog(@"Registered user; now in registered users array");
+    } else {
+        [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
         self.eventAttendancCountInt -= 1;
         [[DataHandling shared] unregisterUser:self.event.eventName];
         [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
+        NSLog(@"Unregistered user; now not in registered users array");
     }
-    else{
-        [self.registerButton setSelected:YES];
-        self.eventAttendancCountInt += 1;
-        NSLog(@"Registered user; now in registered users array");
-        [[DataHandling shared] userRegisteredForEvent:self.event.eventName];
-        [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
-    }
-    
     [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
 }
 
--(void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer
-{
+- (void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
