@@ -125,6 +125,7 @@
         for (Event *thisEvent in self.eventsArray)
         {
             EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
+            newEventAnnotation.title = thisEvent.eventName;
             newEventAnnotation.coordinate = thisEvent.eventCoordinates;
             newEventAnnotation.eventName = thisEvent.eventName;
             newEventAnnotation.eventCreator = thisEvent.eventCreator;
@@ -132,6 +133,11 @@
             newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
             newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
             newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
+            NSURL *imageNSURL = [NSURL URLWithString:thisEvent.eventImageURLString];
+            NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
+            UIImage *eventImage = [UIImage imageWithData:imageData];
+            UIImage *resizedEventImage = [self resizeImage:eventImage withSize:CGSizeMake(30.0, 30.0)];
+            newEventAnnotation.image = resizedEventImage;
             [self.photoMap addAnnotation:newEventAnnotation];
             //NSLog(@"NUMBER OF ANNOTATIONS RENDERED ON MAP: %lu", self.photoMap.annotations.count);
         }
@@ -298,9 +304,10 @@
         return nil;
     }
     NSString *annotationIdentifier = @"Event";
-    MKPinAnnotationView *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
+    EventAnnotation *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if (newEventAnnotationView == nil) {
-        newEventAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+        newEventAnnotationView = [[EventAnnotation alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+        newEventAnnotationView.image = [UIImage imageNamed:@"eventImage"];
         newEventAnnotationView.canShowCallout = YES;
     }
     //[newEventAnnotationView addSubview:[[UIImageView alloc] initWithImage:newEventAnnotationView.eventImage]];
@@ -310,7 +317,7 @@
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [mapView deselectAnnotation:view.annotation animated:YES];
     
-    [self presentEventDetailsView:(EventAnnotation *)view.annotation];
+    //[self presentEventDetailsView:(EventAnnotation *)view.annotation];
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{

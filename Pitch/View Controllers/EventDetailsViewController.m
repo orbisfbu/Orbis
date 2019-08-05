@@ -23,12 +23,13 @@
     
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.registrationDelegate = self;
-     [self.dataHandlingObject registrationCheck:self.eventNameString withUserID:[FIRAuth auth].currentUser.uid];
-    //line below will disable scrolling until the user registers for the event
-    //[self.scrollViewOutlet setContentOffset:self.scrollViewOutlet.contentOffset animated:NO];
     self.vibesArray = [NSArray arrayWithObjects:@"Vibe1",@"Vibe2",@"Vibe3",nil];
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
+    [self.dataHandlingObject registrationCheck:self.eventNameString withUserID:[FIRAuth auth].currentUser.uid];
+    
+    //line below will disable scrolling until the user registers for the event
+    //[self.scrollViewOutlet setContentOffset:self.scrollViewOutlet.contentOffset animated:NO];
     [self createRegisterButton];
     [self createVibesLabelAndVibesCollection];
     [self createDistanceLabel];
@@ -38,6 +39,8 @@
     [self createAgeRestrictionLabel];
     [self createdPollSectionLabel];
     [self createExtraLabel];
+    
+  
 }
 
 
@@ -193,7 +196,7 @@
 {
     
     [self.delegate updateAnnotationInfo];
-    
+    [self.dataHandlingObject registrationCheck:self.eventNameString withUserID:[FIRAuth auth].currentUser.uid];
     [self dismissViewControllerAnimated:YES completion:nil];
     
     

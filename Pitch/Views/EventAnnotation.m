@@ -7,28 +7,16 @@
 //
 
 #import "EventAnnotation.h"
+#import "Event.h"
 
 @implementation EventAnnotation
+@dynamic image;
 
-- (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
-    UIImageView *resizeImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    
-    resizeImageView.contentMode = UIViewContentModeScaleAspectFill;
-    resizeImageView.image = image;
-    
-    UIGraphicsBeginImageContext(size);
-    [resizeImageView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return newImage;
-}
-
-- (instancetype)initWithAnnotation:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
+- (id)initWithAnnotationWithImageWithEvent:(id<MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier withEvent:(Event *)thisEvent {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.title = @"This title doesn't matter";
-        self.photo = [UIImage imageNamed:@"eventImage"];
+        self.image
+        
     }
     return self;
 }

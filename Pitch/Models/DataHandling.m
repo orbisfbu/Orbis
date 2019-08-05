@@ -77,8 +77,6 @@ static NSString * const USER_BIO_KEY = @"Bio";
                                 EVENT_ATTENDANCE_KEY: @(definedEvent.eventAttendanceCount),
                                 EVENT_IMAGE_URL_KEY: definedEvent.eventImageURLString,
                                 EVENT_AGE_RESTRICTION_KEY: @(definedEvent.eventAgeRestriction),
-                                EVENT_MINPEOPLE_KEY: [NSString stringWithFormat:@"%d", definedEvent.minNumPeople],
-                                EVENT_MAXPEOPLE_KEY: [NSString stringWithFormat:@"%d", definedEvent.maxNumPeople],
                                 EVENT_LOCATION_KEY: definedEvent.eventLocationString,
                                 EVENT_DESCRIPTION_KEY: definedEvent.eventDescription,
                                 EVENT_NAME_KEY: definedEvent.eventName,
@@ -149,12 +147,14 @@ static NSString * const USER_BIO_KEY = @"Bio";
     [queryToGetCurrentEvent getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if(error != nil){
             NSLog(@"Error retrieving event that has this array of registered users");
+            
         }
         else{
             for (FIRDocumentSnapshot *document in snapshot.documents){
                 
                 if ([document.data[@"Event Name"] isEqualToString:eventName]){
                     wasRegistered = YES;
+                    
                     [self.registrationDelegate checkForUserRegistrationDelegateMethod:wasRegistered];
                     
                 }
