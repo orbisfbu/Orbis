@@ -21,4 +21,13 @@
     // Configure the view for the selected state
 }
 
+- (IBAction)likeButtonPressed:(id)sender {
+    if (self.userDoesLike) {
+        [self.likeButton setImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
+    } else {
+        [self.likeButton setImage:[UIImage imageNamed:@"red_heart"] forState:UIControlStateNormal];
+    }
+    self.userDoesLike = !self.userDoesLike;
+}
+
 @end

@@ -52,6 +52,9 @@
                             <constraint firstAttribute="height" constant="30" id="sEx-B3-37N"/>
                         </constraints>
                         <state key="normal" title="Button" image="heart"/>
+                        <connections>
+                            <action selector="likeButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="gsy-wG-Z8J"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>
