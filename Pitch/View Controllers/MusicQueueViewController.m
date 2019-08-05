@@ -7,10 +7,11 @@
 //
 
 #import "MusicQueueViewController.h"
+#import "MusicQueueTableViewCell.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface MusicQueueViewController ()
+@interface MusicQueueViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @end
 
@@ -20,35 +21,40 @@
     [self configureInitialViewsAndGestures];
 }
 
-- (void)configureInitialViewsAndGestures{
-    
-    
-    self.queueSectionTabOutlet.layer.cornerRadius = 30;
-    self.queueSectionTabOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
-    self.scrollViewOutlet.clipsToBounds = YES;
-    self.queueSectionTitleLabel.layer.cornerRadius = 30;
-    self.swipeIndicatorOutlet.layer.cornerRadius = self.swipeIndicatorOutlet.frame.size.height/2;
-    self.queueSectionTabOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;;
-    [self.scrollViewOutlet setShowsVerticalScrollIndicator:NO];
-    self.scrollViewOutlet.contentSize = CGSizeMake(self.view.frame.size.width, self.scrollViewSubview.frame.size.height + 500);
-    [self.swipeIndicatorOutlet setBackgroundColor:[UIColor lightGrayColor]];
-    [self.queueSectionTitleLabel setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
-    self.scrollViewSubview.backgroundColor = UIColorFromRGB(0x21ce99);
-    self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
+- (void)configureInitialViewsAndGestures {
     [super viewDidLoad];
+    self.titleView.layer.cornerRadius = 30;
+    self.titleView.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
+    [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
+    self.swipeIndicatorView.layer.cornerRadius = self.swipeIndicatorView.frame.size.height/2;
+    [self.swipeIndicatorView setBackgroundColor:[UIColor lightGrayColor]];
     UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
-    [self.clickableMapViewOutlet addGestureRecognizer:tapMap];
-    
+    [self.clickableMapView addGestureRecognizer:tapMap];
     UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
-    [self.queueSectionTabOutlet addGestureRecognizer: downGestureRecognizer];
+    [self.titleView addGestureRecognizer: downGestureRecognizer];
+    
+    [self.addSongButton setAlpha:0];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView registerNib:[UINib nibWithNibName:@"MusicQueueTableViewCell" bundle:nil] forCellReuseIdentifier:@"MusicQueueTableViewCell"];
+}
+
+- (void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)addSongButtonPressed:(id)sender {
     
 }
 
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
+    return cell;
+}
 
--(void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 10;
 }
 
 @end
