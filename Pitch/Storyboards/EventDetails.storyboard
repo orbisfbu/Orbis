@@ -142,6 +142,9 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dll-Yv-HBf" userLabel="ClickableMapViewOutlet">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="UN7-R5-ctg"/>
+                                </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jve-cU-aCX">
                                 <rect key="frame" x="0.0" y="50" width="414" height="50"/>
@@ -161,47 +164,32 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="0kU-tu-3iI"/>
                                     <constraint firstItem="IPx-ez-O8v" firstAttribute="top" secondItem="uep-Hm-MSL" secondAttribute="top" constant="8" id="AMM-Ya-AmG"/>
+                                    <constraint firstItem="KIU-Ck-fjm" firstAttribute="centerX" secondItem="Jve-cU-aCX" secondAttribute="centerX" id="KkM-1Y-9YN"/>
                                     <constraint firstItem="KIU-Ck-fjm" firstAttribute="top" secondItem="IPx-ez-O8v" secondAttribute="bottom" constant="6" id="XFy-Dr-2Zu"/>
-                                    <constraint firstItem="KIU-Ck-fjm" firstAttribute="centerX" secondItem="Jve-cU-aCX" secondAttribute="centerX" id="ZBL-Fo-eBH"/>
-                                    <constraint firstItem="IPx-ez-O8v" firstAttribute="centerX" secondItem="Jve-cU-aCX" secondAttribute="centerX" id="peU-ec-Op5"/>
+                                    <constraint firstItem="IPx-ez-O8v" firstAttribute="centerX" secondItem="Jve-cU-aCX" secondAttribute="centerX" id="ZRT-cE-Srl"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="uep-Hm-MSL"/>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yVH-rb-la6">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="rrK-Pt-4p3">
                                 <rect key="frame" x="0.0" y="100" width="414" height="747"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eyo-jo-xRO">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="747"/>
-                                        <color key="backgroundColor" red="0.0" green="0.99143940210000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" red="0.55634254220000001" green="0.97934550050000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="eyo-jo-xRO" secondAttribute="bottom" id="7O0-BQ-g9X"/>
-                                    <constraint firstItem="eyo-jo-xRO" firstAttribute="width" secondItem="yVH-rb-la6" secondAttribute="width" id="P7m-MG-g7h"/>
-                                    <constraint firstItem="eyo-jo-xRO" firstAttribute="top" secondItem="yVH-rb-la6" secondAttribute="top" id="SQN-ih-4Zv"/>
-                                    <constraint firstItem="eyo-jo-xRO" firstAttribute="height" secondItem="yVH-rb-la6" secondAttribute="height" priority="250" id="WZV-ce-Zgf"/>
-                                    <constraint firstItem="eyo-jo-xRO" firstAttribute="leading" secondItem="yVH-rb-la6" secondAttribute="leading" id="YFn-r6-gwL"/>
-                                    <constraint firstAttribute="trailing" secondItem="eyo-jo-xRO" secondAttribute="trailing" id="goH-kZ-gbi"/>
-                                </constraints>
-                            </scrollView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="yVH-rb-la6" firstAttribute="top" secondItem="Jve-cU-aCX" secondAttribute="bottom" id="3iv-JO-NcQ"/>
+                            <constraint firstItem="Jve-cU-aCX" firstAttribute="top" secondItem="dll-Yv-HBf" secondAttribute="bottom" id="56s-UM-7B8"/>
+                            <constraint firstItem="rrK-Pt-4p3" firstAttribute="leading" secondItem="yYF-D6-i3N" secondAttribute="leading" id="74M-vh-Ipf"/>
                             <constraint firstItem="dll-Yv-HBf" firstAttribute="top" secondItem="G8L-T5-6gK" secondAttribute="top" id="AB3-eh-Ygg"/>
+                            <constraint firstItem="yYF-D6-i3N" firstAttribute="trailing" secondItem="rrK-Pt-4p3" secondAttribute="trailing" id="C5p-fu-e3b"/>
                             <constraint firstAttribute="trailing" secondItem="dll-Yv-HBf" secondAttribute="trailing" id="EKE-ru-kxI"/>
-                            <constraint firstItem="yYF-D6-i3N" firstAttribute="bottom" secondItem="yVH-rb-la6" secondAttribute="bottom" id="HsZ-WR-iVW"/>
                             <constraint firstAttribute="trailing" secondItem="Jve-cU-aCX" secondAttribute="trailing" id="PJP-MF-vDd"/>
                             <constraint firstItem="dll-Yv-HBf" firstAttribute="leading" secondItem="G8L-T5-6gK" secondAttribute="leading" id="U7G-wv-JrK"/>
-                            <constraint firstItem="yVH-rb-la6" firstAttribute="leading" secondItem="yYF-D6-i3N" secondAttribute="leading" id="cEK-Gs-Zrp"/>
-                            <constraint firstItem="yYF-D6-i3N" firstAttribute="top" secondItem="yVH-rb-la6" secondAttribute="top" constant="-80" id="e8Q-yp-a4L"/>
-                            <constraint firstItem="yYF-D6-i3N" firstAttribute="trailing" secondItem="yVH-rb-la6" secondAttribute="trailing" id="gxB-NU-Wz9"/>
-                            <constraint firstItem="Jve-cU-aCX" firstAttribute="top" secondItem="G8L-T5-6gK" secondAttribute="top" constant="50" id="iRW-Xd-mEF"/>
+                            <constraint firstItem="rrK-Pt-4p3" firstAttribute="top" secondItem="Jve-cU-aCX" secondAttribute="bottom" id="iNx-DK-kw5"/>
+                            <constraint firstItem="yYF-D6-i3N" firstAttribute="bottom" secondItem="rrK-Pt-4p3" secondAttribute="bottom" id="kAD-ug-F6r"/>
                             <constraint firstItem="Jve-cU-aCX" firstAttribute="leading" secondItem="G8L-T5-6gK" secondAttribute="leading" id="qB1-XR-MFe"/>
-                            <constraint firstItem="Jve-cU-aCX" firstAttribute="top" secondItem="dll-Yv-HBf" secondAttribute="bottom" id="yXD-np-IcY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="yYF-D6-i3N"/>
                     </view>
@@ -211,8 +199,6 @@
                         <outlet property="clickableMapViewOutlet" destination="dll-Yv-HBf" id="92e-gx-eRI"/>
                         <outlet property="queueSectionTabOutlet" destination="Jve-cU-aCX" id="RsW-Cw-QmA"/>
                         <outlet property="queueSectionTitleLabel" destination="KIU-Ck-fjm" id="WhS-aq-ujp"/>
-                        <outlet property="roundedCornersViewOutlet" destination="eyo-jo-xRO" id="MIU-rq-SAo"/>
-                        <outlet property="scrollViewOutlet" destination="yVH-rb-la6" id="aPW-3e-Tgx"/>
                         <outlet property="swipeIndicatorOutlet" destination="IPx-ez-O8v" id="beb-uP-9N2"/>
                     </connections>
                 </viewController>

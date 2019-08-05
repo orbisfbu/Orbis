@@ -678,6 +678,18 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) publishEvent {
+    
+    NSMutableArray *songQueue = [[NSMutableArray alloc] init];
+    for (Song *song in self.queuedUpSongsArray) {
+        if (![song.albumName isEqualToString:@"default_album"]) {
+            NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
+            [songDict setValue:song.title forKey:@"Title"];
+            [songDict setValue:song.artistName forKey:@"Artist Name"];
+            [songDict setValue:song.albumName forKey:@"Album Name"];
+            [songQueue addObject:songDict];
+        }
+    }
+    
     NSDictionary *eventDefinition = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
         @"Event Name": self.eventTitleTextField.text,
@@ -686,7 +698,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Description": self.descriptionTextView.text,
         @"Age Restriction": @(self.ageRestriction),
         @"Location": [NSString stringWithFormat:@"%.5f %.5f", self.coordinates.latitude, self.coordinates.longitude],
-        @"Vibes": [self.vibesSet allObjects]
+        @"Vibes": [self.vibesSet allObjects],
+        @"Music Queue": songQueue
     };
     Event *event = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:event];
@@ -760,7 +773,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             for (NSDictionary *venueDict in venuesDict) {
                 SearchResult *result = [[SearchResult alloc] initWithDictionary:venueDict];
                 [self.recentSearchResults addObject:result];
-                NSLog(@"%@", [result getName]);
             }
             [self.searchResultsTableView reloadData];
         }

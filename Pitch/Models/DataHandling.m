@@ -33,6 +33,7 @@ static NSString * const USERNAME_KEY = @"Username";
 static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 //set this text to some default text or something like "change bio now!"
 static NSString * const USER_BIO_KEY = @"Bio";
+static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
 
 @interface DataHandling()
 @property (nonatomic, readwrite) FIRFirestore *database;
@@ -80,7 +81,8 @@ static NSString * const USER_BIO_KEY = @"Bio";
                                 EVENT_DESCRIPTION_KEY: definedEvent.eventDescription,
                                 EVENT_NAME_KEY: definedEvent.eventName,
                                 EVENT_VIBES_KEY: definedEvent.eventVibesArray,
-                                EVENT_REGISTERED_USERS_KEY: [NSMutableArray new]
+                                EVENT_REGISTERED_USERS_KEY: [NSMutableArray new],
+                                MUSIC_QUEUE_KEY: definedEvent.musicQueue
                                 };
     [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithAutoID] setData:eventInfo
          completion:^(NSError * _Nullable error) {

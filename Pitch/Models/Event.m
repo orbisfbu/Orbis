@@ -23,8 +23,6 @@
         self.eventDescription = snapshotDictionary[@"Description"];
         self.eventLocationString = snapshotDictionary[@"Location"];
         self.eventVibesArray = [NSMutableArray arrayWithArray:snapshotDictionary[@"Vibes"]];
-        self.minNumPeople = [snapshotDictionary[@"MinPeople"] intValue];
-        self.maxNumPeople = [snapshotDictionary[@"MaxPeople"] intValue];
         self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
         self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
         self.registeredUsersArray = snapshotDictionary[@"Registered Users"];
@@ -35,6 +33,8 @@
         NSNumber  *latitudeNum = [NSNumber numberWithFloat: [latitudeString floatValue]];
         NSNumber  *longitudeNum = [NSNumber numberWithFloat: [longitudeString floatValue]];
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
+        
+        self.musicQueue = snapshotDictionary[@"Music Queue"];
         
     }
     return self;
