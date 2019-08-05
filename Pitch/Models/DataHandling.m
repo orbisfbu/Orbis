@@ -63,7 +63,9 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
              NSLog(@"Error getting events from database: %@", error);
          } else {
              for (FIRDocumentSnapshot *document in snapshot.documents) {
-                 Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
+                 NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:document.data];
+                 [eventDict setValue:document.documentID forKey:@"ID"];
+                 Event *eventToAdd = [[Event alloc] initWithDictionary:eventDict];
                  [eventsArray addObject:eventToAdd];
              }
          }

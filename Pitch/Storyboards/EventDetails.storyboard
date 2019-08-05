@@ -9,6 +9,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="GothamRounded-Bold.otf">
+            <string>GothamRounded-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Event Details View Controller-->
         <scene sceneID="dAd-SO-LZY">
@@ -70,7 +75,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.55634254220000001" green="0.97934550050000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="ebe-Te-dUN" firstAttribute="width" secondItem="zbG-d9-6Zp" secondAttribute="width" id="0EZ-ov-msW"/>
                                     <constraint firstAttribute="bottom" secondItem="ebe-Te-dUN" secondAttribute="bottom" id="4Al-5J-ZkB"/>
@@ -163,14 +167,26 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tNk-aE-0bA">
+                                        <rect key="frame" x="374" y="4.5" width="30" height="57"/>
+                                        <fontDescription key="fontDescription" name="GothamRounded-Bold" family="Gotham Rounded" pointSize="45"/>
+                                        <state key="normal" title="+">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="addSongButtonPressed:" destination="uzk-tG-6De" eventType="touchUpInside" id="ZJc-LB-p8H"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="0kU-tu-3iI"/>
                                     <constraint firstItem="IPx-ez-O8v" firstAttribute="top" secondItem="uep-Hm-MSL" secondAttribute="top" constant="8" id="AMM-Ya-AmG"/>
+                                    <constraint firstItem="tNk-aE-0bA" firstAttribute="centerY" secondItem="KIU-Ck-fjm" secondAttribute="centerY" id="JZl-eR-IPJ"/>
                                     <constraint firstItem="KIU-Ck-fjm" firstAttribute="centerX" secondItem="Jve-cU-aCX" secondAttribute="centerX" id="KkM-1Y-9YN"/>
                                     <constraint firstItem="KIU-Ck-fjm" firstAttribute="top" secondItem="IPx-ez-O8v" secondAttribute="bottom" constant="6" id="XFy-Dr-2Zu"/>
                                     <constraint firstItem="IPx-ez-O8v" firstAttribute="centerX" secondItem="Jve-cU-aCX" secondAttribute="centerX" id="ZRT-cE-Srl"/>
+                                    <constraint firstItem="uep-Hm-MSL" firstAttribute="trailing" secondItem="tNk-aE-0bA" secondAttribute="trailing" constant="10" id="vXj-C1-6xq"/>
                                 </constraints>
                                 <viewLayoutGuide key="safeArea" id="uep-Hm-MSL"/>
                             </view>
@@ -196,10 +212,12 @@
                     <tabBarItem key="tabBarItem" title="" image="resizedQueueIcon" id="5jJ-Ud-T3e"/>
                     <size key="freeformSize" width="414" height="896"/>
                     <connections>
-                        <outlet property="clickableMapViewOutlet" destination="dll-Yv-HBf" id="92e-gx-eRI"/>
-                        <outlet property="queueSectionTabOutlet" destination="Jve-cU-aCX" id="RsW-Cw-QmA"/>
-                        <outlet property="queueSectionTitleLabel" destination="KIU-Ck-fjm" id="WhS-aq-ujp"/>
-                        <outlet property="swipeIndicatorOutlet" destination="IPx-ez-O8v" id="beb-uP-9N2"/>
+                        <outlet property="addSongButton" destination="tNk-aE-0bA" id="AGl-ih-eha"/>
+                        <outlet property="clickableMapView" destination="dll-Yv-HBf" id="92e-gx-eRI"/>
+                        <outlet property="swipeIndicatorView" destination="IPx-ez-O8v" id="beb-uP-9N2"/>
+                        <outlet property="tableView" destination="rrK-Pt-4p3" id="IDN-Cg-iXA"/>
+                        <outlet property="titleLabel" destination="KIU-Ck-fjm" id="WhS-aq-ujp"/>
+                        <outlet property="titleView" destination="Jve-cU-aCX" id="RsW-Cw-QmA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c10-Wd-fgG" userLabel="First Responder" sceneMemberID="firstResponder"/>

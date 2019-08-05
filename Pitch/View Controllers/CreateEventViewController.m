@@ -291,8 +291,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
     // Create Description text Field
     self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
-    self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event" attributes:nil];
+    self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event..." attributes:nil];
     self.descriptionTextView.layer.cornerRadius = 5;
+    [self.descriptionTextView setFont:[UIFont systemFontOfSize:18]];
     [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.view addSubview:self.descriptionTextView];
     
@@ -677,7 +678,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
-- (void) publishEvent {
+- (void)publishEvent {
     
     NSMutableArray *songQueue = [[NSMutableArray alloc] init];
     for (Song *song in self.queuedUpSongsArray) {
@@ -686,6 +687,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             [songDict setValue:song.title forKey:@"Title"];
             [songDict setValue:song.artistName forKey:@"Artist Name"];
             [songDict setValue:song.albumName forKey:@"Album Name"];
+            [songDict setValue:0 forKey:@"Number of Likes"];
             [songQueue addObject:songDict];
         }
     }

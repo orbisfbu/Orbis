@@ -21,7 +21,6 @@
 - (void)viewDidLoad {
     
     self.dataHandlingObject = [DataHandling shared];
-    self.vibesArray = [NSArray arrayWithObjects:@"Vibe1",@"Vibe2",@"Vibe3",nil];
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
     //line below will disable scrolling until the user registers for the event
@@ -37,15 +36,14 @@
     [self createExtraLabel];
 }
 
-
--(void)configureBaseViewsAndImage
-{
+- (void)configureBaseViewsAndImage {
     self.scrollViewOutlet.clipsToBounds = YES;
     self.eventNameViewOutlet.layer.cornerRadius = 30;
     self.swipeIndicatorOutlet.layer.cornerRadius = self.swipeIndicatorOutlet.frame.size.height/2;
     self.eventNameViewOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;;
     [self.scrollViewOutlet setShowsVerticalScrollIndicator:NO];
     self.scrollViewOutlet.contentSize = CGSizeMake(self.view.frame.size.width, self.roundedCornersViewOutlet.frame.size.height + 500);
+    [self.scrollViewOutlet setBackgroundColor: UIColorFromRGB(0x21ce99)];
     [self.swipeIndicatorOutlet setBackgroundColor:[UIColor lightGrayColor]];
     [self.eventNameViewOutlet setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
@@ -56,8 +54,8 @@
     UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [self.eventNameViewOutlet addGestureRecognizer: downGestureRecognizer];
-    self.eventNameLabel.text = self.eventNameString;
-    NSURL *imageNSURL = [NSURL URLWithString:self.eventImageURLString];
+    self.eventNameLabel.text = self.event.eventName;
+    NSURL *imageNSURL = [NSURL URLWithString:self.event.eventImageURLString];
     NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
     UIImage *eventImage = [UIImage imageWithData:imageData];
     [self.eventImageView setImage:eventImage];
@@ -172,14 +170,14 @@
     if (self.registerButton.selected){
         [self.registerButton setSelected:NO];
         self.eventAttendancCountInt -= 1;
-        [[DataHandling shared] unregisterUser:self.eventNameString];
+        [[DataHandling shared] unregisterUser:self.event.eventName];
         [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
     }
     else{
         [self.registerButton setSelected:YES];
         self.eventAttendancCountInt += 1;
         NSLog(@"Registered user; now in registered users array");
-        [[DataHandling shared] userRegisteredForEvent:self.eventNameString];
+        [[DataHandling shared] userRegisteredForEvent:self.event.eventName];
         [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
     }
     
@@ -193,16 +191,16 @@
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
-    [cell setLabelText:self.vibesArray[indexPath.item]];
+    [cell setLabelText:self.event.eventVibesArray[indexPath.item]];
     return cell;}
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.vibesArray.count;
+    return self.event.eventVibesArray.count;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
-    [cell setLabelText:self.vibesArray[indexPath.row]];
+    [cell setLabelText:self.event.eventVibesArray[indexPath.row]];
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
     CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];

@@ -13,6 +13,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Event : NSObject
+@property (nonatomic, strong) NSString *ID;
 @property (nonatomic, strong) NSString *eventCreator;
 @property (nonatomic, strong) NSString *eventName;
 @property (nonatomic, strong) NSMutableArray *eventPollsArray;
