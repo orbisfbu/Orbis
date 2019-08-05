@@ -23,17 +23,17 @@
 - (void)configureInitialViewsAndGestures{
     
     
-    self.roundedCornersViewOutlet.layer.cornerRadius = 30;
-    self.roundedCornersViewOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
+    self.queueSectionTabOutlet.layer.cornerRadius = 30;
+    self.queueSectionTabOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
     self.scrollViewOutlet.clipsToBounds = YES;
     self.queueSectionTitleLabel.layer.cornerRadius = 30;
     self.swipeIndicatorOutlet.layer.cornerRadius = self.swipeIndicatorOutlet.frame.size.height/2;
     self.queueSectionTabOutlet.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;;
     [self.scrollViewOutlet setShowsVerticalScrollIndicator:NO];
-    self.scrollViewOutlet.contentSize = CGSizeMake(self.view.frame.size.width, self.roundedCornersViewOutlet.frame.size.height + 500);
+    self.scrollViewOutlet.contentSize = CGSizeMake(self.view.frame.size.width, self.scrollViewSubview.frame.size.height + 500);
     [self.swipeIndicatorOutlet setBackgroundColor:[UIColor lightGrayColor]];
     [self.queueSectionTitleLabel setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
-    self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
+    self.scrollViewSubview.backgroundColor = UIColorFromRGB(0x21ce99);
     self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
     [super viewDidLoad];
     UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];

@@ -775,7 +775,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             for (NSDictionary *venueDict in venuesDict) {
                 SearchResult *result = [[SearchResult alloc] initWithDictionary:venueDict];
                 [self.recentSearchResults addObject:result];
-                NSLog(@"%@", [result getName]);
             }
             [self.searchResultsTableView reloadData];
         }
