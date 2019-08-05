@@ -35,8 +35,6 @@
     [self createAgeRestrictionLabel];
     [self createdPollSectionLabel];
     [self createExtraLabel];
-    
-  
 }
 
 
@@ -78,6 +76,7 @@
     [self.registerButton setEnabled:YES];
     if (self.registrationStatusForEvent){
         [self.registerButton setSelected:YES];
+        [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
     }
     [self.registerButton addTarget:self action:@selector(registerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.roundedCornersViewOutlet addSubview:self.registerButton];
@@ -119,7 +118,7 @@
 
 -(void)createdAttendanceCountLabel
 {
-    self.attendanceCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.distanceFromUserLabel.frame.origin.x, self.distanceFromUserLabel.frame.origin.y+self.distanceFromUserLabel.frame.size.height + 10, 40, 20)];
+    self.attendanceCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.distanceFromUserLabel.frame.origin.x, self.distanceFromUserLabel.frame.origin.y+self.distanceFromUserLabel.frame.size.height + 10, 40, 50)];
     [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
     [self.attendanceCountLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     [self.attendanceCountLabel sizeToFit];

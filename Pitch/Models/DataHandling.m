@@ -56,7 +56,7 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
 }
 
 - (void)getEventsFromDatabase {
-    NSMutableArray *eventsArray = [[NSMutableArray alloc] init];
+    NSMutableArray <Event*> *eventsArray = [[NSMutableArray alloc] init];
     [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
      getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
          if (error != nil) {
@@ -70,6 +70,43 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
          [self.delegate refreshEventsDelegateMethod:eventsArray];
      }];
 }
+
+
+- (void)getFilteredEventsFromDatabase: (NSDictionary*)filters{
+    
+    NSMutableArray <Event *> *filteredEventsArray = [[NSMutableArray alloc] init];
+    int ageRestriction = filters[@"Age Restriction"];
+    NSMutableSet *vibesSet = filters[@"Vibes"];
+    int distance = filters[@"Distance"];
+    int minNumPeople = filters[@"Min People"];
+    int maxNumPeople = filters[@"Max People"];
+    FIRCollectionReference *eventRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
+    FIRQuery *filterEventsQuery;
+    
+    if (ageRestriction != 0){
+        filterEventsQuery = [[[[eventRef queryWhereField:@"Age Restriction" isEqualTo:@(ageRestriction)] queryWhereField:@"Attendance" isGreaterThanOrEqualTo:@(minNumPeople)] queryWhereField:@"Attendance" isLessThanOrEqualTo:@(maxNumPeople)] queryWhereField:@"Distance" isEqualTo:@(5)];
+    }
+    else{
+        filterEventsQuery = [[[eventRef queryWhereField:@"Attendance" isGreaterThanOrEqualTo:@(minNumPeople)] queryWhereField:@"Attendance" isLessThanOrEqualTo:@(maxNumPeople)] queryWhereField:@"Distance" isEqualTo:@(5)];
+    }
+    
+    [filterEventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error getting filtered events from database: %@", error);
+        } else {
+            for (FIRDocumentSnapshot *document in snapshot.documents) {
+                NSArray *thisVibesArray = document.data[@"Vibes"];
+                NSMutableSet *vibesSetToCompare = [NSMutableSet setWithArray:thisVibesArray];
+                if ([vibesSetToCompare isEqualToSet:vibesSet]){
+                    Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
+                    [filteredEventsArray addObject:eventToAdd];
+                }
+            }
+        }
+        [self.filteredEventsDelegate refreshFilteredEventsDelegateMethod:filteredEventsArray];
+    }];
+}
+
 
 - (void)addEventToDatabase:(Event *)definedEvent{
     NSDictionary *eventInfo = @{
@@ -121,6 +158,7 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
           }
       }];
 }
+
 
 
 - (void)loadUserInfoAndApp: (NSString *)userID{

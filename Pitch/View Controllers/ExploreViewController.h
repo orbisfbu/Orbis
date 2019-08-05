@@ -14,6 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ExploreViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBarOutlet;
 @end
 
 NS_ASSUME_NONNULL_END
