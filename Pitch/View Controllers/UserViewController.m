@@ -95,7 +95,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [[self.userBackgroundImageView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:YES];
     [[self.userBackgroundImageView.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:YES];
     [[self.userBackgroundImageView.heightAnchor constraintEqualToConstant:200] setActive:YES];
-    [self.userBackgroundImageView setImage:[UIImage imageNamed:@"default_background"]];
+    [self.userBackgroundImageView setImage:[UIImage imageNamed:@"background_user_default"]];
     [self.userBackgroundImageView setBackgroundColor:[UIColor blueColor]];
     
     // Add profile scroll view
