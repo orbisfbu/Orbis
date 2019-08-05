@@ -35,6 +35,8 @@
         NSNumber  *longitudeNum = [NSNumber numberWithFloat: [longitudeString floatValue]];
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
         
+        self.musicQueue = snapshotDictionary[@"Music Queue"];
+        
     }
     return self;
 }

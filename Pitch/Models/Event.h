@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int eventAgeRestriction;
 @property (nonatomic) int minNumPeople;
 @property (nonatomic) int maxNumPeople;
+@property (strong, nonatomic) NSMutableArray *musicQueue;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @end
 
