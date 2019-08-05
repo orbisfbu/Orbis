@@ -126,29 +126,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) NSMutableArray *songsArray;
 @property (strong, nonatomic) NSMutableArray *queuedUpSongsArray;
 
+// Anchors
+
+
 @end
 
 @implementation CreateEventViewController
 
 - (void)viewDidLoad {
-//
-//    NSDictionary *eventDefinition = @{
-//                                      @"Created By": @"Elizabeth Ziets",
-//                                      @"Event Name": @"Test for name change",
-//                                      @"Attendance": @20,
-//                                      @"ImageURL": @"https://bit.ly/2SYp8Za",
-//                                      @"Description": @"Another cool description",
-//                                      @"Age Restriction": @21,
-//                                      @"Location": @"37.802482 -122.420052",
-//                                      @"Vibes": @[@"Vibe1",@"Vibe2",@"Vibe3"],
-//                                      @"MinPeople":@"20",
-//                                      @"MaxPeople":@"40"
-//                                      };
-//    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDefinition];
-//    [[DataHandling shared] addEventToDatabase:eventToAdd];
-//    [self.delegate refreshAfterEventCreation];
-////
-    
     [super viewDidLoad];
     self.vibesSet = [[NSMutableSet alloc] init];
     [self createSongsArray];
@@ -212,15 +197,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) createPageObjects {
-    
     // Create Event Title Text Label
-    self.eventTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
+    self.eventTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.eventTitleLabel setText:@"Title"];
     [self.eventTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.eventTitleLabel];
     
     // Create Event Title Text Field
-    self.eventTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, 2*LABEL_HEIGHT)];
+    self.eventTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     [self.eventTitleTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:40]];
     [self.eventTitleTextField setMinimumFontSize:30];
     [self.eventTitleTextField setAdjustsFontSizeToFitWidth:YES];
@@ -228,31 +212,31 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.eventTitleTextField];
     
     // Create Search Label
-    self.searchLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.searchLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.searchLabel setText:@"Location"];
     [self.searchLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.searchLabel];
     
     // Create a Pin Image View
-    self.pinImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.8*X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
+    self.pinImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
     [self.pinImageView setImage:[UIImage imageNamed:@"pin"]];
     [self.view addSubview:self.pinImageView];
     
     // Create Search Location Placeholder Label
-    self.searchLocationPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, self.view.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + X_OFFSET), LABEL_HEIGHT)];
+    self.searchLocationPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + X_OFFSET), LABEL_HEIGHT)];
     [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
     [self.searchLocationPlaceholderLabel setAlpha:0.2];
     [self.searchLocationPlaceholderLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self.view addSubview:self.searchLocationPlaceholderLabel];
     
     // Create Date Picker Label
-    self.datePickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.datePickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.datePickerLabel setText:@"Date"];
     [self.datePickerLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.datePickerLabel];
     
     // Create date picker
-    self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 150)];
+    self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150)];
     [self.datePicker addTarget:self action:@selector(pickerValueChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.datePicker];
     
@@ -261,13 +245,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
     NSString *date = [dateFormatter stringFromDate:[NSDate date]];
     CGSize size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:13]}];
-    self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width - X_OFFSET - size.width, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
     [self.dateLabel setText:[NSString stringWithFormat:@"%@", date]];
     [self.dateLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:13]];
     [self.view addSubview:self.dateLabel];
     
     // Create Search Location Text Field
-    self.searchLocationTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, self.view.frame.size.height, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT)];
+    self.searchLocationTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT)];
     [self.searchLocationTextField addTarget:self action:@selector(displayLocationView) forControlEvents:UIControlEventEditingDidBegin];
     [self.searchLocationTextField addTarget:self action:@selector(dismissLocationView) forControlEvents:UIControlEventEditingDidEnd];
     [self.searchLocationTextField addTarget:self action:@selector(refreshResultsTableView) forControlEvents:UIControlEventEditingChanged];
@@ -275,14 +259,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Location Cancel Button
     CGSize locationCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
-    self.locationCancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - locationCancelButtonSize.width - 15, self.view.frame.size.height, locationCancelButtonSize.width, LABEL_HEIGHT)];
+    self.locationCancelButton = [[UIButton alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - locationCancelButtonSize.width - 15, [[UIScreen mainScreen] bounds].size.height, locationCancelButtonSize.width, LABEL_HEIGHT)];
     [self.locationCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.locationCancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.locationCancelButton addTarget:self action:@selector(locationCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.locationCancelButton];
     
     // Create Next Button
-    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height - LABEL_HEIGHT - 4*X_OFFSET, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -292,28 +276,28 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.nextButton];
     
     // Create Search Results Table View
-    self.searchResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
+    self.searchResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
     self.searchResultsTableView.layer.cornerRadius = 5;
     self.searchResultsTableView.delegate = self;
     self.searchResultsTableView.dataSource = self;
     [self.view addSubview:self.searchResultsTableView];
     
     // Create Description Label
-    self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.descriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.descriptionLabel setText:@"Description"];
     [self.descriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.descriptionLabel];
 
     // Create Description text Field
-    self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
+    self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event" attributes:nil];
     self.descriptionTextView.layer.cornerRadius = 5;
     [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.view addSubview:self.descriptionTextView];
     
     // Create Vibes Label
-    self.vibesLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.vibesLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.vibesLabel setText:@"Vibes/Themes"];
     [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
@@ -322,7 +306,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Vibes Collection View
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
     [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT) collectionViewLayout:layout];
+    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT) collectionViewLayout:layout];
     self.vibesCollectionView.layer.cornerRadius = 5;
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     self.vibesCollectionView.delegate = self;
@@ -334,14 +318,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.vibesCollectionView];
     
     // Create Age Label
-    self.ageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.ageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.ageLabel setText:@"Age Restrictions"];
     [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.ageLabel];
     
     // Create Age Restrictions
-    self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
+    self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     [self.ageSubview setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.view addSubview:self.ageSubview];
     self.ageSubview.layer.cornerRadius = 5;
@@ -375,39 +359,39 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.ageSubview addSubview:rightLabel];
     
     // Create Cover Image Label
-    self.coverImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.coverImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.coverImageLabel setText:@"Cover Image"];
     [self.coverImageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.coverImageLabel];
     
     // Create Cover Image View
-    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, 0.6 * (self.view.frame.size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT)];
+    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, 0.6 * ([[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT)];
     [self.coverImageView setImage:[UIImage imageNamed:@"addcover"]];
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
-    self.additionalMediaLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
+    self.additionalMediaLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
     [self.additionalMediaLabel setText:@"Additional Media"];
     [self.additionalMediaLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.additionalMediaLabel];
 
 //    // Create Additional Media Subview
-    self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
+    self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     [self.view addSubview:self.additionalMediaSubview];
     
     // Create Music Page Description Label
-    self.musicPageDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
+    self.musicPageDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
     [self.musicPageDescriptionLabel setText:@"Add Music For Your Event"];
     [self.musicPageDescriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.musicPageDescriptionLabel];
     
     // Create Music Note Image View
-    self.musicNoteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.8*X_OFFSET, self.view.frame.size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
+    self.musicNoteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT)];
     [self.musicNoteImageView setImage:[UIImage imageNamed:@"note"]];
     [self.view addSubview:self.musicNoteImageView];
     
     // Create Search Music Text Field
-    self.searchMusicTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, self.view.frame.size.height, self.view.frame.size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
+    self.searchMusicTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self.searchMusicTextField setMinimumFontSize:30];
     [self.searchMusicTextField setAdjustsFontSizeToFitWidth:YES];
@@ -418,21 +402,21 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.searchMusicTextField];
 
     // Create Music Queue Label
-    self.musicQueueLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    self.musicQueueLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.musicQueueLabel setText:@"Your Music"];
     [self.musicQueueLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.musicQueueLabel];
     
     // Create Music Cancel Button
     CGSize musicCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
-    self.musicCancelButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width - musicCancelButtonSize.width - 15, self.view.frame.size.height, musicCancelButtonSize.width, LABEL_HEIGHT)];
+    self.musicCancelButton = [[UIButton alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - musicCancelButtonSize.width - 15, [[UIScreen mainScreen] bounds].size.height, musicCancelButtonSize.width, LABEL_HEIGHT)];
     [self.musicCancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.musicCancelButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.musicCancelButton addTarget:self action:@selector(musicCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.musicCancelButton];
     
     // Create Music Results Table View
-    self.musicResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, self.view.frame.size.height, self.view.frame.size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
+    self.musicResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
     self.musicResultsTableView.layer.cornerRadius = 5;
     self.musicResultsTableView.delegate = self;
     self.musicResultsTableView.dataSource = self;
@@ -441,7 +425,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Music Queue Collection View
     UICollectionViewFlowLayout *musicCVLayout = [[UICollectionViewFlowLayout alloc] init];
     [musicCVLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    self.musicQueueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET/2, self.view.frame.size.height, self.view.frame.size.width - X_OFFSET, 4*LABEL_HEIGHT) collectionViewLayout:musicCVLayout];
+    self.musicQueueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT) collectionViewLayout:musicCVLayout];
     [self.musicQueueCollectionView setBackgroundColor:UIColorFromRGB(0x21ce99)];
     self.musicQueueCollectionView.layer.cornerRadius = 5;
     [self.musicQueueCollectionView registerNib:[UINib nibWithNibName:@"MusicQueueCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MusicQueueCollectionViewCell"];
@@ -490,11 +474,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.datePickerLabel.frame = CGRectMake(self.datePickerLabel.frame.origin.x, -self.datePickerLabel.frame.size.height, self.datePickerLabel.frame.size.width, self.datePickerLabel.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, -self.datePicker.frame.size.height, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, -self.dateLabel.frame.size.height, self.dateLabel.frame.size.width, self.dateLabel.frame.size.height);
-        self.pinImageView.frame = CGRectMake(0, 2*X_OFFSET/3, 1.65*LABEL_HEIGHT, 1.65*LABEL_HEIGHT);
-        self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width), 2*LABEL_HEIGHT);
+        self.pinImageView.frame = CGRectMake(0, X_OFFSET, 1.65*LABEL_HEIGHT, 1.65*LABEL_HEIGHT);
+        self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, self.pinImageView.frame.origin.y, self.view.frame.size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width), 2*LABEL_HEIGHT);
         self.searchLocationPlaceholderLabel.frame = self.searchLocationTextField.frame;
         [self.searchLocationTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
-        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, 1.2*X_OFFSET, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
+        self.locationCancelButton.frame = CGRectMake(self.locationCancelButton.frame.origin.x, 1.5*self.pinImageView.frame.origin.y, self.locationCancelButton.frame.size.width, self.locationCancelButton.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.searchLocationTextField.frame.origin.y + self.searchLocationTextField.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
     }];
     self.datePicker.alpha = 0;
@@ -628,12 +612,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.searchMusicTextField setPlaceholder:@""];
     [UIView animateWithDuration:0.5 animations:^{
         self.musicPageDescriptionLabel.frame = CGRectMake(self.musicPageDescriptionLabel.frame.origin.x, -self.musicPageDescriptionLabel.frame.size.height, self.musicPageDescriptionLabel.frame.size.width, self.musicPageDescriptionLabel.frame.size.height);
-        self.musicNoteImageView.frame = CGRectMake(0, 2*X_OFFSET/3, 1.65*LABEL_HEIGHT, 1.65*LABEL_HEIGHT);
-        self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width, 2*X_OFFSET/3, self.view.frame.size.width - (self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + X_OFFSET), 2*LABEL_HEIGHT);
+        self.musicNoteImageView.frame = CGRectMake(0, X_OFFSET, 1.65*LABEL_HEIGHT, 1.65*LABEL_HEIGHT);
+        self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width, self.musicNoteImageView.frame.origin.y, self.view.frame.size.width - (self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + X_OFFSET), 2*LABEL_HEIGHT);
         [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:30]];
         self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, -self.musicQueueLabel.frame.size.height, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
         self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, -self.musicQueueCollectionView.frame.size.height, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
-        self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, 1.2*X_OFFSET, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
+        self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, 1.5*self.musicNoteImageView.frame.origin.y, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
         self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
     }];
 }
