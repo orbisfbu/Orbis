@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIImageView+AFNetworking.h"
+#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -32,7 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIButton *registerButton;
 @property (nonatomic) BOOL registrationStatusForEvent;
 
-
+// Event ID
+@property (strong, nonatomic) Event *event;
 
 //calculate this distance using difference in coordinates or something
 //this distance should be set in explore view controller with the user's
@@ -40,14 +42,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int distanceFromUserInt;
 @property (nonatomic) int eventAgeRestrictionInt;
 @property (nonatomic) int eventAttendancCountInt;
-@property (strong, nonatomic) UIImage *eventImage;
-@property (strong, nonatomic) NSString *eventNameString;
-@property (strong, nonatomic) NSString *eventCreatorString;
-@property (strong, nonatomic) NSString *eventDescriptionString;
-@property (strong, nonatomic) NSString *eventImageURLString;
-@property (strong, nonatomic) NSArray *vibesArray;
-@property (strong, nonatomic) NSDictionary *pollsDictionary;
-
 
 @end
 

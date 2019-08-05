@@ -49,8 +49,16 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
-    return cell;
+    if (!self.isRegistered && indexPath.row == 0) {
+        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        [cell.textLabel setText:@"Register to Edit Queue"];
+        [cell.textLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:17]];
+        [cell.textLabel setTextColor:UIColorFromRGB(0xf45532)];
+        return cell;
+    } else {
+        MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
+        return cell;
+    }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

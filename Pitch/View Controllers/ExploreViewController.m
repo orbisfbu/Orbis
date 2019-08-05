@@ -147,6 +147,7 @@
     
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
+    detailedEventVC.event = eventToPresent;
     MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
     EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
     UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
@@ -156,19 +157,6 @@
     eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    detailedEventVC.eventNameString = eventToPresent.eventName;
-    detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
-    detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
-    detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
-    
-    if ([self.eventToLoad.registeredUsersArray containsObject:[FIRAuth auth].currentUser.uid]){
-        detailedEventVC.registrationStatusForEvent = YES;
-        musicQueueVC.registrationStatusForEvent = YES;
-    }
-    //somewhere here set the detailedEventVC.distanceFromUser by finding the distance between user location and eventToPresent coordinates
-    detailedEventVC.eventAgeRestrictionInt = eventToPresent.eventAgeRestriction;
-    detailedEventVC.eventAttendancCountInt = eventToPresent.eventAttendanceCount;
-    detailedEventVC.distanceFromUserInt = 5;
     eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
     [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
 }

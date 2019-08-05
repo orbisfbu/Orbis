@@ -17,6 +17,7 @@
 - (instancetype)initWithDictionary:(NSDictionary *)snapshotDictionary {
     self = [super init];
     if (self) {
+        self.ID = snapshotDictionary[@"ID"];
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
