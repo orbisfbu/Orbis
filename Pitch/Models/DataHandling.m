@@ -23,8 +23,7 @@ static NSString * const EVENT_ATTENDANCE_KEY = @"Attendance";
 static NSString * const EVENT_LOCATION_KEY = @"Location";
 static NSString * const EVENT_DESCRIPTION_KEY = @"Description";
 static NSString * const EVENT_VIBES_KEY = @"Vibes";
-static NSString * const EVENT_MINPEOPLE_KEY = @"MinPeople";
-static NSString * const EVENT_MAXPEOPLE_KEY = @"MaxPeople";
+static NSString * const EVENT_REGISTERED_USERS_KEY = @"Registered Users";
 //constants for user addition to database
 static NSString * const USER_FIRSTNAME_KEY = @"First Name";
 static NSString * const USER_LASTNAME_KEY = @"Last Name";
@@ -78,12 +77,11 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
                                 EVENT_ATTENDANCE_KEY: @(definedEvent.eventAttendanceCount),
                                 EVENT_IMAGE_URL_KEY: definedEvent.eventImageURLString,
                                 EVENT_AGE_RESTRICTION_KEY: @(definedEvent.eventAgeRestriction),
-                                EVENT_MINPEOPLE_KEY: [NSString stringWithFormat:@"%d", definedEvent.minNumPeople],
-                                EVENT_MAXPEOPLE_KEY: [NSString stringWithFormat:@"%d", definedEvent.maxNumPeople],
                                 EVENT_LOCATION_KEY: definedEvent.eventLocationString,
                                 EVENT_DESCRIPTION_KEY: definedEvent.eventDescription,
                                 EVENT_NAME_KEY: definedEvent.eventName,
                                 EVENT_VIBES_KEY: definedEvent.eventVibesArray,
+                                EVENT_REGISTERED_USERS_KEY: [NSMutableArray new],
                                 MUSIC_QUEUE_KEY: definedEvent.musicQueue
                                 };
     [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithAutoID] setData:eventInfo
@@ -142,38 +140,32 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
 }
 
 
-- (void)registrationCheck: (NSString *)eventName withUserID:(NSString *)userID
-{
-    __block BOOL wasRegistered = NO;
-    FIRCollectionReference *eventsCollectionRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
-    FIRQuery *queryToGetCurrentEvent = [eventsCollectionRef queryWhereField:@"Registered Users" arrayContains:userID];
-    
-    [queryToGetCurrentEvent getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
-        if(error != nil){
-            NSLog(@"Error retrieving event that has this array of registered users");
+- (void)getInfoForEventAnnotionWithTitle: (NSString *)title withCoordinates: (CLLocationCoordinate2D)coordinates{
+    __block NSDictionary *eventInfoForAnnotation;
+    NSString *coordinateString = [NSString stringWithFormat:@"%.5f %.5f", coordinates.latitude, coordinates.longitude];
+    FIRQuery *eventsForAnnotationQuery =
+    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:title] queryWhereField:EVENT_LOCATION_KEY isEqualTo:coordinateString];
+    [eventsForAnnotationQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil){
+            NSLog(@"Error getting the event info for the annotation clicked");
         }
         else{
-            for (FIRDocumentSnapshot *document in snapshot.documents){
-                
-                if ([document.data[@"Event Name"] isEqualToString:eventName]){
-                    wasRegistered = YES;
-                    [self.registrationDelegate checkForUserRegistrationDelegateMethod:wasRegistered];
-                    
-                }
+            for (FIRDocumentSnapshot *document in snapshot.documents) {
+                eventInfoForAnnotation = document.data;
             }
+            [self.eventAnnotationDelegate eventDataForDetailedView:eventInfoForAnnotation];
         }
     }];
 }
 
 
-
 - (void)userRegisteredForEvent: (NSString *)eventName
 {
     __block FIRDocumentReference *eventToEditReference;
-    FIRQuery *eventsQuery =
+    FIRQuery *getEventsWithThisNameQuery =
     [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:eventName];
     
-    [eventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+    [getEventsWithThisNameQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil){
             NSLog(@"Erorr getting the event user registered for");
         }
@@ -194,10 +186,10 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
 - (void)unregisterUser: (NSString *)eventName
 {
     __block FIRDocumentReference *eventToEditReference;
-    FIRQuery *eventsQuery =
+    FIRQuery *getEventsWithThisNameQuery =
     [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:eventName];
     
-    [eventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
+    [getEventsWithThisNameQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil){
             NSLog(@"Erorr getting the event user registered for");
         }

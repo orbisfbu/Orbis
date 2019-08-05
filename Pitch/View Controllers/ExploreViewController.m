@@ -28,12 +28,13 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate, UpdateAnnotationInfoDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate, EventInfoForAnnotationDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
+@property (strong, nonatomic) Event* eventToLoad;
 @property (nonatomic) BOOL filterMenuIsShowing;
 @property (strong, nonatomic) UITableView *dropDownFilterTV;
 @property (strong, nonatomic) NSMutableArray <Event *> *eventsArray;
@@ -64,6 +65,7 @@
     self.filtersWereSet = NO;
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
+    self.dataHandlingObject.eventAnnotationDelegate = self;
     self.photoMap.delegate = self;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -116,23 +118,16 @@
 - (void)populateMapWithEventswithFilter:(BOOL)filterValue{
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
-        
     }
     
     if (self.eventsArray.count > 0 && !self.filtersWereSet)
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
-            newEventAnnotation.coordinate = thisEvent.eventCoordinates;
-            newEventAnnotation.eventName = thisEvent.eventName;
-            newEventAnnotation.eventCreator = thisEvent.eventCreator;
-            newEventAnnotation.eventDescription = thisEvent.eventDescription;
-            newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
-            newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
-            newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
-            [self.photoMap addAnnotation:newEventAnnotation];
-            //NSLog(@"NUMBER OF ANNOTATIONS RENDERED ON MAP: %lu", self.photoMap.annotations.count);
+            MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
+            eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+            eventAnnotationPoint.title = thisEvent.eventName;
+            [self.photoMap addAnnotation:eventAnnotationPoint];
         }
     }
     
@@ -140,24 +135,18 @@
         NSLog(@"Filtered events array is populated since filters were applied");
         for (Event *thisEvent in self.filteredEventsArray)
         {
-            EventAnnotation *newEventAnnotation = [[EventAnnotation alloc] init];
-            newEventAnnotation.coordinate = thisEvent.eventCoordinates;
-            newEventAnnotation.eventName = thisEvent.eventName;
-            newEventAnnotation.eventCreator = thisEvent.eventCreator;
-            newEventAnnotation.eventDescription = thisEvent.eventDescription;
-            newEventAnnotation.eventAgeRestriction = thisEvent.eventAgeRestriction;
-            newEventAnnotation.eventAttendanceCount = thisEvent.eventAttendanceCount;
-            newEventAnnotation.eventImageURLString = thisEvent.eventImageURLString;
-            [self.photoMap addAnnotation:newEventAnnotation];
-            //NSLog(@"NUMBER OF ANNOTATIONS RENDERED ON MAP: %lu", self.photoMap.annotations.count);
+            MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
+            eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+            eventAnnotationPoint.title = thisEvent.eventName;
+            [self.photoMap addAnnotation:eventAnnotationPoint];
         }
     }
 }
 
-- (void)presentEventDetailsView: (EventAnnotation *)eventToPresent {
+- (void)presentEventDetailsView: (Event *)eventToPresent {
+    
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
-    detailedEventVC.delegate = self;
     MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
     EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
     UITabBarController *eventSelectedTabBarController = (UITabBarController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailsTabBarController"];
@@ -171,6 +160,11 @@
     detailedEventVC.eventCreatorString = eventToPresent.eventCreator;
     detailedEventVC.eventDescriptionString = eventToPresent.eventDescription;
     detailedEventVC.eventImageURLString = eventToPresent.eventImageURLString;
+    
+    if ([self.eventToLoad.registeredUsersArray containsObject:[FIRAuth auth].currentUser.uid]){
+        detailedEventVC.registrationStatusForEvent = YES;
+        musicQueueVC.registrationStatusForEvent = YES;
+    }
     //somewhere here set the detailedEventVC.distanceFromUser by finding the distance between user location and eventToPresent coordinates
     detailedEventVC.eventAgeRestrictionInt = eventToPresent.eventAgeRestriction;
     detailedEventVC.eventAttendancCountInt = eventToPresent.eventAttendanceCount;
@@ -206,7 +200,7 @@
 }
 
 - (IBAction) filterButtonPressed:(id)sender {
-    // self.filtersWereSet = YES;
+    //self.filtersWereSet = YES;
     if (!self.filterMenuIsShowing) {
         [self addFilterMenu];
     } else {
@@ -297,19 +291,20 @@
         return nil;
     }
     NSString *annotationIdentifier = @"Event";
-    MKPinAnnotationView *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
+    EventAnnotation *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if (newEventAnnotationView == nil) {
-        newEventAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+        newEventAnnotationView = [[EventAnnotation alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+        UIImage *resizedEventImage = [self resizeImage:[UIImage imageNamed:@"eventImage"] withSize:CGSizeMake(30.0, 30.0)];
+        newEventAnnotationView.image = resizedEventImage;
         newEventAnnotationView.canShowCallout = NO;
     }
-    //[newEventAnnotationView addSubview:[[UIImageView alloc] initWithImage:newEventAnnotationView.eventImage]];
     return newEventAnnotationView;
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [mapView deselectAnnotation:view.annotation animated:YES];
+    [self.dataHandlingObject getInfoForEventAnnotionWithTitle:view.annotation.title withCoordinates:view.annotation.coordinate];
     
-    [self presentEventDetailsView:(EventAnnotation *)view.annotation];
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
@@ -358,16 +353,13 @@
     //now iterate through the current annotations on map and remove them all
     //then just add the annotations that are in the filtered events array
 }
-
 - (void)refreshAfterEventCreation {
     [self refreshEventsArray];
 }
 
-
-- (void)updateAnnotationInfo {
-    
-    NSLog(@"UPDATED ANNOTATION WITH DATABASE INFORMATION");
-    [self refreshEventsArray];
+- (void)eventDataForDetailedView:(nonnull NSDictionary *)eventData {
+    self.eventToLoad = [[Event alloc] initWithDictionary:eventData];
+    [self presentEventDetailsView:self.eventToLoad];
 }
 
 @end

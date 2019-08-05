@@ -12,9 +12,8 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface EventDetailsViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, EventRegistrationDelegate>
+@interface EventDetailsViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
-@property (nonatomic) BOOL registrationStatusForEvent;
 @end
 
 @implementation EventDetailsViewController
@@ -22,13 +21,11 @@
 - (void)viewDidLoad {
     
     self.dataHandlingObject = [DataHandling shared];
-    self.dataHandlingObject.registrationDelegate = self;
-     [self.dataHandlingObject registrationCheck:self.eventNameString withUserID:[FIRAuth auth].currentUser.uid];
-    //line below will disable scrolling until the user registers for the event
-    //[self.scrollViewOutlet setContentOffset:self.scrollViewOutlet.contentOffset animated:NO];
     self.vibesArray = [NSArray arrayWithObjects:@"Vibe1",@"Vibe2",@"Vibe3",nil];
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
+    //line below will disable scrolling until the user registers for the event
+    //[self.scrollViewOutlet setContentOffset:self.scrollViewOutlet.contentOffset animated:NO];
     [self createRegisterButton];
     [self createVibesLabelAndVibesCollection];
     [self createDistanceLabel];
@@ -38,6 +35,8 @@
     [self createAgeRestrictionLabel];
     [self createdPollSectionLabel];
     [self createExtraLabel];
+    
+  
 }
 
 
@@ -176,7 +175,6 @@
         self.eventAttendancCountInt -= 1;
         [[DataHandling shared] unregisterUser:self.eventNameString];
         [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
-        
     }
     else{
         [self.registerButton setSelected:YES];
@@ -191,12 +189,7 @@
 
 -(void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer
 {
-    
-    [self.delegate updateAnnotationInfo];
-    
     [self dismissViewControllerAnimated:YES completion:nil];
-    
-    
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {

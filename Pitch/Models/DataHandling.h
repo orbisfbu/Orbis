@@ -28,9 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)segueToAppUponLogin;
 @end
 
-@protocol EventRegistrationDelegate
-- (void)checkForUserRegistrationDelegateMethod: (BOOL)registerValue;
+@protocol EventInfoForAnnotationDelegate
+- (void)eventDataForDetailedView:(NSDictionary *)eventData;
 @end
+
 
 @interface DataHandling : NSObject
 + (instancetype)shared;
@@ -40,10 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadUserInfoAndApp: (NSString *)userID;
 - (void)userRegisteredForEvent: (NSString *)eventName;
 - (void)unregisterUser: (NSString *)eventName;
-- (void)registrationCheck: (NSString *)eventName withUserID:(NSString *)userID;
+- (void)getInfoForEventAnnotionWithTitle: (NSString *)title withCoordinates: (CLLocationCoordinate2D)coordinates;
 @property (nonatomic, weak) id<DataHandlingDelegate> delegate;
 @property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
-@property (nonatomic, weak) id<EventRegistrationDelegate> registrationDelegate;
+@property (nonatomic, weak) id<EventInfoForAnnotationDelegate> eventAnnotationDelegate;
 @end
 
 NS_ASSUME_NONNULL_END

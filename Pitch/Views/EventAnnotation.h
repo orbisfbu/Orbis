@@ -11,14 +11,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventAnnotation : MKPinAnnotationView
+@interface EventAnnotation : MKAnnotationView
 
+@property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) NSString *eventImageURLString;
 @property (nonatomic, strong) NSString *eventName;
 @property (nonatomic, strong) NSString *eventCreator;
 @property (nonatomic, strong) NSString *eventDescription;
 @property (nonatomic) int eventAgeRestriction;
 @property (nonatomic) int eventAttendanceCount;
+@property (nonatomic) BOOL eventRegistrationStatus;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic) NSString *title;
 
