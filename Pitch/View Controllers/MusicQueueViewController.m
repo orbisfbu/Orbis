@@ -62,12 +62,14 @@
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         [cell.songNameLabel setText:self.musicQueue[indexPath.row - 1][@"Title"]];
         [cell.artistNameLabel setText:self.musicQueue[indexPath.row - 1][@"Artist Name"]];
+        [cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row - 1][@"Number of Likes"]]];
         return cell;
     } else {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         [cell.songNameLabel setText:self.musicQueue[indexPath.row][@"Title"]];
         [cell.artistNameLabel setText:self.musicQueue[indexPath.row][@"Artist Name"]];
+        [cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row][@"Number of Likes"]]];
         return cell;
     }
 }

@@ -24,8 +24,10 @@
 - (IBAction)likeButtonPressed:(id)sender {
     if (self.userDoesLike) {
         [self.likeButton setImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
+        [self.numLikesLabel setText:[NSString stringWithFormat:@"%i", [self.numLikesLabel.text intValue] - 1]];
     } else {
         [self.likeButton setImage:[UIImage imageNamed:@"red_heart"] forState:UIControlStateNormal];
+        [self.numLikesLabel setText:[NSString stringWithFormat:@"%i", [self.numLikesLabel.text intValue] + 1]];
     }
     self.userDoesLike = !self.userDoesLike;
 }

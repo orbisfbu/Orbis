@@ -677,7 +677,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
-- (void) publishEvent {
+- (void)publishEvent {
     
     NSMutableArray *songQueue = [[NSMutableArray alloc] init];
     for (Song *song in self.queuedUpSongsArray) {
@@ -686,6 +686,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             [songDict setValue:song.title forKey:@"Title"];
             [songDict setValue:song.artistName forKey:@"Artist Name"];
             [songDict setValue:song.albumName forKey:@"Album Name"];
+            [songDict setValue:0 forKey:@"Number of Likes"];
             [songQueue addObject:songDict];
         }
     }
