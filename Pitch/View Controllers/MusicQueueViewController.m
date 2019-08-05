@@ -12,13 +12,14 @@
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface MusicQueueViewController () <UITableViewDelegate, UITableViewDataSource>
-
+@property (strong, nonatomic) NSMutableArray <NSMutableDictionary *> *musicQueue;
 @end
 
 @implementation MusicQueueViewController
 
 - (void)viewDidLoad {
     [self configureInitialViewsAndGestures];
+    self.musicQueue = self.event.musicQueue;
 }
 
 - (void)configureInitialViewsAndGestures {
@@ -56,15 +57,23 @@
         [cell.textLabel setTextColor:UIColorFromRGB(0xf45532)];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
+    } else if (!self.isRegistered) {
+        MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
+        [cell.songNameLabel setText:self.musicQueue[indexPath.row - 1][@"Title"]];
+        [cell.artistNameLabel setText:self.musicQueue[indexPath.row - 1][@"Artist Name"]];
+        return cell;
     } else {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
+        [cell.songNameLabel setText:self.musicQueue[indexPath.row][@"Title"]];
+        [cell.artistNameLabel setText:self.musicQueue[indexPath.row][@"Artist Name"]];
         return cell;
     }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return self.musicQueue.count + 1;
 }
 
 @end

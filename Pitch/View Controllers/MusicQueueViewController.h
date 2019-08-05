@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *addSongButton;
 @property (nonatomic) BOOL isRegistered;
+
+@property (strong, nonatomic) Event *event;
+
 @end
 
 NS_ASSUME_NONNULL_END

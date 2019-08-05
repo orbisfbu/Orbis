@@ -11,7 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MusicQueueTableViewCell : UITableViewCell
-
+@property (weak, nonatomic) IBOutlet UILabel *songNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *artistNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *numLikesLabel;
+@property (weak, nonatomic) IBOutlet UIButton *likeButton;
 @end
 
 NS_ASSUME_NONNULL_END
