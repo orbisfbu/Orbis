@@ -153,22 +153,28 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     long row = indexPath.row;
     if (row == 0) {
         FirstLastNameCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"FirstLastNameCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 1) {
         BioCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"BioCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 2){
         EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 3){
         EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         [cell.title setText:@"Events Created"];
         return cell;
     } else if (row == 4){
         ProfileLinksCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"ProfileLinksCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else {
         LogoutCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"LogoutCell"];
+        cell.selectionStyle = UITableViewCellEditingStyleNone;
         [cell setDelegate:self];
         return cell;
     }

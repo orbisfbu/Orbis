@@ -399,6 +399,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                              //if authresult is nill then check for error
                              //non nill authresult means we can login
                              if (authResult.user) {
+                                 [self dismissSignInPage];
                                  [[DataHandling shared] loadUserInfoAndApp:authResult.user.uid];
                                  
                              }
