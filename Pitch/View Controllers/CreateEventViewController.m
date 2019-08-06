@@ -238,6 +238,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create date picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150)];
+    [self.datePicker setMinimumDate: [NSDate date]];
     [self.datePicker addTarget:self action:@selector(pickerValueChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.datePicker];
     
