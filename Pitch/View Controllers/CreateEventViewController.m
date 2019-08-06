@@ -296,7 +296,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event..." attributes:nil];
     self.descriptionTextView.layer.cornerRadius = 5;
     [self.descriptionTextView setFont:[UIFont systemFontOfSize:18]];
-    [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
+    self.descriptionTextView.textColor = [UIColor blackColor];
     [self.view addSubview:self.descriptionTextView];
     
     // Create Vibes Label
@@ -329,34 +330,34 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Age Restrictions
     self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
-    [self.ageSubview setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.ageSubview setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     [self.view addSubview:self.ageSubview];
     self.ageSubview.layer.cornerRadius = 5;
     self.leftAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 9*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
-    [self.leftAgeRestriction setProgressColor:UIColorFromRGB(0xbcf0e0)];
+    [self.leftAgeRestriction setProgressColor:UIColorFromRGB(0x157f5f)];
     [self.leftAgeRestriction setProgressLineWidth:5];
-    [self.leftAgeRestriction setProgressStrokeColor:UIColorFromRGB(0xbcf0e0)];
-    [self.leftAgeRestriction setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.leftAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x157f5f)];
+    [self.leftAgeRestriction setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     [self.ageSubview addSubview:self.leftAgeRestriction];
     UIButton *leftLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.leftAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.leftAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
     [leftLabel setTitle:@"18+" forState:UIControlStateNormal];
     [leftLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
     [leftLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [leftLabel setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [leftLabel setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     leftLabel.layer.cornerRadius = 10;
     [leftLabel addTarget:self action:@selector(leftAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.ageSubview addSubview:leftLabel];
     self.rightAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 5*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
-    [self.rightAgeRestriction setProgressColor:UIColorFromRGB(0xbcf0e0)];
+    [self.rightAgeRestriction setProgressColor:UIColorFromRGB(0x157f5f)];
     [self.rightAgeRestriction setProgressLineWidth:5];
-    [self.rightAgeRestriction setProgressStrokeColor:UIColorFromRGB(0xbcf0e0)];
-    [self.rightAgeRestriction setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.rightAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x157f5f)];
+    [self.rightAgeRestriction setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     [self.ageSubview addSubview:self.rightAgeRestriction];
     UIButton *rightLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.rightAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.rightAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
     [rightLabel setTitle:@"21+" forState:UIControlStateNormal];
     [rightLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
     [rightLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [rightLabel setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [rightLabel setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     rightLabel.layer.cornerRadius = 10;
     [rightLabel addTarget:self action:@selector(rightAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.ageSubview addSubview:rightLabel];
