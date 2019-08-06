@@ -170,6 +170,8 @@
     eventSelectedTabBarController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     eventSelectedTabBarController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     eventSelectedTabBarController.viewControllers = @[musicQueueVC,detailedEventVC,eventGalleryVC];
+    [[eventSelectedTabBarController tabBar] setTintColor:(UIColorFromRGB(0x0d523d))];
+    [[eventSelectedTabBarController tabBar] setBackgroundColor:(UIColorFromRGB(0xf5f5f5))];
     [self presentViewController:eventSelectedTabBarController animated:YES completion:nil];
 }
 
