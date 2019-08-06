@@ -9,6 +9,7 @@
 #import "EventDetailsViewController.h"
 #import "CustomCollectionViewCell.h"
 #import "DataHandling.h"
+#import "UIImageView+AFNetworking.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -50,9 +51,7 @@
     [self.eventNameViewOutlet addGestureRecognizer: downGestureRecognizer];
     self.eventNameLabel.text = self.event.eventName;
     NSURL *imageNSURL = [NSURL URLWithString:self.event.eventImageURLString];
-    NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
-    UIImage *eventImage = [UIImage imageWithData:imageData];
-    [self.eventImageView setImage:eventImage];
+    [self.eventImageView setImageWithURL:imageNSURL];
 }
 
 - (void)createRegisterButton {

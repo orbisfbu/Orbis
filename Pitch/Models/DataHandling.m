@@ -107,7 +107,9 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                 CLLocationDistance distanceInMeters = [thisEventLocation distanceFromLocation:userLocation];
                 NSLog(@"THIS IS THE DISTANCE BETWEEN USER AND EVENT: %f", distanceInMeters/1000);
                 if ([thisEventVibeSet isSubsetOfSet:vibesFilterSet] && distanceInMeters/1000 <= distanceFilter){
-                    Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
+                    NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:document.data];
+                    [eventDict setValue:document.documentID forKey:@"ID"];
+                    Event *eventToAdd = [[Event alloc] initWithDictionary:eventDict];
                     [filteredEventsArray addObject:eventToAdd];
                 }
             }
