@@ -42,15 +42,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoAndApp: (NSString *)userID;
-- (void)userRegisteredForEvent: (NSString *)eventName;
-- (void)unregisterUser: (NSString *)eventName;
-- (void)getInfoForEventAnnotionWithTitle: (NSString *)title withCoordinates:
-(CLLocationCoordinate2D)coordinates;
 - (void)getFilteredEventsFromDatabase: (NSDictionary*)filters;
 @property (nonatomic, weak) id<GetEventsArrayDelegate> delegate;
-@property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
-@property (nonatomic, weak) id<EventInfoForAnnotationDelegate> eventAnnotationDelegate;
 @property (nonatomic, weak) id<GetFilteredEventsArrayDelegate> filteredEventsDelegate;
+@property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
+// Mario's methods
+- (void) getEvent:(NSString *)eventID withCompletion:(void (^) (Event *event))completion;
+- (void)registerUserToEvent: (Event *)eventName;
+- (void)unregisterUser: (Event *)event;
 @end
 
 NS_ASSUME_NONNULL_END

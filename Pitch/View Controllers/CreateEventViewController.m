@@ -35,6 +35,7 @@
 #import "MusicQueueCollectionViewCell.h"
 #import "Song.h"
 
+
 // Constant View Names
 static NSString * const INITIAL_VIEW = @"INITIAL_VIEW";
 static NSString * const LOCATION_VIEW = @"LOCATION_VIEW";

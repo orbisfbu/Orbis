@@ -83,12 +83,9 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
     int maxNumPeople = [filters[@"Max People"] intValue];
     FIRCollectionReference *eventRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
     FIRQuery *filterEventsQuery;
-    
     if (ageRestriction != 0){
-        
         filterEventsQuery = [[[eventRef queryWhereField:@"Age Restriction" isEqualTo:@(ageRestriction)] queryWhereField:@"Attendance" isGreaterThanOrEqualTo:@(minNumPeople)] queryWhereField:@"Attendance" isLessThanOrEqualTo:@(maxNumPeople)];
     }
-    
     else{
         filterEventsQuery = [[eventRef queryWhereField:@"Attendance" isGreaterThanOrEqualTo:@(minNumPeople)] queryWhereField:@"Attendance" isLessThanOrEqualTo:@(maxNumPeople)];
     }
@@ -96,22 +93,16 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
     [filterEventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"Error getting filtered events from database: %@", error);
-            
         } else {
-            
             for (FIRDocumentSnapshot *document in snapshot.documents) {
-                
                 NSArray *thisVibesArray = document.data[@"Vibes"];
                 NSMutableSet *vibesSetToCompare = [NSMutableSet setWithArray:thisVibesArray];
-                
                 if ([vibesSetToCompare isEqualToSet:vibesSet]){
                     Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
-                    
                     [filteredEventsArray addObject:eventToAdd];
                 }
             }
         }
-        
         [self.filteredEventsDelegate refreshFilteredEventsDelegateMethod:filteredEventsArray];
     }];
 }
@@ -169,8 +160,6 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
       }];
 }
 
-
-
 - (void)loadUserInfoAndApp: (NSString *)userID{
 {
     [[[self.database collectionWithPath:@"users"] documentWithPath:userID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
@@ -187,73 +176,51 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
     }
 }
 
-
-- (void)getInfoForEventAnnotionWithTitle: (NSString *)title withCoordinates: (CLLocationCoordinate2D)coordinates{
-    __block NSDictionary *eventInfoForAnnotation;
-    NSString *coordinateString = [NSString stringWithFormat:@"%.5f %.5f", coordinates.latitude, coordinates.longitude];
-    FIRQuery *eventsForAnnotationQuery =
-    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:title] queryWhereField:EVENT_LOCATION_KEY isEqualTo:coordinateString];
-    [eventsForAnnotationQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
-        if (error != nil){
-            NSLog(@"Error getting the event info for the annotation clicked");
-        }
-        else{
-            for (FIRDocumentSnapshot *document in snapshot.documents) {
-                eventInfoForAnnotation = document.data;
-            }
-            [self.eventAnnotationDelegate eventDataForDetailedView:eventInfoForAnnotation];
+- (void) getEvent:(NSString *)eventID withCompletion:(void (^) (Event *event))completion {
+    FIRDocumentReference *docRef = [[self.database collectionWithPath:@"events"] documentWithPath:eventID];
+    [docRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error getting event with ID: %@: ", eventID);
+            completion(nil);
+        } else {
+            NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:snapshot.data];
+            [eventDict setValue:snapshot.documentID forKey:@"ID"];
+            completion([[Event alloc] initWithDictionary:eventDict]);
         }
     }];
 }
 
-
-- (void)userRegisteredForEvent: (NSString *)eventName
-{
-    __block FIRDocumentReference *eventToEditReference;
-    FIRQuery *getEventsWithThisNameQuery =
-    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:eventName];
-    
-    [getEventsWithThisNameQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
-        if (error != nil){
+- (void)registerUserToEvent:(Event *)event {
+    __block FIRDocumentReference *eventRef;
+    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+    eventRef = [eventsRef documentWithPath:event.ID];
+    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
             NSLog(@"Erorr getting the event user registered for");
-        }
-        else{
-            for (FIRDocumentSnapshot *document in snapshot.documents) {
-                eventToEditReference = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:document.documentID];
-            }
-            [eventToEditReference updateData:@{
-                                        @"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:1],
-                                        @"Registered Users": [FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]
-                                        }];
+        } else {
+            [eventRef updateData:@{@"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:1],
+                                   @"Registered Users": [FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]
+                                   }];
             NSLog(@"Successfully registered, increased attendance count, and added to registered users array");
         }
     }];
 }
 
-
-- (void)unregisterUser: (NSString *)eventName
-{
-    __block FIRDocumentReference *eventToEditReference;
-    FIRQuery *getEventsWithThisNameQuery =
-    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] queryWhereField:EVENT_NAME_KEY isEqualTo:eventName];
-    
-    [getEventsWithThisNameQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
-        if (error != nil){
+- (void)unregisterUser:(Event *)event {
+    NSLog(@"%@", event.ID);
+    __block FIRDocumentReference *eventRef;
+    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+    eventRef = [eventsRef documentWithPath:event.ID];
+    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
             NSLog(@"Erorr getting the event user registered for");
-        }
-        else{
-            for (FIRDocumentSnapshot *document in snapshot.documents) {
-                eventToEditReference = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:document.documentID];
-            }
-            [eventToEditReference updateData:@{
-                                               @"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:-1],
-                                               @"Registered Users": [FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]
-                                               }];
+        } else {
+            [eventRef updateData:@{@"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:-1],
+                                   @"Registered Users": [FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]
+                                   }];
             NSLog(@"Successfully unregistered, decreased attendance count, and removed user from registered users");
         }
     }];
 }
-
-
 
 @end

@@ -28,7 +28,7 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, GetEventsArrayDelegate, GetFilteredEventsArrayDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate, EventInfoForAnnotationDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, GetEventsArrayDelegate, GetFilteredEventsArrayDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -60,7 +60,6 @@
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
     self.dataHandlingObject.filteredEventsDelegate = self;
-    self.dataHandlingObject.eventAnnotationDelegate = self;
     self.photoMap.delegate = self;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -136,14 +135,13 @@
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
     }
-    
     if (self.eventsArray.count > 0 && !self.filtersWereSet)
     {
         for (Event *thisEvent in self.eventsArray)
         {
             MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
-            eventAnnotationPoint.title = thisEvent.eventName;
+            eventAnnotationPoint.title = thisEvent.ID;
             [self.photoMap addAnnotation:eventAnnotationPoint];
         }
     }
@@ -163,6 +161,7 @@
 - (void)presentEventDetailsView: (Event *)eventToPresent {
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
+    NSLog(@"EVENT: %@", eventToPresent.ID);
     detailedEventVC.event = eventToPresent;
     MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
     musicQueueVC.event = eventToPresent;
@@ -305,18 +304,20 @@
     return newEventAnnotationView;
 }
 
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    [mapView deselectAnnotation:view.annotation animated:YES];
-    [self.dataHandlingObject getInfoForEventAnnotionWithTitle:view.annotation.title withCoordinates:view.annotation.coordinate];
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)annotationView {
+    [mapView deselectAnnotation:annotationView.annotation animated:YES];
+    [self.dataHandlingObject getEvent:annotationView.annotation.title withCompletion:^(Event * _Nonnull event) {
+        [self presentEventDetailsView:event];
+    }];
 }
 
--(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"There was an error retrieving your location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [errorAlert show];
     NSLog(@"Error: %@",error.description);
 }
 
--(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *crnLoc = [locations lastObject];
     //NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
     //NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
@@ -356,11 +357,6 @@
 
 - (void)refreshAfterEventCreation {
     [self refreshEventsArray];
-}
-
-- (void)eventDataForDetailedView:(nonnull NSDictionary *)eventData {
-    self.eventToLoad = [[Event alloc] initWithDictionary:eventData];
-    [self presentEventDetailsView:self.eventToLoad];
 }
 
 - (void)refreshFilteredEventsDelegateMethod:(nonnull NSArray *)filteredEvents {
