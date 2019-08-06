@@ -208,6 +208,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.eventTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     [self.eventTitleTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:40]];
     [self.eventTitleTextField setMinimumFontSize:30];
+    self.eventTitleTextField.textColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1] ;
     [self.eventTitleTextField setAdjustsFontSizeToFitWidth:YES];
     [self.eventTitleTextField setPlaceholder:@"E.g Yike's Bday"];
     [self.view addSubview:self.eventTitleTextField];
@@ -239,6 +240,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create date picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150)];
     [self.datePicker setMinimumDate: [NSDate date]];
+//    self.datePicker.subviews[0].subviews[0].backgroundColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1];//the picker's own background view
+    self.datePicker.subviews[0].subviews[1].backgroundColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1];
+    self.datePicker.subviews[0].subviews[2].backgroundColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1];
+    [self.datePicker setValue:[UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1] forKey:@"textColor"];
     [self.datePicker addTarget:self action:@selector(pickerValueChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.datePicker];
     
@@ -254,6 +259,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Search Location Text Field
     self.searchLocationTextField = [[UITextField alloc] initWithFrame:CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT)];
+    self.searchLocationTextField.textColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1] ;
     [self.searchLocationTextField addTarget:self action:@selector(displayLocationView) forControlEvents:UIControlEventEditingDidBegin];
     [self.searchLocationTextField addTarget:self action:@selector(dismissLocationView) forControlEvents:UIControlEventEditingDidEnd];
     [self.searchLocationTextField addTarget:self action:@selector(refreshResultsTableView) forControlEvents:UIControlEventEditingChanged];
@@ -297,7 +303,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.descriptionTextView.layer.cornerRadius = 5;
     [self.descriptionTextView setFont:[UIFont systemFontOfSize:18]];
     [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
-    self.descriptionTextView.textColor = [UIColor blackColor];
+    self.descriptionTextView.textColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1] ;
     [self.view addSubview:self.descriptionTextView];
     
     // Create Vibes Label
@@ -342,7 +348,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     UIButton *leftLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.leftAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.leftAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
     [leftLabel setTitle:@"18+" forState:UIControlStateNormal];
     [leftLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
-    [leftLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [leftLabel setTitleColor:UIColorFromRGB(0x157f5f) forState:UIControlStateNormal];
     [leftLabel setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     leftLabel.layer.cornerRadius = 10;
     [leftLabel addTarget:self action:@selector(leftAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -356,7 +362,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     UIButton *rightLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.rightAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.rightAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
     [rightLabel setTitle:@"21+" forState:UIControlStateNormal];
     [rightLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
-    [rightLabel setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [rightLabel setTitleColor:UIColorFromRGB(0x157f5f) forState:UIControlStateNormal];
     [rightLabel setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
     rightLabel.layer.cornerRadius = 10;
     [rightLabel addTarget:self action:@selector(rightAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
