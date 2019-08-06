@@ -21,11 +21,10 @@
     [super awakeFromNib];
     // Initialization code
     self.dataHandler = [DataHandling shared];
-    NSLog(@"ARTIST NAME: %@", self.song.artistName);
     [self.artistNameLabel setText:self.song.artistName];
     [self.songNameLabel setText:self.song.title];
     [self.numLikesLabel setText:[NSString stringWithFormat:@"%ld", self.song.numLikes]];
-    if (self.userDoesLike) {
+    if ([self.song.userIDsThatHaveLikedSong containsObject:[FIRAuth auth].currentUser.uid]) {
         [self.likeButton setImage:[UIImage imageNamed:@"red_heart"] forState:UIControlStateNormal];
     }
 }
@@ -37,16 +36,17 @@
 }
 
 - (IBAction)likeButtonPressed:(id)sender {
-    if (self.userDoesLike) {
+    if ([self.song.userIDsThatHaveLikedSong containsObject:[FIRAuth auth].currentUser.uid]) {
+        [self.song.userIDsThatHaveLikedSong removeObject:[FIRAuth auth].currentUser.uid];
         [self.likeButton setImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
         [self.numLikesLabel setText:[NSString stringWithFormat:@"%i", [self.numLikesLabel.text intValue] - 1]];
         [self.dataHandler user:[FIRAuth auth].currentUser.uid didUnlikeSong:self.song atIndex:self.index atEvent:self.eventID];
     } else {
+        [self.song.userIDsThatHaveLikedSong addObject:[FIRAuth auth].currentUser.uid];
         [self.likeButton setImage:[UIImage imageNamed:@"red_heart"] forState:UIControlStateNormal];
         [self.numLikesLabel setText:[NSString stringWithFormat:@"%i", [self.numLikesLabel.text intValue] + 1]];
         [self.dataHandler user:[FIRAuth auth].currentUser.uid didLikeSong:self.song atIndex:self.index atEvent:self.eventID];
     }
-    self.userDoesLike = !self.userDoesLike;
 }
 
 @end
