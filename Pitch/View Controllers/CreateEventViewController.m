@@ -693,6 +693,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self displayMusicPage];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         [self publishEvent];
+        [self dismissMusicPage];
+        [self displayInitialPage];
+        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     }
 }
 

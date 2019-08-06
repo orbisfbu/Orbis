@@ -184,8 +184,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
       }];
 }
 
-- (void)loadUserInfoAndApp: (NSString *)userID{
-{
+- (void)loadUserInfoAndApp: (NSString *)userID{ {
     [[[self.database collectionWithPath:@"users"] documentWithPath:userID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (snapshot.exists)
         {
