@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import "Song.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray <NSString *> *registeredUsersArray;
 @property (nonatomic) int eventAttendanceCount;
 @property (nonatomic) int eventAgeRestriction;
-@property (strong, nonatomic) NSMutableArray *musicQueue;
+@property (strong, nonatomic) NSMutableArray <Song *> *musicQueue;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @end

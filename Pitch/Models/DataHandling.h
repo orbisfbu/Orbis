@@ -11,6 +11,7 @@
 #import "Event.h"
 #import "User.h"
 #import "UserInSession.h"
+#import "Song.h"
 
 @import UIKit;
 @import Firebase;
@@ -48,6 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
 // Mario's methods
 - (void) getEvent:(NSString *)eventID withCompletion:(void (^) (Event *event))completion;
+- (void) user:(NSString *)userID didLikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
+- (void) user:(NSString *)userID didUnlikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
 - (void)registerUserToEvent: (Event *)eventName;
 - (void)unregisterUser: (Event *)event;
 @end

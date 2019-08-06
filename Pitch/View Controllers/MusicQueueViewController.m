@@ -12,13 +12,14 @@
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 @interface MusicQueueViewController () <UITableViewDelegate, UITableViewDataSource>
-@property (strong, nonatomic) NSMutableArray <NSMutableDictionary *> *musicQueue;
+@property (strong, nonatomic) NSMutableArray <Song *> *musicQueue;
 @end
 
 @implementation MusicQueueViewController
 
 - (void)viewDidLoad {
     [self configureInitialViewsAndGestures];
+    NSLog(@"MUSIC QUEUE: %@", self.event.musicQueue);
     self.musicQueue = self.event.musicQueue;
 }
 
@@ -59,17 +60,26 @@
         return cell;
     } else if (!self.isRegistered) {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
+        cell.eventID = self.event.ID;
+        cell.index = indexPath.row - 1;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
-        [cell.songNameLabel setText:self.musicQueue[indexPath.row - 1][@"Title"]];
-        [cell.artistNameLabel setText:self.musicQueue[indexPath.row - 1][@"Artist Name"]];
-        [cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row - 1][@"Number of Likes"]]];
+        NSLog(@"HELLOOOO");
+        cell.song = self.event.musicQueue[indexPath.row - 1];
+        [cell awakeFromNib];
+        //[cell.songNameLabel setText:self.musicQueue[indexPath.row - 1][@"Title"]];
+        //[cell.artistNameLabel setText:self.musicQueue[indexPath.row - 1][@"Artist Name"]];
+        //[cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row - 1][@"numLikes"]]];
         return cell;
     } else {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
+        cell.eventID = self.event.ID;
+        cell.index = indexPath.row;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
-        [cell.songNameLabel setText:self.musicQueue[indexPath.row][@"Title"]];
-        [cell.artistNameLabel setText:self.musicQueue[indexPath.row][@"Artist Name"]];
-        [cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row][@"Number of Likes"]]];
+        cell.song = self.event.musicQueue[indexPath.row];
+        [cell awakeFromNib];
+//        [cell.songNameLabel setText:self.musicQueue[indexPath.row][@"Title"]];
+//        [cell.artistNameLabel setText:self.musicQueue[indexPath.row][@"Artist Name"]];
+//        [cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row][@"numLikes"]]];
         return cell;
     }
 }

@@ -8,8 +8,6 @@
 
 #import "DataHandling.h"
 
-
-
 //constants for database access to nodes and their children
 static NSString * const DATABASE_USERS_COLLECTION = @"users";
 static NSString * const DATABASE_EVENTS_COLLECTION = @"events";
@@ -79,7 +77,6 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
      }];
 }
 
-
 - (void)getFilteredEventsFromDatabase: (NSDictionary*)filters userLocation:(CLLocation *)userLocation {
     NSMutableArray <Event *> *filteredEventsArray = [[NSMutableArray alloc] init];
     int ageRestrictionFilter = [filters[FILTER_AGE_KEY] intValue];
@@ -122,18 +119,31 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
 }
 
 
-- (void)addEventToDatabase:(Event *)definedEvent{
+- (void)addEventToDatabase:(Event *)event {
+    NSMutableDictionary *songQueue = [[NSMutableDictionary alloc] init];
+    int i = 0;
+    for (Song *song in event.musicQueue) {
+        if (![song.albumName isEqualToString:@"default_album"]) {
+            NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
+            [songDict setValue:song.title forKey:@"Title"];
+            [songDict setValue:song.artistName forKey:@"Artist Name"];
+            [songDict setValue:song.albumName forKey:@"Album Name"];
+            [songDict setValue:@(0) forKey:@"numLikes"];
+            [songQueue setValue:songDict forKey:[NSString stringWithFormat:@"%i", i]];
+            i++;
+        }
+    }
     NSDictionary *eventInfo = @{
                                 EVENT_CREATOR_KEY: [UserInSession shared].sharedUser.nameString,
-                                EVENT_ATTENDANCE_KEY: @(definedEvent.eventAttendanceCount),
-                                EVENT_IMAGE_URL_KEY: definedEvent.eventImageURLString,
-                                EVENT_AGE_RESTRICTION_KEY: @(definedEvent.eventAgeRestriction),
-                                EVENT_LOCATION_KEY: definedEvent.eventLocationString,
-                                EVENT_DESCRIPTION_KEY: definedEvent.eventDescription,
-                                EVENT_NAME_KEY: definedEvent.eventName,
-                                EVENT_VIBES_KEY: definedEvent.eventVibesArray,
+                                EVENT_ATTENDANCE_KEY: @(event.eventAttendanceCount),
+                                EVENT_IMAGE_URL_KEY: event.eventImageURLString,
+                                EVENT_AGE_RESTRICTION_KEY: @(event.eventAgeRestriction),
+                                EVENT_LOCATION_KEY: event.eventLocationString,
+                                EVENT_DESCRIPTION_KEY: event.eventDescription,
+                                EVENT_NAME_KEY: event.eventName,
+                                EVENT_VIBES_KEY: event.eventVibesArray,
                                 EVENT_REGISTERED_USERS_KEY: [NSMutableArray new],
-                                MUSIC_QUEUE_KEY: definedEvent.musicQueue
+                                MUSIC_QUEUE_KEY: songQueue
                                 };
     [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithAutoID] setData:eventInfo
          completion:^(NSError * _Nullable error) {
@@ -199,6 +209,11 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
         } else {
             NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:snapshot.data];
             [eventDict setValue:snapshot.documentID forKey:@"ID"];
+            NSMutableArray *songsArray = [[NSMutableArray alloc] init];
+            for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
+                [songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][songIndex]]];
+            }
+            [eventDict setValue:songsArray forKey:@"Music Queue"];
             completion([[Event alloc] initWithDictionary:eventDict]);
         }
     }];
@@ -210,7 +225,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     eventRef = [eventsRef documentWithPath:event.ID];
     [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil) {
-            NSLog(@"Erorr getting the event user registered for");
+            NSLog(@"Error getting the event user registered for");
         } else {
             [eventRef updateData:@{@"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:1],
                                    @"Registered Users": [FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]
@@ -220,19 +235,44 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }];
 }
 
-- (void)unregisterUser:(Event *)event {
-    NSLog(@"%@", event.ID);
+- (void) unregisterUser:(Event *)event {
     __block FIRDocumentReference *eventRef;
     FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
     eventRef = [eventsRef documentWithPath:event.ID];
     [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil) {
-            NSLog(@"Erorr getting the event user registered for");
+            NSLog(@"Error getting the event user registered for");
         } else {
             [eventRef updateData:@{@"Attendance": [FIRFieldValue fieldValueForIntegerIncrement:-1],
                                    @"Registered Users": [FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]
                                    }];
             NSLog(@"Successfully unregistered, decreased attendance count, and removed user from registered users");
+        }
+    }];
+}
+
+- (void) user:(NSString *)userID didLikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID {
+    __block FIRDocumentReference *eventRef;
+    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+    eventRef = [eventsRef documentWithPath:eventID];
+    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error getting the event");
+        } else {
+            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:+1]}];
+        }
+    }];
+}
+
+- (void) user:(NSString *)userID didUnlikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID {
+    __block FIRDocumentReference *eventRef;
+    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+    eventRef = [eventsRef documentWithPath:eventID];
+    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error getting the event");
+        } else {
+            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:-1]}];
         }
     }];
 }

@@ -16,7 +16,6 @@
 }
 
 - (void) initWithSong:(Song *) song {
-    NSLog(@"ALBUM NAME:%@", song.albumName);
     [self.albumImageView setImage:[UIImage imageNamed:song.albumName]];
     [self.artistNameLabel setText:song.artistName];
     [self.nameLabel setText:song.title];

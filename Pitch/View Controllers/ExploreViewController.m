@@ -158,7 +158,6 @@
 - (void)presentEventDetailsView: (Event *)eventToPresent {
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
-    NSLog(@"EVENT: %@", eventToPresent.ID);
     detailedEventVC.event = eventToPresent;
     MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
     musicQueueVC.event = eventToPresent;
@@ -303,6 +302,7 @@
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)annotationView {
     [mapView deselectAnnotation:annotationView.annotation animated:YES];
+    NSLog(@"TITLE: %@", annotationView.annotation.title);
     [self.dataHandlingObject getEvent:annotationView.annotation.title withCompletion:^(Event * _Nonnull event) {
         [self presentEventDetailsView:event];
     }];

@@ -7,6 +7,7 @@
 //
 
 #import "Event.h"
+#import "Song.h"
 
 @implementation Event
 
@@ -36,6 +37,11 @@
         self.eventCoordinates = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
         
         self.musicQueue = snapshotDictionary[@"Music Queue"];
+        
+//        self.musicQueue = [[NSMutableArray alloc] init];
+//        for (NSDictionary *dict in snapshotDictionary[@"Music Queue"]) {
+//            [self.musicQueue addObject:[[Song alloc] initWithDictionary:dict]];
+//        }
         
     }
     return self;

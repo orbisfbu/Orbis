@@ -171,5 +171,4 @@
     self.registrationStatusForEvent = registerValue;
 }
 
-
 @end
