@@ -15,6 +15,7 @@
                 <outlet property="filterButton" destination="402-va-wqo" id="duK-ke-4DU"/>
                 <outlet property="photoMap" destination="Gfd-S1-nQU" id="eX9-d8-Rkp"/>
                 <outlet property="searchBar" destination="8Yx-83-rzV" id="Hke-Sf-jl4"/>
+                <outlet property="searchBarOutlet" destination="8Yx-83-rzV" id="hJJ-Ma-Euz"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>

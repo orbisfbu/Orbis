@@ -20,15 +20,15 @@
     [super awakeFromNib];
     // Initialization code
     self.filters = [Filters sharedFilters];
-    [self.applyFiltersButton setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.applyFiltersButton setBackgroundColor:UIColorFromRGB(0x157f5f)];
+    [self.applyFiltersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.applyFiltersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [self.applyFiltersButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     self.applyFiltersButton.layer.cornerRadius = 5;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
 }
 
 - (IBAction)applyfiltersButtonPressed:(id)sender {

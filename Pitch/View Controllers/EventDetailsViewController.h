@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UILabel *distanceFromUserLabel;
 @property (strong, nonatomic) UILabel *attendanceCountLabel;
 @property (strong, nonatomic) UILabel *vibesLabel;
-@property (strong, nonatomic) UILabel *pollSectionLabel;
 @property (strong, nonatomic) UILabel *extraLabel;
 @property (strong, nonatomic) UICollectionView *vibesCollectionView;
 @property (strong, nonatomic) UIButton *registerButton;
@@ -35,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Event ID
 @property (strong, nonatomic) Event *event;
+@property (strong, nonatomic) NSArray *testingVibes;
 
 //calculate this distance using difference in coordinates or something
 //this distance should be set in explore view controller with the user's

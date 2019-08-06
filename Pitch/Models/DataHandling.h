@@ -21,7 +21,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol DataHandlingDelegate
+@protocol GetEventsArrayDelegate
 - (void)refreshEventsDelegateMethod:(NSArray *)events;
 @end
 
@@ -33,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)eventDataForDetailedView:(NSDictionary *)eventData;
 @end
 
+@protocol GetFilteredEventsArrayDelegate
+- (void)refreshFilteredEventsDelegateMethod:(NSArray *)filteredEvents;
+@end
 
 @interface DataHandling : NSObject
 + (instancetype)shared;
@@ -40,17 +43,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoAndApp: (NSString *)userID;
-- (void)registerUserToEvent: (Event *)eventName;
-- (void)unregisterUser: (Event *)event;
-@property (nonatomic, weak) id<DataHandlingDelegate> delegate;
+- (void)getFilteredEventsFromDatabase: (NSDictionary*)filters userLocation:(CLLocation*)userLocation;
+@property (nonatomic, weak) id<GetEventsArrayDelegate> delegate;
+@property (nonatomic, weak) id<GetFilteredEventsArrayDelegate> filteredEventsDelegate;
 @property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
-@property (nonatomic, weak) id<EventInfoForAnnotationDelegate> eventAnnotationDelegate;
-
 // Mario's methods
 - (void) getEvent:(NSString *)eventID withCompletion:(void (^) (Event *event))completion;
 - (void) user:(NSString *)userID didLikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
 - (void) user:(NSString *)userID didUnlikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
-
+- (void)registerUserToEvent: (Event *)eventName;
+- (void)unregisterUser: (Event *)event;
 @end
 
 NS_ASSUME_NONNULL_END

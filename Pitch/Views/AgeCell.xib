@@ -35,7 +35,7 @@
                                         <rect key="frame" x="20" y="20" width="30" height="30"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="18+">
-                                            <color key="titleColor" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <color key="titleColor" red="0.074509803921568626" green="0.4823529411764706" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <connections>
                                             <action selector="eighteenPlusButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3QS-t3-hKo"/>
@@ -54,13 +54,13 @@
                                         <real key="value" value="0.0"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="fontColor">
-                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.074509803920000006" green="0.4823529412" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
-                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.074509803920000006" green="0.4823529412" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="progressStrokeColor">
-                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.074509803920000006" green="0.4823529412" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxValue">
                                         <real key="value" value="100"/>
@@ -81,7 +81,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="21+">
-                                            <color key="titleColor" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <color key="titleColor" red="0.074509803921568626" green="0.4823529411764706" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <connections>
                                             <action selector="twentyOnePlusButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eoP-gw-PQr"/>
@@ -98,13 +98,13 @@
                                         <real key="value" value="0.0"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="fontColor">
-                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.074509803920000006" green="0.4823529412" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
-                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.074509803920000006" green="0.4823529412" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="progressStrokeColor">
-                                        <color key="value" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.074509803920000006" green="0.4823529412" blue="0.35686274509999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxValue">
                                         <real key="value" value="100"/>
@@ -145,7 +145,7 @@
                 <outlet property="subview" destination="35S-PC-qJw" id="nxm-8x-Tdb"/>
                 <outlet property="titleLabel" destination="URi-Pk-aQi" id="V5e-Ir-ePW"/>
             </connections>
-            <point key="canvasLocation" x="137.59999999999999" y="147.07646176911544"/>
+            <point key="canvasLocation" x="137.59999999999999" y="146.17691154422789"/>
         </tableViewCell>
     </objects>
 </document>
