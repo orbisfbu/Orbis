@@ -31,7 +31,7 @@ static int const MIN_DISTANCE = 1;
     [self.slider setMaximumValue:MAX_DISTANCE];
     [self.slider setMinimumValue:MIN_DISTANCE];
     [self.slider setValue:DEFAULT_DISTANCE];
-    [self.slider setMinimumTrackTintColor:UIColorFromRGB(0xbcf0e0)];
+    [self.slider setMinimumTrackTintColor:UIColorFromRGB(0x157f5f)];
     self.currentDistance = INFINITY;
 }
 

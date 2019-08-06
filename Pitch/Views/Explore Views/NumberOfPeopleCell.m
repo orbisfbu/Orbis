@@ -40,7 +40,7 @@ static int const DEFAULT_MIN_PEOPLE = 1;
     NSArray *arrayOfImages = self.rangeSlider.subviews;
     UIImageView *imageView = arrayOfImages[1];
     imageView.image = [imageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [imageView setTintColor: UIColorFromRGB(0xbcf0e0)];
+    [imageView setTintColor: UIColorFromRGB(0x157f5f)];
     
     [self.subview addSubview:self.rangeSlider];
     self.maxNumPeople = INFINITY;
