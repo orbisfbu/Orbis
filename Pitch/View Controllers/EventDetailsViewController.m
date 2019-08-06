@@ -85,7 +85,6 @@
     [self.vibesLabel sizeToFit];
     [self.vibesLabel setRestorationIdentifier:@"vibesLabel"];
     [self.roundedCornersViewOutlet addSubview:self.vibesLabel];
-    
     self.vibesCollectionView.delegate = self;
     self.vibesCollectionView.dataSource = self;
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -113,7 +112,7 @@
 
 -(void)createdAttendanceCountLabel
 {
-    self.attendanceCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.distanceFromUserLabel.frame.origin.x, self.distanceFromUserLabel.frame.origin.y+self.distanceFromUserLabel.frame.size.height + 10, 40, 20)];
+    self.attendanceCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.distanceFromUserLabel.frame.origin.x, self.distanceFromUserLabel.frame.origin.y+self.distanceFromUserLabel.frame.size.height + 10, 40, 50)];
     [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
     [self.attendanceCountLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     [self.attendanceCountLabel sizeToFit];
@@ -185,11 +184,13 @@
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
     CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
     [cell setLabelText:self.event.eventVibesArray[indexPath.item]];
     return cell;}
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
     return self.event.eventVibesArray.count;
 }
 

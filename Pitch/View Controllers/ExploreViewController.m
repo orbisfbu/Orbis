@@ -28,7 +28,7 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, DataHandlingDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate, EventInfoForAnnotationDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, GetEventsArrayDelegate, GetFilteredEventsArrayDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -46,6 +46,7 @@
 @property (strong, nonatomic) NumberOfPeopleCell *numberOfPeopleCell;
 @property (strong, nonatomic) AgeCell *ageCell;
 @property (strong, nonatomic) ApplyFiltersCell *applyFiltersCell;
+@property (strong, nonatomic) UIButton *refreshMapButton;
 @property BOOL isScrollingTVUp;
 @property BOOL filtersWereSet;
 
@@ -53,19 +54,12 @@
 
 @implementation ExploreViewController
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-    [self.locationManager startUpdatingLocation];
-}
-
 - (void) viewDidLoad {
     [super viewDidLoad];
     self.filtersWereSet = NO;
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
-    self.dataHandlingObject.eventAnnotationDelegate = self;
+    self.dataHandlingObject.filteredEventsDelegate = self;
     self.photoMap.delegate = self;
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -109,13 +103,35 @@
     [self.dropDownFilterTV setAllowsSelection:NO];
     //[self.dropDownFilterTV setRowHeight:UITableViewAutomaticDimension];
     self.isScrollingTVUp = NO;
+    
+    [self createRefreshButton];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)createRefreshButton{
+    self.refreshMapButton = [[UIButton alloc] initWithFrame:CGRectMake(self.searchBar.frame.origin.x + self.searchBar.frame.size.width * .85, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 5, self.searchBar.frame.size.height/2, self.searchBar.frame.size.height/2)];
+    self.refreshMapButton.alpha = 1;
+    [self.refreshMapButton setEnabled:YES];
+    [self.refreshMapButton addTarget:self action:@selector(refreshEventsArray) forControlEvents:UIControlEventTouchUpInside];
+    UIImage *resizedRefreshIcon = [self resizeImage:[UIImage imageNamed:@"refreshIcon"] withSize:CGSizeMake(self.searchBar.frame.size.height/2, self.searchBar.frame.size.height/2)];
+    [self.refreshMapButton setImage:resizedRefreshIcon forState:UIControlStateNormal];
+    [self.view insertSubview:self.refreshMapButton belowSubview:self.dropDownFilterTV];
 }
 
 - (void)refreshEventsArray {
     [self.dataHandlingObject getEventsFromDatabase];
+    
 }
 
 - (void)populateMapWithEventswithFilter:(BOOL)filterValue{
+    
+    
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
     }
@@ -131,9 +147,9 @@
     }
     
     else if (self.filteredEventsArray > 0 && self.filtersWereSet){
-        NSLog(@"Filtered events array is populated since filters were applied");
         for (Event *thisEvent in self.filteredEventsArray)
         {
+            
             MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
             eventAnnotationPoint.title = thisEvent.eventName;
@@ -309,6 +325,7 @@
 
 - (void)applyFiltersButtonWasPressed {
     NSLog(@"Applying Filters...");
+    self.filtersWereSet = YES;
     [self filterAnnotations];
 }
 
@@ -319,12 +336,7 @@
     [self.distanceCell resetDistance];
     [self.numberOfPeopleCell resetNumberOfPeople];
     [self.ageCell resetAgeRestrictions];
-
-    
-    ///upon resetting filters, empty the filtered events array
-    //remove all the annotations on map and
-    //add the events in the events array 
-    
+    [self refreshEventsArray];
 }
 
 - (void) filterAnnotations {
@@ -333,21 +345,24 @@
     int distance = [self.distanceCell getDistance];
     int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
     int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
-
-    //create an NSMutable filteredEvents property
-    //iterate through local events array; if that event doesn't match these parameters
-    //then don't add them to the filtered array
-    
-    //now iterate through the current annotations on map and remove them all
-    //then just add the annotations that are in the filtered events array
+    NSDictionary *filterValues = @{
+                                  @"Age Restriction": @(ageRestriction),
+                                  @"Distance": @(distance),
+                                  @"Min People": @(minNumPeople),
+                                  @"Max People": @(maxNumPeople),
+                                  @"Vibes": vibesSet
+                                  };
+    [self.dataHandlingObject getFilteredEventsFromDatabase:filterValues];
 }
+
 - (void)refreshAfterEventCreation {
     [self refreshEventsArray];
 }
 
-//- (void)eventDataForDetailedView:(nonnull NSDictionary *)eventData {
-//    self.eventToLoad = [[Event alloc] initWithDictionary:eventData];
-//    [self presentEventDetailsView:self.eventToLoad];
-//}
+- (void)refreshFilteredEventsDelegateMethod:(nonnull NSArray *)filteredEvents {
+    self.filteredEventsArray = [NSMutableArray arrayWithArray:filteredEvents];
+    [self populateMapWithEventswithFilter:self.filtersWereSet];
+}
+
 
 @end

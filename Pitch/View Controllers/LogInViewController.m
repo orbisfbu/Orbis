@@ -492,6 +492,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 - (void)loginButton:(FBSDKLoginButton *)loginButton
 didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)error {
     if (error == nil) {
+        
         FIRAuthCredential *credential = [FIRFacebookAuthProvider credentialWithAccessToken:[FBSDKAccessToken currentAccessToken].tokenString];
         [[FIRAuth auth] signInWithCredential:credential completion:^(FIRAuthDataResult * _Nullable authResult,
                                                                      NSError * _Nullable error) {
@@ -504,6 +505,7 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
                 return;
             }
             NSLog(@"SUCCESSFULLY AUTHENTICATED USER");
+            
         }];
     } else {
         NSLog(AUTHENTICATION_ERROR);
