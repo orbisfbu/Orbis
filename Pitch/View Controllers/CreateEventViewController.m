@@ -159,30 +159,40 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [song setTitle:@"Jocelyn Flores"];
     [song setArtistName:@"XXXTENTACION"];
     [song setAlbumName:@"17"];
+    [song setNumLikes:0];
+    [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.songsArray addObject:song];
 
     song = [[Song alloc] init];
     [song setTitle:@"Saviers Road"];
     [song setArtistName:@"Anderson .Paak"];
     [song setAlbumName:@"Oxnard"];
+    [song setNumLikes:0];
+    [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.songsArray addObject:song];
     
     song = [[Song alloc] init];
     [song setTitle:@"Bound 2"];
     [song setArtistName:@"Kanye West"];
     [song setAlbumName:@"Yeezus"];
+    [song setNumLikes:0];
+    [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.songsArray addObject:song];
     
     song = [[Song alloc] init];
     [song setTitle:@"Stepping Stone"];
     [song setArtistName:@"Eminem"];
     [song setAlbumName:@"Kamikaze"];
+    [song setNumLikes:0];
+    [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.songsArray addObject:song];
     
     song = [[Song alloc] init];
     [song setTitle:@"Lucy In The Sky With Diamonds"];
     [song setArtistName:@"The Beatles"];
     [song setAlbumName:@"Sgt. Pepper's Lonely Hearts Club"];
+    [song setNumLikes:0];
+    [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.songsArray addObject:song];
     
     self.queuedUpSongsArray = [[NSMutableArray alloc] init];
@@ -190,6 +200,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [song setTitle:@"Title"];
     [song setArtistName:@"Artist"];
     [song setAlbumName:@"default_album"];
+    [song setNumLikes:0];
+    [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.queuedUpSongsArray addObject:song];
 }
 
@@ -703,19 +715,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void)publishEvent {
-//    NSMutableArray *songQueue = [[NSMutableArray alloc] init];
-//    for (Song *song in self.queuedUpSongsArray) {
-//        if (![song.albumName isEqualToString:@"default_album"]) {
-//            NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
-//            [songDict setValue:song.title forKey:@"Title"];
-//            [songDict setValue:song.artistName forKey:@"Artist Name"];
-//            [songDict setValue:song.albumName forKey:@"Album Name"];
-//            [songDict setValue:@(0) forKey:@"numLikes"];
-//            [songQueue addObject:songDict];
-//        }
-//    }
-    
-    NSDictionary *eventDefinition = @{
+    NSDictionary *eventDict = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
         @"Event Name": self.eventTitleTextField.text,
         @"Attendance": @(1),
@@ -724,10 +724,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Age Restriction": @(self.ageRestriction),
         @"Location": [NSString stringWithFormat:@"%.5f %.5f", self.coordinates.latitude, self.coordinates.longitude],
         @"Vibes": [self.vibesSet allObjects],
-        //@"Music Queue": songQueue
         @"Music Queue": self.queuedUpSongsArray
     };
-    Event *event = [[Event alloc] initWithDictionary:eventDefinition];
+    Event *event = [[Event alloc] initWithDictionary:eventDict];
     [[DataHandling shared] addEventToDatabase:event];
     [self.delegate refreshAfterEventCreation];
 }

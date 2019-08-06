@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *artistName;
 @property (strong, nonatomic) NSString *albumName;
+@property (strong, nonatomic) NSMutableArray <NSString *> *userIDsThatHaveLikedSong;
 @property long numLikes;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

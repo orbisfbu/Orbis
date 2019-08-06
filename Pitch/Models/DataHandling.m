@@ -127,6 +127,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
             [songDict setValue:song.artistName forKey:@"Artist Name"];
             [songDict setValue:song.albumName forKey:@"Album Name"];
             [songDict setValue:@(0) forKey:@"numLikes"];
+            [songDict setValue:[[NSArray alloc] init] forKey:@"userIDs"];
             [songQueue setValue:songDict forKey:[NSString stringWithFormat:@"%i", i]];
             i++;
         }
@@ -152,7 +153,6 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
        }
    }];
 }
-
 
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID{
     NSString *fullName = thisUser.nameString;
@@ -257,7 +257,8 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
         if (error != nil) {
             NSLog(@"Error getting the event");
         } else {
-            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:+1]}];
+            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:+1],
+                                   [NSString stringWithFormat:@"Music Queue.%li.userIDs", index]:[FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]}];
         }
     }];
 }
@@ -270,7 +271,8 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
         if (error != nil) {
             NSLog(@"Error getting the event");
         } else {
-            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:-1]}];
+            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:-1],
+                                   [NSString stringWithFormat:@"Music Queue.%li.userIDs", index]:[FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]}];
         }
     }];
 }
