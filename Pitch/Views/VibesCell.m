@@ -67,7 +67,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
     }];
-    [cell setBackgroundColor:UIColorFromRGB(0x157f5f)];
+    [cell setBackgroundColor:UIColorFromRGB(0x137b5b)];
     [cell.titleLabel setTextColor:UIColorFromRGB(0xffffff)];
 //    [cell setLabelText:UIColorFromRGB(0xffffff)];
     [self.selectedVibesSet addObject:cell.titleLabel.text];
@@ -80,7 +80,7 @@
         cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
     }];
 //    [cell setBackgroundColor:UIColorFromRGB(0x21ce99)];
-    [cell setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
+    [cell setBackgroundColor:UIColorFromRGB(0x90e6cc)];
     [cell.titleLabel setTextColor:UIColorFromRGB(0x000000)];
     [self.selectedVibesSet removeObject:cell.titleLabel.text];
     [self.filter setSelectedVibes:[NSMutableArray arrayWithObjects:[self.selectedVibesSet allObjects], nil]];
@@ -94,7 +94,7 @@
         [UIView animateWithDuration:0.3 animations:^{
             cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
         }];
-        [cell setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
+        [cell setBackgroundColor:UIColorFromRGB(0x90e6cc)];
         [cell.titleLabel setTextColor:UIColorFromRGB(0x000000)];
         [self.selectedVibesSet removeObject:cell.titleLabel.text];
     }

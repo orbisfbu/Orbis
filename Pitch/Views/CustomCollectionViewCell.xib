@@ -27,7 +27,7 @@
                     </label>
                 </subviews>
             </view>
-            <color key="backgroundColor" red="0.73449856042861938" green="0.94229131937026978" blue="0.87450426816940308" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color key="backgroundColor" red="0.56470588235294117" green="0.90196078431372551" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="ucm-DB-Anb" secondAttribute="trailing" constant="10" id="1e1-cc-Q2j"/>
                 <constraint firstItem="ucm-DB-Anb" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="D41-Jl-FDJ"/>
