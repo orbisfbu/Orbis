@@ -14,7 +14,9 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
-    [self.userBioLabel setText:[UserInSession shared].sharedUser.userBioString];
+//    [self.userBioLabel setText:[UserInSession shared].sharedUser.userBioString];
+    self.userBioLabel.text = [NSString stringWithFormat: @"This is what a user bio would look like!"];
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
