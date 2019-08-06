@@ -88,7 +88,6 @@
     [self.vibesLabel sizeToFit];
     [self.vibesLabel setRestorationIdentifier:@"vibesLabel"];
     [self.roundedCornersViewOutlet addSubview:self.vibesLabel];
-    
     self.vibesCollectionView.delegate = self;
     self.vibesCollectionView.dataSource = self;
     UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -180,7 +179,6 @@
         [[DataHandling shared] userRegisteredForEvent:self.event.eventName];
         [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
     }
-    
     [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
 }
 
@@ -190,11 +188,13 @@
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    
     CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
     [cell setLabelText:self.event.eventVibesArray[indexPath.item]];
     return cell;}
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    
     return self.event.eventVibesArray.count;
 }
 

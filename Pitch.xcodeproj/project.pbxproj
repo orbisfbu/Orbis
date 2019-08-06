@@ -28,6 +28,7 @@
 		780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */; };
 		780DB2F022EA6A8200B78516 /* EventDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */; };
 		781A941622ECB184002966B5 /* UserInSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 781A941522ECB184002966B5 /* UserInSession.m */; };
+		7872897D22F90175002CADE8 /* EventGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7872897C22F90175002CADE8 /* EventGalleryCell.m */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
 		78FC04B822E17C700049E0BD /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B722E17C700049E0BD /* Event.m */; };
 		C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C127D52522DFE699009963B0 /* ExploreViewController.m */; };
@@ -136,6 +137,8 @@
 		780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EventDetails.storyboard; sourceTree = "<group>"; };
 		781A941422ECB184002966B5 /* UserInSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInSession.h; sourceTree = "<group>"; };
 		781A941522ECB184002966B5 /* UserInSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInSession.m; sourceTree = "<group>"; };
+		7872897B22F90175002CADE8 /* EventGalleryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGalleryCell.h; sourceTree = "<group>"; };
+		7872897C22F90175002CADE8 /* EventGalleryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventGalleryCell.m; sourceTree = "<group>"; };
 		78FC04B322E17C640049E0BD /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		78FC04B422E17C640049E0BD /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		78FC04B622E17C700049E0BD /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -482,6 +485,8 @@
 				C1C3418322F8A96200A09666 /* MusicQueueTableViewCell.h */,
 				C1C3418422F8A96200A09666 /* MusicQueueTableViewCell.m */,
 				C1C3418522F8A96200A09666 /* MusicQueueTableViewCell.xib */,
+				7872897B22F90175002CADE8 /* EventGalleryCell.h */,
+				7872897C22F90175002CADE8 /* EventGalleryCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -799,6 +804,7 @@
 				C138EDEA22DFAD9F00AAA0D0 /* main.m in Sources */,
 				78FC04B822E17C700049E0BD /* Event.m in Sources */,
 				780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */,
+				7872897D22F90175002CADE8 /* EventGalleryCell.m in Sources */,
 				780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */,
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,
 				C1C3417722F3533D00A09666 /* SearchResult.m in Sources */,

@@ -131,6 +131,8 @@
 }
 
 - (void)populateMapWithEventswithFilter:(BOOL)filterValue{
+    
+    
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
     }
@@ -149,6 +151,7 @@
     else if (self.filteredEventsArray > 0 && self.filtersWereSet){
         for (Event *thisEvent in self.filteredEventsArray)
         {
+            
             MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
             eventAnnotationPoint.title = thisEvent.eventName;
@@ -158,7 +161,6 @@
 }
 
 - (void)presentEventDetailsView: (Event *)eventToPresent {
-    
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
     detailedEventVC.event = eventToPresent;
@@ -306,7 +308,6 @@
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     [mapView deselectAnnotation:view.annotation animated:YES];
     [self.dataHandlingObject getInfoForEventAnnotionWithTitle:view.annotation.title withCoordinates:view.annotation.coordinate];
-    
 }
 
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
@@ -334,12 +335,7 @@
     [self.distanceCell resetDistance];
     [self.numberOfPeopleCell resetNumberOfPeople];
     [self.ageCell resetAgeRestrictions];
-
-    
-    ///upon resetting filters, empty the filtered events array
-    //remove all the annotations on map and
-    //add the events in the events array 
-    
+    [self refreshEventsArray];
 }
 
 - (void) filterAnnotations {
@@ -348,8 +344,6 @@
     int distance = [self.distanceCell getDistance];
     int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
     int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
-    
-    
     NSDictionary *filterValues = @{
                                   @"Age Restriction": @(ageRestriction),
                                   @"Distance": @(distance),
@@ -358,14 +352,8 @@
                                   @"Vibes": vibesSet
                                   };
     [self.dataHandlingObject getFilteredEventsFromDatabase:filterValues];
-    
-    //create an NSMutable filteredEvents property
-    //iterate through local events array; if that event doesn't match these parameters
-    //then don't add them to the filtered array
-    
-    //now iterate through the current annotations on map and remove them all
-    //then just add the annotations that are in the filtered events array
 }
+
 - (void)refreshAfterEventCreation {
     [self refreshEventsArray];
 }
