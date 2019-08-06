@@ -8,6 +8,7 @@
 
 #import "EventGalleryViewController.h"
 #import "EventGalleryCell.h"
+#import "UIImageView+AFNetworking.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -49,10 +50,8 @@
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     EventGalleryCell *imageCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"galleryCell" forIndexPath:indexPath];
     NSURL *imageNSURL = [NSURL URLWithString:self.imageURLStringsArray[indexPath.item]];
-    NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
-    UIImage *eventImage = [UIImage imageWithData:imageData];
-    imageCell.galleryPicImageView.image = nil;
-    [imageCell.galleryPicImageView setImage:eventImage];
+//    NSData *imageData = [NSData dataWithContentsOfURL:imageNSURL];
+    [imageCell.galleryPicImageView setImageWithURL:imageNSURL];
     return imageCell;
 }
 
