@@ -20,12 +20,13 @@
 @implementation EventDetailsViewController
 
 - (void)viewDidLoad {
-    self.testingVibes = @[@"Vibe1",@"Vibe2",@"Vibe3"];
     self.dataHandlingObject = [DataHandling shared];
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
     [self createRegisterButton];
-    [self createVibesLabelAndVibesCollection];
+    if (self.event.eventVibesArray.count != 0){
+        [self createVibesLabelAndVibesCollection];
+    }
     [self createDistanceLabel];
     [self createdAttendanceCountLabel];
     [self createAgeRestrictionLabel];
@@ -74,30 +75,41 @@
 
 -(void)createVibesLabelAndVibesCollection
 {
-    self.vibesLabel = [[UILabel alloc] initWithFrame: CGRectMake(30, self.registerButton.frame.origin.y + self.registerButton.frame.size.height + 20, 40,20)];
+    self.vibesLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.registerButton.frame.size.width/5, self.registerButton.frame.origin.y + self.registerButton.frame.size.height + 20, 40,20)];
     [self.vibesLabel setText:@"Vibes/Themes:"];
     [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.vibesLabel sizeToFit];
     [self.vibesLabel setRestorationIdentifier:@"vibesLabel"];
     [self.roundedCornersViewOutlet addSubview:self.vibesLabel];
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(self.vibesLabel.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.view.frame.size.width - self.vibesLabel.frame.origin.x * 2, 30) collectionViewLayout:layout];
+    self.vibesCollectionView.layer.cornerRadius = 5;
+    [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     self.vibesCollectionView.delegate = self;
     self.vibesCollectionView.dataSource = self;
-    UICollectionViewFlowLayout* flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.itemSize = CGSizeMake(50, 50);
-    [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
-    [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
-    [self.vibesCollectionView setAllowsSelection:NO];
-    CGRect frameForCollectionView = CGRectMake(self.vibesLabel.frame.origin.x, self.vibesLabel.frame.origin.y + self.vibesLabel.frame.size.height + 10, self.view.frame.size.width - self.vibesLabel.frame.origin.x * 2, 30);
-    self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:frameForCollectionView collectionViewLayout:flowLayout];
-    self.vibesCollectionView.layer.cornerRadius = self.vibesCollectionView.frame.size.height/2;
+    [self.vibesCollectionView setAlwaysBounceHorizontal:YES];
+    [self.vibesCollectionView setShowsHorizontalScrollIndicator:NO];
+    [self.vibesCollectionView setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.vibesCollectionView setAllowsMultipleSelection:YES];
     [self.roundedCornersViewOutlet addSubview:self.vibesCollectionView];
-    [self.vibesCollectionView setFrame:frameForCollectionView];
 }
 
 -(void)createDistanceLabel
 {
-    self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.vibesLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y+self.vibesCollectionView.frame.size.height + 20, 100, 20)];
-    [self.distanceFromUserLabel setText:[NSString stringWithFormat:@"Distance From You: %d", self.distanceFromUserInt]];
+    NSArray *locationComponents = [self.event.eventLocationString componentsSeparatedByString:@" "];
+    NSNumber  *latitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:0] floatValue]];
+    NSNumber  *longitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:1] floatValue]];
+    CLLocationCoordinate2D thisEventCoordinate = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
+    CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
+    CLLocationDistance distanceInKilometers = [thisEventLocation distanceFromLocation:[DataHandling shared].userLocation]/1000;
+    if (self.event.eventVibesArray.count != 0){
+        self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.vibesLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y+self.vibesCollectionView.frame.size.height + 20, 100, 20)];
+    }
+    else{
+        self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.registerButton.frame.size.width/5, self.registerButton.frame.origin.y+self.self.registerButton.frame.size.height + 20, 100, 20)];
+    }
+    [self.distanceFromUserLabel setText:[NSString stringWithFormat:@"Distance From You: %.1fkm", distanceInKilometers]];
     [self.distanceFromUserLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.distanceFromUserLabel sizeToFit];
     [self.distanceFromUserLabel setRestorationIdentifier:@"distanceFromUserLabel"];
@@ -107,7 +119,7 @@
 -(void)createdAttendanceCountLabel
 {
     self.attendanceCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.distanceFromUserLabel.frame.origin.x, self.distanceFromUserLabel.frame.origin.y+self.distanceFromUserLabel.frame.size.height + 20, 100, 50)];
-    [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
+    [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.event.eventAttendanceCount]];
     [self.attendanceCountLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.attendanceCountLabel sizeToFit];
     [self.attendanceCountLabel setRestorationIdentifier:@"attendanceCountLabel"];
@@ -117,7 +129,14 @@
 -(void)createAgeRestrictionLabel
 {
     self.ageRestrictionLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.attendanceCountLabel.frame.origin.x, self.attendanceCountLabel.frame.origin.y+self.attendanceCountLabel.frame.size.height + 20, 100, 20)];
-    [self.ageRestrictionLabel setText:[NSString stringWithFormat:@"Age Restriction: %d", self.eventAgeRestrictionInt]];
+    NSString *textToShow;
+    if (self.event.eventAgeRestriction != 0){
+        textToShow = [NSString stringWithFormat:@"Age Restriction: %d", self.event.eventAgeRestriction];
+    }
+    else{
+        textToShow = @"Age Restriction: None";
+    }
+    [self.ageRestrictionLabel setText:textToShow];
     [self.ageRestrictionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.ageRestrictionLabel sizeToFit];
     [self.ageRestrictionLabel setRestorationIdentifier:@"ageRestrictionLabel"];
@@ -150,17 +169,17 @@
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
-    [cell setLabelText:self.testingVibes[indexPath.item]];
+    [cell setLabelText:self.event.eventVibesArray[indexPath.item]];
     return cell;
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.testingVibes.count;
+    return self.event.eventVibesArray.count;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
-    [cell setLabelText:self.testingVibes[indexPath.row]];
+    [cell setLabelText:self.event.eventVibesArray[indexPath.row]];
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
     CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];

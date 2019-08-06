@@ -32,7 +32,6 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) CLLocation *currentUserLocation;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
 @property (strong, nonatomic) Event* eventToLoad;
@@ -149,7 +148,7 @@
         {
             MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
-            eventAnnotationPoint.title = thisEvent.eventName;
+            eventAnnotationPoint.title = thisEvent.ID;
             [self.photoMap addAnnotation:eventAnnotationPoint];
         }
     }
@@ -159,6 +158,7 @@
     UIStoryboard *detailsSB = [UIStoryboard storyboardWithName:@"EventDetails" bundle:nil];
     EventDetailsViewController *detailedEventVC = (EventDetailsViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"DetailedEventView"];
     detailedEventVC.event = eventToPresent;
+    
     MusicQueueViewController *musicQueueVC = (MusicQueueViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"MusicQueueView"];
     musicQueueVC.event = eventToPresent;
     EventGalleryViewController *eventGalleryVC = (EventGalleryViewController *)[detailsSB instantiateViewControllerWithIdentifier:@"EventGalleryView"];
@@ -306,6 +306,7 @@
     [mapView deselectAnnotation:annotationView.annotation animated:YES];
     NSLog(@"TITLE: %@", annotationView.annotation.title);
     [self.dataHandlingObject getEvent:annotationView.annotation.title withCompletion:^(Event * _Nonnull event) {
+        
         [self presentEventDetailsView:event];
     }];
 }
@@ -324,7 +325,7 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    self.currentUserLocation = [locations lastObject];
+    [DataHandling shared].userLocation = [locations lastObject];
 }
 
 - (void)applyFiltersButtonWasPressed {
@@ -346,7 +347,8 @@
 - (void) filterAnnotations {
     int ageRestriction = [self.ageCell getAgeRestrictions];
     NSMutableSet *vibesSet = [self.vibesCell getSelectedVibes];
-    int distance = [self.distanceCell getDistance];
+    long distance = [self.distanceCell getDistance];
+    
     int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
     int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
     NSDictionary *filterValues = @{
@@ -356,7 +358,7 @@
                                   @"Max People": @(maxNumPeople),
                                   @"Vibes": vibesSet
                                   };
-    [self.dataHandlingObject getFilteredEventsFromDatabase:filterValues userLocation:self.currentUserLocation];
+    [self.dataHandlingObject getFilteredEventsFromDatabase:filterValues userLocation:[DataHandling shared].userLocation];
 }
 
 - (void)refreshAfterEventCreation {

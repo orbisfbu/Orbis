@@ -31,15 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UICollectionView *vibesCollectionView;
 @property (strong, nonatomic) UIButton *registerButton;
 @property (nonatomic) BOOL registrationStatusForEvent;
-
-// Event ID
 @property (strong, nonatomic) Event *event;
-@property (strong, nonatomic) NSArray *testingVibes;
-
-//calculate this distance using difference in coordinates or something
-//this distance should be set in explore view controller with the user's
-//current location on the map
-@property (nonatomic) int distanceFromUserInt;
 @property (nonatomic) int eventAgeRestrictionInt;
 @property (nonatomic) int eventAttendancCountInt;
 

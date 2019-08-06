@@ -82,6 +82,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     int ageRestrictionFilter = [filters[FILTER_AGE_KEY] intValue];
     NSMutableSet *vibesFilterSet = filters[FILTER_VIBES_KEY];
     int distanceFilter = [filters[FILTER_DISTANCE_KEY] intValue];
+    
     int minNumPeopleFilter = [filters[FILTER_MINPEOPLE_KEY] intValue];
     int maxNumPeopleFilter = [filters[FILTER_MAXPEOPLE_KEY] intValue];
     FIRCollectionReference *eventRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
@@ -104,9 +105,11 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                 NSNumber  *longitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:1] floatValue]];
                 CLLocationCoordinate2D thisEventCoordinate = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
                 CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
-                CLLocationDistance distanceInMeters = [thisEventLocation distanceFromLocation:userLocation];
-                NSLog(@"THIS IS THE DISTANCE BETWEEN USER AND EVENT: %f", distanceInMeters/1000);
-                if ([thisEventVibeSet isSubsetOfSet:vibesFilterSet] && distanceInMeters/1000 <= distanceFilter){
+                CLLocationDistance distanceInKilometers = [thisEventLocation distanceFromLocation:userLocation]/1000;
+                NSLog(@"THIS IS THE DISTANCE BETWEEN USER AND EVENT: %f", distanceInKilometers);
+                
+                if ([thisEventVibeSet isSubsetOfSet:vibesFilterSet] && distanceInKilometers <= distanceFilter){
+                    
                     NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:document.data];
                     [eventDict setValue:document.documentID forKey:@"ID"];
                     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDict];
