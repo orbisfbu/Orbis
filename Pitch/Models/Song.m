@@ -13,15 +13,11 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-        NSLog(@"%@", dict);
         self.albumName = dict[@"Album Name"];
-        NSLog(@"OK HERE");
         self.artistName = dict[@"Artist Name"];
-        NSLog(@"OK HERE");
         self.title = dict[@"Title"];
-        NSLog(@"OK HERE");
         self.numLikes = [dict[@"numLikes"] longValue];
-        NSLog(@"OK HERE");
+        self.userIDsThatHaveLikedSong = dict[@"userIDs"];
     }
     return self;
 }

@@ -63,12 +63,8 @@
         cell.eventID = self.event.ID;
         cell.index = indexPath.row - 1;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
-        NSLog(@"HELLOOOO");
         cell.song = self.event.musicQueue[indexPath.row - 1];
         [cell awakeFromNib];
-        //[cell.songNameLabel setText:self.musicQueue[indexPath.row - 1][@"Title"]];
-        //[cell.artistNameLabel setText:self.musicQueue[indexPath.row - 1][@"Artist Name"]];
-        //[cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row - 1][@"numLikes"]]];
         return cell;
     } else {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
@@ -77,9 +73,6 @@
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         cell.song = self.event.musicQueue[indexPath.row];
         [cell awakeFromNib];
-//        [cell.songNameLabel setText:self.musicQueue[indexPath.row][@"Title"]];
-//        [cell.artistNameLabel setText:self.musicQueue[indexPath.row][@"Artist Name"]];
-//        [cell.numLikesLabel setText:[NSString stringWithFormat:@"%@", self.musicQueue[indexPath.row][@"numLikes"]]];
         return cell;
     }
 }
