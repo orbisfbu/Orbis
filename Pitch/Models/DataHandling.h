@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoAndApp: (NSString *)userID;
-- (void)getFilteredEventsFromDatabase: (NSDictionary*)filters;
+- (void)getFilteredEventsFromDatabase: (NSDictionary*)filters userLocation:(CLLocation*)userLocation;
 @property (nonatomic, weak) id<GetEventsArrayDelegate> delegate;
 @property (nonatomic, weak) id<GetFilteredEventsArrayDelegate> filteredEventsDelegate;
 @property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;

@@ -34,6 +34,12 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 //set this text to some default text or something like "change bio now!"
 static NSString * const USER_BIO_KEY = @"Bio";
 static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
+//Filter dictionary keys
+static NSString * const FILTER_AGE_KEY = @"Age Restriction";
+static NSString * const FILTER_VIBES_KEY = @"Vibes";
+static NSString * const FILTER_DISTANCE_KEY = @"Distance";
+static NSString * const FILTER_MINPEOPLE_KEY = @"Min People";
+static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
 
 @interface DataHandling()
 @property (nonatomic, readwrite) FIRFirestore *database;
@@ -74,30 +80,36 @@ static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
 }
 
 
-- (void)getFilteredEventsFromDatabase: (NSDictionary*)filters{
+- (void)getFilteredEventsFromDatabase: (NSDictionary*)filters userLocation:(CLLocation *)userLocation {
     NSMutableArray <Event *> *filteredEventsArray = [[NSMutableArray alloc] init];
-    int ageRestriction = [filters[@"Age Restriction"] intValue];
-    NSMutableSet *vibesSet = filters[@"Vibes"];
-    int distance = [filters[@"Distance"] intValue];
-    int minNumPeople = [filters[@"Min People"] intValue];
-    int maxNumPeople = [filters[@"Max People"] intValue];
+    int ageRestrictionFilter = [filters[FILTER_AGE_KEY] intValue];
+    NSMutableSet *vibesFilterSet = filters[FILTER_VIBES_KEY];
+    int distanceFilter = [filters[FILTER_DISTANCE_KEY] intValue];
+    int minNumPeopleFilter = [filters[FILTER_MINPEOPLE_KEY] intValue];
+    int maxNumPeopleFilter = [filters[FILTER_MAXPEOPLE_KEY] intValue];
     FIRCollectionReference *eventRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
     FIRQuery *filterEventsQuery;
-    if (ageRestriction != 0){
-        filterEventsQuery = [[[eventRef queryWhereField:@"Age Restriction" isEqualTo:@(ageRestriction)] queryWhereField:@"Attendance" isGreaterThanOrEqualTo:@(minNumPeople)] queryWhereField:@"Attendance" isLessThanOrEqualTo:@(maxNumPeople)];
+    if (ageRestrictionFilter != 0){
+        filterEventsQuery = [[[eventRef queryWhereField:EVENT_AGE_RESTRICTION_KEY isEqualTo:@(ageRestrictionFilter)] queryWhereField:EVENT_ATTENDANCE_KEY isGreaterThanOrEqualTo:@(minNumPeopleFilter)] queryWhereField:EVENT_ATTENDANCE_KEY isLessThanOrEqualTo:@(maxNumPeopleFilter)];
     }
     else{
-        filterEventsQuery = [[eventRef queryWhereField:@"Attendance" isGreaterThanOrEqualTo:@(minNumPeople)] queryWhereField:@"Attendance" isLessThanOrEqualTo:@(maxNumPeople)];
+        filterEventsQuery = [[eventRef queryWhereField:EVENT_ATTENDANCE_KEY isGreaterThanOrEqualTo:@(minNumPeopleFilter)] queryWhereField:EVENT_ATTENDANCE_KEY isLessThanOrEqualTo:@(maxNumPeopleFilter)];
     }
-    
     [filterEventsQuery getDocumentsWithCompletion:^(FIRQuerySnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"Error getting filtered events from database: %@", error);
         } else {
             for (FIRDocumentSnapshot *document in snapshot.documents) {
-                NSArray *thisVibesArray = document.data[@"Vibes"];
-                NSMutableSet *vibesSetToCompare = [NSMutableSet setWithArray:thisVibesArray];
-                if ([vibesSetToCompare isEqualToSet:vibesSet]){
+                NSArray *thisEventVibesArray = document.data[FILTER_VIBES_KEY];
+                NSMutableSet *thisEventVibeSet = [NSMutableSet setWithArray:thisEventVibesArray];
+                NSArray *locationComponents = [document.data[EVENT_LOCATION_KEY] componentsSeparatedByString:@" "];
+                NSNumber  *latitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:0] floatValue]];
+                NSNumber  *longitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:1] floatValue]];
+                CLLocationCoordinate2D thisEventCoordinate = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
+                CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
+                CLLocationDistance distanceInMeters = [thisEventLocation distanceFromLocation:userLocation];
+                NSLog(@"THIS IS THE DISTANCE BETWEEN USER AND EVENT: %f", distanceInMeters/1000);
+                if ([thisEventVibeSet isSubsetOfSet:vibesFilterSet] && distanceInMeters/1000 <= distanceFilter){
                     Event *eventToAdd = [[Event alloc] initWithDictionary:document.data];
                     [filteredEventsArray addObject:eventToAdd];
                 }

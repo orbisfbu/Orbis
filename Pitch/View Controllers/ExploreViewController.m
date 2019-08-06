@@ -32,6 +32,7 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) CLLocation *currentUserLocation;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *filterButton;
 @property (strong, nonatomic) Event* eventToLoad;
@@ -103,7 +104,6 @@
     [self.dropDownFilterTV setAllowsSelection:NO];
     //[self.dropDownFilterTV setRowHeight:UITableViewAutomaticDimension];
     self.isScrollingTVUp = NO;
-    
     [self createRefreshButton];
 }
 
@@ -130,8 +130,6 @@
 }
 
 - (void)populateMapWithEventswithFilter:(BOOL)filterValue{
-    
-    
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
     }
@@ -149,7 +147,6 @@
     else if (self.filteredEventsArray > 0 && self.filtersWereSet){
         for (Event *thisEvent in self.filteredEventsArray)
         {
-            
             MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
             eventAnnotationPoint.title = thisEvent.eventName;
@@ -312,15 +309,20 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
-    UIAlertView *errorAlert = [[UIAlertView alloc]initWithTitle:@"Error" message:@"There was an error retrieving your location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-    [errorAlert show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: @"Error getting location"
+                                                                   message:[NSString stringWithFormat:@"Error %@", error]
+                                                            preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                     }];
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
     NSLog(@"Error: %@",error.description);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    CLLocation *crnLoc = [locations lastObject];
-    //NSString *mylatitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.latitude];
-    //NSString *myLongitude = [NSString stringWithFormat:@"%.8f",crnLoc.coordinate.longitude];
+    self.currentUserLocation = [locations lastObject];
 }
 
 - (void)applyFiltersButtonWasPressed {
@@ -352,7 +354,7 @@
                                   @"Max People": @(maxNumPeople),
                                   @"Vibes": vibesSet
                                   };
-    [self.dataHandlingObject getFilteredEventsFromDatabase:filterValues];
+    [self.dataHandlingObject getFilteredEventsFromDatabase:filterValues userLocation:self.currentUserLocation];
 }
 
 - (void)refreshAfterEventCreation {
@@ -360,8 +362,31 @@
 }
 
 - (void)refreshFilteredEventsDelegateMethod:(nonnull NSArray *)filteredEvents {
-    self.filteredEventsArray = [NSMutableArray arrayWithArray:filteredEvents];
-    [self populateMapWithEventswithFilter:self.filtersWereSet];
+    if (filteredEvents.count == 0){
+        [self presentAlert:@"No events found with these filters" withMessage:@"Try changing your search criteria"];
+    }
+    else{
+        self.filteredEventsArray = [NSMutableArray arrayWithArray:filteredEvents];
+        [self populateMapWithEventswithFilter:self.filtersWereSet];
+        [self removeFilterMenu];
+        self.filterMenuIsShowing = !self.filterMenuIsShowing;
+    }
+}
+
+- (void)presentAlert:(NSString *)alertTitle withMessage:(NSString *)alertMessage
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle: alertTitle
+                                                                   message:alertMessage
+                                                            preferredStyle:(UIAlertControllerStyleAlert)];
+    // create an OK action
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction * _Nonnull action) {
+                                                         // handle response here.
+                                                     }];
+    // add the OK action to the alert controller
+    [alert addAction:okAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 
