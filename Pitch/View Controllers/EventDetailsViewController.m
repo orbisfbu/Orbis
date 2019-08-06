@@ -32,7 +32,6 @@
     [self createAgeRestrictionLabel];
     [self createdPollSectionLabel];
     [self createExtraLabel];
-  
 }
 
 - (void)configureBaseViewsAndImage {
@@ -168,13 +167,13 @@
         [self.registerButton setSelected:YES];
         [self.registerButton setTitle:@"Registered" forState:UIControlStateNormal];
         self.eventAttendancCountInt += 1;
-        [[DataHandling shared] userRegisteredForEvent:self.event.eventName];
+        [[DataHandling shared] registerUserToEvent:self.event];
         [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
         NSLog(@"Registered user; now in registered users array");
     } else {
         [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
         self.eventAttendancCountInt -= 1;
-        [[DataHandling shared] unregisterUser:self.event.eventName];
+        [[DataHandling shared] unregisterUser:self.event];
         [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
         NSLog(@"Unregistered user; now not in registered users array");
     }
