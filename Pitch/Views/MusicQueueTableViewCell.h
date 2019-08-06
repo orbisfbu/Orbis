@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Song.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UILabel *numLikesLabel;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
 
+
 @property BOOL userDoesLike;
+@property (strong, nonatomic) NSString *eventID;
+@property long index;
+@property (strong, nonatomic) Song *song;
 @end
 
 NS_ASSUME_NONNULL_END

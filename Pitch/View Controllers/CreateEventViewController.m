@@ -680,18 +680,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void)publishEvent {
-    
-    NSMutableArray *songQueue = [[NSMutableArray alloc] init];
-    for (Song *song in self.queuedUpSongsArray) {
-        if (![song.albumName isEqualToString:@"default_album"]) {
-            NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
-            [songDict setValue:song.title forKey:@"Title"];
-            [songDict setValue:song.artistName forKey:@"Artist Name"];
-            [songDict setValue:song.albumName forKey:@"Album Name"];
-            [songDict setValue:0 forKey:@"Number of Likes"];
-            [songQueue addObject:songDict];
-        }
-    }
+//    NSMutableArray *songQueue = [[NSMutableArray alloc] init];
+//    for (Song *song in self.queuedUpSongsArray) {
+//        if (![song.albumName isEqualToString:@"default_album"]) {
+//            NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
+//            [songDict setValue:song.title forKey:@"Title"];
+//            [songDict setValue:song.artistName forKey:@"Artist Name"];
+//            [songDict setValue:song.albumName forKey:@"Album Name"];
+//            [songDict setValue:@(0) forKey:@"numLikes"];
+//            [songQueue addObject:songDict];
+//        }
+//    }
     
     NSDictionary *eventDefinition = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
@@ -702,7 +701,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Age Restriction": @(self.ageRestriction),
         @"Location": [NSString stringWithFormat:@"%.5f %.5f", self.coordinates.latitude, self.coordinates.longitude],
         @"Vibes": [self.vibesSet allObjects],
-        @"Music Queue": songQueue
+        //@"Music Queue": songQueue
+        @"Music Queue": self.queuedUpSongsArray
     };
     Event *event = [[Event alloc] initWithDictionary:eventDefinition];
     [[DataHandling shared] addEventToDatabase:event];
