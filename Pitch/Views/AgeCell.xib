@@ -35,7 +35,7 @@
                                         <rect key="frame" x="20" y="20" width="30" height="30"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="18+">
-                                            <color key="titleColor" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <color key="titleColor" red="0.18399685621261597" green="0.71355634927749634" blue="0.443095862865448" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <connections>
                                             <action selector="eighteenPlusButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="3QS-t3-hKo"/>
@@ -81,7 +81,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="21+">
-                                            <color key="titleColor" red="0.1836712415" green="0.71418940360000005" blue="0.44048496399999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <color key="titleColor" red="0.18391802906990051" green="0.71359717845916748" blue="0.43917322158813477" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <connections>
                                             <action selector="twentyOnePlusButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="eoP-gw-PQr"/>

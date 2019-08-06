@@ -36,6 +36,7 @@
                         <subviews>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="3Z8-Su-Pge">
                                 <rect key="frame" x="3" y="5" width="304" height="56"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="sliderDidSlide:" destination="KGk-i7-Jjw" eventType="valueChanged" id="nYw-72-Wk2"/>
                                 </connections>

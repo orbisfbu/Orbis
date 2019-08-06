@@ -268,10 +268,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Next Button
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.nextButton setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+    [self.nextButton setBackgroundColor:UIColorFromRGB(0x157f5f)];
     [self.nextButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     self.nextButton.layer.cornerRadius = 5;
     [self.view addSubview:self.nextButton];
@@ -332,9 +332,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.ageSubview];
     self.ageSubview.layer.cornerRadius = 5;
     self.leftAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 9*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
-    [self.leftAgeRestriction setProgressColor:UIColorFromRGB(0x21ce99)];
+    [self.leftAgeRestriction setProgressColor:UIColorFromRGB(0xbcf0e0)];
     [self.leftAgeRestriction setProgressLineWidth:5];
-    [self.leftAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x21ce99)];
+    [self.leftAgeRestriction setProgressStrokeColor:UIColorFromRGB(0xbcf0e0)];
     [self.leftAgeRestriction setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.ageSubview addSubview:self.leftAgeRestriction];
     UIButton *leftLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.leftAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.leftAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
@@ -346,9 +346,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [leftLabel addTarget:self action:@selector(leftAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.ageSubview addSubview:leftLabel];
     self.rightAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 5*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
-    [self.rightAgeRestriction setProgressColor:UIColorFromRGB(0x21ce99)];
+    [self.rightAgeRestriction setProgressColor:UIColorFromRGB(0xbcf0e0)];
     [self.rightAgeRestriction setProgressLineWidth:5];
-    [self.rightAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x21ce99)];
+    [self.rightAgeRestriction setProgressStrokeColor:UIColorFromRGB(0xbcf0e0)];
     [self.rightAgeRestriction setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
     [self.ageSubview addSubview:self.rightAgeRestriction];
     UIButton *rightLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.rightAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.rightAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
@@ -825,7 +825,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
         [cell setLabelText:self.vibesArray[indexPath.item]];
-        [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        [cell setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
         return cell;
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         MusicQueueCollectionViewCell *cell = [self.musicQueueCollectionView dequeueReusableCellWithReuseIdentifier:@"MusicQueueCollectionViewCell" forIndexPath:indexPath];
@@ -869,7 +869,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [UIView animateWithDuration:0.3 animations:^{
             cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
         }];
-        [cell setBackgroundColor:[UIColor grayColor]];
+        [cell setBackgroundColor:UIColorFromRGB(0x157f5f)];
+        [cell.titleLabel setTextColor:UIColorFromRGB(0xffffff)];
         [self.vibesSet addObject:cell.titleLabel.text];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW] && indexPath.row == self.queuedUpSongsArray.count - 1) {
         [self.searchMusicTextField becomeFirstResponder];
@@ -882,7 +883,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [UIView animateWithDuration:0.3 animations:^{
             cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
         }];
-        [cell setBackgroundColor:UIColorFromRGB(0xf5f5f5)];
+        [cell setBackgroundColor:UIColorFromRGB(0xbcf0e0)];
+        [cell.titleLabel setTextColor:UIColorFromRGB(0x000000)];
         [self.vibesSet removeObject:cell.titleLabel.text];
     }
 }
