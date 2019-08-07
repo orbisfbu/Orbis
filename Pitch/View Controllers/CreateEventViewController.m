@@ -543,7 +543,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.datePickerLabel.frame.origin.y, self.dateLabel.frame.size.width, self.dateLabel.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.view.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
         if ([self.searchLocationTextField.text isEqualToString:@""]) {
-            [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
+//            [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
             self.searchLocationPlaceholderLabel.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, self.searchLocationTextField.frame.origin.y + 5, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT);
         }
         self.datePicker.alpha = 1;
@@ -685,7 +685,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } completion:^(BOOL finished) {
         self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, self.view.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
     }];
-
 }
 
 - (void) resetPages {
@@ -827,13 +826,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) locationCancelButtonPressed {
-//    [self.searchLocationTextField setText:@""];
+    [self.searchLocationTextField setText:@""];
     [self dismissKeyboard];
+    [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
 }
 
 - (void) musicCancelButtonPressed {
-    [self.searchMusicTextField setText:@""];
     [self dismissKeyboard];
+    [self.searchMusicTextField setText:@""];
 }
 
 - (void) leftAgeButtonPressed {
@@ -873,6 +873,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) refreshResultsTableView {
+    
     NSString *coordinates = @"37.77,-122.41";
     NSString *query = self.searchLocationTextField.text;
     NSString *CLIENT_ID = @"3NZPO204JPDCJW0XJWY5AFCWCLXNZWDNIOHTQYHHOP0ARXRI";
