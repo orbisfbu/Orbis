@@ -500,6 +500,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.datePickerLabel.frame.origin.y, self.dateLabel.frame.size.width, self.dateLabel.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, self.datePickerLabel.frame.origin.y + self.datePickerLabel.frame.size.height - 5, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(self.pinImageView.frame.origin.x, self.searchLocationTextField.frame.origin.y, self.pinImageView.frame.size.width, self.pinImageView.frame.size.height);
+        [self.backButton setAlpha:0];
     }];
 }
 
