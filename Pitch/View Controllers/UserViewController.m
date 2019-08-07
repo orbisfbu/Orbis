@@ -114,6 +114,8 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventListCell" bundle:nil] forCellReuseIdentifier:@"EventListCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"FirstLastNameCell" bundle:nil] forCellReuseIdentifier:@"FirstLastNameCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"LogoutCell" bundle:nil] forCellReuseIdentifier:@"LogoutCell"];
+    //self.userProfileTableView.estimatedRowHeight = 150; // added
+    //self.userProfileTableView.rowHeight = UITableViewAutomaticDimension; // added
     self.userProfileTableView.delegate = self;
     self.userProfileTableView.dataSource = self;
     
