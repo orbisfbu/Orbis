@@ -13,13 +13,25 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface EventDetailsViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface EventDetailsViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
+@property (strong, nonatomic) UIImagePickerController *imagePickerVC;
 @end
 
 @implementation EventDetailsViewController
 
 - (void)viewDidLoad {
+    self.imagePickerVC = [UIImagePickerController new];
+    self.imagePickerVC.delegate = self;
+    self.imagePickerVC.allowsEditing = YES;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }
+    else {
+        NSLog(@"Camera 🚫 available so we will use photo library instead");
+        self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
     self.dataHandlingObject = [DataHandling shared];
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
@@ -189,5 +201,19 @@
 - (void)checkForUserRegistrationDelegateMethod:(BOOL)registerValue {
     self.registrationStatusForEvent = registerValue;
 }
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *editedImage = info[UIImagePickerControllerEditedImage];
+    [self.dataHandlingObject updateProfileImage:editedImage withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
+        [UserInSession shared].sharedUser.profileImageURLString = createdProfileImageURLString;
+        NSLog(@"Successfully stored image and updated userProfileImageURLString");
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
+
+- (IBAction)imageUploadButton:(id)sender {
+    [self presentViewController:self.imagePickerVC animated:YES completion:nil];
+}
+
 
 @end

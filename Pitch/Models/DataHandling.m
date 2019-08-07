@@ -41,6 +41,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
 
 @interface DataHandling()
 @property (nonatomic, readwrite) FIRFirestore *database;
+@property (nonatomic, readwrite) FIRStorage *storage;
 @end
 
 @implementation DataHandling
@@ -56,7 +57,110 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
 
 - (instancetype)init {
     self.database = [FIRFirestore firestore];
+    // Get a reference to the storage service using the default Firebase App
+    self.storage = [FIRStorage storage];
     return self;
+}
+
+- (void)updateProfileImage:(UIImage*)imageToUpload withCompletion:(void (^) (NSString *createdProfileImageURLString))completion {
+    NSString *userID = [UserInSession shared].sharedUser.ID;
+    FIRDocumentReference *userInfoRef = [[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:userID];
+    // Data in memory
+    NSData *data = UIImageJPEGRepresentation(imageToUpload, 0.8);
+    // Create a storage reference from our storage service
+    FIRStorageReference *storageRef = [self.storage reference];
+    // Create a reference to the file you want to upload
+    FIRStorageReference *profileImageRef = [storageRef child:[NSString stringWithFormat:@"userProfileImages/%@/profileImage.jpg", userID]];
+    // Upload the file to the path "userProfileImages/%@/profileImage.jpg"
+    FIRStorageUploadTask *uploadTask = [profileImageRef putData:data
+                                                 metadata:nil
+                                               completion:^(FIRStorageMetadata *metadata,
+                                                            NSError *error) {
+                                                   if (error != nil) {
+                                                       NSLog(@"UPLOAD REACHED SOME ERROR");
+                                                       switch (error.code) {
+                                                           case FIRStorageErrorCodeObjectNotFound:
+                                                               // File doesn't exist
+                                                               break;
+                                                               
+                                                           case FIRStorageErrorCodeUnauthorized:
+                                                               // User doesn't have permission to access file
+                                                               break;
+                                                           case FIRStorageErrorCodeCancelled:
+                                                               // User canceled the upload
+                                                               break;
+                                                           case FIRStorageErrorCodeUnknown:
+                                                               // Unknown error occurred, inspect the server response
+                                                               break;
+                                                       }
+                                                   } else {
+                                                       // Metadata contains file metadata such as size, content-type, and download URL.
+                                                       //int size = metadata.size;
+                                                       // You can also access to download URL after upload.
+                                                       [profileImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+                                                           if (error != nil) {
+                                                               NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
+                                                           } else {
+                                                               //convert to URL string since this is how User object stores it
+                                                               //this ensures profileImageURLString is also updated
+                                                               [userInfoRef updateData:@{USER_PROFILE_IMAGE_KEY: URL.absoluteString
+                                                                                      }];
+                                                               completion(URL.absoluteString);
+                                                           }
+                                                       }];
+                                                   }
+                                               }];
+}
+
+
+- (void)uploadEventImage:(UIImage*)imageToUpload withEventID:(NSString *)eventID withCompletion:(void (^) (NSString *createdImageURLString))completion {
+    FIRDocumentReference *userInfoRef = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:eventID];
+    // Data in memory
+    NSData *data = UIImageJPEGRepresentation(imageToUpload, 0.8);
+    // Create a storage reference from our storage service
+    FIRStorageReference *storageRef = [self.storage reference];
+    NSString *randomImageFileName = [[NSUUID alloc] init].UUIDString;
+    // Create a reference to the file you want to upload
+    FIRStorageReference *eventImagesRef = [storageRef child:[NSString stringWithFormat:@"eventMainImages/%@/%@.jpg", eventID, randomImageFileName]];
+    // Upload the file to the path "userProfileImages/%@/profileImage.jpg"
+//    FIRStorageUploadTask *uploadTask = [eventImagesRef putData:data
+//                                                       metadata:nil
+//                                                     completion:^(FIRStorageMetadata *metadata,
+//                                                                  NSError *error) {
+//                                                         if (error != nil) {
+//                                                             NSLog(@"UPLOAD REACHED SOME ERROR");
+//                                                             switch (error.code) {
+//                                                                 case FIRStorageErrorCodeObjectNotFound:
+//                                                                     // File doesn't exist
+//                                                                     break;
+//
+//                                                                 case FIRStorageErrorCodeUnauthorized:
+//                                                                     // User doesn't have permission to access file
+//                                                                     break;
+//                                                                 case FIRStorageErrorCodeCancelled:
+//                                                                     // User canceled the upload
+//                                                                     break;
+//                                                                 case FIRStorageErrorCodeUnknown:
+//                                                                     // Unknown error occurred, inspect the server response
+//                                                                     break;
+//                                                             }
+//                                                         } else {
+//                                                             // Metadata contains file metadata such as size, content-type, and download URL.
+//                                                             //int size = metadata.size;
+//                                                             // You can also access to download URL after upload.
+//                                                             [profileImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+//                                                                 if (error != nil) {
+//                                                                     NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
+//                                                                 } else {
+//                                                                     //convert to URL string since this is how User object stores it
+//                                                                     //this ensures profileImageURLString is also updated
+//                                                                     [userInfoRef updateData:@{USER_PROFILE_IMAGE_KEY: URL.absoluteString
+//                                                                                               }];
+//                                                                     completion(URL.absoluteString);
+//                                                                 }
+//                                                             }];
+//                                                         }
+//                                                     }];
 }
 
 - (void)getEventsFromDatabase {
@@ -107,9 +211,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                 CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
                 CLLocationDistance distanceInKilometers = [thisEventLocation distanceFromLocation:userLocation]/1000;
                 NSLog(@"THIS IS THE DISTANCE BETWEEN USER AND EVENT: %f", distanceInKilometers);
-                
                 if ([thisEventVibeSet isSubsetOfSet:vibesFilterSet] && distanceInKilometers <= distanceFilter){
-                    
                     NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:document.data];
                     [eventDict setValue:document.documentID forKey:@"ID"];
                     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDict];
@@ -172,10 +274,11 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     NSDictionary *userInfo = @{ USER_FIRSTNAME_KEY: [nameArray objectAtIndex:0],
                                 USER_LASTNAME_KEY: [nameArray  objectAtIndex:1],
                                 USER_PROFILE_IMAGE_KEY : thisUser.profileImageURLString,
+                                USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString,
                                 USER_EMAIL_KEY: thisUser.email,
                                 USER_PROFILE_IMAGE_KEY: thisUser.profileImageURLString,
                                 USERNAME_KEY: thisUser.usernameString,
-                                USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString
+                                USER_BIO_KEY: thisUser.userBioString
                                 };
     [[[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:createdUserID] setData:userInfo
       completion:^(NSError * _Nullable error) {
@@ -192,7 +295,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
         if (snapshot.exists)
         {
             NSLog(@"USER DOES EXIST");
-            [[UserInSession shared] setCurrentUser:snapshot.data];
+            [[UserInSession shared] setCurrentUser:snapshot.data withUserID:userID];
             [self.sharedUserDelegate segueToAppUponLogin];
         }
         else{
