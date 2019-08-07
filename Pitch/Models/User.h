@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *userBioString;
 @property (nonatomic, strong) NSString *profileImageURLString;
 @property (nonatomic, strong) NSString *profileBackgroundImageURLString;
+@property (nonatomic, strong) NSString *ID;
 @property (nonatomic, strong) NSString *email;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;

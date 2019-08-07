@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UserViewController">
             <connections>
+                <outlet property="backButton" destination="zRA-Od-6vS" id="Frf-Ow-WsP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,9 +20,29 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zRA-Od-6vS">
+                    <rect key="frame" x="172.5" y="25" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Cax-WW-r3h"/>
+                        <constraint firstAttribute="width" constant="30" id="h2o-0d-bx8"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="back"/>
+                    <connections>
+                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="gPj-mO-KLT"/>
+                    </connections>
+                </button>
+            </subviews>
             <color key="backgroundColor" red="0.3707554042339325" green="0.77097988128662109" blue="0.5960577130317688" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <constraints>
+                <constraint firstItem="zRA-Od-6vS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="25" id="CoS-62-7Sf"/>
+                <constraint firstItem="zRA-Od-6vS" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="X1r-Rc-6km"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <point key="canvasLocation" x="136.80000000000001" y="100.29985007496252"/>
         </view>
     </objects>
+    <resources>
+        <image name="back" width="500" height="550"/>
+    </resources>
 </document>

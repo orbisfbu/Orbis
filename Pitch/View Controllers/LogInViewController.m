@@ -25,7 +25,7 @@ static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImageURL";
 static NSString * const USER_BACKGROUND_IMG_URLSTRING = @"BackgroundImageURL";
 static NSString * const USERNAME_KEY = @"Username";
 static NSString * const USER_BIO_KEY = @"Bio";
-static NSString * const DEFAULT_BIO = @"Let people know more about you!";
+static NSString * const DEFAULT_BIO = @"Add a bio here...";
 static NSString * const DEFAULT_BACKGROUNDIMAGE_URLSTRING = @"https://bit.ly/2KmzJch";
 static NSString * const DEFAULT_PROFILEIMAGE_URLSTRING = @"";
 //Required permissions for user info

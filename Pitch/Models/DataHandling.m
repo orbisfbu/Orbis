@@ -173,9 +173,9 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 USER_LASTNAME_KEY: [nameArray  objectAtIndex:1],
                                 USER_PROFILE_IMAGE_KEY : thisUser.profileImageURLString,
                                 USER_EMAIL_KEY: thisUser.email,
-                                USER_PROFILE_IMAGE_KEY: thisUser.profileImageURLString,
                                 USERNAME_KEY: thisUser.usernameString,
-                                USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString
+                                USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString,
+                                USER_BIO_KEY: thisUser.userBioString
                                 };
     [[[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:createdUserID] setData:userInfo
       completion:^(NSError * _Nullable error) {
