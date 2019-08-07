@@ -763,8 +763,20 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void) nextButtonPressed {
     if ([self.pageName isEqualToString:INITIAL_VIEW]) {
-        [self dismissInitialPage];
-        [self displayDetailsPage];
+        if ([self.eventTitleTextField.text isEqualToString:@""]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Required Field Is Empty" message:@"Please give your event a title" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+            [alertController addAction:defaultAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ([self.searchLocationTextField.text isEqualToString:@""]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Required Field Is Empty" message:@"Please give your event a location" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+            [alertController addAction:defaultAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else {
+            [self dismissInitialPage];
+            [self displayDetailsPage];
+        }
     } else if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         [self dismissDetailsPage];
         [self displayMediaPage];
