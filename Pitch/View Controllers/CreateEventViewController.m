@@ -49,6 +49,7 @@ static int const LABEL_HEIGHT = 30;
 static int const X_OFFSET = 30;
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+#define MAXLENGTH 20
 
 @import UIKit;
 @import Firebase;
@@ -60,7 +61,7 @@ static int const X_OFFSET = 30;
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
 
-@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
 //@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
@@ -83,6 +84,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 // Initial View
 @property (strong, nonatomic) UILabel *eventTitleLabel;
 @property (strong, nonatomic) UITextField *eventTitleTextField;
+@property (strong, nonatomic) UILabel *charsLeftInTitleLabel;
 @property (strong, nonatomic) UILabel *searchLabel;
 @property (strong, nonatomic) UITextField *searchLocationTextField;
 @property (strong, nonatomic) UILabel *searchLocationPlaceholderLabel;
@@ -229,7 +231,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.eventTitleTextField setMinimumFontSize:20];
     [self.eventTitleTextField setAdjustsFontSizeToFitWidth:YES];
     [self.eventTitleTextField setPlaceholder:@"E.g Yike's Bday"];
+    self.eventTitleTextField.delegate = self;
+    [self.eventTitleTextField addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.eventTitleTextField];
+    
+    // Create Chars Left In Title Label
+    CGSize size = [[NSString stringWithFormat:@"(%d)", MAXLENGTH] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.charsLeftInTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
+    [self.charsLeftInTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+    [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%d)", MAXLENGTH]];
+    [self.charsLeftInTitleLabel setTextColor:titleLabelFontColor];
+    [self.view addSubview:self.charsLeftInTitleLabel];
     
     // Create Location Label
     self.searchLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
@@ -276,7 +288,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
     NSString *date = [dateFormatter stringFromDate:[NSDate date]];
-    CGSize size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
     self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
     [self.dateLabel setText:[NSString stringWithFormat:@"%@", date]];
     [self.dateLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
@@ -484,6 +496,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleLabel.frame = CGRectMake(self.eventTitleLabel.frame.origin.x, 3*X_OFFSET, self.eventTitleLabel.frame.size.width, self.eventTitleLabel.frame.size.height);
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, self.eventTitleLabel.frame.origin.y + self.eventTitleLabel.frame.size.height - 10, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
+        self.charsLeftInTitleLabel.frame = CGRectMake(self.charsLeftInTitleLabel.frame.origin.x, self.eventTitleLabel.frame.origin.y, self.charsLeftInTitleLabel.frame.size.width, self.charsLeftInTitleLabel.frame.size.height);
         self.searchLabel.frame = CGRectMake(self.searchLabel.frame.origin.x, self.eventTitleTextField.frame.origin.y + self.eventTitleTextField.frame.size.height + 30, self.searchLabel.frame.size.width, self.searchLabel.frame.size.height);
         self.searchLocationPlaceholderLabel.frame = CGRectMake(self.searchLocationPlaceholderLabel.frame.origin.x, self.searchLabel.frame.origin.y + self.searchLabel.frame.size.height, self.searchLocationPlaceholderLabel.frame.size.width, self.searchLocationPlaceholderLabel.frame.size.height);
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, self.searchLocationPlaceholderLabel.frame.origin.y, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
@@ -873,7 +886,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) refreshResultsTableView {
-    
     NSString *coordinates = @"37.77,-122.41";
     NSString *query = self.searchLocationTextField.text;
     NSString *CLIENT_ID = @"3NZPO204JPDCJW0XJWY5AFCWCLXNZWDNIOHTQYHHOP0ARXRI";
@@ -1007,6 +1019,19 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [cell.titleLabel setTextColor:UIColorFromRGB(0x000000)];
         [self.vibesSet removeObject:cell.titleLabel.text];
     }
+}
+
+- (BOOL) textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSUInteger oldLength = [textField.text length];
+    NSUInteger replacementLength = [string length];
+    NSUInteger rangeLength = range.length;
+    NSUInteger newLength = oldLength - rangeLength + replacementLength;
+    BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
+    return newLength <= MAXLENGTH || returnKey;
+}
+
+- (void) textFieldDidChange {
+    [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%lu)", MAXLENGTH - self.eventTitleTextField.text.length]];
 }
 
 @end
