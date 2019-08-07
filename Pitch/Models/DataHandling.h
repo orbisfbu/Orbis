@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FirebaseDatabase/FirebaseDatabase.h"
+#import "FirebaseStorage/FirebaseStorage.h"
 #import "Event.h"
 #import "User.h"
 #import "UserInSession.h"
