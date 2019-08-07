@@ -49,6 +49,7 @@ static int const LABEL_HEIGHT = 30;
 static int const X_OFFSET = 30;
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+#define MAXLENGTH 20
 
 @import UIKit;
 @import Firebase;
@@ -60,14 +61,10 @@ static int const X_OFFSET = 30;
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
 
-@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
-//@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
-//@property (strong, nonatomic) NSMutableArray *customPollCellsArray;
-//@property (strong, nonatomic) User *makingUser;
-//@property (strong, nonatomic) UITableView *createEventTableView;
 @property (strong, nonatomic) UIButton *createEventButton;
 
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
@@ -83,6 +80,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 // Initial View
 @property (strong, nonatomic) UILabel *eventTitleLabel;
 @property (strong, nonatomic) UITextField *eventTitleTextField;
+@property (strong, nonatomic) UILabel *charsLeftInTitleLabel;
 @property (strong, nonatomic) UILabel *searchLabel;
 @property (strong, nonatomic) UITextField *searchLocationTextField;
 @property (strong, nonatomic) UILabel *searchLocationPlaceholderLabel;
@@ -210,31 +208,45 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) createPageObjects {
-    UIFont *titleLabelFontColor = UIColorFromRGB(0x0d523d);
+    
+    UIColor *titleLabelFontColor = UIColorFromRGB(0x0d523d);
+    
     // Create Event Title Text Label
     self.eventTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.eventTitleLabel setText:@"Title"];
-    self.eventTitleLabel.textColor = titleLabelFontColor;
-    //self.eventTitleLabel.textColor = [[UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1]];
     [self.eventTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    NSString *titleText = @"Title*";
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    self.eventTitleLabel.attributedText = attributedString;
     [self.view addSubview:self.eventTitleLabel];
     
     // Create Event Title Text Field
     self.eventTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     [self.eventTitleTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:40]];
     [self.eventTitleTextField setMinimumFontSize:20];
-   // self.eventTitleTextField.textColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1] ;
     [self.eventTitleTextField setAdjustsFontSizeToFitWidth:YES];
     [self.eventTitleTextField setPlaceholder:@"E.g Yike's Bday"];
-//    UIColor *color = [UIColor whiteColor];
-//    self.eventTitleTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"E.g Yike's Bday" attributes:@{NSForegroundColorAttributeName: color}];
+    self.eventTitleTextField.delegate = self;
+    [self.eventTitleTextField addTarget:self action:@selector(textFieldDidChange) forControlEvents:UIControlEventEditingChanged];
     [self.view addSubview:self.eventTitleTextField];
     
-    // Create Search Label
+    // Create Chars Left In Title Label
+    CGSize size = [[NSString stringWithFormat:@"(%d)", MAXLENGTH] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.charsLeftInTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
+    [self.charsLeftInTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+    [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%d)", MAXLENGTH]];
+    [self.charsLeftInTitleLabel setTextColor:titleLabelFontColor];
+    [self.view addSubview:self.charsLeftInTitleLabel];
+    
+    // Create Location Label
     self.searchLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.searchLabel setText:@"Location"];
-    self.searchLabel.textColor = titleLabelFontColor;
     [self.searchLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    titleText = @"Location*";
+    attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    self.searchLabel.attributedText = attributedString;
     [self.view addSubview:self.searchLabel];
     
     // Create a Pin Image View
@@ -251,15 +263,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Date Picker Label
     self.datePickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.datePickerLabel setText:@"Date"];
-    self.datePickerLabel.textColor = titleLabelFontColor;
     [self.datePickerLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    titleText = @"Date*";
+    attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    self.datePickerLabel.attributedText = attributedString;
     [self.view addSubview:self.datePickerLabel];
     
     // Create date picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150)];
     [self.datePicker setMinimumDate: [NSDate date]];
-//    self.datePicker.subviews[0].subviews[0].backgroundColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1];//the picker's own background view
     self.datePicker.subviews[0].subviews[1].backgroundColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1];
     self.datePicker.subviews[0].subviews[2].backgroundColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1];
     [self.datePicker setValue:titleLabelFontColor forKey:@"textColor"];
@@ -268,9 +282,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Date Label
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM/dd/yy, hh:mm a"];
+    [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
     NSString *date = [dateFormatter stringFromDate:[NSDate date]];
-    CGSize size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
     self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
     [self.dateLabel setText:[NSString stringWithFormat:@"%@", date]];
     [self.dateLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
@@ -478,6 +492,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleLabel.frame = CGRectMake(self.eventTitleLabel.frame.origin.x, 3*X_OFFSET, self.eventTitleLabel.frame.size.width, self.eventTitleLabel.frame.size.height);
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, self.eventTitleLabel.frame.origin.y + self.eventTitleLabel.frame.size.height - 10, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
+        self.charsLeftInTitleLabel.frame = CGRectMake(self.charsLeftInTitleLabel.frame.origin.x, self.eventTitleLabel.frame.origin.y, self.charsLeftInTitleLabel.frame.size.width, self.charsLeftInTitleLabel.frame.size.height);
         self.searchLabel.frame = CGRectMake(self.searchLabel.frame.origin.x, self.eventTitleTextField.frame.origin.y + self.eventTitleTextField.frame.size.height + 30, self.searchLabel.frame.size.width, self.searchLabel.frame.size.height);
         self.searchLocationPlaceholderLabel.frame = CGRectMake(self.searchLocationPlaceholderLabel.frame.origin.x, self.searchLabel.frame.origin.y + self.searchLabel.frame.size.height, self.searchLocationPlaceholderLabel.frame.size.width, self.searchLocationPlaceholderLabel.frame.size.height);
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, self.searchLocationPlaceholderLabel.frame.origin.y, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
@@ -485,6 +500,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.datePickerLabel.frame.origin.y, self.dateLabel.frame.size.width, self.dateLabel.frame.size.height);
         self.datePicker.frame = CGRectMake(self.datePicker.frame.origin.x, self.datePickerLabel.frame.origin.y + self.datePickerLabel.frame.size.height - 5, self.datePicker.frame.size.width, self.datePicker.frame.size.height);
         self.pinImageView.frame = CGRectMake(self.pinImageView.frame.origin.x, self.searchLocationTextField.frame.origin.y, self.pinImageView.frame.size.width, self.pinImageView.frame.size.height);
+        [self.backButton setAlpha:0];
     }];
 }
 
@@ -492,6 +508,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleLabel.frame = CGRectMake(self.eventTitleLabel.frame.origin.x, -self.eventTitleLabel.frame.size.height, self.eventTitleLabel.frame.size.width, self.eventTitleLabel.frame.size.height);
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, -self.eventTitleTextField.frame.size.height, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
+        self.charsLeftInTitleLabel.frame = CGRectMake(self.charsLeftInTitleLabel.frame.origin.x, -self.charsLeftInTitleLabel.frame.origin.y, self.charsLeftInTitleLabel.frame.size.width, self.charsLeftInTitleLabel.frame.size.height);
         self.searchLabel.frame = CGRectMake(self.searchLabel.frame.origin.x, -self.searchLabel.frame.size.height, self.searchLabel.frame.size.width, self.searchLabel.frame.size.height);
         self.searchLocationPlaceholderLabel.frame = CGRectMake(self.searchLocationPlaceholderLabel.frame.origin.x, -self.searchLocationPlaceholderLabel.frame.size.height, self.searchLocationPlaceholderLabel.frame.size.width, self.searchLocationPlaceholderLabel.frame.size.height);
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, -self.searchLocationTextField.frame.size.height, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
@@ -537,7 +554,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.dateLabel.frame = CGRectMake(self.dateLabel.frame.origin.x, self.datePickerLabel.frame.origin.y, self.dateLabel.frame.size.width, self.dateLabel.frame.size.height);
         self.searchResultsTableView.frame = CGRectMake(self.searchResultsTableView.frame.origin.x, self.view.frame.size.height, self.searchResultsTableView.frame.size.width, self.searchResultsTableView.frame.size.height);
         if ([self.searchLocationTextField.text isEqualToString:@""]) {
-            [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
+//            [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
             self.searchLocationPlaceholderLabel.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, self.searchLocationTextField.frame.origin.y + 5, self.view.frame.size.width - 2*X_OFFSET, LABEL_HEIGHT);
         }
         self.datePicker.alpha = 1;
@@ -671,7 +688,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height + 30, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
         self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
         self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.view.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
-        
         if ([self.searchMusicTextField.text isEqualToString:@""]) {
             [self.searchMusicTextField setPlaceholder:@"E.g Song or Artist..."];
             [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
@@ -680,13 +696,102 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } completion:^(BOOL finished) {
         self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, self.view.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
     }];
+}
 
+- (void) resetPages {
+    self.eventTitleLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.eventTitleTextField.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT);
+    [self.eventTitleTextField setText:@""];
+    
+    // Create Chars Left In Title Label
+    CGSize size = [[NSString stringWithFormat:@"(%d)", MAXLENGTH] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.charsLeftInTitleLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
+    [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%lu)", MAXLENGTH - self.eventTitleTextField.text.length]];
+    
+    self.searchLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.pinImageView.frame = CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT);
+    
+    self.searchLocationPlaceholderLabel.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + X_OFFSET), LABEL_HEIGHT);
+    [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
+    
+    self.datePickerLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.datePicker.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150);
+    [self.datePicker setMinimumDate: [NSDate date]];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
+    NSString *date = [dateFormatter stringFromDate:[NSDate date]];
+    size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
+    [self.dateLabel setText:[NSString stringWithFormat:@"%@", date]];
+    
+    self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT);
+    [self.searchLocationTextField setText:@""];
+    
+    CGSize locationCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    self.locationCancelButton.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - locationCancelButtonSize.width - 15, [[UIScreen mainScreen] bounds].size.height, locationCancelButtonSize.width, LABEL_HEIGHT);
+    
+    self.nextButton.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    
+    self.searchResultsTableView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1);
+    
+    self.descriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.descriptionTextView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    
+    self.vibesLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.vibesCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT);
+    
+    self.ageLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.ageSubview.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    
+    self.coverImageLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.coverImageView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, 0.6 * ([[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT);
+    
+    self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT);
+    
+    self.additionalMediaSubview.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    
+    self.musicPageDescriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT);
+    
+    self.musicNoteImageView.frame = CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT);
+    
+    self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    [self.searchLocationTextField setText:@""];
+    
+    self.musicQueueLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    CGSize musicCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    self.musicCancelButton.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - musicCancelButtonSize.width - 15, [[UIScreen mainScreen] bounds].size.height, musicCancelButtonSize.width, LABEL_HEIGHT);
+    
+    self.musicResultsTableView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1);
+    
+    self.musicQueueCollectionView.frame = CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT);
 }
 
 - (void) nextButtonPressed {
     if ([self.pageName isEqualToString:INITIAL_VIEW]) {
-        [self dismissInitialPage];
-        [self displayDetailsPage];
+        if ([self.eventTitleTextField.text isEqualToString:@""]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Required Field Is Empty" message:@"Please give your event a title" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+            [alertController addAction:defaultAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ([self.searchLocationTextField.text isEqualToString:@""]) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Required Field Is Empty" message:@"Please give your event a location" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
+            [alertController addAction:defaultAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else {
+            [self dismissInitialPage];
+            [self displayDetailsPage];
+        }
     } else if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         [self dismissDetailsPage];
         [self displayMediaPage];
@@ -696,6 +801,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         [self publishEvent];
         [self dismissMusicPage];
+        [self resetPages];
         [self displayInitialPage];
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     }
@@ -713,7 +819,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self dismissMediaPage];
     }
     else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
-        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
         [self displayMediaPage];
         [self dismissMusicPage];
     }
@@ -737,13 +842,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) locationCancelButtonPressed {
-//    [self.searchLocationTextField setText:@""];
+    [self.searchLocationTextField setText:@""];
     [self dismissKeyboard];
+    [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
 }
 
 - (void) musicCancelButtonPressed {
-    [self.searchMusicTextField setText:@""];
     [self dismissKeyboard];
+    [self.searchMusicTextField setText:@""];
 }
 
 - (void) leftAgeButtonPressed {
@@ -777,6 +883,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     NSString *strDate = [dateFormatter stringFromDate:self.datePicker.date];
+    CGSize size = [strDate sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, self.datePickerLabel.frame.origin.y, size.width, LABEL_HEIGHT);
     self.dateLabel.text = strDate;
 }
 
@@ -914,6 +1022,19 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [cell.titleLabel setTextColor:UIColorFromRGB(0x000000)];
         [self.vibesSet removeObject:cell.titleLabel.text];
     }
+}
+
+- (BOOL) textField:(UITextField *) textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    NSUInteger oldLength = [textField.text length];
+    NSUInteger replacementLength = [string length];
+    NSUInteger rangeLength = range.length;
+    NSUInteger newLength = oldLength - rangeLength + replacementLength;
+    BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
+    return newLength <= MAXLENGTH || returnKey;
+}
+
+- (void) textFieldDidChange {
+    [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%lu)", MAXLENGTH - self.eventTitleTextField.text.length]];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FirebaseDatabase/FirebaseDatabase.h"
+#import "FirebaseStorage/FirebaseStorage.h"
 #import "Event.h"
 #import "User.h"
 #import "UserInSession.h"
@@ -44,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoAndApp: (NSString *)userID;
 - (void)getFilteredEventsFromDatabase: (NSDictionary*)filters userLocation:(CLLocation*)userLocation;
+- (void)updateProfileImage:(UIImage*)imageToUpload withCompletion:(void (^) (NSString *createdProfileImageURLString))completion ;
 @property (nonatomic, strong) CLLocation *userLocation;
 @property (nonatomic, weak) id<GetEventsArrayDelegate> delegate;
 @property (nonatomic, weak) id<GetFilteredEventsArrayDelegate> filteredEventsDelegate;

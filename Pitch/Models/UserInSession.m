@@ -27,10 +27,11 @@
     return self;
 }
 
-- (void)setCurrentUser: (NSDictionary *)userInfo
+- (void)setCurrentUser: (NSDictionary *)userInfo withUserID:(NSString *)userID
 {
-    self.sharedUser = [[User alloc] initWithDictionary:userInfo];
-    
+    NSMutableDictionary *userDict = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
+    [userDict setValue:userID forKey:@"ID"];
+    self.sharedUser = [[User alloc] initWithDictionary:userDict];
 }
 
 @end
