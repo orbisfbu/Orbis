@@ -337,9 +337,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event..." attributes:nil];
     self.descriptionTextView.layer.cornerRadius = 5;
-    [self.descriptionTextView setFont:[UIFont systemFontOfSize:18]];
+    [self.descriptionTextView setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     [self.descriptionTextView setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
-    // self.descriptionTextView.textColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1] ;
+    [self.descriptionTextView setTextColor:UIColorFromRGB(DARK_GREEN)];
     [self.view addSubview:self.descriptionTextView];
     
     // Create Vibes Label
