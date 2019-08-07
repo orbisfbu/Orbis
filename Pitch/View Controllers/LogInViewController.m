@@ -452,14 +452,12 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                      if(authResult){
                                          userID = authResult.user.uid;
                                          NSLog(@"New firebase user was created with userID %@", authResult.user);
-                                
-                                         [[UserInSession shared] setCurrentUser:userInfo];
+                                         [[UserInSession shared] setCurrentUser:userInfo withUserID:userID];
                                          [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
                                          [self dismissSignInPage];
                                          [self dismissSignUpPage2:YES];
                                          [self segueToApp];
                                      }
-                                     
                                      else{
                                          switch([error code]){
                                                  

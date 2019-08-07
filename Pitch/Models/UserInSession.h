@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UserInSession : NSObject
 @property (strong, nonatomic) User *sharedUser;
 + (instancetype)shared;
-- (void)setCurrentUser: (NSDictionary *)userInfo;
+- (void)setCurrentUser: (NSDictionary *)userInfo withUserID:(NSString *)userID;
 @end
 
 NS_ASSUME_NONNULL_END
