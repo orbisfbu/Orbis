@@ -65,7 +65,7 @@ static int const X_OFFSET = 30;
 static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info to database";
 
 
-@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
+@interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
@@ -421,6 +421,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.coverImageView.layer.cornerRadius = 5;
     [self.coverImageView setImage:[UIImage imageNamed:@"plus"]];
     [self.coverImageView setContentMode:UIViewContentModeScaleAspectFit];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(coverImageViewPressed)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.coverImageView setUserInteractionEnabled:YES];
+    [self.coverImageView.layer setMasksToBounds:YES];
+    [self.coverImageView addGestureRecognizer:singleTap];
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
@@ -831,6 +836,23 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self displayMediaPage];
         [self dismissMusicPage];
     }
+}
+
+- (void) coverImageViewPressed {
+    UIImagePickerController *imagePickerVC = [UIImagePickerController new];
+    imagePickerVC.delegate = self;
+    imagePickerVC.allowsEditing = YES;
+    imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:imagePickerVC animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *editedImage = info[UIImagePickerControllerEditedImage];
+    [self.coverImageView setImage:editedImage];
+    long width = editedImage.size.width*self.coverImageView.frame.size.height/self.coverImageView.image.size.height;
+    self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x + (self.coverImageView.frame.size.width - width)/2, self.coverImageView.frame.origin.y, width, self.coverImageView.frame.size.height);
+    // Dismiss UIImagePickerController to go back to your original view controller
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)publishEvent {
