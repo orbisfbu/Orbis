@@ -210,11 +210,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) createPageObjects {
-    UIFont *titleLabelFontColor = UIColorFromRGB(0x0d523d);
+    
+    UIColor *titleLabelFontColor = UIColorFromRGB(0x0d523d);
+    
     // Create Event Title Text Label
     self.eventTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.eventTitleLabel setText:@"Title"];
-    self.eventTitleLabel.textColor = titleLabelFontColor;
+    self.eventTitleLabel.textColor = UIColorFromRGB(0x0d523d);
     //self.eventTitleLabel.textColor = [[UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1]];
     [self.eventTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.eventTitleLabel];
@@ -268,7 +270,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Date Label
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM/dd/yy, hh:mm a"];
+    [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
     NSString *date = [dateFormatter stringFromDate:[NSDate date]];
     CGSize size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
     self.dateLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
@@ -671,7 +673,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.musicQueueLabel.frame = CGRectMake(self.musicQueueLabel.frame.origin.x, self.searchMusicTextField.frame.origin.y + self.searchMusicTextField.frame.size.height + 30, self.musicQueueLabel.frame.size.width, self.musicQueueLabel.frame.size.height);
         self.musicQueueCollectionView.frame = CGRectMake(self.musicQueueCollectionView.frame.origin.x, self.musicQueueLabel.frame.origin.y + self.musicQueueLabel.frame.size.height + 10, self.musicQueueCollectionView.frame.size.width, self.musicQueueCollectionView.frame.size.height);
         self.musicResultsTableView.frame = CGRectMake(self.musicResultsTableView.frame.origin.x, self.view.frame.size.height, self.musicResultsTableView.frame.size.width, self.musicResultsTableView.frame.size.height);
-        
         if ([self.searchMusicTextField.text isEqualToString:@""]) {
             [self.searchMusicTextField setPlaceholder:@"E.g Song or Artist..."];
             [self.searchMusicTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
@@ -681,6 +682,79 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         self.musicCancelButton.frame = CGRectMake(self.musicCancelButton.frame.origin.x, self.view.frame.size.height, self.musicCancelButton.frame.size.width, self.musicCancelButton.frame.size.height);
     }];
 
+}
+
+- (void) resetPages {
+    self.eventTitleLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.eventTitleTextField.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT);
+    [self.eventTitleTextField setText:@""];
+    
+    self.searchLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.pinImageView.frame = CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT);
+    
+    self.searchLocationPlaceholderLabel.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + X_OFFSET), LABEL_HEIGHT);
+    [self.searchLocationPlaceholderLabel setText:@"City, street, museum..."];
+    
+    self.datePickerLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.datePicker.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150);
+    [self.datePicker setMinimumDate: [NSDate date]];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
+    NSString *date = [dateFormatter stringFromDate:[NSDate date]];
+    CGSize size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
+    [self.dateLabel setText:[NSString stringWithFormat:@"%@", date]];
+    
+    self.searchLocationTextField.frame = CGRectMake(self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - (self.pinImageView.frame.origin.x + self.pinImageView.frame.size.width + 10) - X_OFFSET, LABEL_HEIGHT);
+    [self.searchLocationTextField setText:@""];
+    
+    CGSize locationCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    self.locationCancelButton.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - locationCancelButtonSize.width - 15, [[UIScreen mainScreen] bounds].size.height, locationCancelButtonSize.width, LABEL_HEIGHT);
+    
+    self.nextButton.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    
+    self.searchResultsTableView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1);
+    
+    self.descriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.descriptionTextView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    
+    self.vibesLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.vibesCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT);
+    
+    self.ageLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.ageSubview.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    
+    self.coverImageLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    self.coverImageView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, 0.6 * ([[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT);
+    
+    self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT);
+    
+    self.additionalMediaSubview.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    
+    self.musicPageDescriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT);
+    
+    self.musicNoteImageView.frame = CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT);
+    
+    self.searchMusicTextField.frame = CGRectMake(self.musicNoteImageView.frame.origin.x + self.musicNoteImageView.frame.size.width + 10, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    [self.searchLocationTextField setText:@""];
+    
+    self.musicQueueLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
+    
+    CGSize musicCancelButtonSize = [@"Cancel" sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    self.musicCancelButton.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - musicCancelButtonSize.width - 15, [[UIScreen mainScreen] bounds].size.height, musicCancelButtonSize.width, LABEL_HEIGHT);
+    
+    self.musicResultsTableView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1);
+    
+    self.musicQueueCollectionView.frame = CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT);
 }
 
 - (void) nextButtonPressed {
@@ -696,6 +770,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         [self publishEvent];
         [self dismissMusicPage];
+        [self resetPages];
         [self displayInitialPage];
         [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     }
@@ -713,7 +788,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self dismissMediaPage];
     }
     else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
-        [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
         [self displayMediaPage];
         [self dismissMusicPage];
     }
