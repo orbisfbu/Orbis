@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface EventDetailsViewController : UIViewController
-- (IBAction)imageUploadButton:(id)sender;
-
-
 @property (weak, nonatomic) IBOutlet UIView *clickableMapViewOutlet;
 @property (retain, nonatomic) IBOutlet UILabel *eventNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *eventImageView;

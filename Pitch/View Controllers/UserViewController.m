@@ -15,6 +15,7 @@
 #import "LogInViewController.h"
 #import "LogoutCell.h"
 #import "UserInSession.h"
+#import "DataHandling.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -26,8 +27,8 @@
 static double const BACKGORUND_IMAGE_MIN_HEIGHT = 70.0;
 static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
-@interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LogoutUserDelegate>
-
+@interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LogoutUserDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@property (strong, nonatomic) UIImagePickerController *imagePickerVC;
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
 //initially inputted email and password correspond to existing account
@@ -78,6 +79,16 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 @implementation UserViewController
 
 - (void)viewDidLoad {
+    self.imagePickerVC = [UIImagePickerController new];
+    self.imagePickerVC.delegate = self;
+    self.imagePickerVC.allowsEditing = YES;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }
+    else {
+        NSLog(@"Camera 🚫 available so we will use photo library instead");
+        self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
     //user currentAccessToken to detect whether a Facebook user
     //is already logged-in; if so, automatically load the profile
     //and profile picture when userView is selected
@@ -117,8 +128,14 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     // Add user profile photo
     self.userProfileImageView = [[UIImageView alloc] initWithFrame:CGRectMake(15, self.view.frame.size.height, self.view.frame.size.width/3, self.view.frame.size.width/3)];
     [self.userProfileImageView setClipsToBounds:YES];
+    self.userProfileImageView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *profileImageTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(profileImageWasClicked:)];
+    profileImageTapRecognizer.numberOfTapsRequired = 2;
     self.userProfileImageView.layer.cornerRadius = self.userProfileImageView.frame.size.width/2;
-    [self.userProfileImageView setImage:[UIImage imageNamed:@"default_profile"]];
+    [self.userProfileImageView addGestureRecognizer:profileImageTapRecognizer];
+    //add dataHandling method here "setUserProfileImage" to load the profile image from the database
+    [[DataHandling shared] setUserProfileImage:self.userProfileImageView];
+    //[self.userProfileImageView setImage:];
     [self.userProfileImageView setBackgroundColor:[UIColor redColor]];
     [self.view addSubview:self.userProfileImageView];
     
@@ -222,6 +239,21 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         [FBSDKProfile setCurrentProfile:nil];
         [self.delegate dismissViewController];
     }
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    UIImage *editedImage = info[UIImagePickerControllerEditedImage];
+    [[DataHandling shared] updateProfileImage:editedImage withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
+        [UserInSession shared].sharedUser.profileImageURLString = createdProfileImageURLString;
+        NSLog(@"Successfully stored image and updated userProfileImageURLString");
+        [[DataHandling shared] setUserProfileImage:self.userProfileImageView];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+}
+
+- (void)profileImageWasClicked: (UITapGestureRecognizer *)tap{
+    [self presentViewController:self.imagePickerVC animated:YES completion:nil];
 }
 
 @end
