@@ -228,7 +228,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     NSMutableDictionary *songQueue = [[NSMutableDictionary alloc] init];
     int i = 0;
     for (Song *song in event.musicQueue) {
-        if (![song.albumName isEqualToString:@"default_album"]) {
+        if (![song.albumName isEqualToString:@"plus"]) {
             NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
             [songDict setValue:song.title forKey:@"Title"];
             [songDict setValue:song.artistName forKey:@"Artist Name"];

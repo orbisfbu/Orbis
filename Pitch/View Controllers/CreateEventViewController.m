@@ -201,7 +201,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     song = [[Song alloc] init];
     [song setTitle:@"Title"];
     [song setArtistName:@"Artist"];
-    [song setAlbumName:@"default_album"];
+    [song setAlbumName:@"plus"];
     [song setNumLikes:0];
     [song setUserIDsThatHaveLikedSong:[[NSMutableArray alloc] init]];
     [self.queuedUpSongsArray addObject:song];
@@ -419,6 +419,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 5*LABEL_HEIGHT)];
     [self.coverImageView setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     self.coverImageView.layer.cornerRadius = 5;
+    [self.coverImageView setImage:[UIImage imageNamed:@"plus"]];
+    [self.coverImageView setContentMode:UIViewContentModeScaleAspectFit];
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
@@ -606,6 +608,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void) displayMediaPage {
     self.pageName = MEDIA_VIEW;
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
     [UIView animateWithDuration:0.5 animations:^{
         self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
         self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, self.coverImageLabel.frame.origin.y + self.coverImageLabel.frame.size.height + 10, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
