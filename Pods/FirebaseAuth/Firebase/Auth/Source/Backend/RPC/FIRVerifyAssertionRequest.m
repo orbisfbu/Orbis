@@ -120,13 +120,11 @@ static NSString *const kSessionIDKey = @"sessionId";
                                                       value:_providerAccessToken]];
   }
 
-
-  /*if (!_providerIDToken && !_providerAccessToken && !_pendingToken && !_requestURI) {
+  if (!_providerIDToken && !_providerAccessToken && !_pendingToken && !_requestURI) {
     [NSException raise:NSInvalidArgumentException
         format:@"One of IDToken, accessToken, pendingToken, or requestURI must be supplied."];
   }
-*/
-    
+
   if (_providerOAuthTokenSecret) {
     [queryItems addObject:[NSURLQueryItem queryItemWithName:kProviderOAuthTokenSecretKey
                                                       value:_providerOAuthTokenSecret]];

@@ -11,7 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface BioCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *userBioLabel;
+
+@property (strong, nonatomic) IBOutlet UIButton *editUserBioButton;
+@property (strong, nonatomic) IBOutlet UITextView *bioTextView;
+
 @end
 
 NS_ASSUME_NONNULL_END

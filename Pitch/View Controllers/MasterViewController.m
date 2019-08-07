@@ -27,8 +27,8 @@ static double const MIN_ICON_X_OFFSET = 30;
 @property (strong, nonatomic) CreateEventViewController *createEventController;
 @property (strong, nonatomic) ExploreViewController *exploreController;
 @property (strong, nonatomic) UserViewController *userController;
-@property (strong, nonatomic) IBOutlet UIScrollView *viewControllerScrollView;
 @property (strong, nonatomic) UIButton *createEventButton;
+@property (strong, nonatomic) IBOutlet UIScrollView *viewControllerScrollView;
 @property (strong, nonatomic) UIButton *exploreButton;
 @property (strong, nonatomic) UIButton *profileButton;
 
@@ -43,7 +43,7 @@ static double const MIN_ICON_X_OFFSET = 30;
     [self.createEventButton addTarget:self action:@selector(createNewEventButtonPressed) forControlEvents:UIControlEventTouchDown];
     [self.createEventButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     self.createEventButton.layer.cornerRadius = 10;
-    [self.createEventButton setBackgroundColor:[UIColor colorWithRed:0.5 green:0.8 blue:0.7 alpha:0.5]];
+    [self.createEventButton setBackgroundColor:[UIColor colorWithRed:13.0/255 green:82.0/255 blue:61.0/255 alpha:0.5]];
     [self.view addSubview:self.createEventButton];
     
     self.exploreButton = [[UIButton alloc] initWithFrame: CGRectMake((self.view.frame.size.width-MAX_ICON_HEIGHT_AND_WIDTH)/2, self.view.frame.size.height - MAX_ICON_HEIGHT_AND_WIDTH - MAX_ICON_Y_OFFSET, MAX_ICON_HEIGHT_AND_WIDTH, MAX_ICON_HEIGHT_AND_WIDTH)];
@@ -51,7 +51,7 @@ static double const MIN_ICON_X_OFFSET = 30;
     [self.exploreButton addTarget:self action:@selector(exploreButtonPressed) forControlEvents:UIControlEventTouchDown];
     [self.exploreButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     self.exploreButton.layer.cornerRadius = 10;
-    [self.exploreButton setBackgroundColor:[UIColor colorWithRed:0.5 green:0.8 blue:0.7 alpha:0.5]];
+    [self.exploreButton setBackgroundColor:[UIColor colorWithRed:13.0/255 green:82.0/255 blue:61.0/255 alpha:0.5]];
     [self.view addSubview:self.exploreButton];
     
     self.profileButton = [[UIButton alloc] initWithFrame: CGRectMake(self.view.frame.size.width - MIN_ICON_HEIGHT_AND_WIDTH - MAX_ICON_X_OFFSET, self.view.frame.size.height - MIN_ICON_HEIGHT_AND_WIDTH - MIN_ICON_Y_OFFSET, MIN_ICON_HEIGHT_AND_WIDTH, MIN_ICON_HEIGHT_AND_WIDTH)];
@@ -59,7 +59,7 @@ static double const MIN_ICON_X_OFFSET = 30;
     [self.profileButton addTarget:self action:@selector(profileButtonPressed) forControlEvents:UIControlEventTouchDown];
     [self.profileButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     self.profileButton.layer.cornerRadius = 10;
-    [self.profileButton setBackgroundColor:[UIColor colorWithRed:0.5 green:0.8 blue:0.7 alpha:0.5]];
+    [self.profileButton setBackgroundColor:[UIColor colorWithRed:13.0/255 green:82.0/255 blue:61.0/255 alpha:0.5]];
     [self.view addSubview:self.profileButton];
     
     // Set up the scroll view with nested view controllers
@@ -97,7 +97,11 @@ static double const MIN_ICON_X_OFFSET = 30;
     // Resize the scroll view to be able to encompass all the view controllers
     self.viewControllerScrollView.contentSize = CGSizeMake(self.view.frame.size.width*3, self.view.frame.size.height);
     
-    [self.viewControllerScrollView setContentOffset:CGPointMake(self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    if (self.isNewUser) {
+        [self.viewControllerScrollView setContentOffset:CGPointMake(2*self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    } else {
+        [self.viewControllerScrollView setContentOffset:CGPointMake(self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

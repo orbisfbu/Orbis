@@ -25,7 +25,7 @@ static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImageURL";
 static NSString * const USER_BACKGROUND_IMG_URLSTRING = @"BackgroundImageURL";
 static NSString * const USERNAME_KEY = @"Username";
 static NSString * const USER_BIO_KEY = @"Bio";
-static NSString * const DEFAULT_BIO = @"Let people know more about you!";
+static NSString * const DEFAULT_BIO = @"Add a bio here...";
 static NSString * const DEFAULT_BACKGROUNDIMAGE_URLSTRING = @"https://bit.ly/2KmzJch";
 static NSString * const DEFAULT_PROFILEIMAGE_URLSTRING = @"";
 //Required permissions for user info
@@ -97,7 +97,6 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     [super viewDidLoad];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.sharedUserDelegate = self;
-    [self.backButton setEnabled:NO];
     self.backButton.alpha = 0;
     if (![FIRAuth auth].currentUser) {
         NSLog(@"No user signed in... Creating sign in/up page");
@@ -240,9 +239,12 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     [self.view addSubview:self.signUpButton];
 }
 
-- (void) segueToApp {
+- (void) segueToApp:(BOOL)isFirstTime {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     MasterViewController * vc = (MasterViewController *)[sb instantiateViewControllerWithIdentifier:@"MasterViewController"];
+    if (isFirstTime) {
+        vc.isNewUser = YES;
+    }
     vc.delegate = self;
     [self presentViewController:vc animated:YES completion:nil];
 }
@@ -279,31 +281,31 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) createSignInPage {
-    [self.backButton setEnabled:YES];
+    //[self.backButton setEnabled:YES];
     self.viewName = SIGNIN_VIEW;
     [UIView animateWithDuration:0.5 animations:^{
-        self.usernameTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, 100, self.usernameTextField.frame.size.width, self.usernameTextField.frame.size.height);
-        self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.usernameTextField.frame.origin.y + + self.usernameTextField.frame.size.height + 20, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
+        //self.usernameTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, 100, self.usernameTextField.frame.size.width, self.usernameTextField.frame.size.height);
+        self.passwordTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, 100, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
+        //self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.usernameTextField.frame.origin.y + + self.usernameTextField.frame.size.height + 20, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
         self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.passwordTextField.frame.origin.y + self.passwordTextField.frame.size.height + 20, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
+        // self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.passwordTextField.frame.origin.y + self.passwordTextField.frame.size.height + 20, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
     }];
 }
 
 - (void) dismissSignInPage {
-    [self.backButton setEnabled:NO];
+    //[self.backButton setEnabled:NO];
     [UIView animateWithDuration:0.5 animations:^{
-        self.usernameTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, -self.usernameTextField.frame.size.height, self.usernameTextField.frame.size.width, self.usernameTextField.frame.size.height);
         self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, -self.passwordTextField.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
         self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, -self.logInButton.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
         self.backButton.alpha = 0;
     } completion:^(BOOL finished) {
-        self.usernameTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, self.view.frame.size.height, self.usernameTextField.frame.size.width, self.usernameTextField.frame.size.height);
         self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.view.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
         self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.view.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
     }];
 }
 
 - (void) createSignUpPage1 {
-    [self.backButton setEnabled:YES];
+    //[self.backButton setEnabled:YES];
     self.viewName = SIGNUP_VIEW1;
     [UIView animateWithDuration:0.5 animations:^{
         self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, 100, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
@@ -319,7 +321,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         self.nextButton.frame = CGRectMake(self.nextButton.frame.origin.x, -self.nextButton.frame.size.height, self.nextButton.frame.size.width, self.nextButton.frame.size.height);
         if (!advancing) {
             self.backButton.alpha = 0;
-            [self.backButton setEnabled:NO];
+            //[self.backButton setEnabled:NO];
         }
     } completion:^(BOOL finished) {
         self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, self.view.frame.size.height, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
@@ -345,7 +347,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         self.confirmPasswordSignUpTextField.frame = CGRectMake(self.confirmPasswordSignUpTextField.frame.origin.x, -self.confirmPasswordSignUpTextField.frame.size.height, self.confirmPasswordSignUpTextField.frame.size.width, self.confirmPasswordSignUpTextField.frame.size.height);
         self.signUpButton.frame = CGRectMake(self.signUpButton.frame.origin.x, -self.signUpButton.frame.size.height, self.signUpButton.frame.size.width, self.signUpButton.frame.size.height);
         if (advancing) {
-            [self.backButton setEnabled:NO];
+            //[self.backButton setEnabled:NO];
             self.backButton.alpha = 0;
         }
     } completion:^(BOOL finished) {
@@ -369,9 +371,10 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     }
 }
 
+
 - (void) continueButtonPressed {
-    if ([self.inputtedUserEmail isEqualToString:@""]){
-        [self presentAlert:@"Invalid email" withMessage:@"Don't leave email empty"];
+    if ([self.emailTextField.text isEqualToString:@""]){
+        [self presentAlert:@"Invalid email address" withMessage:@"Please provide your email address"];
     }
     else{
         self.inputtedUserEmail = self.emailTextField.text;
@@ -405,11 +408,11 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                              }
                              else{
                                  switch([error code]){
-                                     case 17009:
-                                         [self presentAlert:@"Wrong password" withMessage:@"Make sure password is correct"];
-                                         break;
                                      case 17034:
                                          [self presentAlert:@"Email not provided" withMessage:@"Please provide an email"];
+                                         break;
+                                     case 17009:
+                                         [self presentAlert:@"Incorrect password" withMessage:@"Please ensure password is correct"];
                                          break;
                                  }
                              }
@@ -417,7 +420,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) nextButtonPressed {
-    BOOL signupIsCorrect = !([self.firstNameTextField.text isEqualToString:@""] && [self.lastNameTextField.text isEqualToString:@""]);
+    BOOL signupIsCorrect = !([self.firstNameTextField.text isEqualToString:@""] || [self.lastNameTextField.text isEqualToString:@""]);
     if (signupIsCorrect) {
         self.registerFirstName = self.firstNameTextField.text;
         self.registerLastName = self.lastNameTextField.text;
@@ -425,7 +428,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         [self createSignUpPage2];
     }
     else{
-        [self presentAlert:@"Empty field" withMessage:@"Don't leave a field empty!"];
+        [self presentAlert:@"Required Field Is Empty" withMessage:@"Please fill out every field"];
     }
 }
 
@@ -456,7 +459,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                          [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
                                          [self dismissSignInPage];
                                          [self dismissSignUpPage2:YES];
-                                         [self segueToApp];
+                                         [self segueToApp:YES];
                                      }
                                      else{
                                          switch([error code]){
@@ -468,7 +471,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                                  [self presentAlert:@"Invalid Email" withMessage:@"Make sure email was in right format"];
                                                  break;
                                              case 17026:
-                                                 [self presentAlert:@"Password is too weak" withMessage:@"Please input a stronger password"];
+                                                 [self presentAlert:@"Password is invalid" withMessage:@"Please input a stronger password"];
                                                  break;
                                          }
                                      }
@@ -479,7 +482,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
             [self presentAlert:@"Username invalid" withMessage:@"Username cannot be empty"];
         }
         else if(!passwordsMatch){
-            [self presentAlert:@"Passwords Don't Match" withMessage:@"Make sure your password fields match"];
+            [self presentAlert:@"Passwords Don't Match" withMessage:@"Please make sure your password fields match"];
             self.passwordSignUpTextField.text = @"";
             self.confirmPasswordSignUpTextField.text = @"";
         }
@@ -547,7 +550,7 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
 }
 
 - (void) segueToAppUponLogin {
-    [self segueToApp];
+    [self segueToApp:NO];
 }
 
 @end

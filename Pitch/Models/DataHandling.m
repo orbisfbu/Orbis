@@ -64,6 +64,21 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     return self;
 }
 
+- (void) updateUserBio:(NSString *)userBioUpdate withCompletion:(void (^) (BOOL succeeded))completion {
+    NSString *userID = [UserInSession shared].sharedUser.ID;
+    FIRDocumentReference *userInfoRef = [[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:userID];
+    [userInfoRef updateData:@{USER_BIO_KEY:userBioUpdate} completion:^(NSError * _Nullable error) {
+        if (error!= nil){
+            NSLog(@"Error updating bio; %@", error);
+            completion(nil);
+        }
+        else {
+            NSLog(@"Bio successfully updated");
+            completion(YES);
+        }
+    }];
+}
+
 - (void)updateProfileImage:(UIImage*)imageToUpload withCompletion:(void (^) (NSString *createdProfileImageURLString))completion {
     NSString *userID = [UserInSession shared].sharedUser.ID;
     FIRDocumentReference *userInfoRef = [[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:userID];
@@ -277,7 +292,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     NSMutableDictionary *songQueue = [[NSMutableDictionary alloc] init];
     int i = 0;
     for (Song *song in event.musicQueue) {
-        if (![song.albumName isEqualToString:@"default_album"]) {
+        if (![song.albumName isEqualToString:@"plus"]) {
             NSMutableDictionary *songDict = [[NSMutableDictionary alloc] init];
             [songDict setValue:song.title forKey:@"Title"];
             [songDict setValue:song.artistName forKey:@"Artist Name"];
@@ -325,7 +340,6 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 USER_PROFILE_IMAGE_KEY : thisUser.profileImageURLString,
                                 USER_BACKGROUND_KEY: thisUser.profileBackgroundImageURLString,
                                 USER_EMAIL_KEY: thisUser.email,
-                                USER_PROFILE_IMAGE_KEY: thisUser.profileImageURLString,
                                 USERNAME_KEY: thisUser.usernameString,
                                 USER_BIO_KEY: thisUser.userBioString
                                 };

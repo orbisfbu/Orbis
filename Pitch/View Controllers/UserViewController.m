@@ -72,6 +72,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 @property (strong, nonatomic) UITableView *userProfileTableView;
 @property (strong, nonatomic) UILabel *usernameLabel;
 @property (strong, nonatomic) UIButton *editProfileButton;
+@property (strong, nonatomic) IBOutlet UIButton *backButton;
 
 @end
 
@@ -93,6 +94,8 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     //is already logged-in; if so, automatically load the profile
     //and profile picture when userView is selected
     [super viewDidLoad];
+    [self.backButton setAlpha:0];
+    [self.backButton setTransform:CGAffineTransformMakeRotation(M_PI_2)];
     [self createPageObjects];
     [self createUserProfile];
 }
@@ -122,6 +125,8 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventListCell" bundle:nil] forCellReuseIdentifier:@"EventListCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"FirstLastNameCell" bundle:nil] forCellReuseIdentifier:@"FirstLastNameCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"LogoutCell" bundle:nil] forCellReuseIdentifier:@"LogoutCell"];
+    //self.userProfileTableView.estimatedRowHeight = 150; // added
+    //self.userProfileTableView.rowHeight = UITableViewAutomaticDimension; // added
     self.userProfileTableView.delegate = self;
     self.userProfileTableView.dataSource = self;
     
@@ -164,6 +169,9 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         self.usernameLabel.frame = CGRectMake(self.usernameLabel.frame.origin.x, 15, self.usernameLabel.frame.size.width, self.usernameLabel.frame.size.height);
         self.editProfileButton.frame = CGRectMake(self.editProfileButton.frame.origin.x, 15, self.editProfileButton.frame.size.width, self.editProfileButton.frame.size.height);
     }];
+}
+
+- (IBAction)backButtonPressed:(id)sender {
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

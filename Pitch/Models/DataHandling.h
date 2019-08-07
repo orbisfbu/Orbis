@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FirebaseDatabase/FirebaseDatabase.h"
+#import "FirebaseStorage/FirebaseStorage.h"
 #import "Event.h"
 #import "User.h"
 #import "UserInSession.h"
@@ -41,6 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 - (void)getEventsFromDatabase;
 - (void)setUserProfileImage:(UIImageView *)profile_imageImageView;
+- (void) updateUserBio:(NSString *)userBioUpdate withCompletion:(void (^) (BOOL succeeded))completion;
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoAndApp: (NSString *)userID;
