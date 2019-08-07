@@ -335,7 +335,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
     // Create Description text Field
     self.descriptionTextView = [[UITextView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
-    self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event..." attributes:nil];
+    self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event..." attributes:@{NSForegroundColorAttributeName:UIColorFromRGB(DARK_GREEN)}];
     self.descriptionTextView.layer.cornerRadius = 5;
     [self.descriptionTextView setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     [self.descriptionTextView setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
@@ -416,19 +416,22 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addSubview:self.coverImageLabel];
     
     // Create Cover Image View
-    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 4*LABEL_HEIGHT)];
-    [self.coverImageView setBackgroundColor:UIColorFromRGB(DARK_GREEN)];
+    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 5*LABEL_HEIGHT)];
+    [self.coverImageView setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
+    self.coverImageView.layer.cornerRadius = 5;
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
-    self.additionalMediaLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
+    self.additionalMediaLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.additionalMediaLabel setText:@"Additional Media"];
     self.additionalMediaLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.additionalMediaLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.additionalMediaLabel];
 
 //    // Create Additional Media Subview
-    self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
+    self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 5*LABEL_HEIGHT)];
+    [self.additionalMediaSubview setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
+    self.additionalMediaSubview.layer.cornerRadius = 5;
     [self.view addSubview:self.additionalMediaSubview];
     
     // Create Music Page Description Label
