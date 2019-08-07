@@ -44,6 +44,10 @@ static NSString * const MEDIA_VIEW = @"MEDIA_VIEW";
 static NSString * const MUSIC_VIEW = @"MUSIC_VIEW";
 static NSString * const POLL_VIEW = @"POLL_VIEW";
 
+static NSInteger const BACKGROUND_GREEN = 0x21ce99;
+static NSInteger const LIGHT_GREEN = 0xd2f5ea;
+static NSInteger const DARK_GREEN = 0x157f5f;
+static NSInteger const LABEL_GREEN = 0x0d523d;
 // Constant Sizes
 static int const LABEL_HEIGHT = 30;
 static int const X_OFFSET = 30;
@@ -138,7 +142,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self createSongsArray];
     self.ageRestriction = 0;
     self.shouldFireGETRequest = NO;
-    [self.view setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.view setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
     [self.backButton setAlpha:0];
     [self.backButton setTransform:CGAffineTransformMakeRotation(M_PI_2)];
     self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
@@ -208,16 +212,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) createPageObjects {
-    
-    UIColor *titleLabelFontColor = UIColorFromRGB(0x0d523d);
-    
     // Create Event Title Text Label
     self.eventTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.eventTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     NSString *titleText = @"Title*";
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(LABEL_GREEN) range:NSMakeRange(0, titleText.length - 1)];
     self.eventTitleLabel.attributedText = attributedString;
     [self.view addSubview:self.eventTitleLabel];
     
@@ -236,7 +237,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.charsLeftInTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT)];
     [self.charsLeftInTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
     [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%d)", MAXLENGTH]];
-    [self.charsLeftInTitleLabel setTextColor:titleLabelFontColor];
+    [self.charsLeftInTitleLabel setTextColor:UIColorFromRGB(DARK_GREEN)];
     [self.view addSubview:self.charsLeftInTitleLabel];
     
     // Create Location Label
@@ -245,7 +246,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     titleText = @"Location*";
     attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(LABEL_GREEN) range:NSMakeRange(0, titleText.length - 1)];
     self.searchLabel.attributedText = attributedString;
     [self.view addSubview:self.searchLabel];
     
@@ -267,7 +268,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     titleText = @"Date*";
     attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(LABEL_GREEN) range:NSMakeRange(0, titleText.length - 1)];
     self.datePickerLabel.attributedText = attributedString;
     [self.view addSubview:self.datePickerLabel];
     
@@ -276,7 +277,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.datePicker setMinimumDate: [NSDate date]];
     self.datePicker.subviews[0].subviews[1].backgroundColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1];
     self.datePicker.subviews[0].subviews[2].backgroundColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1];
-    [self.datePicker setValue:titleLabelFontColor forKey:@"textColor"];
+    [self.datePicker setValue:UIColorFromRGB(DARK_GREEN) forKey:@"textColor"];
     [self.datePicker addTarget:self action:@selector(pickerValueChanged) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.datePicker];
     
@@ -328,7 +329,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.descriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.descriptionLabel setText:@"Description"];
-    self.descriptionLabel.textColor = titleLabelFontColor;
+    self.descriptionLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.descriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.descriptionLabel];
 
@@ -337,7 +338,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.descriptionTextView.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Use this to tell people about your event..." attributes:nil];
     self.descriptionTextView.layer.cornerRadius = 5;
     [self.descriptionTextView setFont:[UIFont systemFontOfSize:18]];
-    [self.descriptionTextView setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+    [self.descriptionTextView setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     // self.descriptionTextView.textColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1] ;
     [self.view addSubview:self.descriptionTextView];
     
@@ -345,7 +346,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.vibesLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.vibesLabel setText:@"Vibes/Themes"];
-    self.vibesLabel.textColor = titleLabelFontColor;
+    self.vibesLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.vibesLabel];
     
@@ -359,7 +360,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.vibesCollectionView.dataSource = self;
     [self.vibesCollectionView setAlwaysBounceHorizontal:YES];
     [self.vibesCollectionView setShowsHorizontalScrollIndicator:NO];
-    [self.vibesCollectionView setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.vibesCollectionView setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
     [self.vibesCollectionView setAllowsMultipleSelection:YES];
     [self.view addSubview:self.vibesCollectionView];
     
@@ -368,41 +369,41 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.ageLabel setText:@"Age Restrictions"];
     [self.ageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
-    self.ageLabel.textColor = titleLabelFontColor;
+    self.ageLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.view addSubview:self.ageLabel];
     
     // Create Age Restrictions
     self.ageSubview = [[UIView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT)];
-    [self.ageSubview setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+    [self.ageSubview setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     [self.view addSubview:self.ageSubview];
     self.ageSubview.layer.cornerRadius = 5;
     self.leftAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 9*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
-    [self.leftAgeRestriction setEmptyLineStrokeColor:UIColorFromRGB(0x21ce99)];
+    [self.leftAgeRestriction setEmptyLineStrokeColor:UIColorFromRGB(BACKGROUND_GREEN)];
     [self.leftAgeRestriction setProgressColor:UIColorFromRGB(0x137b5b)];
     [self.leftAgeRestriction setProgressLineWidth:5];
     [self.leftAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x137b5b)];
-    [self.leftAgeRestriction setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+    [self.leftAgeRestriction setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     [self.ageSubview addSubview:self.leftAgeRestriction];
     UIButton *leftLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.leftAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.leftAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
     [leftLabel setTitle:@"18+" forState:UIControlStateNormal];
     [leftLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
     [leftLabel setTitleColor:UIColorFromRGB(0x137b5b) forState:UIControlStateNormal];
-    [leftLabel setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+    [leftLabel setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     leftLabel.layer.cornerRadius = 10;
     [leftLabel addTarget:self action:@selector(leftAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.ageSubview addSubview:leftLabel];
     self.rightAgeRestriction = [[MBCircularProgressBarView alloc] initWithFrame:CGRectMake(self.ageSubview.frame.size.width - 5*X_OFFSET, 0, 3*X_OFFSET, 3*X_OFFSET)];
-    [self.rightAgeRestriction setEmptyLineStrokeColor:UIColorFromRGB(0x21ce99)];
+    [self.rightAgeRestriction setEmptyLineStrokeColor:UIColorFromRGB(BACKGROUND_GREEN)];
     [self.rightAgeRestriction setProgressColor:UIColorFromRGB(0x137b5b)];
     [self.rightAgeRestriction setProgressLineWidth:5];
     [self.rightAgeRestriction setProgressStrokeColor:UIColorFromRGB(0x137b5b)];
-    [self.rightAgeRestriction setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+    [self.rightAgeRestriction setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     [self.ageSubview addSubview:self.rightAgeRestriction];
     UIButton *rightLabel = [[UIButton alloc] initWithFrame:CGRectMake(self.rightAgeRestriction.frame.origin.x + 0.9*X_OFFSET, self.rightAgeRestriction.frame.origin.y + X_OFFSET, 40, 35)];
     [rightLabel setTitle:@"21+" forState:UIControlStateNormal];
     [rightLabel.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:16]];
     [rightLabel setTitleColor:UIColorFromRGB(0x137b5b) forState:UIControlStateNormal];
-    [rightLabel setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+    [rightLabel setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
     rightLabel.layer.cornerRadius = 10;
     [rightLabel addTarget:self action:@selector(rightAgeButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.ageSubview addSubview:rightLabel];
@@ -410,19 +411,19 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Cover Image Label
     self.coverImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.coverImageLabel setText:@"Cover Image"];
-    self.coverImageLabel.textColor = titleLabelFontColor;
+    self.coverImageLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.coverImageLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.coverImageLabel];
     
     // Create Cover Image View
-    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, 0.6 * ([[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT)];
-    [self.coverImageView setImage:[UIImage imageNamed:@"addcover"]];
+    self.coverImageView = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 4*LABEL_HEIGHT)];
+    [self.coverImageView setBackgroundColor:UIColorFromRGB(DARK_GREEN)];
     [self.view addSubview:self.coverImageView];
     
     // Create Additional Media Label
     self.additionalMediaLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT)];
     [self.additionalMediaLabel setText:@"Additional Media"];
-    self.additionalMediaLabel.textColor = titleLabelFontColor;
+    self.additionalMediaLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.additionalMediaLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.additionalMediaLabel];
 
@@ -433,7 +434,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Music Page Description Label
     self.musicPageDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
     [self.musicPageDescriptionLabel setText:@"Add Music For Your Event"];
-    self.musicPageDescriptionLabel.textColor = titleLabelFontColor;
+    self.musicPageDescriptionLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.musicPageDescriptionLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.musicPageDescriptionLabel];
     
@@ -456,7 +457,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     // Create Music Queue Label
     self.musicQueueLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
     [self.musicQueueLabel setText:@"Your Music"];
-    self.musicQueueLabel.textColor = titleLabelFontColor;
+    self.musicQueueLabel.textColor = UIColorFromRGB(LABEL_GREEN);
     [self.musicQueueLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.musicQueueLabel];
     
@@ -479,7 +480,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     UICollectionViewFlowLayout *musicCVLayout = [[UICollectionViewFlowLayout alloc] init];
     [musicCVLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.musicQueueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT) collectionViewLayout:musicCVLayout];
-    [self.musicQueueCollectionView setBackgroundColor:UIColorFromRGB(0x21ce99)];
+    [self.musicQueueCollectionView setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
     self.musicQueueCollectionView.layer.cornerRadius = 5;
     [self.musicQueueCollectionView registerNib:[UINib nibWithNibName:@"MusicQueueCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MusicQueueCollectionViewCell"];
     self.musicQueueCollectionView.delegate = self;
@@ -960,7 +961,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     if ([self.pageName isEqualToString:DETAILS_VIEW]) {
         CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
         [cell setLabelText:self.vibesArray[indexPath.item]];
-        [cell setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+        [cell setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
         return cell;
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         MusicQueueCollectionViewCell *cell = [self.musicQueueCollectionView dequeueReusableCellWithReuseIdentifier:@"MusicQueueCollectionViewCell" forIndexPath:indexPath];
@@ -1004,7 +1005,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [UIView animateWithDuration:0.3 animations:^{
             cell.frame = CGRectMake(cell.frame.origin.x - 5, cell.frame.origin.y - 2.5, cell.frame.size.width + 10, cell.frame.size.height + 5);
         }];
-        [cell setBackgroundColor:UIColorFromRGB(0x157f5f)];
+        [cell setBackgroundColor:UIColorFromRGB(DARK_GREEN)];
         [cell.titleLabel setTextColor:UIColorFromRGB(0xffffff)];
         [self.vibesSet addObject:cell.titleLabel.text];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW] && indexPath.row == self.queuedUpSongsArray.count - 1) {
@@ -1018,7 +1019,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [UIView animateWithDuration:0.3 animations:^{
             cell.frame = CGRectMake(cell.frame.origin.x + 5, cell.frame.origin.y + 2.5, cell.frame.size.width - 10, cell.frame.size.height - 5);
         }];
-        [cell setBackgroundColor:UIColorFromRGB(0xd2f5ea)];
+        [cell setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
         [cell.titleLabel setTextColor:UIColorFromRGB(0x000000)];
         [self.vibesSet removeObject:cell.titleLabel.text];
     }
