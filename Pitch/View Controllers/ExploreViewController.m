@@ -15,7 +15,6 @@
 #import "Event.h"
 #import "DataHandling.h"
 #import "UIImageView+AFNetworking.h"
-#import "EventAnnotation.h"
 #import "EventDetailsViewController.h"
 #import "CreateEventViewController.h"
 #import "MusicQueueViewController.h"
@@ -24,6 +23,7 @@
 #import "DragCell.h"
 #import "CreateEventViewController.h"
 #import "MusicQueueViewController.h"
+#import "UIImageView+AFNetworking.h"
 #import "EventGalleryViewController.h"
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
@@ -291,10 +291,15 @@
     if([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
     }
+    UIImageView *eventImageView;
     NSString *annotationIdentifier = @"Event";
-    EventAnnotation *newEventAnnotationView = (EventAnnotation*)[mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
+    MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if (newEventAnnotationView == nil) {
-        newEventAnnotationView = [[EventAnnotation alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+        NSString *eventID = annotation.title;
+        newEventAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
+//        [DataHandling shared] getEvent:eventID withCompletion:^(Event * _Nonnull event) {
+//            [eventImageView setImageWithURL:[NSURL URLWithString:event.eventImageURLString]];
+//        }
         UIImage *resizedEventImage = [self resizeImage:[UIImage imageNamed:@"eventImage"] withSize:CGSizeMake(30.0, 30.0)];
         newEventAnnotationView.image = resizedEventImage;
         newEventAnnotationView.canShowCallout = NO;
@@ -306,7 +311,6 @@
     [mapView deselectAnnotation:annotationView.annotation animated:YES];
     NSLog(@"TITLE: %@", annotationView.annotation.title);
     [self.dataHandlingObject getEvent:annotationView.annotation.title withCompletion:^(Event * _Nonnull event) {
-        
         [self presentEventDetailsView:event];
     }];
 }

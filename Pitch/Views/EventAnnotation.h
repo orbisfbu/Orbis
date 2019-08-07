@@ -2,30 +2,18 @@
 //  EventAnnotation.h
 //  Pitch
 //
-//  Created by sbernal0115 on 7/25/19.
+//  Created by sbernal0115 on 8/7/19.
 //  Copyright © 2019 PitchFBU. All rights reserved.
 //
 
 #import <MapKit/MapKit.h>
-#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventAnnotation : MKAnnotationView
-
-@property (nonatomic, strong) UIImage *image;
-@property (nonatomic, strong) NSString *eventImageURLString;
-@property (nonatomic, strong) NSString *eventName;
-@property (nonatomic, strong) NSString *eventCreator;
-@property (nonatomic, strong) NSString *eventDescription;
-@property (nonatomic) int eventAgeRestriction;
-@property (nonatomic) int eventAttendanceCount;
-@property (nonatomic) BOOL eventRegistrationStatus;
+@interface EventAnnotation : MKPointAnnotation
+@property (nonatomic, strong) NSString *title;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
-@property (nonatomic) NSString *title;
-
-- (instancetype)initWithAnnotation:(nullable id <MKAnnotation>)annotation reuseIdentifier:(nullable NSString *)reuseIdentifier;
-
+@property (nonatomic, strong) NSString *mainImageURLString;
 @end
 
 NS_ASSUME_NONNULL_END
