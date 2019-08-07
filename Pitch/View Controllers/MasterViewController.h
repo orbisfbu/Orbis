@@ -15,6 +15,5 @@
 @interface MasterViewController : UIViewController
 
 @property (nonatomic, weak) id<ShowLoginScreenDelegate> delegate;
-
+@property BOOL isNewUser;
 @end
-

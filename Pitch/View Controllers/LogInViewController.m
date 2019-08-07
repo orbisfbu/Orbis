@@ -239,9 +239,12 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
     [self.view addSubview:self.signUpButton];
 }
 
-- (void) segueToApp {
+- (void) segueToApp:(BOOL)isFirstTime {
     UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     MasterViewController * vc = (MasterViewController *)[sb instantiateViewControllerWithIdentifier:@"MasterViewController"];
+    if (isFirstTime) {
+        vc.isNewUser = YES;
+    }
     vc.delegate = self;
     [self presentViewController:vc animated:YES completion:nil];
 }
@@ -278,7 +281,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) createSignInPage {
-    [self.backButton setEnabled:YES];
+    //[self.backButton setEnabled:YES];
     self.viewName = SIGNIN_VIEW;
     [UIView animateWithDuration:0.5 animations:^{
         //self.usernameTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, 100, self.usernameTextField.frame.size.width, self.usernameTextField.frame.size.height);
@@ -290,7 +293,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) dismissSignInPage {
-    [self.backButton setEnabled:NO];
+    //[self.backButton setEnabled:NO];
     [UIView animateWithDuration:0.5 animations:^{
         self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, -self.passwordTextField.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
         self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, -self.logInButton.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
@@ -302,7 +305,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) createSignUpPage1 {
-    [self.backButton setEnabled:YES];
+    //[self.backButton setEnabled:YES];
     self.viewName = SIGNUP_VIEW1;
     [UIView animateWithDuration:0.5 animations:^{
         self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, 100, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
@@ -318,7 +321,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         self.nextButton.frame = CGRectMake(self.nextButton.frame.origin.x, -self.nextButton.frame.size.height, self.nextButton.frame.size.width, self.nextButton.frame.size.height);
         if (!advancing) {
             self.backButton.alpha = 0;
-            [self.backButton setEnabled:NO];
+            //[self.backButton setEnabled:NO];
         }
     } completion:^(BOOL finished) {
         self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, self.view.frame.size.height, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
@@ -344,7 +347,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
         self.confirmPasswordSignUpTextField.frame = CGRectMake(self.confirmPasswordSignUpTextField.frame.origin.x, -self.confirmPasswordSignUpTextField.frame.size.height, self.confirmPasswordSignUpTextField.frame.size.width, self.confirmPasswordSignUpTextField.frame.size.height);
         self.signUpButton.frame = CGRectMake(self.signUpButton.frame.origin.x, -self.signUpButton.frame.size.height, self.signUpButton.frame.size.width, self.signUpButton.frame.size.height);
         if (advancing) {
-            [self.backButton setEnabled:NO];
+            //[self.backButton setEnabled:NO];
             self.backButton.alpha = 0;
         }
     } completion:^(BOOL finished) {
@@ -456,7 +459,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
                                          [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
                                          [self dismissSignInPage];
                                          [self dismissSignUpPage2:YES];
-                                         [self segueToApp];
+                                         [self segueToApp:YES];
                                      }
                                      else{
                                          switch([error code]){
@@ -547,7 +550,7 @@ didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result error:(NSError *)er
 }
 
 - (void) segueToAppUponLogin {
-    [self segueToApp];
+    [self segueToApp:NO];
 }
 
 @end
