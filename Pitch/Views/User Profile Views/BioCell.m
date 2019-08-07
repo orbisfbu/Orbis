@@ -24,8 +24,8 @@
         //[self.bioTextView setText:[UserInSession shared].sharedUser.userBioString];
     }
     else {
-        self.bioTextView.text = @"Add a bio here...";
-        self.bioTextView.editable = NO;
+        //self.bioTextView.text = @"Add a bio here...";
+        //self.bioTextView.editable = NO;
     }
     [self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
     
@@ -44,7 +44,7 @@
 - (void) editBio {
     self.bioTextView.editable = YES;
     if ([self.bioTextView.text isEqualToString:(@"")]){
-        self.bioTextView.text = @"Add a bio here...";
+       // self.bioTextView.text = @"Add a bio here...";
     }
     [self.editUserBioButton setTitle:@"Done" forState:UIControlStateNormal];
     [self.editUserBioButton addTarget:self action:@selector(saveBioChanges) forControlEvents:UIControlEventTouchUpInside];
@@ -53,17 +53,21 @@
 
 - (void) saveBioChanges{
     [self.editUserBioButton setTitle:@"Edit" forState:UIControlStateNormal];
-    //[self.bioTextView setText:[UserInSession shared].sharedUser.userBioString];
     self.bioTextView.editable = NO;
-    
+    [self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
     [[DataHandling shared] updateUserBio:self.bioTextView.text withCompletion:^(BOOL succeeded) {
         if (succeeded) {
-            [self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
+            NSLog(@"Saved bio");
+            //[self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
         }
         else {
             NSLog(@"Can't update bio");
         }
     }];
+    //[self.editUserBioButton setTitle:@"Edit" forState:UIControlStateNormal];
+    //[self.bioTextView setText:[UserInSession shared].sharedUser.userBioString];
+ //   self.bioTextView.editable = NO;
+
 }
 //    if ([self.userBioLabel.text isEqualToString:@""]) {
 //        self.userBioLabel.text = @"Write your own bio...";
