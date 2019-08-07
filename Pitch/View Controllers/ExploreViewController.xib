@@ -27,7 +27,7 @@
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Gfd-S1-nQU">
                     <rect key="frame" x="3" y="0.0" width="369" height="667"/>
                 </mapView>
-                <searchBar contentMode="redraw" placeholder="Search Events" translatesAutoresizingMaskIntoConstraints="NO" id="8Yx-83-rzV">
+                <searchBar contentMode="redraw" placeholder="Find Events" translatesAutoresizingMaskIntoConstraints="NO" id="8Yx-83-rzV">
                     <rect key="frame" x="3" y="70" width="369" height="56"/>
                     <textInputTraits key="textInputTraits"/>
                 </searchBar>
