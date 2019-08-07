@@ -63,12 +63,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 @interface CreateEventViewController () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITextFieldDelegate>
 
-//@property (strong, nonatomic) FBSDKLoginButton *FBLoginButton;
 @property (strong, nonatomic) FIRDatabaseReference *databaseEventsReference;
 @property (strong, nonatomic) FIRDatabaseReference *databaseUsersReference;
-//@property (strong, nonatomic) NSMutableArray *customPollCellsArray;
-//@property (strong, nonatomic) User *makingUser;
-//@property (strong, nonatomic) UITableView *createEventTableView;
 @property (strong, nonatomic) UIButton *createEventButton;
 
 @property (strong, nonatomic) UITapGestureRecognizer *tap;
@@ -511,6 +507,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [UIView animateWithDuration:0.5 animations:^{
         self.eventTitleLabel.frame = CGRectMake(self.eventTitleLabel.frame.origin.x, -self.eventTitleLabel.frame.size.height, self.eventTitleLabel.frame.size.width, self.eventTitleLabel.frame.size.height);
         self.eventTitleTextField.frame = CGRectMake(self.eventTitleTextField.frame.origin.x, -self.eventTitleTextField.frame.size.height, self.eventTitleTextField.frame.size.width, self.eventTitleTextField.frame.size.height);
+        self.charsLeftInTitleLabel.frame = CGRectMake(self.charsLeftInTitleLabel.frame.origin.x, -self.charsLeftInTitleLabel.frame.origin.y, self.charsLeftInTitleLabel.frame.size.width, self.charsLeftInTitleLabel.frame.size.height);
         self.searchLabel.frame = CGRectMake(self.searchLabel.frame.origin.x, -self.searchLabel.frame.size.height, self.searchLabel.frame.size.width, self.searchLabel.frame.size.height);
         self.searchLocationPlaceholderLabel.frame = CGRectMake(self.searchLocationPlaceholderLabel.frame.origin.x, -self.searchLocationPlaceholderLabel.frame.size.height, self.searchLocationPlaceholderLabel.frame.size.width, self.searchLocationPlaceholderLabel.frame.size.height);
         self.searchLocationTextField.frame = CGRectMake(self.searchLocationTextField.frame.origin.x, -self.searchLocationTextField.frame.size.height, self.searchLocationTextField.frame.size.width, self.searchLocationTextField.frame.size.height);
@@ -706,6 +703,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.eventTitleTextField.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT);
     [self.eventTitleTextField setText:@""];
     
+    // Create Chars Left In Title Label
+    CGSize size = [[NSString stringWithFormat:@"(%d)", MAXLENGTH] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.charsLeftInTitleLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
+    [self.charsLeftInTitleLabel setText:[NSString stringWithFormat:@"(%lu)", MAXLENGTH - self.eventTitleTextField.text.length]];
+    
     self.searchLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
     
     self.pinImageView.frame = CGRectMake(0.8*X_OFFSET, [[UIScreen mainScreen] bounds].size.height, LABEL_HEIGHT, LABEL_HEIGHT);
@@ -721,7 +723,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"M/d/yy, h:mm a"];
     NSString *date = [dateFormatter stringFromDate:[NSDate date]];
-    CGSize size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    size = [[NSString stringWithFormat:@"%@", date] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
     self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
     [self.dateLabel setText:[NSString stringWithFormat:@"%@", date]];
     
