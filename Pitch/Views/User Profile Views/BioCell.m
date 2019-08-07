@@ -41,8 +41,22 @@
     [self.bioTextView resignFirstResponder];
 }
 
+//- (void)textViewDidChange:(UITextView *)textView
+//{
+//    self.bioTextView.scrollEnabled = NO;
+//    CGSize sizeThatShouldFitTheContent = [self.bioTextView sizeThatFits:self.bioTextView.frame.size];
+//    self.heightConstraint.constant = sizeThatShouldFitTheContent.height;
+//    
+////    CGFloat fixedWidth = textView.frame.size.width;
+////    CGSize newSize = [textView sizeThatFits:CGSizeMake(fixedWidth, MAXFLOAT)];
+////    CGRect newFrame = textView.frame;
+////    newFrame.size = CGSizeMake(fmaxf(newSize.width, fixedWidth), newSize.height);
+////    textView.frame = newFrame;
+//}
+
 - (void) editBio {
     self.bioTextView.editable = YES;
+    [self.bioTextView becomeFirstResponder];
     if ([self.bioTextView.text isEqualToString:(@"")]){
        // self.bioTextView.text = @"Add a bio here...";
     }
