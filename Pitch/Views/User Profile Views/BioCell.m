@@ -8,6 +8,7 @@
 
 #import "BioCell.h"
 #import "UserInSession.h"
+#import "DataHandling.h"
 
 @implementation BioCell
 
@@ -54,7 +55,15 @@
     [self.editUserBioButton setTitle:@"Edit" forState:UIControlStateNormal];
     //[self.bioTextView setText:[UserInSession shared].sharedUser.userBioString];
     self.bioTextView.editable = NO;
-    [self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[DataHandling shared] updateUserBio:self.bioTextView.text withCompletion:^(BOOL succeeded) {
+        if (succeeded) {
+            [self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
+        }
+        else {
+            NSLog(@"Can't update bio");
+        }
+    }];
 }
 //    if ([self.userBioLabel.text isEqualToString:@""]) {
 //        self.userBioLabel.text = @"Write your own bio...";
