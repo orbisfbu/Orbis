@@ -856,7 +856,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     NSString *strDate = [dateFormatter stringFromDate:self.datePicker.date];
     CGSize size = [strDate sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
-    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
+    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, self.datePickerLabel.frame.origin.y, size.width, LABEL_HEIGHT);
     self.dateLabel.text = strDate;
 }
 
