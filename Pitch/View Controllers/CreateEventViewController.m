@@ -215,28 +215,30 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Event Title Text Label
     self.eventTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.eventTitleLabel setText:@"Title"];
-    self.eventTitleLabel.textColor = UIColorFromRGB(0x0d523d);
-    //self.eventTitleLabel.textColor = [[UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1]];
     [self.eventTitleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    NSString *titleText = @"Title*";
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    self.eventTitleLabel.attributedText = attributedString;
     [self.view addSubview:self.eventTitleLabel];
     
     // Create Event Title Text Field
     self.eventTitleTextField = [[UITextField alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 2*LABEL_HEIGHT)];
     [self.eventTitleTextField setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:40]];
     [self.eventTitleTextField setMinimumFontSize:20];
-   // self.eventTitleTextField.textColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1] ;
     [self.eventTitleTextField setAdjustsFontSizeToFitWidth:YES];
     [self.eventTitleTextField setPlaceholder:@"E.g Yike's Bday"];
-//    UIColor *color = [UIColor whiteColor];
-//    self.eventTitleTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"E.g Yike's Bday" attributes:@{NSForegroundColorAttributeName: color}];
     [self.view addSubview:self.eventTitleTextField];
     
-    // Create Search Label
+    // Create Location Label
     self.searchLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.searchLabel setText:@"Location"];
-    self.searchLabel.textColor = titleLabelFontColor;
     [self.searchLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    titleText = @"Location*";
+    attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    self.searchLabel.attributedText = attributedString;
     [self.view addSubview:self.searchLabel];
     
     // Create a Pin Image View
@@ -253,15 +255,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     // Create Date Picker Label
     self.datePickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.datePickerLabel setText:@"Date"];
-    self.datePickerLabel.textColor = titleLabelFontColor;
     [self.datePickerLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    titleText = @"Date*";
+    attributedString = [[NSMutableAttributedString alloc] initWithString:titleText];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(titleText.length - 1, 1)];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:titleLabelFontColor range:NSMakeRange(0, titleText.length - 1)];
+    self.datePickerLabel.attributedText = attributedString;
     [self.view addSubview:self.datePickerLabel];
     
     // Create date picker
     self.datePicker = [[UIDatePicker alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 150)];
     [self.datePicker setMinimumDate: [NSDate date]];
-//    self.datePicker.subviews[0].subviews[0].backgroundColor = [UIColor colorWithRed:(21/255.0) green:(127/255.0) blue:(95/255.0) alpha:1];//the picker's own background view
     self.datePicker.subviews[0].subviews[1].backgroundColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1];
     self.datePicker.subviews[0].subviews[2].backgroundColor = [UIColor colorWithRed:(19/255.0) green:(123/255.0) blue:(91/255.0) alpha:1];
     [self.datePicker setValue:titleLabelFontColor forKey:@"textColor"];
@@ -851,6 +855,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     NSString *strDate = [dateFormatter stringFromDate:self.datePicker.date];
+    CGSize size = [strDate sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, [[UIScreen mainScreen] bounds].size.height, size.width, LABEL_HEIGHT);
     self.dateLabel.text = strDate;
 }
 
