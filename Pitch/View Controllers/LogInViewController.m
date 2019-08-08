@@ -52,6 +52,8 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
 
 @interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate, InstantiateSharedUserDelegate>
 
+@property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
+
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
@@ -118,8 +120,9 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
         self.FBLoginButton.delegate = self;
         self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
         // Add touch gestures to dismiss keyboard
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-        [self.view addGestureRecognizer:tapGesture];
+        self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+        [self.view addGestureRecognizer:self.tapGesture];
+        [self.tapGesture setCancelsTouchesInView:NO];
         [self createPageObjects];
         [self createContinuePage];
     }
@@ -389,14 +392,6 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
         self.orLabel.frame = CGRectMake(self.orLabel.frame.origin.x, -self.orLabel.frame.size.height, self.orLabel.frame.size.width, self.orLabel.frame.size.height);
         self.FBLoginButton.frame = CGRectMake(self.FBLoginButton.frame.origin.x, -self.FBLoginButton.frame.size.height, self.FBLoginButton.frame.size.width, self.FBLoginButton.frame.size.height);
         self.backButton.alpha = 1;
-    } completion:^(BOOL finished) {
-        self.welcomeLabel1.frame = CGRectMake(self.welcomeLabel1.frame.origin.x, self.view.frame.size.height, self.welcomeLabel1.frame.size.width, self.welcomeLabel1.frame.size.height);
-        self.welcomeLabel2.frame = CGRectMake(self.welcomeLabel2.frame.origin.x, self.view.frame.size.height, self.welcomeLabel2.frame.size.width, self.welcomeLabel2.frame.size.height);
-        self.emailTitleLabel.frame = CGRectMake(self.emailTitleLabel.frame.origin.x, self.view.frame.size.height, self.emailTitleLabel.frame.size.width, self.emailTitleLabel.frame.size.height);
-        self.emailTextField.frame = CGRectMake(self.emailTextField.frame.origin.x, self.view.frame.size.height, self.emailTextField.frame.size.width, self.emailTextField.frame.size.height);
-        self.continueButton.frame = CGRectMake(self.continueButton.frame.origin.x, self.view.frame.size.height, self.continueButton.frame.size.width, self.continueButton.frame.size.height);
-        self.orLabel.frame = CGRectMake(self.orLabel.frame.origin.x, self.view.frame.size.height, self.orLabel.frame.size.width, self.orLabel.frame.size.height);
-        self.FBLoginButton.frame = CGRectMake(self.FBLoginButton.frame.origin.x, self.view.frame.size.height, self.FBLoginButton.frame.size.width, self.FBLoginButton.frame.size.height);
     }];
 }
 
