@@ -25,6 +25,7 @@ static NSString * const USER_PROFILE_IMAGE_URLSTRING = @"ProfileImageURL";
 static NSString * const USER_BACKGROUND_IMG_URLSTRING = @"BackgroundImageURL";
 static NSString * const USERNAME_KEY = @"Username";
 static NSString * const USER_BIO_KEY = @"Bio";
+static NSString * const USER_ID_KEY = @"ID";
 static NSString * const DEFAULT_BIO = @"Add a bio here...";
 static NSString * const DEFAULT_BACKGROUNDIMAGE_URLSTRING = @"https://bit.ly/2KmzJch";
 static NSString * const DEFAULT_PROFILEIMAGE_URLSTRING = @"";
@@ -94,6 +95,18 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 @implementation LogInViewController
 
 - (void)viewDidLoad {
+//    NSLog(@"FACEBOOK LOGOUT WAS PRESSED");
+//    NSError *signOutError;
+//    BOOL status = [[FIRAuth auth] signOut:&signOutError];
+//    if (!status) {
+//        NSLog(SIGN_OUT_FAILURE);
+//        return;
+//    }
+//    else
+//    {
+//        NSLog(@"FACEBOOK LOGOUT SUCCESSFUL");
+//    }
+
     [super viewDidLoad];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.sharedUserDelegate = self;
@@ -433,35 +446,45 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 }
 
 - (void) signUpButtonPressed {
+    
     BOOL passwordsMatch = [self.passwordSignUpTextField.text isEqualToString:self.confirmPasswordSignUpTextField.text];
     BOOL usernameIsValid =  ![self.usernameSignUpTextField.text isEqualToString:@""];
+    
     if (passwordsMatch && usernameIsValid) {
         __block NSString *userID;
         self.registerUsername = self.usernameSignUpTextField.text;
         self.registerPassword = self.passwordSignUpTextField.text;
-        NSDictionary *userInfo = @{
+        
+        NSDictionary *userPrelimInfo = @{
                                    USER_FIRSTNAME: self.registerFirstName,
                                    USER_LASTNAME: self.registerLastName,
-                                   USER_PROFILE_IMAGE_URLSTRING: DEFAULT_BACKGROUNDIMAGE_URLSTRING,
                                    USER_BIO_KEY: DEFAULT_BIO,
                                    USERNAME_KEY: self.registerUsername,
                                    USER_BACKGROUND_IMG_URLSTRING: DEFAULT_BACKGROUNDIMAGE_URLSTRING,
                                    USER_EMAIL: self.inputtedUserEmail,
                                    };
+        
         [[FIRAuth auth] createUserWithEmail:self.inputtedUserEmail
                                    password:self.registerPassword
                                  completion:^(FIRAuthDataResult * _Nullable authResult,
                                               NSError * _Nullable error) {
                                      if(authResult){
                                          userID = authResult.user.uid;
+                                         NSMutableDictionary *userAllInfo = [[NSMutableDictionary alloc] initWithDictionary:userPrelimInfo];
                                          NSLog(@"New firebase user was created with userID %@", authResult.user);
-                                         [[UserInSession shared] setCurrentUser:userInfo withUserID:userID];
-                                         [[DataHandling shared] addUserToDatabase:[UserInSession shared].sharedUser withUserID:userID];
-                                         [self dismissSignInPage];
-                                         [self dismissSignUpPage2:YES];
-                                         [self segueToApp:YES];
+                                         [[DataHandling shared] updateProfileImage:[UIImage imageNamed:@"default_profile"] withUserID:userID withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
+                                             //making sure to add newly created profileImageURLString after completion
+                                             [userAllInfo setValue:createdProfileImageURLString forKey:USER_PROFILE_IMAGE_URLSTRING];
+                                             [[DataHandling shared] addUserToDatabase:[[User alloc] initWithDictionary:userAllInfo] withUserID:userID];
+                                             [userAllInfo setValue:userID forKey:USER_ID_KEY];
+                                             [[UserInSession shared] setCurrentUser:userAllInfo withUserID:userID];
+                                             [self dismissSignInPage];
+                                             [self dismissSignUpPage2:YES];
+                                             [self segueToApp:YES];
+                                         }];  
                                      }
                                      else{
+                                         
                                          switch([error code]){
                                                  
                                              case 1707:

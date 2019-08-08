@@ -42,12 +42,12 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shared;
 - (void)getEventsFromDatabase;
 - (void)setUserProfileImage:(UIImageView *)profile_imageImageView;
+- (void)updateProfileImage:(UIImage*)imageToUpload withUserID:(NSString *)userID withCompletion:(void (^) (NSString *createdProfileImageURLString))completion;
 - (void) updateUserBio:(NSString *)userBioUpdate withCompletion:(void (^) (BOOL succeeded))completion;
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
 - (void)loadUserInfoAndApp: (NSString *)userID;
 - (void)getFilteredEventsFromDatabase: (NSDictionary*)filters userLocation:(CLLocation*)userLocation;
-- (void)updateProfileImage:(UIImage*)imageToUpload withCompletion:(void (^) (NSString *createdProfileImageURLString))completion ;
 @property (nonatomic, strong) CLLocation *userLocation;
 @property (nonatomic, weak) id<GetEventsArrayDelegate> delegate;
 @property (nonatomic, weak) id<GetFilteredEventsArrayDelegate> filteredEventsDelegate;

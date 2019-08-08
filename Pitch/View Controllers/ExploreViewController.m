@@ -21,10 +21,12 @@
 #import "EventGalleryViewController.h"
 #import "ApplyFiltersCell.h"
 #import "DragCell.h"
+#import "EventAnnotation.h"
 #import "CreateEventViewController.h"
 #import "MusicQueueViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "EventGalleryViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -136,9 +138,10 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
+            EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
             eventAnnotationPoint.title = thisEvent.ID;
+            eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
             [self.photoMap addAnnotation:eventAnnotationPoint];
         }
     }
@@ -288,22 +291,27 @@
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    NSString *annotationIdentifier = @"Event";
+    MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
     }
-    UIImageView *eventImageView;
-    NSString *annotationIdentifier = @"Event";
-    MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
-    if (newEventAnnotationView == nil) {
-        NSString *eventID = annotation.title;
-        newEventAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
-//        [DataHandling shared] getEvent:eventID withCompletion:^(Event * _Nonnull event) {
-//            [eventImageView setImageWithURL:[NSURL URLWithString:event.eventImageURLString]];
-//        }
-        UIImage *resizedEventImage = [self resizeImage:[UIImage imageNamed:@"eventImage"] withSize:CGSizeMake(30.0, 30.0)];
-        newEventAnnotationView.image = resizedEventImage;
+    else if ([annotation isKindOfClass:[EventAnnotation class]]){
+        EventAnnotation *thisAnnotation = (EventAnnotation *)annotation;
+        NSURL *url = [NSURL URLWithString:thisAnnotation.mainImageURLString];
+//        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
+//        UIImage *image = [UIImage imageWithData:data];
+        UIImageView *eventImageView = [[UIImageView alloc] init];
+        [eventImageView setImageWithURL:url];
+        UIImage *resizedEventImage = [self resizeImage:eventImageView.image withSize:CGSizeMake(30.0, 30.0)];
+        [eventImageView setImage:resizedEventImage];
+        eventImageView.layer.cornerRadius = 5;
+        //[eventImageView setImage:resizedEventImage];
+        newEventAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:thisAnnotation reuseIdentifier:annotationIdentifier];
+        newEventAnnotationView.image = eventImageView.image;
         newEventAnnotationView.canShowCallout = NO;
     }
+    
     return newEventAnnotationView;
 }
 
@@ -353,8 +361,8 @@
     NSMutableSet *vibesSet = [self.vibesCell getSelectedVibes];
     long distance = [self.distanceCell getDistance];
     
-    int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
-    int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
+    long minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
+    long maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
     NSDictionary *filterValues = @{
                                   @"Age Restriction": @(ageRestriction),
                                   @"Distance": @(distance),

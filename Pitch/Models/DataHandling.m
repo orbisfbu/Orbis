@@ -79,86 +79,69 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }];
 }
 
-- (void)updateProfileImage:(UIImage*)imageToUpload withCompletion:(void (^) (NSString *createdProfileImageURLString))completion {
-    NSString *userID = [UserInSession shared].sharedUser.ID;
-    FIRDocumentReference *userInfoRef = [[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:userID];
+- (void)updateProfileImage:(UIImage*)imageToUpload withUserID:(NSString *)userID withCompletion:(void (^) (NSString *createdProfileImageURLString))completion {
+    NSString *pathToProfileImage = [NSString stringWithFormat:@"users/%@/profileImage.jpg", userID];
+    //document reference used to update user profileImageURLString in database
+    FIRDocumentReference *userDocumentRef = [[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:userID];
     // Data in memory
     NSData *data = UIImageJPEGRepresentation(imageToUpload, 0.8);
     // Create a storage reference from our storage service
     FIRStorageReference *storageRef = [self.storage reference];
-    // Create a reference to the file to delete
-    FIRStorageReference *deleteRef = [storageRef child:[NSString stringWithFormat:@"users/%@/profileImage.jpg", userID]];
-    // Delete the file
-    [deleteRef deleteWithCompletion:^(NSError *error){
+    FIRStorageReference *checkForExistanceRef = [storageRef child:pathToProfileImage];
+    FIRStorageReference *deleteRef = [storageRef child:pathToProfileImage];
+    [checkForExistanceRef downloadURLWithCompletion:^(NSURL *URL, NSError *error){
         if (error != nil) {
-            // Uh-oh, an error occurred!
-            NSLog(@"THERE WAS AN ERROR DELETING OLD PROFILE IMAGE, error: %ln", (long *)error.code);
+            if (error.code == FIRStorageErrorCodeObjectNotFound){
+                NSLog(@"PROFILE IMAGE DIDNT EXIST, WILL UPLOAD FOR FIRST TIME NOW");
+            }
+            
         } else {
-            //succesfully deleted old profile image
-            // Create a reference to the file you want to upload
-            FIRStorageReference *profileImageRef = [storageRef child:[NSString stringWithFormat:@"users/%@/profileImage.jpg", userID]];
-            // Upload the file to the path "userProfileImages/%@/profileImage.jpg"
-            FIRStorageUploadTask *uploadTask = [profileImageRef putData:data
-                                                               metadata:nil
-                                                             completion:^(FIRStorageMetadata *metadata,
-                                                                          NSError *error) {
-                                                                 if (error != nil) {
-                                                                     NSLog(@"UPLOAD REACHED SOME ERROR");
-                                                                     switch (error.code) {
-                                                                         case FIRStorageErrorCodeObjectNotFound:
-                                                                             // File doesn't exist
-                                                                             break;
-                                                                             
-                                                                         case FIRStorageErrorCodeUnauthorized:
-                                                                             // User doesn't have permission to access file
-                                                                             break;
-                                                                         case FIRStorageErrorCodeCancelled:
-                                                                             // User canceled the upload
-                                                                             break;
-                                                                         case FIRStorageErrorCodeUnknown:
-                                                                             // Unknown error occurred, inspect the server response
-                                                                             break;
-                                                                     }
-                                                                 } else {
-                                                                     // You can also access to download URL after upload.
-                                                                     [profileImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
-                                                                         if (error != nil) {
-                                                                             NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
-                                                                         } else {
-                                                                             //convert to URL string since this is how User object stores it
-                                                                             //this ensures profileImageURLString is also updated
-                                                                             [userInfoRef updateData:@{USER_PROFILE_IMAGE_KEY: URL.absoluteString
-                                                                                                       }];
-                                                                             completion(URL.absoluteString);
-                                                                         }
-                                                                     }];
-                                                                 }
-                                                             }];
+            // Delete the old user profile image
+            [deleteRef deleteWithCompletion:^(NSError *error){
+                if (error != nil) {
+                    NSLog(@"THERE WAS AN ERROR DELETING OLD PROFILE IMAGE");
+                    switch (error.code) {
+                        case FIRStorageErrorCodeObjectNotFound:
+                            NSLog(@"THE FILE YOU ARE TRYING TO DELETE DOESNT EXIST");
+                            break;
+                    }
+                } else {
+                    NSLog(@"SUCCESSFULLY DELETED OLD PROFILE IMAGE");
+                }
+            }];
         }
+        
+        
+        FIRStorageUploadTask *uploadTask = [checkForExistanceRef putData:data
+                                                                metadata:nil
+                                                              completion:^(FIRStorageMetadata *metadata,
+                                                                           NSError *error) {
+                                                                  if (error != nil) {
+                                                                      switch (error.code) {
+                                                                              
+                                                                          case FIRStorageErrorCodeObjectNotFound:
+                                                                              NSLog(@"UPLOAD REACHED SOME ERROR, doesn't exist");
+                                                                              break;
+                                                                      }
+                                                                  } else {
+                                                                      // You can also access to download URL after upload.
+                                                                      [checkForExistanceRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+                                                                          if (error != nil) {
+                                                                              NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
+                                                                              completion(nil);
+                                                                          } else {
+                                                                              //convert to URL string since this is how User object stores it
+                                                                              //this ensures profileImageURLString is also updated
+                                                                              completion(URL.absoluteString);
+                                                                          }
+                                                                      }];
+                                                                  }
+                                                              }];
+        
     }];
+    
 }
 
-
-//this is going to be used to set the eventDetails imageView
-//a separate one needs to be made for annotation images
-
-////this is going to have to be called when the final create event button is pressed; with the autoID that is generated by the
-////upload event to database method
-//- (void)setEventMainImage:(UIImageView *)eventDetailsImageView withEventID:(NSString *)eventID{
-//    FIRStorageReference *storageRef = [self.storage reference];
-//    FIRStorageReference *eventMainImageRef = [storageRef child:[NSString stringWithFormat:@"events/%@/mainImage.jpg", eventID]];
-//    UIImage *placeholderImage = [UIImage imageNamed:@"default_profile"];
-//    // Fetch the download URL
-//    [eventMainImageRef downloadURLWithCompletion:^(NSURL *URL, NSError *error){
-//        if (error != nil) {
-//            NSLog(@"ERROR GETTING EVENT IMAGE FROM STORAGE");
-//            NSLog(@"THIS IS THE ERROR CODE: %ln", (long)error.code);
-//        } else {
-//            //successfully setImageView
-//            [eventDetailsImageView sd_setImageWithURL:URL placeholderImage:placeholderImage];
-//        }
-//    }];
-//}
 
 - (void)setUserProfileImage:(UIImageView *)profile_imageImageView{
     NSString *userID = [UserInSession shared].sharedUser.ID;
@@ -249,10 +232,11 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     NSMutableArray <Event *> *filteredEventsArray = [[NSMutableArray alloc] init];
     int ageRestrictionFilter = [filters[FILTER_AGE_KEY] intValue];
     NSMutableSet *vibesFilterSet = filters[FILTER_VIBES_KEY];
-    int distanceFilter = [filters[FILTER_DISTANCE_KEY] intValue];
+    long distanceFilter = [filters[FILTER_DISTANCE_KEY] longValue];
     
-    int minNumPeopleFilter = [filters[FILTER_MINPEOPLE_KEY] intValue];
-    int maxNumPeopleFilter = [filters[FILTER_MAXPEOPLE_KEY] intValue];
+    long minNumPeopleFilter = [filters[FILTER_MINPEOPLE_KEY] longValue];
+    long maxNumPeopleFilter = [filters[FILTER_MAXPEOPLE_KEY] longValue];
+    
     FIRCollectionReference *eventRef = [self.database collectionWithPath:DATABASE_EVENTS_COLLECTION];
     FIRQuery *filterEventsQuery;
     if (ageRestrictionFilter != 0){
@@ -268,14 +252,17 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
             for (FIRDocumentSnapshot *document in snapshot.documents) {
                 NSArray *thisEventVibesArray = document.data[FILTER_VIBES_KEY];
                 NSMutableSet *thisEventVibeSet = [NSMutableSet setWithArray:thisEventVibesArray];
+                
                 NSArray *locationComponents = [document.data[EVENT_LOCATION_KEY] componentsSeparatedByString:@" "];
                 NSNumber  *latitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:0] floatValue]];
                 NSNumber  *longitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:1] floatValue]];
                 CLLocationCoordinate2D thisEventCoordinate = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
                 CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
                 CLLocationDistance distanceInKilometers = [thisEventLocation distanceFromLocation:userLocation]/1000;
+                
                 NSLog(@"THIS IS THE DISTANCE BETWEEN USER AND EVENT: %f", distanceInKilometers);
-                if ([thisEventVibeSet isSubsetOfSet:vibesFilterSet] && distanceInKilometers <= distanceFilter){
+                if ([vibesFilterSet isSubsetOfSet:thisEventVibeSet] && distanceInKilometers <= distanceFilter){
+                    
                     NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:document.data];
                     [eventDict setValue:document.documentID forKey:@"ID"];
                     Event *eventToAdd = [[Event alloc] initWithDictionary:eventDict];

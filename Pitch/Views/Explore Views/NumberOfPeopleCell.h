@@ -18,8 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) MARKRangeSlider *rangeSlider;
 
 - (void) resetNumberOfPeople;
-- (int) getMinNumPeople;
-- (int) getMaxNumPeople;
+- (long) getMinNumPeople;
+- (long) getMaxNumPeople;
 
 @end
 
