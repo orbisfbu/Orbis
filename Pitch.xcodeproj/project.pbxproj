@@ -24,9 +24,9 @@
 		5E0564BD2DE1E80B0B62790F /* Pods_PitchUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA7A4CB52FA959324F5E08BB /* Pods_PitchUITests.framework */; };
 		780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2DB22E6D02200B78516 /* DataHandling.m */; };
 		780DB2E622E92FD700B78516 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 780DB2E522E92FD700B78516 /* CoreLocation.framework */; };
-		780DB2E922EA12D200B78516 /* EventAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2E822EA12D200B78516 /* EventAnnotation.m */; };
 		780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */; };
 		780DB2F022EA6A8200B78516 /* EventDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */; };
+		781873F822FB811000658734 /* EventAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873F722FB811000658734 /* EventAnnotation.m */; };
 		781A941622ECB184002966B5 /* UserInSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 781A941522ECB184002966B5 /* UserInSession.m */; };
 		7872897D22F90175002CADE8 /* EventGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7872897C22F90175002CADE8 /* EventGalleryCell.m */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
@@ -132,11 +132,11 @@
 		780DB2DA22E6D02200B78516 /* DataHandling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataHandling.h; sourceTree = "<group>"; };
 		780DB2DB22E6D02200B78516 /* DataHandling.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataHandling.m; sourceTree = "<group>"; };
 		780DB2E522E92FD700B78516 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		780DB2E722EA12D200B78516 /* EventAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventAnnotation.h; sourceTree = "<group>"; };
-		780DB2E822EA12D200B78516 /* EventAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventAnnotation.m; sourceTree = "<group>"; };
 		780DB2EA22EA24D800B78516 /* EventDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventDetailsViewController.h; sourceTree = "<group>"; };
 		780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventDetailsViewController.m; sourceTree = "<group>"; };
 		780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EventDetails.storyboard; sourceTree = "<group>"; };
+		781873F622FB811000658734 /* EventAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventAnnotation.h; sourceTree = "<group>"; };
+		781873F722FB811000658734 /* EventAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventAnnotation.m; sourceTree = "<group>"; };
 		781A941422ECB184002966B5 /* UserInSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInSession.h; sourceTree = "<group>"; };
 		781A941522ECB184002966B5 /* UserInSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInSession.m; sourceTree = "<group>"; };
 		7872897B22F90175002CADE8 /* EventGalleryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGalleryCell.h; sourceTree = "<group>"; };
@@ -470,8 +470,6 @@
 				C1616E0C22EB98C8004B536B /* FirstLastNameCell.h */,
 				C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */,
 				C1616E0E22EB98C8004B536B /* FirstLastNameCell.xib */,
-				780DB2E722EA12D200B78516 /* EventAnnotation.h */,
-				780DB2E822EA12D200B78516 /* EventAnnotation.m */,
 				C1C3416222F0C21800A09666 /* ApplyFiltersCell.h */,
 				C1C3415B22F0C21800A09666 /* ApplyFiltersCell.m */,
 				C1C3415C22F0C21800A09666 /* ApplyFiltersCell.xib */,
@@ -495,6 +493,8 @@
 				C1C3419422FB61A700A09666 /* MediaCollectionViewCell.h */,
 				C1C3419522FB61A700A09666 /* MediaCollectionViewCell.m */,
 				C1C3419622FB61A700A09666 /* MediaCollectionViewCell.xib */,
+				781873F622FB811000658734 /* EventAnnotation.h */,
+				781873F722FB811000658734 /* EventAnnotation.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -796,7 +796,6 @@
 				C1C3416D22F0E36500A09666 /* DragCell.m in Sources */,
 				C1C3418622F8A96200A09666 /* MusicQueueTableViewCell.m in Sources */,
 				06A909C222E67A0500CD2969 /* LocationCell.m in Sources */,
-				780DB2E922EA12D200B78516 /* EventAnnotation.m in Sources */,
 				C127D52722DFE699009963B0 /* ExploreViewController.m in Sources */,
 				C14E19F522E23BD000883CFB /* DistanceCell.m in Sources */,
 				C1C3416822F0C21900A09666 /* EventPictureCell.m in Sources */,
@@ -806,6 +805,7 @@
 				C1C3417122F207BA00A09666 /* MusicQueueViewController.m in Sources */,
 				C1C3417422F2083B00A09666 /* EventGalleryViewController.m in Sources */,
 				C14E19ED22E23B8B00883CFB /* VibesCell.m in Sources */,
+				781873F822FB811000658734 /* EventAnnotation.m in Sources */,
 				C1C3416422F0C21900A09666 /* ApplyFiltersCell.m in Sources */,
 				C1616E0022EB7322004B536B /* ProfileLinksCell.m in Sources */,
 				78FC04B522E17C640049E0BD /* User.m in Sources */,

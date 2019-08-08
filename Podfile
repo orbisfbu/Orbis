@@ -20,7 +20,8 @@ target 'Pitch' do
   pod 'MBCircularProgressBar'
   pod 'UITextView+Placeholder'
   pod 'Firebase/Storage'
-
+  pod 'SDWebImage'
+  pod 'FirebaseUI/Storage'
   
   target 'PitchTests' do
     inherit! :search_paths

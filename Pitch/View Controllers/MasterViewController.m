@@ -27,8 +27,8 @@ static double const MIN_ICON_X_OFFSET = 30;
 @property (strong, nonatomic) CreateEventViewController *createEventController;
 @property (strong, nonatomic) ExploreViewController *exploreController;
 @property (strong, nonatomic) UserViewController *userController;
-@property (strong, nonatomic) IBOutlet UIScrollView *viewControllerScrollView;
 @property (strong, nonatomic) UIButton *createEventButton;
+@property (strong, nonatomic) IBOutlet UIScrollView *viewControllerScrollView;
 @property (strong, nonatomic) UIButton *exploreButton;
 @property (strong, nonatomic) UIButton *profileButton;
 
@@ -97,7 +97,11 @@ static double const MIN_ICON_X_OFFSET = 30;
     // Resize the scroll view to be able to encompass all the view controllers
     self.viewControllerScrollView.contentSize = CGSizeMake(self.view.frame.size.width*3, self.view.frame.size.height);
     
-    [self.viewControllerScrollView setContentOffset:CGPointMake(self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    if (self.isNewUser) {
+        [self.viewControllerScrollView setContentOffset:CGPointMake(2*self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    } else {
+        [self.viewControllerScrollView setContentOffset:CGPointMake(self.exploreController.view.frame.origin.x, self.exploreController.view.frame.origin.y) animated:NO];
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
