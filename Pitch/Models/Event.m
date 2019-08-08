@@ -28,6 +28,7 @@
         self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
         self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
         self.registeredUsersArray = snapshotDictionary[@"Registered Users"];
+        self.mediaArray = snapshotDictionary[@"Media"];
         //formatting location string
         NSArray *locationComponents = [self.eventLocationString componentsSeparatedByString:@" "];
         NSString *latitudeString = [locationComponents objectAtIndex:0];

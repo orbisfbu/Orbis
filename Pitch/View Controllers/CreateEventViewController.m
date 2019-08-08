@@ -881,6 +881,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void)publishEvent {
+    [self.additionalImages removeObjectAtIndex:0]; // Remove the plus image
+    [self.additionalImages addObject:self.coverImageView.image]; // Add the main image
     NSDictionary *eventDict = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
         @"Event Name": self.eventTitleTextField.text,
@@ -890,6 +892,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Age Restriction": @(self.ageRestriction),
         @"Location": [NSString stringWithFormat:@"%.5f %.5f", self.coordinates.latitude, self.coordinates.longitude],
         @"Vibes": [self.vibesSet allObjects],
+        @"Media": self.additionalImages,
         @"Music Queue": self.queuedUpSongsArray
     };
     Event *event = [[Event alloc] initWithDictionary:eventDict];

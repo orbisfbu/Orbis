@@ -28,7 +28,7 @@ static NSString * const USER_BACKGROUND_IMG_URLSTRING = @"BackgroundImageURL";
 static NSString * const USERNAME_KEY = @"Username";
 static NSString * const USER_BIO_KEY = @"Bio";
 static NSString * const USER_ID_KEY = @"ID";
-static NSString * const DEFAULT_BIO = @"Add a bio here...";
+static NSString * const DEFAULT_BIO = @"Tap edit to add a bio!";
 static NSString * const DEFAULT_BACKGROUNDIMAGE_URLSTRING = @"https://bit.ly/2KmzJch";
 static NSString * const DEFAULT_PROFILEIMAGE_URLSTRING = @"";
 //Required permissions for user info
@@ -52,6 +52,8 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
 static NSInteger const LABEL_GRAY = 0xc7c7cd;
 
 @interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate, InstantiateSharedUserDelegate>
+
+@property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
 
 @property (strong, nonatomic) DataHandling *dataHandlingObject;
 //inputted properties to be used and checked during
@@ -108,31 +110,21 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
 @implementation LogInViewController
 
 - (void)viewDidLoad {
-//    NSLog(@"FACEBOOK LOGOUT WAS PRESSED");
-//    NSError *signOutError;
-//    BOOL status = [[FIRAuth auth] signOut:&signOutError];
-//    if (!status) {
-//        NSLog(SIGN_OUT_FAILURE);
-//        return;
-//    }
-//    else
-//    {
-//        NSLog(@"FACEBOOK LOGOUT SUCCESSFUL");
-//    }
-
     [super viewDidLoad];
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.sharedUserDelegate = self;
     self.backButton.alpha = 0;
     [self.backButton setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+    [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     if (![FIRAuth auth].currentUser) {
         NSLog(@"No user signed in... Creating sign in/up page");
         [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         //self.FBLoginButton.delegate = self;
         //self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
         // Add touch gestures to dismiss keyboard
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-        [self.view addGestureRecognizer:tapGesture];
+        self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+        [self.view addGestureRecognizer:self.tapGesture];
+        [self.tapGesture setCancelsTouchesInView:NO];
         [self createPageObjects];
         [self createContinuePage];
     }
@@ -389,6 +381,7 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
         self.continueButton.frame = CGRectMake(30, self.emailTextField.frame.origin.y + self.emailTextField.frame.size.height + 20, self.view.frame.size.width - 60, 30);
         self.orLabel.frame = CGRectMake(self.view.frame.size.width/2 - 30, self.continueButton.frame.origin.y + self.continueButton.frame.size.height + 20, 100, 30);
         self.FBLoginButton.frame = CGRectMake(30, self.orLabel.frame.origin.y + self.orLabel.frame.size.height + 20, self.view.frame.size.width - 60, 30);
+        [self.backButton setAlpha:0];
     }];
 }
 
@@ -401,43 +394,35 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
         self.continueButton.frame = CGRectMake(self.continueButton.frame.origin.x, -self.continueButton.frame.size.height, self.continueButton.frame.size.width, self.continueButton.frame.size.height);
         self.orLabel.frame = CGRectMake(self.orLabel.frame.origin.x, -self.orLabel.frame.size.height, self.orLabel.frame.size.width, self.orLabel.frame.size.height);
         self.FBLoginButton.frame = CGRectMake(self.FBLoginButton.frame.origin.x, -self.FBLoginButton.frame.size.height, self.FBLoginButton.frame.size.width, self.FBLoginButton.frame.size.height);
-        self.backButton.alpha = 1;
-    } completion:^(BOOL finished) {
-        self.welcomeLabel1.frame = CGRectMake(self.welcomeLabel1.frame.origin.x, self.view.frame.size.height, self.welcomeLabel1.frame.size.width, self.welcomeLabel1.frame.size.height);
-        self.welcomeLabel2.frame = CGRectMake(self.welcomeLabel2.frame.origin.x, self.view.frame.size.height, self.welcomeLabel2.frame.size.width, self.welcomeLabel2.frame.size.height);
-        self.emailTitleLabel.frame = CGRectMake(self.emailTitleLabel.frame.origin.x, self.view.frame.size.height, self.emailTitleLabel.frame.size.width, self.emailTitleLabel.frame.size.height);
-        self.emailTextField.frame = CGRectMake(self.emailTextField.frame.origin.x, self.view.frame.size.height, self.emailTextField.frame.size.width, self.emailTextField.frame.size.height);
-        self.continueButton.frame = CGRectMake(self.continueButton.frame.origin.x, self.view.frame.size.height, self.continueButton.frame.size.width, self.continueButton.frame.size.height);
-        self.orLabel.frame = CGRectMake(self.orLabel.frame.origin.x, self.view.frame.size.height, self.orLabel.frame.size.width, self.orLabel.frame.size.height);
-        self.FBLoginButton.frame = CGRectMake(self.FBLoginButton.frame.origin.x, self.view.frame.size.height, self.FBLoginButton.frame.size.width, self.FBLoginButton.frame.size.height);
+        [self.backButton setAlpha:1];
     }];
 }
 
 - (void) createSignInPage {
-    //[self.backButton setEnabled:YES];
     self.viewName = SIGNIN_VIEW;
     [UIView animateWithDuration:0.5 animations:^{
-        //self.usernameTextField.frame = CGRectMake(self.usernameTextField.frame.origin.x, 100, self.usernameTextField.frame.size.width, self.usernameTextField.frame.size.height);
         self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, 100, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
         self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.signInPasswordTitleLabel.frame.origin.y + self.signInPasswordTitleLabel.frame.size.height + 20, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
-        //self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.usernameTextField.frame.origin.y + + self.usernameTextField.frame.size.height + 20, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
         self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.passwordTextField.frame.origin.y + self.passwordTextField.frame.size.height + 20, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
-        // self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.passwordTextField.frame.origin.y + self.passwordTextField.frame.size.height + 20, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
     }];
 }
 
 - (void) dismissSignInPage {
-    //[self.backButton setEnabled:NO];
-    [UIView animateWithDuration:0.5 animations:^{
-        self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, -self.signInPasswordTitleLabel.frame.size.height, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
-        self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, -self.passwordTextField.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
-        self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, -self.logInButton.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
-        self.backButton.alpha = 0;
-    } completion:^(BOOL finished) {
-        self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
-        self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.view.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
-        self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.view.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
-    }];
+    if ([self.viewName isEqualToString:CONTINUE_VIEW]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
+            self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.view.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
+            self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.view.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
+        }];
+    } else {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, -self.signInPasswordTitleLabel.frame.size.height, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
+            self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, -self.passwordTextField.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
+            self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, -self.logInButton.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
+            [self.backButton setAlpha:0];
+        }];
+    }
+    
 }
 
 - (void) createSignUpPage1 {
@@ -453,23 +438,31 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
 }
 
 - (void) dismissSignUpPage1:(BOOL)advancing {
-    [UIView animateWithDuration:0.5 animations:^{
-        self.firstNameTitleLabel.frame = CGRectMake(self.firstNameTitleLabel.frame.origin.x, -self.firstNameTitleLabel.frame.size.height, self.firstNameTitleLabel.frame.size.width, self.firstNameTitleLabel.frame.size.height);
-        self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, -self.firstNameTextField.frame.size.height, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
-        self.lastNameTitleLabel.frame = CGRectMake(self.lastNameTitleLabel.frame.origin.x, -self.lastNameTitleLabel.frame.size.height, self.lastNameTitleLabel.frame.size.width, self.lastNameTitleLabel.frame.size.height);
-        self.lastNameTextField.frame = CGRectMake(self.lastNameTextField.frame.origin.x, -self.lastNameTextField.frame.size.height, self.lastNameTextField.frame.size.width, self.lastNameTextField.frame.size.height);
-        self.nextButton.frame = CGRectMake(self.nextButton.frame.origin.x, -self.nextButton.frame.size.height, self.nextButton.frame.size.width, self.nextButton.frame.size.height);
-        if (!advancing) {
-            self.backButton.alpha = 0;
-            //[self.backButton setEnabled:NO];
-        }
-    } completion:^(BOOL finished) {
-        self.firstNameTitleLabel.frame = CGRectMake(self.firstNameTitleLabel.frame.origin.x, self.view.frame.size.height, self.firstNameTitleLabel.frame.size.width, self.firstNameTitleLabel.frame.size.height);
-        self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, self.view.frame.size.height, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
-        self.lastNameTitleLabel.frame = CGRectMake(self.lastNameTitleLabel.frame.origin.x, self.view.frame.size.height, self.lastNameTitleLabel.frame.size.width, self.lastNameTitleLabel.frame.size.height);
-        self.lastNameTextField.frame = CGRectMake(self.lastNameTextField.frame.origin.x, self.view.frame.size.height, self.lastNameTextField.frame.size.width, self.lastNameTextField.frame.size.height);
-        self.nextButton.frame = CGRectMake(self.nextButton.frame.origin.x, self.view.frame.size.height, self.nextButton.frame.size.width, self.nextButton.frame.size.height);
-    }];
+    if ([self.viewName isEqualToString:CONTINUE_VIEW]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.firstNameTitleLabel.frame = CGRectMake(self.firstNameTitleLabel.frame.origin.x, self.view.frame.size.height, self.firstNameTitleLabel.frame.size.width, self.firstNameTitleLabel.frame.size.height);
+            self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, self.view.frame.size.height, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
+            self.lastNameTitleLabel.frame = CGRectMake(self.lastNameTitleLabel.frame.origin.x, self.view.frame.size.height, self.lastNameTitleLabel.frame.size.width, self.lastNameTitleLabel.frame.size.height);
+            self.lastNameTextField.frame = CGRectMake(self.lastNameTextField.frame.origin.x, self.view.frame.size.height, self.lastNameTextField.frame.size.width, self.lastNameTextField.frame.size.height);
+            self.nextButton.frame = CGRectMake(self.nextButton.frame.origin.x, self.view.frame.size.height, self.nextButton.frame.size.width, self.nextButton.frame.size.height);
+            if (!advancing) {
+                self.backButton.alpha = 0;
+                //[self.backButton setEnabled:NO];
+            }
+        }];
+    } else {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.firstNameTitleLabel.frame = CGRectMake(self.firstNameTitleLabel.frame.origin.x, -self.firstNameTitleLabel.frame.size.height, self.firstNameTitleLabel.frame.size.width, self.firstNameTitleLabel.frame.size.height);
+            self.firstNameTextField.frame = CGRectMake(self.firstNameTextField.frame.origin.x, -self.firstNameTextField.frame.size.height, self.firstNameTextField.frame.size.width, self.firstNameTextField.frame.size.height);
+            self.lastNameTitleLabel.frame = CGRectMake(self.lastNameTitleLabel.frame.origin.x, -self.lastNameTitleLabel.frame.size.height, self.lastNameTitleLabel.frame.size.width, self.lastNameTitleLabel.frame.size.height);
+            self.lastNameTextField.frame = CGRectMake(self.lastNameTextField.frame.origin.x, -self.lastNameTextField.frame.size.height, self.lastNameTextField.frame.size.width, self.lastNameTextField.frame.size.height);
+            self.nextButton.frame = CGRectMake(self.nextButton.frame.origin.x, -self.nextButton.frame.size.height, self.nextButton.frame.size.width, self.nextButton.frame.size.height);
+            if (!advancing) {
+                self.backButton.alpha = 0;
+                //[self.backButton setEnabled:NO];
+            }
+        }];
+    }
 }
 
 - (void) createSignUpPage2 {
@@ -486,56 +479,56 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
 }
 
 - (void) dismissSignUpPage2:(BOOL)advancing {
-    [UIView animateWithDuration:0.5 animations:^{
-        self.usernameTitleLabel.frame = CGRectMake(self.usernameTitleLabel.frame.origin.x, -self.usernameTitleLabel.frame.size.height, self.usernameTitleLabel.frame.size.width, self.usernameTitleLabel.frame.size.height);
-        self.usernameSignUpTextField.frame = CGRectMake(self.usernameSignUpTextField.frame.origin.x, -self.usernameSignUpTextField.frame.size.height, self.usernameSignUpTextField.frame.size.width, self.usernameSignUpTextField.frame.size.height);
-        self.setPasswordTitleLabel.frame = CGRectMake(self.setPasswordTitleLabel.frame.origin.x, -self.setPasswordTitleLabel.frame.size.height, self.setPasswordTitleLabel.frame.size.width, self.setPasswordTitleLabel.frame.size.height);
-        self.passwordSignUpTextField.frame = CGRectMake(self.passwordSignUpTextField.frame.origin.x, -self.passwordSignUpTextField.frame.size.height, self.passwordSignUpTextField.frame.size.width, self.passwordSignUpTextField.frame.size.height);
-        self.confirmPasswordTitleLabel.frame = CGRectMake(self.confirmPasswordTitleLabel.frame.origin.x, -self.confirmPasswordTitleLabel.frame.size.height, self.confirmPasswordTitleLabel.frame.size.width, self.confirmPasswordTitleLabel.frame.size.height);
-        self.confirmPasswordSignUpTextField.frame = CGRectMake(self.confirmPasswordSignUpTextField.frame.origin.x, -self.confirmPasswordSignUpTextField.frame.size.height, self.confirmPasswordSignUpTextField.frame.size.width, self.confirmPasswordSignUpTextField.frame.size.height);
-        self.signUpButton.frame = CGRectMake(self.signUpButton.frame.origin.x, -self.signUpButton.frame.size.height, self.signUpButton.frame.size.width, self.signUpButton.frame.size.height);
-        if (advancing) {
-            //[self.backButton setEnabled:NO];
-            self.backButton.alpha = 0;
-        }
-    } completion:^(BOOL finished) {
-        self.usernameTitleLabel.frame = CGRectMake(self.usernameTitleLabel.frame.origin.x, self.view.frame.size.height, self.usernameTitleLabel.frame.size.width, self.usernameTitleLabel.frame.size.height);
-        self.usernameSignUpTextField.frame = CGRectMake(self.usernameSignUpTextField.frame.origin.x, self.view.frame.size.height, self.usernameSignUpTextField.frame.size.width, self.usernameSignUpTextField.frame.size.height);
-        self.setPasswordTitleLabel.frame = CGRectMake(self.setPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.setPasswordTitleLabel.frame.size.width, self.setPasswordTitleLabel.frame.size.height);
-        self.passwordSignUpTextField.frame = CGRectMake(self.passwordSignUpTextField.frame.origin.x, self.view.frame.size.height, self.passwordSignUpTextField.frame.size.width, self.passwordSignUpTextField.frame.size.height);
-         self.confirmPasswordTitleLabel.frame = CGRectMake(self.confirmPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.confirmPasswordTitleLabel.frame.size.width, self.confirmPasswordTitleLabel.frame.size.height);
-        self.confirmPasswordSignUpTextField.frame = CGRectMake(self.confirmPasswordSignUpTextField.frame.origin.x, self.view.frame.size.height, self.confirmPasswordSignUpTextField.frame.size.width, self.confirmPasswordSignUpTextField.frame.size.height);
-        self.signUpButton.frame = CGRectMake(self.signUpButton.frame.origin.x, self.view.frame.size.height, self.signUpButton.frame.size.width, self.signUpButton.frame.size.height);
-    }];
+    if ([self.viewName isEqualToString:SIGNUP_VIEW1]) {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.usernameTitleLabel.frame = CGRectMake(self.usernameTitleLabel.frame.origin.x, self.view.frame.size.height, self.usernameTitleLabel.frame.size.width, self.usernameTitleLabel.frame.size.height);
+            self.usernameSignUpTextField.frame = CGRectMake(self.usernameSignUpTextField.frame.origin.x, self.view.frame.size.height, self.usernameSignUpTextField.frame.size.width, self.usernameSignUpTextField.frame.size.height);
+            self.setPasswordTitleLabel.frame = CGRectMake(self.setPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.view.frame.size.width, self.setPasswordTitleLabel.frame.size.height);
+            self.passwordSignUpTextField.frame = CGRectMake(self.passwordSignUpTextField.frame.origin.x, self.view.frame.size.height, self.passwordSignUpTextField.frame.size.width, self.passwordSignUpTextField.frame.size.height);
+            self.confirmPasswordTitleLabel.frame = CGRectMake(self.confirmPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.confirmPasswordTitleLabel.frame.size.width, self.confirmPasswordTitleLabel.frame.size.height);
+            self.confirmPasswordSignUpTextField.frame = CGRectMake(self.confirmPasswordSignUpTextField.frame.origin.x, self.view.frame.size.height, self.confirmPasswordSignUpTextField.frame.size.width, self.confirmPasswordSignUpTextField.frame.size.height);
+            self.signUpButton.frame = CGRectMake(self.signUpButton.frame.origin.x, self.view.frame.size.height, self.signUpButton.frame.size.width, self.signUpButton.frame.size.height);
+        }];
+    } else {
+        [UIView animateWithDuration:0.5 animations:^{
+            self.usernameTitleLabel.frame = CGRectMake(self.usernameTitleLabel.frame.origin.x, -self.usernameTitleLabel.frame.size.height, self.usernameTitleLabel.frame.size.width, self.usernameTitleLabel.frame.size.height);
+            self.usernameSignUpTextField.frame = CGRectMake(self.usernameSignUpTextField.frame.origin.x, -self.usernameSignUpTextField.frame.size.height, self.usernameSignUpTextField.frame.size.width, self.usernameSignUpTextField.frame.size.height);
+            self.setPasswordTitleLabel.frame = CGRectMake(self.setPasswordTitleLabel.frame.origin.x, -self.setPasswordTitleLabel.frame.size.height, self.setPasswordTitleLabel.frame.size.width, self.setPasswordTitleLabel.frame.size.height);
+            self.passwordSignUpTextField.frame = CGRectMake(self.passwordSignUpTextField.frame.origin.x, -self.passwordSignUpTextField.frame.size.height, self.passwordSignUpTextField.frame.size.width, self.passwordSignUpTextField.frame.size.height);
+            self.confirmPasswordTitleLabel.frame = CGRectMake(self.confirmPasswordTitleLabel.frame.origin.x, -self.confirmPasswordTitleLabel.frame.size.height, self.confirmPasswordTitleLabel.frame.size.width, self.confirmPasswordTitleLabel.frame.size.height);
+            self.confirmPasswordSignUpTextField.frame = CGRectMake(self.confirmPasswordSignUpTextField.frame.origin.x, -self.confirmPasswordSignUpTextField.frame.size.height, self.confirmPasswordSignUpTextField.frame.size.width, self.confirmPasswordSignUpTextField.frame.size.height);
+            self.signUpButton.frame = CGRectMake(self.signUpButton.frame.origin.x, -self.signUpButton.frame.size.height, self.signUpButton.frame.size.width, self.signUpButton.frame.size.height);
+        }];
+    }
 }
 
 - (void) backButtonPressed {
     if ([self.viewName isEqualToString:SIGNIN_VIEW]) {
+        [self createContinuePage];
         [self dismissSignInPage];
-        [self createContinuePage];
     } else if ([self.viewName isEqualToString:SIGNUP_VIEW1]) {
-        [self dismissSignUpPage1:NO];
         [self createContinuePage];
+        [self dismissSignUpPage1:NO];
     } else if ([self.viewName isEqualToString:SIGNUP_VIEW2]) {
-        [self dismissSignUpPage2:NO];
         [self createSignUpPage1];
+        [self dismissSignUpPage2:NO];
     }
 }
 
 
 - (void) continueButtonPressed {
-    if ([self.emailTextField.text isEqualToString:@""]){
+    if ([self.emailTextField.text isEqualToString:@""]) {
         [self presentAlert:@"Invalid email address" withMessage:@"Please provide your email address"];
     }
-    else{
+    else {
         self.inputtedUserEmail = self.emailTextField.text;
         [[FIRAuth auth] fetchSignInMethodsForEmail:_inputtedUserEmail completion:^(NSArray<NSString *> * _Nullable listOfMethods, NSError * _Nullable error) {
             
-            if(listOfMethods){
+            if (listOfMethods) { // If User exists
                 [self dismissContinuePage];
                 [self createSignInPage];
             }
-            else{
+            else {
                 [self dismissContinuePage];
                 [self createSignUpPage1];
             }

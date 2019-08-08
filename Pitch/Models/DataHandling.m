@@ -34,6 +34,7 @@ static NSString * const USER_BACKGROUND_KEY = @"BackgroundImageURL";
 //set this text to some default text or something like "change bio now!"
 static NSString * const USER_BIO_KEY = @"Bio";
 static NSString * const MUSIC_QUEUE_KEY = @"Music Queue";
+static NSString * const MEDIA_KEY = @"Media";
 //Filter dictionary keys
 static NSString * const FILTER_AGE_KEY = @"Age Restriction";
 static NSString * const FILTER_VIBES_KEY = @"Vibes";
@@ -160,54 +161,82 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }];
 }
 
-
-- (void)uploadEventMainImage:(UIImage*)imageToUpload withEventID:(NSString *)eventID withCompletion:(void (^) (BOOL uploadSuccess))completion {
+- (void)uploadEventMainImage:(UIImage*)imageToUpload withEventID:(NSString *)eventID {
     FIRDocumentReference *eventInfoRef = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithPath:eventID];
-    // Data in memory
     NSData *data = UIImageJPEGRepresentation(imageToUpload, 0.8);
-    // Create a storage reference from our storage service
     FIRStorageReference *storageRef = [self.storage reference];
-    //use below line when uploading gallery images
-    //NSString *randomImageFileName = [[NSUUID alloc] init].UUIDString;
-    // Create a reference to the file you want to upload
-    FIRStorageReference *eventMainImageRef = [storageRef child:[NSString stringWithFormat:@"eventMainImages/%@/mainImage.jpg", eventID]];
-    FIRStorageUploadTask *uploadTask = [eventMainImageRef putData:data
-                                                       metadata:nil
-                                                     completion:^(FIRStorageMetadata *metadata,
-                                                                  NSError *error) {
-                                                         if (error != nil) {
-                                                             NSLog(@"UPLOAD REACHED SOME ERROR");
-                                                             switch (error.code) {
-                                                                 case FIRStorageErrorCodeObjectNotFound:
-                                                                     // File doesn't exist
-                                                                     break;
+    FIRStorageReference *eventMainImageRef = [storageRef child:[NSString stringWithFormat:@"events/%@/coverImage.jpg", eventID]];
+    [eventMainImageRef putData:data metadata:nil
+                    completion:^(FIRStorageMetadata *metadata, NSError *error) {
+                        if (error != nil) {
+                            NSLog(@"UPLOAD REACHED SOME ERROR");
+                            switch (error.code) {
+                                case FIRStorageErrorCodeObjectNotFound:
+                                    // File doesn't exist
+                                    break;
+                                    
+                                case FIRStorageErrorCodeUnauthorized:
+                                    // User doesn't have permission to access file
+                                    break;
+                                case FIRStorageErrorCodeCancelled:
+                                    // User canceled the upload
+                                    break;
+                                case FIRStorageErrorCodeUnknown:
+                                    // Unknown error occurred, inspect the server response
+                                    break;
+                            }
+                        } else {
+                            [eventMainImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+                                if (error != nil) {
+                                    NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
+                                } else {
+                                    //convert to URL string since this is how User object stores it
+                                    //this ensures profileImageURLString is also updated
+                                    [eventInfoRef updateData:@{EVENT_IMAGE_URL_KEY: URL.absoluteString}];
+                                    //if success then go to explore view controller
+                                }
+                            }];
+                        }
+                    }];
+}
 
-                                                                 case FIRStorageErrorCodeUnauthorized:
-                                                                     // User doesn't have permission to access file
-                                                                     break;
-                                                                 case FIRStorageErrorCodeCancelled:
-                                                                     // User canceled the upload
-                                                                     break;
-                                                                 case FIRStorageErrorCodeUnknown:
-                                                                     // Unknown error occurred, inspect the server response
-                                                                     break;
-                                                             }
-                                                         } else {
-                                                             [eventMainImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
-                                                                 if (error != nil) {
-                                                                     NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
-                                                                     completion(NO);
-                                                                 } else {
-                                                                     //convert to URL string since this is how User object stores it
-                                                                     //this ensures profileImageURLString is also updated
-                                                                     [eventInfoRef updateData:@{EVENT_IMAGE_URL_KEY: URL.absoluteString
-                                                                                               }];
-                                                                     //if success then go to explore view controller
-                                                                     completion(YES);
-                                                                 }
-                                                             }];
-                                                         }
-                                                     }];
+- (void)uploadAdditionalMedia:(NSArray *)mediaToUpload toEvent:(NSString *)eventID {
+    FIRStorageReference *storageRef = [self.storage reference];
+    int i = 0;
+    for (UIImage *image in mediaToUpload) {
+        NSData *data = UIImageJPEGRepresentation(image, 0.8);
+        FIRStorageReference *eventMainImageRef = [storageRef child:[NSString stringWithFormat:@"events/%@/additionalImage_%i.jpg", eventID, i]];
+        [eventMainImageRef putData:data metadata:nil
+                        completion:^(FIRStorageMetadata *metadata, NSError *error) {
+                            if (error != nil) {
+                                NSLog(@"UPLOAD REACHED SOME ERROR");
+                                switch (error.code) {
+                                    case FIRStorageErrorCodeObjectNotFound:
+                                        // File doesn't exist
+                                        break;
+                                        
+                                    case FIRStorageErrorCodeUnauthorized:
+                                        // User doesn't have permission to access file
+                                        break;
+                                    case FIRStorageErrorCodeCancelled:
+                                        // User canceled the upload
+                                        break;
+                                    case FIRStorageErrorCodeUnknown:
+                                        // Unknown error occurred, inspect the server response
+                                        break;
+                                }
+                            } else {
+                                [eventMainImageRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+                                    if (error != nil) {
+                                        NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED IMAGE URL");
+                                    } else {
+                                        NSLog(@"SUCCESSFULLY UPLOADED IMAGE");
+                                    }
+                                }];
+                            }
+                        }];
+        i++;
+    }
 }
 
 - (void)getEventsFromDatabase {
@@ -300,16 +329,23 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 EVENT_NAME_KEY: event.eventName,
                                 EVENT_VIBES_KEY: event.eventVibesArray,
                                 EVENT_REGISTERED_USERS_KEY: [NSMutableArray new],
-                                MUSIC_QUEUE_KEY: songQueue
+                                MUSIC_QUEUE_KEY: songQueue,
                                 };
-    [[[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] documentWithAutoID] setData:eventInfo
-         completion:^(NSError * _Nullable error) {
-       if (error != nil) {
-           NSLog(@"Error adding event: %@", error);
-       } else {
-           NSLog(@"CREATED LATEST EVENT");
-       }
-   }];
+    
+    __block FIRDocumentReference *eventRef = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] addDocumentWithData:eventInfo completion:^(NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error adding document: %@", error);
+        } else {
+            NSLog(@"Document added with ID: %@", eventRef.documentID);
+            if (event.mediaArray.count > 0) {
+                [self uploadEventMainImage:event.mediaArray[event.mediaArray.count - 1] withEventID:eventRef.documentID];
+                [event.mediaArray removeObjectAtIndex:event.mediaArray.count - 1];
+                if (event.mediaArray.count > 0) {
+                    [self uploadAdditionalMedia:event.mediaArray toEvent:eventRef.documentID];
+                }
+            }
+        }
+    }];
 }
 
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID{
