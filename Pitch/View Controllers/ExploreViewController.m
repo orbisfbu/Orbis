@@ -73,8 +73,6 @@
     }
     #endif
     [self.locationManager startUpdatingLocation];
-    //retrieve events from database
-    [self refreshEventsArray];
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667), MKCoordinateSpanMake(0.1, 0.1));
     [self.photoMap setRegion:sfRegion animated:false];
     // Eliminate the gray background color of the search bar
@@ -113,6 +111,8 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
     [self.locationManager startUpdatingLocation];
+    //retrieve events from database
+    [self refreshEventsArray];
 }
 
 - (void)createRefreshButton{
@@ -127,7 +127,6 @@
 
 - (void)refreshEventsArray {
     [self.dataHandlingObject getEventsFromDatabase];
-    
 }
 
 - (void)populateMapWithEventswithFilter:(BOOL)filterValue{
@@ -291,7 +290,7 @@
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    NSString *annotationIdentifier = @"Event";
+    NSString *annotationIdentifier = [NSString stringWithFormat:@"%@_%@", @"Event", annotation.title];
     MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
@@ -299,16 +298,19 @@
     else if ([annotation isKindOfClass:[EventAnnotation class]]){
         EventAnnotation *thisAnnotation = (EventAnnotation *)annotation;
         NSURL *url = [NSURL URLWithString:thisAnnotation.mainImageURLString];
-//        NSData *data = [[NSData alloc] initWithContentsOfURL:url];
-//        UIImage *image = [UIImage imageWithData:data];
         UIImageView *eventImageView = [[UIImageView alloc] init];
-        [eventImageView setImageWithURL:url];
+        [eventImageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"eventImage"]];
+//        [eventImageView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:url] placeholderImage:[UIImage imageNamed:@"eventImage"] success:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, UIImage * _Nonnull image) {
+//            UIImage *resizedEventImage = [self resizeImage:image withSize:CGSizeMake(30.0, 30.0)];
+//            newEventAnnotationView.image = resizedEventImage;
+//        } failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
+//            //
+//        }];
         UIImage *resizedEventImage = [self resizeImage:eventImageView.image withSize:CGSizeMake(30.0, 30.0)];
-        [eventImageView setImage:resizedEventImage];
-        eventImageView.layer.cornerRadius = 5;
-        //[eventImageView setImage:resizedEventImage];
         newEventAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:thisAnnotation reuseIdentifier:annotationIdentifier];
-        newEventAnnotationView.image = eventImageView.image;
+        newEventAnnotationView.image = resizedEventImage;
+        newEventAnnotationView.layer.masksToBounds = true;
+        newEventAnnotationView.layer.cornerRadius = newEventAnnotationView.frame.size.height/2;
         newEventAnnotationView.canShowCallout = NO;
     }
     
@@ -316,8 +318,10 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)annotationView {
+    if([annotationView.annotation isKindOfClass:[MKUserLocation class]]){
+        return;
+    }
     [mapView deselectAnnotation:annotationView.annotation animated:YES];
-    NSLog(@"TITLE: %@", annotationView.annotation.title);
     [self.dataHandlingObject getEvent:annotationView.annotation.title withCompletion:^(Event * _Nonnull event) {
         [self presentEventDetailsView:event];
     }];
@@ -385,7 +389,7 @@
         self.filteredEventsArray = [NSMutableArray arrayWithArray:filteredEvents];
         [self populateMapWithEventswithFilter:self.filtersWereSet];
         [self removeFilterMenu];
-        self.filterMenuIsShowing = !self.filterMenuIsShowing;
+        self.filterMenuIsShowing = NO;
     }
 }
 

@@ -128,8 +128,8 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
     if (![FIRAuth auth].currentUser) {
         NSLog(@"No user signed in... Creating sign in/up page");
         [self.backButton addTarget:self action:@selector(backButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        self.FBLoginButton.delegate = self;
-        self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
+        //self.FBLoginButton.delegate = self;
+        //self.FBLoginButton.permissions = @[PUBLIC_PROFILE_PERMISSION, EMAIL_PERSMISSION];
         // Add touch gestures to dismiss keyboard
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
         [self.view addGestureRecognizer:tapGesture];
