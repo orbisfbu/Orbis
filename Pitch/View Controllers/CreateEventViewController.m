@@ -34,6 +34,7 @@
 #import "MBCircularProgressBarView.h"
 #import "MusicQueueCollectionViewCell.h"
 #import "Song.h"
+#import "MediaCollectionViewCell.h"
 
 
 // Constant View Names
@@ -116,7 +117,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UILabel *coverImageLabel;
 @property (strong, nonatomic) UIImageView *coverImageView;
 @property (strong, nonatomic) UILabel *additionalMediaLabel;
-@property (strong, nonatomic) UIView *additionalMediaSubview;
+@property (strong, nonatomic) UICollectionView *additionalMediaCollectionView;
+@property (strong, nonatomic) NSMutableArray *additionalImages;
+@property BOOL isCoverImage;
 
 // Music View
 @property (strong, nonatomic) UILabel *musicPageDescriptionLabel;
@@ -138,8 +141,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.isCoverImage = YES;
     self.vibesSet = [[NSMutableSet alloc] init];
     [self createSongsArray];
+    [self createAdditionalImagesArray];
     self.ageRestriction = 0;
     self.shouldFireGETRequest = NO;
     [self.view setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
@@ -151,6 +156,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.vibesArray = [[Vibes sharedVibes] getVibesArray];
     [self createPageObjects];
     [self displayInitialPage];
+}
+
+- (void) createAdditionalImagesArray {
+    self.additionalImages = [[NSMutableArray alloc] init];
+    [self.additionalImages addObject:[UIImage imageNamed:@"plus"]];
 }
 
 - (void) createSongsArray {
@@ -308,16 +318,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.locationCancelButton addTarget:self action:@selector(locationCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.locationCancelButton];
     
-    // Create Next Button
-    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-    [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.nextButton setBackgroundColor:UIColorFromRGB(0x137b5b)];
-    [self.nextButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
-    self.nextButton.layer.cornerRadius = 5;
-    [self.view addSubview:self.nextButton];
-    
     // Create Search Results Table View
     self.searchResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
     self.searchResultsTableView.layer.cornerRadius = 5;
@@ -421,7 +421,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.coverImageView.layer.cornerRadius = 5;
     [self.coverImageView setImage:[UIImage imageNamed:@"plus"]];
     [self.coverImageView setContentMode:UIViewContentModeScaleAspectFit];
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(coverImageViewPressed)];
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mediaImageViewPressed)];
     singleTap.numberOfTapsRequired = 1;
     [self.coverImageView setUserInteractionEnabled:YES];
     [self.coverImageView.layer setMasksToBounds:YES];
@@ -435,11 +435,19 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.additionalMediaLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.view addSubview:self.additionalMediaLabel];
 
-//    // Create Additional Media Subview
-    self.additionalMediaSubview = [[UIImageView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 5*LABEL_HEIGHT)];
-    [self.additionalMediaSubview setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
-    self.additionalMediaSubview.layer.cornerRadius = 5;
-    [self.view addSubview:self.additionalMediaSubview];
+//    // Create Additional Media Collection View
+    UICollectionViewFlowLayout *mediaLayout = [[UICollectionViewFlowLayout alloc] init];
+    [mediaLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.additionalMediaCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 5*LABEL_HEIGHT) collectionViewLayout:mediaLayout];
+    [self.additionalMediaCollectionView registerNib:[UINib nibWithNibName:@"MediaCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MediaCollectionViewCell"];
+    [self.additionalMediaCollectionView setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
+    [self.additionalMediaCollectionView setRestorationIdentifier:@"additionalMediaCollectionView"];
+    //[self.additionalMediaCollectionView setAlwaysBounceHorizontal:YES];
+    //[self.additionalMediaCollectionView setShowsHorizontalScrollIndicator:NO];
+    self.additionalMediaCollectionView.layer.cornerRadius = 5;
+    self.additionalMediaCollectionView.delegate = self;
+    self.additionalMediaCollectionView.dataSource = self;
+    [self.view addSubview:self.additionalMediaCollectionView];
     
     // Create Music Page Description Label
     self.musicPageDescriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT)];
@@ -496,6 +504,16 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicQueueCollectionView.delegate = self;
     self.musicQueueCollectionView.dataSource = self;
     [self.view addSubview:self.musicQueueCollectionView];
+    
+    // Create Next Button
+    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.nextButton setBackgroundColor:UIColorFromRGB(0x137b5b)];
+    [self.nextButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    self.nextButton.layer.cornerRadius = 5;
+    [self.view addSubview:self.nextButton];
 }
 
 - (void) displayInitialPage {
@@ -614,11 +632,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void) displayMediaPage {
     self.pageName = MEDIA_VIEW;
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.additionalMediaCollectionView reloadData];
     [UIView animateWithDuration:0.5 animations:^{
         self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, self.backButton.frame.origin.y + self.backButton.frame.size.height + 10, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
         self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, self.coverImageLabel.frame.origin.y + self.coverImageLabel.frame.size.height + 10, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
         self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, self.coverImageView.frame.origin.y + self.coverImageView.frame.size.height + 10, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
-        self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, self.additionalMediaLabel.frame.origin.y + self.additionalMediaLabel.frame.size.height + 10, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
+        self.additionalMediaCollectionView.frame = CGRectMake(self.additionalMediaCollectionView.frame.origin.x, self.additionalMediaLabel.frame.origin.y + self.additionalMediaLabel.frame.size.height + 10, self.additionalMediaCollectionView.frame.size.width, self.additionalMediaCollectionView.frame.size.height);
     }];
 }
 
@@ -628,14 +647,14 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
             self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, self.view.frame.size.height, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
             self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, self.view.frame.size.height, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
             self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, self.view.frame.size.height, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
-            self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, self.view.frame.size.height, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
+            self.additionalMediaCollectionView.frame = CGRectMake(self.additionalMediaCollectionView.frame.origin.x, self.view.frame.size.height, self.additionalMediaCollectionView.frame.size.width, self.additionalMediaCollectionView.frame.size.height);
         }];
     } else {
         [UIView animateWithDuration:0.5 animations:^{
             self.coverImageLabel.frame = CGRectMake(self.coverImageLabel.frame.origin.x, -self.coverImageLabel.frame.size.height, self.coverImageLabel.frame.size.width, self.coverImageLabel.frame.size.height);
             self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x, -self.coverImageView.frame.size.height, self.coverImageView.frame.size.width, self.coverImageView.frame.size.height);
             self.additionalMediaLabel.frame = CGRectMake(self.additionalMediaLabel.frame.origin.x, -self.additionalMediaLabel.frame.size.height, self.additionalMediaLabel.frame.size.width, self.additionalMediaLabel.frame.size.height);
-            self.additionalMediaSubview.frame = CGRectMake(self.additionalMediaSubview.frame.origin.x, -self.additionalMediaSubview.frame.size.height, self.additionalMediaSubview.frame.size.width, self.additionalMediaSubview.frame.size.height);
+            self.additionalMediaCollectionView.frame = CGRectMake(self.additionalMediaCollectionView.frame.origin.x, -self.additionalMediaCollectionView.frame.size.height, self.additionalMediaCollectionView.frame.size.width, self.additionalMediaCollectionView.frame.size.height);
         }];
     }
 }
@@ -771,7 +790,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT);
     
-    self.additionalMediaSubview.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    self.additionalMediaCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
     
     self.musicPageDescriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT);
     
@@ -811,6 +830,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self displayMediaPage];
     } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
         [self dismissMediaPage];
+        NSLog(@"HEYYYYY");
         [self displayMusicPage];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         [self publishEvent];
@@ -838,7 +858,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     }
 }
 
-- (void) coverImageViewPressed {
+- (void) mediaImageViewPressed {
     UIImagePickerController *imagePickerVC = [UIImagePickerController new];
     imagePickerVC.delegate = self;
     imagePickerVC.allowsEditing = YES;
@@ -848,10 +868,15 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    [self.coverImageView setImage:editedImage];
-    long width = editedImage.size.width*self.coverImageView.frame.size.height/self.coverImageView.image.size.height;
-    self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x + (self.coverImageView.frame.size.width - width)/2, self.coverImageView.frame.origin.y, width, self.coverImageView.frame.size.height);
-    // Dismiss UIImagePickerController to go back to your original view controller
+    if (self.isCoverImage) {
+        [self.coverImageView setImage:editedImage];
+        long width = editedImage.size.width*self.coverImageView.frame.size.height/self.coverImageView.image.size.height;
+        self.coverImageView.frame = CGRectMake(self.coverImageView.frame.origin.x + (self.coverImageView.frame.size.width - width)/2, self.coverImageView.frame.origin.y, width, self.coverImageView.frame.size.height);
+    } else {
+        [self.additionalImages insertObject:editedImage atIndex:1];
+        [self.additionalMediaCollectionView reloadData];
+    }
+    self.isCoverImage = YES;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -951,7 +976,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     if ([self.pageName isEqualToString:INITIAL_VIEW]) {
-        NSLog(@"IN CFRAIP");
         UITableViewCell *cell = [[UITableViewCell alloc] init];
         [cell.textLabel setText:[NSString stringWithFormat:@"%@", [(SearchResult *)self.recentSearchResults[indexPath.row] getName]]];
         return cell;
@@ -993,12 +1017,21 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [cell setLabelText:self.vibesArray[indexPath.item]];
         [cell setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
         return cell;
-    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && ![collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
+        NSLog(@"1. ROW: %lu", indexPath.row);
+        NSLog(@"%@", collectionView);
         MusicQueueCollectionViewCell *cell = [self.musicQueueCollectionView dequeueReusableCellWithReuseIdentifier:@"MusicQueueCollectionViewCell" forIndexPath:indexPath];
+        NSLog(@"2. ROW: %lu", indexPath.row);
         [cell initWithSong:self.queuedUpSongsArray[indexPath.row]];
+        NSLog(@"3. ROW: %lu", indexPath.row);
         cell.layer.cornerRadius = 5;
         [cell.nameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
         [cell.artistNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:10]];
+        return cell;
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+        MediaCollectionViewCell *cell = [self.additionalMediaCollectionView dequeueReusableCellWithReuseIdentifier:@"MediaCollectionViewCell" forIndexPath:indexPath];
+        [cell.imageView setImage:self.additionalImages[indexPath.row]];
+        cell.layer.cornerRadius = 5;
         return cell;
     } else {
         UICollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
@@ -1008,11 +1041,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+        NSLog(@"COUNT: %lu", self.vibesArray.count);
         return self.vibesArray.count;
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        NSLog(@"COUNT: %lu", self.queuedUpSongsArray.count);
         return self.queuedUpSongsArray.count;
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+        NSLog(@"COUNT: %lu", self.additionalImages.count);
+        return self.additionalImages.count;
     } else {
-        return 10;
+        NSLog(@"%i", 1);
+        return 1;
     }
 }
     
@@ -1024,6 +1063,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [cell layoutIfNeeded];
         CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
         return CGSizeMake(size.width, 30);
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+        return CGSizeMake(90, 120);
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+        return CGSizeMake(self.additionalMediaCollectionView.frame.size.height/2, self.additionalMediaCollectionView.frame.size.height/2);
     } else {
         return CGSizeMake(90, 120);
     }
@@ -1040,6 +1083,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self.vibesSet addObject:cell.titleLabel.text];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW] && indexPath.row == self.queuedUpSongsArray.count - 1) {
         [self.searchMusicTextField becomeFirstResponder];
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW] && indexPath.row == self.queuedUpSongsArray.count - 1) {
+        self.isCoverImage = NO;
+        [self mediaImageViewPressed];
     }
 }
 

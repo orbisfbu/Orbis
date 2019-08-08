@@ -28,34 +28,42 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Bio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="By9-XS-RWH">
-                        <rect key="frame" x="10" y="5" width="29" height="24"/>
+                        <rect key="frame" x="10" y="5" width="29" height="29.5"/>
                         <fontDescription key="fontDescription" name="GothamRounded-Medium" family="Gotham Rounded" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QZ9-E5-lWe">
-                        <rect key="frame" x="278" y="5" width="32" height="24"/>
+                        <rect key="frame" x="278" y="5" width="32" height="29.5"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                         <state key="normal" title="Edit"/>
                     </button>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Text View text" translatesAutoresizingMaskIntoConstraints="NO" id="G1k-NS-0kI">
-                        <rect key="frame" x="6" y="39" width="309" height="35.5"/>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Text View text" translatesAutoresizingMaskIntoConstraints="NO" id="G1k-NS-0kI">
+                        <rect key="frame" x="6" y="44.5" width="309" height="30"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="E4a-vZ-45Z"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="GothamRounded-Book" family="Gotham Rounded" pointSize="16"/>
+                        <fontDescription key="fontDescription" name="GothamRounded-Book" family="Gotham Rounded" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="40" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vdo-IS-nGS">
+                        <rect key="frame" x="249" y="9.5" width="21" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="By9-XS-RWH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="2EP-oB-OaF"/>
+                    <constraint firstItem="QZ9-E5-lWe" firstAttribute="leading" secondItem="Vdo-IS-nGS" secondAttribute="trailing" constant="8" id="8br-t2-f1a"/>
                     <constraint firstItem="QZ9-E5-lWe" firstAttribute="centerY" secondItem="By9-XS-RWH" secondAttribute="centerY" id="8vc-Fd-u3m"/>
                     <constraint firstItem="G1k-NS-0kI" firstAttribute="top" secondItem="QZ9-E5-lWe" secondAttribute="bottom" constant="10" id="GGh-7K-KJO"/>
                     <constraint firstItem="By9-XS-RWH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="IoI-KF-u1E"/>
                     <constraint firstAttribute="trailing" secondItem="QZ9-E5-lWe" secondAttribute="trailing" constant="10" id="NKg-ad-U9V"/>
                     <constraint firstAttribute="bottom" secondItem="G1k-NS-0kI" secondAttribute="bottom" constant="5" id="WXA-PF-edi"/>
                     <constraint firstItem="G1k-NS-0kI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="6" id="bKc-il-MFJ"/>
+                    <constraint firstItem="QZ9-E5-lWe" firstAttribute="centerY" secondItem="Vdo-IS-nGS" secondAttribute="centerY" id="bW0-HG-ngu"/>
                     <constraint firstAttribute="trailing" secondItem="G1k-NS-0kI" secondAttribute="trailing" constant="5" id="cXg-Wk-sZv"/>
                     <constraint firstItem="QZ9-E5-lWe" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="rpI-T7-let"/>
                 </constraints>
@@ -63,6 +71,7 @@
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
                 <outlet property="bioTextView" destination="G1k-NS-0kI" id="yeQ-gE-5z2"/>
+                <outlet property="charsLeftInBioLabel" destination="Vdo-IS-nGS" id="FhS-Rs-ocJ"/>
                 <outlet property="editUserBioButton" destination="QZ9-E5-lWe" id="4hh-bl-BqY"/>
             </connections>
             <point key="canvasLocation" x="46.399999999999999" y="44.977511244377816"/>
