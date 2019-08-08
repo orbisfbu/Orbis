@@ -26,15 +26,10 @@ static NSInteger const DARK_GREEN = 0x157f5f;
     [self.charsLeftInBioLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:17]];
     self.charsLeftInBioLabel.textColor = UIColorFromRGB(LABEL_GRAY);
     [self.bioTextView setText:[UserInSession shared].sharedUser.userBioString];
-    [self.charsLeftInBioLabel setText:[NSString stringWithFormat:@"(%lu)", MAXLENGTH - self.bioTextView.text.length]];
     self.charsLeftInBioLabel.alpha = 0;
     self.bioTextView.delegate = self;
-    //    self.userBioTextView.text = [NSString stringWithFormat: @"This is what a user bio would look like!"];
-    //self.userBioLabel.text = @"Tap the edit button to add a bio!";
     if (self.bioTextView.text && self.bioTextView.text.length > 0) {
-        /* not empty - do something */
         self.bioTextView.editable = NO;
-        //[self.bioTextView setText:[UserInSession shared].sharedUser.userBioString];
     }
     else {
         //self.bioTextView.text = @"Add a bio here...";
@@ -87,7 +82,6 @@ static NSInteger const DARK_GREEN = 0x157f5f;
     [[DataHandling shared] updateUserBio:self.bioTextView.text withCompletion:^(BOOL succeeded) {
         if (succeeded) {
             NSLog(@"Saved bio");
-            //[self.editUserBioButton addTarget:self action:@selector(editBio) forControlEvents:UIControlEventTouchUpInside];
         }
         else {
             NSLog(@"Can't update bio");
