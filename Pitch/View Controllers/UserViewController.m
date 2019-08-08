@@ -151,7 +151,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [[self.usernameLabel.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor] setActive:YES];
     [[self.usernameLabel.topAnchor constraintEqualToAnchor:self.view.layoutMarginsGuide.topAnchor] setActive:YES];
     [[self.usernameLabel.heightAnchor constraintEqualToConstant:20] setActive:YES];
-    [self.usernameLabel setFont:[UIFont fontWithName:@"roboto" size:20]];
+    [self.usernameLabel setFont:[UIFont fontWithName:@"GothamRounded-Book" size:20]];
     [self.usernameLabel setClipsToBounds:YES];
     self.usernameLabel.layer.cornerRadius = 5;
     [self.usernameLabel setText:[NSString stringWithFormat:@"@%@", [UserInSession shared].sharedUser.usernameString]];

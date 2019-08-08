@@ -423,20 +423,6 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
     
 }
 
-//- (void) dismissSignInPage {
-//    //[self.backButton setEnabled:NO];
-//    [UIView animateWithDuration:0.5 animations:^{
-//        self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, -self.signInPasswordTitleLabel.frame.size.height, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
-//        self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, -self.passwordTextField.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
-//        self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, -self.logInButton.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
-//        self.backButton.alpha = 0;
-//    } completion:^(BOOL finished) {
-//        self.signInPasswordTitleLabel.frame = CGRectMake(self.signInPasswordTitleLabel.frame.origin.x, self.view.frame.size.height, self.signInPasswordTitleLabel.frame.size.width, self.signInPasswordTitleLabel.frame.size.height);
-//        self.passwordTextField.frame = CGRectMake(self.passwordTextField.frame.origin.x, self.view.frame.size.height, self.passwordTextField.frame.size.width, self.passwordTextField.frame.size.height);
-//        self.logInButton.frame = CGRectMake(self.logInButton.frame.origin.x, self.view.frame.size.height, self.logInButton.frame.size.width, self.logInButton.frame.size.height);
-//    }];
-//}
-
 - (void) createSignUpPage1 {
     //[self.backButton setEnabled:YES];
     self.viewName = SIGNUP_VIEW1;
