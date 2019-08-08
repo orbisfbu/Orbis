@@ -48,6 +48,7 @@ static NSString * const SIGNUP_VIEW2 = @"SIGNUP_VIEW2";
 
 // Colors
 static NSInteger const LABEL_GREEN = 0x0d523d;
+static NSInteger const LABEL_GRAY = 0xc7c7cd;
 
 @interface LogInViewController () <FBSDKLoginButtonDelegate, ShowLoginScreenDelegate, InstantiateSharedUserDelegate>
 
@@ -162,7 +163,11 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add email text field
     self.emailTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.emailTextField setPlaceholder:@"email"];
+    self.emailTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"email" attributes:@{
+                                                 NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                 NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                 }];
+    [self.emailTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.emailTextField setBorderStyle:UITextBorderStyleRoundedRect];
     self.emailTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.emailTextField];
@@ -170,22 +175,24 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     // Add continue button
     self.continueButton = [[UIButton alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.continueButton setTitle:@"Continue" forState:UIControlStateNormal];
-    [self.continueButton setBackgroundColor:[UIColor blackColor]];
+    [self.continueButton setBackgroundColor:(UIColorFromRGB(LABEL_GREEN))];
     self.continueButton.layer.cornerRadius = 5;
+    [self.continueButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.continueButton addTarget:self action:@selector(continueButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.continueButton];
     
-    // Add --OR-- label
-    self.orLabel = [[UILabel alloc] initWithFrame: CGRectMake(30, self.view.frame.size.height, 100, 30)];
-    [self.orLabel setFont:[UIFont fontWithName:@"roboto" size:20]];
-    [self.orLabel setText:@"-- OR --"];
-    [self.orLabel sizeToFit];
-    [self.orLabel setCenter:CGPointMake(self.view.center.x, self.orLabel.center.y)];
-    [self.view addSubview:self.orLabel];
-    
-    // Add continue with facebook button
-    self.FBLoginButton = [[FBSDKLoginButton alloc] initWithFrame: CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.view addSubview:self.FBLoginButton];
+//    // Add --OR-- label
+//    self.orLabel = [[UILabel alloc] initWithFrame: CGRectMake(30, self.view.frame.size.height, 100, 30)];
+//    [self.orLabel setText:@"-- OR --"];
+//    [self.orLabel sizeToFit];
+//    [self.orLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+//    [self.orLabel setCenter:CGPointMake(self.view.center.x, self.orLabel.center.y)];
+//    [self.view addSubview:self.orLabel];
+//
+//    // Add continue with facebook button
+//    self.FBLoginButton = [[FBSDKLoginButton alloc] initWithFrame: CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
+//    [self.FBLoginButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+//    [self.view addSubview:self.FBLoginButton];
     
     // Add username text field
     self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
@@ -206,7 +213,11 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add password text field
     self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.passwordTextField setPlaceholder:@"Password"];
+    self.passwordTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"password" attributes:@{
+                                                                                                                 NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                                                                                 NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                                                                                 }];
+    [self.passwordTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.passwordTextField setBorderStyle:UITextBorderStyleRoundedRect];
     self.passwordTextField.secureTextEntry = YES;
     self.passwordTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -215,8 +226,9 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     // Add login button
     self.logInButton = [[UIButton alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.logInButton setTitle:@"Log In" forState:UIControlStateNormal];
-    [self.logInButton setBackgroundColor:[UIColor blackColor]];
+    [self.logInButton setBackgroundColor:(UIColorFromRGB(LABEL_GREEN))];
     self.logInButton.layer.cornerRadius = 5;
+    [self.logInButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.logInButton addTarget:self action:@selector(logInButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.logInButton];
     
@@ -232,7 +244,11 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add first name text field
     self.firstNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.firstNameTextField setPlaceholder:@"First/Preferred Name"];
+    self.firstNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"first/preferred name" attributes:@{
+                                                                                                                       NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                                                                                       NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                                                                                       }];
+    [self.firstNameTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.firstNameTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [self.view addSubview:self.firstNameTextField];
     
@@ -248,15 +264,20 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add last name text field
     self.lastNameTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.lastNameTextField setPlaceholder:@"Last Name"];
+    self.lastNameTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"last name" attributes:@{
+                                                                                                                                    NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                                                                                                    NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                                                                                                    }];
+    [self.lastNameTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.lastNameTextField setBorderStyle:UITextBorderStyleRoundedRect];
     [self.view addSubview:self.lastNameTextField];
     
     // Add next button
     self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-    [self.nextButton setBackgroundColor:[UIColor blackColor]];
+    [self.nextButton setBackgroundColor:(UIColorFromRGB(LABEL_GREEN))];
     self.nextButton.layer.cornerRadius = 5;
+    [self.nextButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.nextButton];
     
@@ -272,7 +293,11 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add signup username text field
     self.usernameSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.usernameSignUpTextField setPlaceholder:@"Username"];
+    self.usernameSignUpTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"username" attributes:@{
+                                                                                                                        NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                                                                                        NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                                                                                        }];
+    [self.usernameSignUpTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.usernameSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
     self.usernameSignUpTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.usernameSignUpTextField];
@@ -289,7 +314,11 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add signup password text field
     self.passwordSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.passwordSignUpTextField setPlaceholder:@"Password"];
+    self.passwordSignUpTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"password" attributes:@{
+                                                                                                                        NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                                                                                        NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                                                                                        }];
+    [self.passwordSignUpTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.passwordSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
     self.passwordSignUpTextField.secureTextEntry = YES;
     self.passwordSignUpTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -307,7 +336,11 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     
     // Add signup confirm password text field
     self.confirmPasswordSignUpTextField = [[UITextField alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
-    [self.confirmPasswordSignUpTextField setPlaceholder:@"Confirm Password"];
+    self.confirmPasswordSignUpTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"confirm password" attributes:@{
+                                                                                                                             NSForegroundColorAttributeName: UIColorFromRGB(LABEL_GRAY),
+                                                                                                                             NSFontAttributeName : [UIFont fontWithName:@"GothamRounded-Book" size:17.0]
+                                                                                                                             }];
+    [self.confirmPasswordSignUpTextField setFont:[UIFont fontWithName:@"GothamRounded-Book" size:17]];
     [self.confirmPasswordSignUpTextField setBorderStyle:UITextBorderStyleRoundedRect];
     self.confirmPasswordSignUpTextField.secureTextEntry = YES;
     self.confirmPasswordSignUpTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -316,8 +349,9 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     // Add signup button
     self.signUpButton = [[UIButton alloc] initWithFrame:CGRectMake(30, self.view.frame.size.height, self.view.frame.size.width - 60, 30)];
     [self.signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
-    [self.signUpButton setBackgroundColor:[UIColor blackColor]];
+    [self.signUpButton setBackgroundColor:(UIColorFromRGB(LABEL_GREEN))];
     self.signUpButton.layer.cornerRadius = 5;
+    [self.signUpButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.signUpButton addTarget:self action:@selector(signUpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.signUpButton];
 }
@@ -336,8 +370,8 @@ static NSInteger const LABEL_GREEN = 0x0d523d;
     self.viewName = CONTINUE_VIEW;
     [UIView animateWithDuration:0.5 animations:^{
         self.welcomeLabel1.frame = CGRectMake(30, 100, 400, 100);
-        self.welcomeLabel2.frame = CGRectMake(30, self.welcomeLabel1.frame.origin.y + self.welcomeLabel1.frame.size.height, 400, 100);
-        self.emailTitleLabel.frame = CGRectMake(30, self.welcomeLabel2.frame.origin.y + self.welcomeLabel2.frame.size.height + 20, self.view.frame.size.width - 60, 30);
+        self.welcomeLabel2.frame = CGRectMake(30, self.welcomeLabel1.frame.origin.y + self.welcomeLabel1.frame.size.height - 30, 400, 100);
+        self.emailTitleLabel.frame = CGRectMake(30, self.welcomeLabel2.frame.origin.y + self.welcomeLabel2.frame.size.height, self.view.frame.size.width - 60, 30);
         self.emailTextField.frame = CGRectMake(30, self.emailTitleLabel.frame.origin.y + self.emailTitleLabel.frame.size.height + 20, self.view.frame.size.width - 60, 30);
         self.continueButton.frame = CGRectMake(30, self.emailTextField.frame.origin.y + self.emailTextField.frame.size.height + 20, self.view.frame.size.width - 60, 30);
         self.orLabel.frame = CGRectMake(self.view.frame.size.width/2 - 30, self.continueButton.frame.origin.y + self.continueButton.frame.size.height + 20, 100, 30);
