@@ -318,16 +318,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.locationCancelButton addTarget:self action:@selector(locationCancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.locationCancelButton];
     
-    // Create Next Button
-    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
-    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
-    [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.nextButton setBackgroundColor:UIColorFromRGB(0x137b5b)];
-    [self.nextButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
-    self.nextButton.layer.cornerRadius = 5;
-    [self.view addSubview:self.nextButton];
-    
     // Create Search Results Table View
     self.searchResultsTableView = [[UITableView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1)];
     self.searchResultsTableView.layer.cornerRadius = 5;
@@ -514,6 +504,16 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicQueueCollectionView.delegate = self;
     self.musicQueueCollectionView.dataSource = self;
     [self.view addSubview:self.musicQueueCollectionView];
+    
+    // Create Next Button
+    self.nextButton = [[UIButton alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height - LABEL_HEIGHT - 4*X_OFFSET, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT)];
+    [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.nextButton setTitle:@"Next" forState:UIControlStateNormal];
+    [self.nextButton addTarget:self action:@selector(nextButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.nextButton setBackgroundColor:UIColorFromRGB(0x137b5b)];
+    [self.nextButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    self.nextButton.layer.cornerRadius = 5;
+    [self.view addSubview:self.nextButton];
 }
 
 - (void) displayInitialPage {
