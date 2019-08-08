@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) int eventAttendanceCount;
 @property (nonatomic) int eventAgeRestriction;
 @property (strong, nonatomic) NSMutableArray <Song *> *musicQueue;
+@property (strong, nonatomic) NSMutableArray <UIImage *> *mediaArray;
+
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 @end
