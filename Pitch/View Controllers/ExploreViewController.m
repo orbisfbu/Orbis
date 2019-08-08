@@ -129,7 +129,26 @@
     [self.dataHandlingObject getEventsFromDatabase];
 }
 
-- (void)populateMapWithEventswithFilter:(BOOL)filterValue{
+- (BOOL) isFutureEvent:(Event *) eventToCheck {
+    BOOL returnValue = nil;
+    NSDate *currentDate = [[NSDate alloc] init];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *currentDateString = [dateFormatter stringFromDate:currentDate];
+    NSDate *formattedCurrentDate = [dateFormatter dateFromString:currentDateString];
+    NSDate *startDate = [dateFormatter dateFromString:eventToCheck.startDateString];
+    NSComparisonResult comparisonResult = [formattedCurrentDate compare:startDate];
+    if (comparisonResult == NSOrderedAscending || comparisonResult == NSOrderedSame) { //The current Date is earlier in time than start Date
+        returnValue = YES;
+    }
+    else if (comparisonResult == NSOrderedDescending) { // The receiver is later in time than start Date
+            returnValue = NO;
+    }
+    return returnValue;
+}
+
+- (void)populateMapWithEventswithFilter:(BOOL)filterValue{ // Populating map with future events only
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
     }
@@ -137,21 +156,27 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
-            eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
-            eventAnnotationPoint.title = thisEvent.ID;
-            eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
-            [self.photoMap addAnnotation:eventAnnotationPoint];
+            if ([self isFutureEvent:(thisEvent)]) {
+                EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
+                eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+                eventAnnotationPoint.title = thisEvent.ID;
+                eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
+                eventAnnotationPoint.startDateString = thisEvent.startDateString;
+                [self.photoMap addAnnotation:eventAnnotationPoint];
+            }
         }
     }
-    
     else if (self.filteredEventsArray > 0 && self.filtersWereSet){
         for (Event *thisEvent in self.filteredEventsArray)
         {
-            MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
-            eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
-            eventAnnotationPoint.title = thisEvent.ID;
-            [self.photoMap addAnnotation:eventAnnotationPoint];
+            if ([self isFutureEvent:(thisEvent)]) {
+                EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
+                eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+                eventAnnotationPoint.title = thisEvent.ID;
+                eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
+                eventAnnotationPoint.startDateString = thisEvent.startDateString;
+                [self.photoMap addAnnotation:eventAnnotationPoint];
+            }
         }
     }
 }

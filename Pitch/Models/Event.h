@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *ID;
 @property (nonatomic, strong) NSString *eventCreator;
 @property (nonatomic, strong) NSString *eventName;
+@property (nonatomic, strong) NSString *startDateString;
 @property (nonatomic, strong) NSMutableArray *eventPollsArray;
 @property (nonatomic) NSString *eventHasMusic;
 @property (nonatomic, strong) NSString *eventImageURLString;

@@ -92,6 +92,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) UILabel *datePickerLabel;
 @property (strong, nonatomic) UILabel *dateLabel;
 @property (strong, nonatomic) UIDatePicker *datePicker;
+@property (strong, nonatomic) NSString *eventStartDateString;
 @property (strong, nonatomic) UIImageView *pinImageView;
 
 // Location View
@@ -893,7 +894,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Location": [NSString stringWithFormat:@"%.5f %.5f", self.coordinates.latitude, self.coordinates.longitude],
         @"Vibes": [self.vibesSet allObjects],
         @"Media": self.additionalImages,
-        @"Music Queue": self.queuedUpSongsArray
+        @"Music Queue": self.queuedUpSongsArray,
+        @"Start Date": self.eventStartDateString
     };
     Event *event = [[Event alloc] initWithDictionary:eventDict];
     [[DataHandling shared] addEventToDatabase:event];
@@ -941,11 +943,22 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    NSString *strDate = [dateFormatter stringFromDate:self.datePicker.date];
-    CGSize size = [strDate sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+    self.eventStartDateString = [dateFormatter stringFromDate:self.datePicker.date];
+    NSLog(@"EVENT START DATE: %@", self.eventStartDateString);
+    CGSize size = [self.eventStartDateString sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
     self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, self.datePickerLabel.frame.origin.y, size.width, LABEL_HEIGHT);
-    self.dateLabel.text = strDate;
+    self.dateLabel.text = self.eventStartDateString;
 }
+
+//- (void) pickerValueChanged {
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+//    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+//    NSString *strDate = [dateFormatter stringFromDate:self.datePicker.date];
+//    CGSize size = [strDate sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:15]}];
+//    self.dateLabel.frame = CGRectMake([[UIScreen mainScreen] bounds].size.width - X_OFFSET - size.width, self.datePickerLabel.frame.origin.y, size.width, LABEL_HEIGHT);
+//    self.dateLabel.text = strDate;
+//}
 
 - (void) refreshResultsTableView {
     NSString *coordinates = @"37.77,-122.41";
