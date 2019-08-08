@@ -21,10 +21,12 @@
 #import "EventGalleryViewController.h"
 #import "ApplyFiltersCell.h"
 #import "DragCell.h"
+#import "EventAnnotation.h"
 #import "CreateEventViewController.h"
 #import "MusicQueueViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "EventGalleryViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -71,8 +73,6 @@
     }
     #endif
     [self.locationManager startUpdatingLocation];
-    //retrieve events from database
-    [self refreshEventsArray];
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(CLLocationCoordinate2DMake(37.783333, -122.416667), MKCoordinateSpanMake(0.1, 0.1));
     [self.photoMap setRegion:sfRegion animated:false];
     // Eliminate the gray background color of the search bar
@@ -111,10 +111,12 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
     [self.locationManager startUpdatingLocation];
+    //retrieve events from database
+    [self refreshEventsArray];
 }
 
 - (void)createRefreshButton{
-    self.refreshMapButton = [[UIButton alloc] initWithFrame:CGRectMake(self.searchBar.frame.origin.x + self.searchBar.frame.size.width * .85, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 5, self.searchBar.frame.size.height/2, self.searchBar.frame.size.height/2)];
+    self.refreshMapButton = [[UIButton alloc] initWithFrame:CGRectMake(self.searchBar.frame.origin.x + self.searchBar.frame.size.width * .9, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 5, self.searchBar.frame.size.height/2.5, self.searchBar.frame.size.height/2.5)];
     self.refreshMapButton.alpha = 1;
     [self.refreshMapButton setEnabled:YES];
     [self.refreshMapButton addTarget:self action:@selector(refreshEventsArray) forControlEvents:UIControlEventTouchUpInside];
@@ -125,7 +127,6 @@
 
 - (void)refreshEventsArray {
     [self.dataHandlingObject getEventsFromDatabase];
-    
 }
 
 - (void)populateMapWithEventswithFilter:(BOOL)filterValue{
@@ -136,9 +137,10 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
+            EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
             eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
             eventAnnotationPoint.title = thisEvent.ID;
+            eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
             [self.photoMap addAnnotation:eventAnnotationPoint];
         }
     }
@@ -288,28 +290,38 @@
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
+    NSString *annotationIdentifier = [NSString stringWithFormat:@"%@", annotation.title];
+    MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
     }
-    UIImageView *eventImageView;
-    NSString *annotationIdentifier = @"Event";
-    MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
-    if (newEventAnnotationView == nil) {
-        NSString *eventID = annotation.title;
-        newEventAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:annotationIdentifier];
-//        [DataHandling shared] getEvent:eventID withCompletion:^(Event * _Nonnull event) {
-//            [eventImageView setImageWithURL:[NSURL URLWithString:event.eventImageURLString]];
-//        }
-        UIImage *resizedEventImage = [self resizeImage:[UIImage imageNamed:@"eventImage"] withSize:CGSizeMake(30.0, 30.0)];
+    else if ([annotation isKindOfClass:[EventAnnotation class]]){
+        EventAnnotation *thisAnnotation = (EventAnnotation *)annotation;
+        NSURL *url = [NSURL URLWithString:thisAnnotation.mainImageURLString];
+        UIImageView *eventImageView = [[UIImageView alloc] init];
+        [eventImageView setImageWithURL:url placeholderImage:[UIImage imageNamed:@"eventImage"]];
+//        [eventImageView setImageWithURLRequest:[[NSURLRequest alloc] initWithURL:url] placeholderImage:[UIImage imageNamed:@"eventImage"] success:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, UIImage * _Nonnull image) {
+//            UIImage *resizedEventImage = [self resizeImage:image withSize:CGSizeMake(30.0, 30.0)];
+//            newEventAnnotationView.image = resizedEventImage;
+//        } failure:^(NSURLRequest * _Nonnull request, NSHTTPURLResponse * _Nullable response, NSError * _Nonnull error) {
+//            //
+//        }];
+        UIImage *resizedEventImage = [self resizeImage:eventImageView.image withSize:CGSizeMake(30.0, 30.0)];
+        newEventAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:thisAnnotation reuseIdentifier:annotationIdentifier];
         newEventAnnotationView.image = resizedEventImage;
+        newEventAnnotationView.layer.masksToBounds = true;
+        newEventAnnotationView.layer.cornerRadius = newEventAnnotationView.frame.size.height/2;
         newEventAnnotationView.canShowCallout = NO;
     }
+    
     return newEventAnnotationView;
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)annotationView {
+    if([annotationView.annotation isKindOfClass:[MKUserLocation class]]){
+        return;
+    }
     [mapView deselectAnnotation:annotationView.annotation animated:YES];
-    NSLog(@"TITLE: %@", annotationView.annotation.title);
     [self.dataHandlingObject getEvent:annotationView.annotation.title withCompletion:^(Event * _Nonnull event) {
         [self presentEventDetailsView:event];
     }];
@@ -353,8 +365,8 @@
     NSMutableSet *vibesSet = [self.vibesCell getSelectedVibes];
     long distance = [self.distanceCell getDistance];
     
-    int minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
-    int maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
+    long minNumPeople = [self.numberOfPeopleCell getMinNumPeople];
+    long maxNumPeople = [self.numberOfPeopleCell getMaxNumPeople];
     NSDictionary *filterValues = @{
                                   @"Age Restriction": @(ageRestriction),
                                   @"Distance": @(distance),
@@ -371,13 +383,14 @@
 
 - (void)refreshFilteredEventsDelegateMethod:(nonnull NSArray *)filteredEvents {
     if (filteredEvents.count == 0){
+        [self resetFiltersButtonWasPressed];
         [self presentAlert:@"No events found with these filters" withMessage:@"Try changing your search criteria"];
     }
     else{
         self.filteredEventsArray = [NSMutableArray arrayWithArray:filteredEvents];
         [self populateMapWithEventswithFilter:self.filtersWereSet];
         [self removeFilterMenu];
-        self.filterMenuIsShowing = !self.filterMenuIsShowing;
+        self.filterMenuIsShowing = NO;
     }
 }
 

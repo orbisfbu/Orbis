@@ -252,7 +252,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    [[DataHandling shared] updateProfileImage:editedImage withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
+    [[DataHandling shared] updateProfileImage:editedImage withUserID:[UserInSession shared].sharedUser.ID withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
         [UserInSession shared].sharedUser.profileImageURLString = createdProfileImageURLString;
         NSLog(@"Successfully stored image and updated userProfileImageURLString");
         [[DataHandling shared] setUserProfileImage:self.userProfileImageView];
