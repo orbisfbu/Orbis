@@ -85,6 +85,8 @@
 		C1C3418722F8A96200A09666 /* MusicQueueTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3418522F8A96200A09666 /* MusicQueueTableViewCell.xib */; };
 		C1C3418922F8ABF600A09666 /* GothamRounded-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = C1C3418822F8ABF600A09666 /* GothamRounded-Medium.otf */; };
 		C1C3418B22F8AC4800A09666 /* GothamRounded-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = C1C3418A22F8AC4800A09666 /* GothamRounded-Book.otf */; };
+		C1C3419722FB61A700A09666 /* MediaCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1C3419522FB61A700A09666 /* MediaCollectionViewCell.m */; };
+		C1C3419822FB61A700A09666 /* MediaCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1C3419622FB61A700A09666 /* MediaCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -231,6 +233,9 @@
 		C1C3418522F8A96200A09666 /* MusicQueueTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MusicQueueTableViewCell.xib; sourceTree = "<group>"; };
 		C1C3418822F8ABF600A09666 /* GothamRounded-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Medium.otf"; path = "Gotham-rounded/GothamRounded-Medium.otf"; sourceTree = SOURCE_ROOT; };
 		C1C3418A22F8AC4800A09666 /* GothamRounded-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "GothamRounded-Book.otf"; path = "Gotham-rounded/GothamRounded-Book.otf"; sourceTree = SOURCE_ROOT; };
+		C1C3419422FB61A700A09666 /* MediaCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaCollectionViewCell.h; sourceTree = "<group>"; };
+		C1C3419522FB61A700A09666 /* MediaCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaCollectionViewCell.m; sourceTree = "<group>"; };
+		C1C3419622FB61A700A09666 /* MediaCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MediaCollectionViewCell.xib; sourceTree = "<group>"; };
 		C4164D6E91261C8ACB86B04F /* Pods-Pitch.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pitch.release.xcconfig"; path = "Target Support Files/Pods-Pitch/Pods-Pitch.release.xcconfig"; sourceTree = "<group>"; };
 		C5A4F46338BC569996E17E1C /* Pods-PitchUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PitchUITests.release.xcconfig"; path = "Target Support Files/Pods-PitchUITests/Pods-PitchUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PitchTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -487,6 +492,9 @@
 				C1C3418522F8A96200A09666 /* MusicQueueTableViewCell.xib */,
 				7872897B22F90175002CADE8 /* EventGalleryCell.h */,
 				7872897C22F90175002CADE8 /* EventGalleryCell.m */,
+				C1C3419422FB61A700A09666 /* MediaCollectionViewCell.h */,
+				C1C3419522FB61A700A09666 /* MediaCollectionViewCell.m */,
+				C1C3419622FB61A700A09666 /* MediaCollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -641,6 +649,7 @@
 				06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */,
 				06A909CD22E67A3500CD2969 /* CustomPollCell.xib in Resources */,
 				C1C3418B22F8AC4800A09666 /* GothamRounded-Book.otf in Resources */,
+				C1C3419822FB61A700A09666 /* MediaCollectionViewCell.xib in Resources */,
 				C138EDE422DFAD9F00AAA0D0 /* Assets.xcassets in Resources */,
 				C14E1A0022E23BF000883CFB /* AgeCell.xib in Resources */,
 				C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */,
@@ -793,6 +802,7 @@
 				C1C3416822F0C21900A09666 /* EventPictureCell.m in Sources */,
 				C14E19FF22E23BF000883CFB /* AgeCell.m in Sources */,
 				C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */,
+				C1C3419722FB61A700A09666 /* MediaCollectionViewCell.m in Sources */,
 				C1C3417122F207BA00A09666 /* MusicQueueViewController.m in Sources */,
 				C1C3417422F2083B00A09666 /* EventGalleryViewController.m in Sources */,
 				C14E19ED22E23B8B00883CFB /* VibesCell.m in Sources */,
