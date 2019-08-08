@@ -11,7 +11,7 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-static long const DEFAULT_LEFT_PEOPLE = 10;
+static long const DEFAULT_LEFT_PEOPLE = 1;
 static long const DEFAULT_RIGHT_PEOPLE = 100;
 static long const DEFAULT_MAX_PEOPLE = 501;
 static long const DEFAULT_MIN_PEOPLE = 1;
@@ -43,8 +43,10 @@ static long const DEFAULT_MIN_PEOPLE = 1;
     [imageView setTintColor: UIColorFromRGB(0x137b5b)];
     
     [self.subview addSubview:self.rangeSlider];
-    self.maxNumPeople = DEFAULT_MAX_PEOPLE;
-    self.minNumPeople = 0;
+    
+    self.maxNumPeople = (long)self.rangeSlider.rightValue;
+    self.minNumPeople = (long)self.rangeSlider.leftValue;
+    [self.numberLabel setText:[NSString stringWithFormat:@"%ld-%ld+", (long)self.rangeSlider.leftValue, (long)self.rangeSlider.rightValue - 1]];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

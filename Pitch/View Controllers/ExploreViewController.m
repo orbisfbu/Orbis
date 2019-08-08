@@ -116,7 +116,7 @@
 }
 
 - (void)createRefreshButton{
-    self.refreshMapButton = [[UIButton alloc] initWithFrame:CGRectMake(self.searchBar.frame.origin.x + self.searchBar.frame.size.width * .85, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 5, self.searchBar.frame.size.height/2, self.searchBar.frame.size.height/2)];
+    self.refreshMapButton = [[UIButton alloc] initWithFrame:CGRectMake(self.searchBar.frame.origin.x + self.searchBar.frame.size.width * .9, self.searchBar.frame.origin.y + self.searchBar.frame.size.height + 5, self.searchBar.frame.size.height/2.5, self.searchBar.frame.size.height/2.5)];
     self.refreshMapButton.alpha = 1;
     [self.refreshMapButton setEnabled:YES];
     [self.refreshMapButton addTarget:self action:@selector(refreshEventsArray) forControlEvents:UIControlEventTouchUpInside];
@@ -290,7 +290,7 @@
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    NSString *annotationIdentifier = [NSString stringWithFormat:@"%@_%@", @"Event", annotation.title];
+    NSString *annotationIdentifier = [NSString stringWithFormat:@"%@", annotation.title];
     MKAnnotationView *newEventAnnotationView = [mapView dequeueReusableAnnotationViewWithIdentifier:annotationIdentifier];
     if([annotation isKindOfClass:[MKUserLocation class]]){
         return nil;
@@ -383,6 +383,7 @@
 
 - (void)refreshFilteredEventsDelegateMethod:(nonnull NSArray *)filteredEvents {
     if (filteredEvents.count == 0){
+        [self resetFiltersButtonWasPressed];
         [self presentAlert:@"No events found with these filters" withMessage:@"Try changing your search criteria"];
     }
     else{
