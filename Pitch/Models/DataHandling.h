@@ -58,6 +58,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) user:(NSString *)userID didUnlikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
 - (void)registerUserToEvent: (Event *)eventName;
 - (void)unregisterUser: (Event *)event;
+- (void) getImageURLFromEvent:(NSString *)eventID atIndex:(int)index withCompletion:(void (^) (UIImage *image))completion;
+- (void) getNumberOfAdditionalMediaFilesFromEvent:(NSString *)eventID withCompletion:(void (^) (int count))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

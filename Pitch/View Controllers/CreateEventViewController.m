@@ -910,7 +910,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Media": self.additionalImages,
         @"Music Queue": self.queuedUpSongsArray,
         @"Start Date": self.eventStartDateString,
-        @"Registered Users": @[[FIRAuth auth].currentUser.uid]
+        @"Registered Users": @[[FIRAuth auth].currentUser.uid],
+        @"Number of Additional Media Files": @(self.additionalImages.count - 1)
     };
     Event *event = [[Event alloc] initWithDictionary:eventDict];
     [[DataHandling shared] addEventToDatabase:event];

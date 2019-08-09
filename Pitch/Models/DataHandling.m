@@ -25,6 +25,7 @@ static NSString * const EVENT_LOCATION_KEY = @"Location";
 static NSString * const EVENT_DESCRIPTION_KEY = @"Description";
 static NSString * const EVENT_VIBES_KEY = @"Vibes";
 static NSString * const EVENT_REGISTERED_USERS_KEY = @"Registered Users";
+static NSString * const EVENT_NUM_ADDITIONAL_MEDIA_FILES_KEY = @"Number of Additional Media Files";
 //constants for user addition to database
 static NSString * const USER_FIRSTNAME_KEY = @"First Name";
 static NSString * const USER_LASTNAME_KEY = @"Last Name";
@@ -331,7 +332,8 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 EVENT_VIBES_KEY: event.eventVibesArray,
                                 EVENT_REGISTERED_USERS_KEY: event.registeredUsersArray,
                                 MUSIC_QUEUE_KEY: songQueue,
-                                EVENT_START_DATE_KEY: event.startDateString
+                                EVENT_START_DATE_KEY: event.startDateString,
+                                EVENT_NUM_ADDITIONAL_MEDIA_FILES_KEY: @(event.numAdditionalMediaFiles)
                                 };
     
     __block FIRDocumentReference *eventRef = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] addDocumentWithData:eventInfo completion:^(NSError * _Nullable error) {
@@ -350,7 +352,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }];
 }
 
-- (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID{
+- (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID {
     NSString *fullName = thisUser.nameString;
     NSArray *nameArray = [fullName componentsSeparatedByString:@" "];
     NSMutableDictionary *userInfoDict = [NSMutableDictionary new];
@@ -468,6 +470,33 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
         } else {
             [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:-1],
                                    [NSString stringWithFormat:@"Music Queue.%li.userIDs", index]:[FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]}];
+        }
+    }];
+}
+
+- (void) getNumberOfAdditionalMediaFilesFromEvent:(NSString *)eventID withCompletion:(void (^) (int count))completion {
+    __block FIRDocumentReference *eventRef;
+    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+    eventRef = [eventsRef documentWithPath:eventID];
+    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error getting the event");
+        } else {
+            completion([snapshot.data[@"Number of Additional Media Files"] intValue]);
+        }
+    }];
+}
+
+- (void) getImageURLFromEvent:(NSString *)eventID atIndex:(int)index withCompletion:(void (^) (UIImage *imageURL))completion {
+    FIRStorageReference *storageRef = [self.storage reference];
+    FIRStorageReference *imageStorageRef = [storageRef child:[NSString stringWithFormat:@"events/%@/additionalImage_%i.jpg", eventID, index]];
+    [imageStorageRef dataWithMaxSize:1024*1024*1024 completion:^(NSData * _Nullable data, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"ERROR DOWNLOADING IMAGE FROM STORAGE");
+        } else {
+            NSLog(@"SUCCESS DOWNLOADING IMAGE FROM STORAGE");
+            UIImage *image = [UIImage imageWithData:data];
+            completion(image);
         }
     }];
 }
