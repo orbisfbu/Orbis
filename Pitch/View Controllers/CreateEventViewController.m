@@ -133,9 +133,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) NSMutableArray *songsArray;
 @property (strong, nonatomic) NSMutableArray *queuedUpSongsArray;
 
-// Anchors
-
-
 @end
 
 @implementation CreateEventViewController
@@ -808,6 +805,10 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicResultsTableView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1);
     
     self.musicQueueCollectionView.frame = CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT);
+    
+    self.vibesSet = [[NSMutableSet alloc] init];
+    self.additionalImages = [[NSMutableArray alloc] init];
+    self.queuedUpSongsArray = [[NSMutableArray alloc] init];
 }
 
 - (void) nextButtonPressed {
@@ -884,6 +885,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void)publishEvent {
     [self.additionalImages removeObjectAtIndex:0]; // Remove the plus image
     [self.additionalImages addObject:self.coverImageView.image]; // Add the main image
+    NSMutableArray *registeredUsers = [[NSMutableArray alloc] init];
+    [registeredUsers addObject:[FIRAuth auth].currentUser.uid];
     NSDictionary *eventDict = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
         @"Event Name": self.eventTitleTextField.text,
@@ -895,7 +898,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Vibes": [self.vibesSet allObjects],
         @"Media": self.additionalImages,
         @"Music Queue": self.queuedUpSongsArray,
-        @"Start Date": self.eventStartDateString
+        @"Start Date": self.eventStartDateString,
+        @"Registered Users": registeredUsers
     };
     Event *event = [[Event alloc] initWithDictionary:eventDict];
     [[DataHandling shared] addEventToDatabase:event];
