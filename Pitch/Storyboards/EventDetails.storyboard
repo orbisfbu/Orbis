@@ -31,7 +31,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qJ0-uT-ZIL" userLabel="SwipeIndicatorOutlet">
                                         <rect key="frame" x="192" y="6" width="30" height="7"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="7" id="LdX-yZ-hxb"/>
                                             <constraint firstAttribute="width" constant="30" id="bNA-ID-eOv"/>
@@ -158,7 +158,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IPx-ez-O8v" userLabel="SwipeIndicatorOutlet">
                                         <rect key="frame" x="192" y="6" width="30" height="7"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="7" id="9zd-UW-eJW"/>
                                             <constraint firstAttribute="width" constant="30" id="mwp-ag-wQL"/>
@@ -246,22 +246,22 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bee-g3-Lnv">
                                 <rect key="frame" x="0.0" y="50" width="414" height="50"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gallery" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k3F-CP-2cl">
-                                        <rect key="frame" x="180" y="19" width="54" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Media Gallery" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k3F-CP-2cl">
+                                        <rect key="frame" x="80.5" y="19" width="253.5" height="25"/>
+                                        <fontDescription key="fontDescription" name="GothamRounded-Bold" family="Gotham Rounded" pointSize="25"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="33G-vY-qsE" userLabel="SwipeIndicatorOutlet">
                                         <rect key="frame" x="192" y="6" width="30" height="7"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="HYJ-RH-cT5"/>
                                             <constraint firstAttribute="height" constant="7" id="cg6-HO-q0H"/>
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.99215686274509807" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="k3F-CP-2cl" firstAttribute="top" secondItem="33G-vY-qsE" secondAttribute="bottom" constant="6" id="Iww-Dc-1nf"/>
                                     <constraint firstItem="33G-vY-qsE" firstAttribute="centerX" secondItem="Bee-g3-Lnv" secondAttribute="centerX" id="MCQ-1H-gzr"/>
@@ -287,27 +287,9 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bcx-TE-XwP">
-                                                    <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="120" id="w7r-ic-kGt"/>
-                                                        <constraint firstAttribute="width" constant="120" id="xRb-fH-PCt"/>
-                                                    </constraints>
-                                                </imageView>
-                                            </subviews>
                                         </view>
                                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstItem="Bcx-TE-XwP" firstAttribute="top" secondItem="CLd-RX-NTA" secondAttribute="top" id="Dxo-6c-Gqk"/>
-                                            <constraint firstAttribute="bottom" secondItem="Bcx-TE-XwP" secondAttribute="bottom" id="MYP-1F-BFD"/>
-                                            <constraint firstAttribute="trailing" secondItem="Bcx-TE-XwP" secondAttribute="trailing" id="uc8-8G-tLx"/>
-                                            <constraint firstItem="Bcx-TE-XwP" firstAttribute="leading" secondItem="CLd-RX-NTA" secondAttribute="leading" id="wda-QA-YCs"/>
-                                        </constraints>
                                         <size key="customSize" width="120" height="120"/>
-                                        <connections>
-                                            <outlet property="galleryPicImageView" destination="Bcx-TE-XwP" id="zmB-6x-QAJ"/>
-                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -331,11 +313,11 @@
                     </tabBarItem>
                     <size key="freeformSize" width="414" height="896"/>
                     <connections>
-                        <outlet property="clickableMapViewOutlet" destination="9L5-CK-7r8" id="Bn1-er-PcK"/>
-                        <outlet property="galleryTitleLabel" destination="k3F-CP-2cl" id="nzS-dN-H4W"/>
-                        <outlet property="galleryTitleView" destination="Bee-g3-Lnv" id="JXb-Mu-50Q"/>
-                        <outlet property="imageCollectionView" destination="cek-BO-EKE" id="A7r-te-oja"/>
-                        <outlet property="swipeIndicatorOutlet" destination="33G-vY-qsE" id="dIU-00-Tze"/>
+                        <outlet property="clickableMapView" destination="9L5-CK-7r8" id="Bn1-er-PcK"/>
+                        <outlet property="collectionView" destination="cek-BO-EKE" id="6da-7y-cGM"/>
+                        <outlet property="swipeIndicatorView" destination="33G-vY-qsE" id="dIU-00-Tze"/>
+                        <outlet property="titleLabel" destination="k3F-CP-2cl" id="nzS-dN-H4W"/>
+                        <outlet property="titleView" destination="Bee-g3-Lnv" id="JXb-Mu-50Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v91-Zu-7u5" userLabel="First Responder" sceneMemberID="firstResponder"/>
