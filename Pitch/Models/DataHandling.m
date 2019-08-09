@@ -173,17 +173,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                             NSLog(@"UPLOAD REACHED SOME ERROR");
                             switch (error.code) {
                                 case FIRStorageErrorCodeObjectNotFound:
-                                    // File doesn't exist
-                                    break;
-                                    
-                                case FIRStorageErrorCodeUnauthorized:
-                                    // User doesn't have permission to access file
-                                    break;
-                                case FIRStorageErrorCodeCancelled:
-                                    // User canceled the upload
-                                    break;
-                                case FIRStorageErrorCodeUnknown:
-                                    // Unknown error occurred, inspect the server response
+                                    NSLog(@"Upload event mainImage file doesn't exist error");
                                     break;
                             }
                         } else {
@@ -213,17 +203,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 NSLog(@"UPLOAD REACHED SOME ERROR");
                                 switch (error.code) {
                                     case FIRStorageErrorCodeObjectNotFound:
-                                        // File doesn't exist
-                                        break;
-                                        
-                                    case FIRStorageErrorCodeUnauthorized:
-                                        // User doesn't have permission to access file
-                                        break;
-                                    case FIRStorageErrorCodeCancelled:
-                                        // User canceled the upload
-                                        break;
-                                    case FIRStorageErrorCodeUnknown:
-                                        // Unknown error occurred, inspect the server response
+                                        NSLog(@"Upload additional media file doesn't exist error");
                                         break;
                                 }
                             } else {
@@ -238,6 +218,50 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                         }];
         i++;
     }
+}
+
+- (void) getEventsAttendedByUser {
+    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
+     getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
+         if (error != nil) {
+             NSLog(@"Error getting events from database: %@", error);
+         } else {
+             for (FIRDocumentSnapshot *document in snapshot.documents) {
+                 if ([document.data[@"Registered Users"] containsObject:[UserInSession shared].sharedUser.ID]) {
+                     Event *attendedEventToAdd = [[Event alloc ]initWithDictionary:document.data];
+                     NSDate *currentDate = [[NSDate alloc] init];
+                     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                     [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+                     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+                     NSString *currentDateString = [dateFormatter stringFromDate:currentDate];
+                     NSDate *formattedCurrentDate = [dateFormatter dateFromString:currentDateString];
+                     NSDate *startDate = [dateFormatter dateFromString:attendedEventToAdd.startDateString];
+                     NSComparisonResult comparisonResult = [formattedCurrentDate compare:startDate];
+                     if (comparisonResult == NSOrderedDescending ) { //The current Date is earlier in time than start Date
+                         [[UserInSession shared].eventsAttendedMArray addObject:attendedEventToAdd]; // event will be added to NSMutableArray because event was in the past and user was registered
+                     }
+                 }
+             }
+         }
+         NSLog(@"Number of events attended by (USER PAGE): %lu", [UserInSession shared].eventsAttendedMArray.count);
+     }];
+}
+
+- (void) getEventsCreatedByUser {
+    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
+     getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
+         if (error != nil) {
+             NSLog(@"Error getting events from database: %@", error);
+         } else {
+             for (FIRDocumentSnapshot *document in snapshot.documents) {
+                 if ([document.data[@"Created By"] isEqualToString:[UserInSession shared].sharedUser.nameString]) {
+                     Event *createdEventToAdd = [[Event alloc ]initWithDictionary:document.data];
+                     [[UserInSession shared].eventsCreatedMArray addObject:createdEventToAdd];
+                 }
+             }
+         }
+         NSLog(@"Number of events created by (USER): %lu", [UserInSession shared].eventsCreatedMArray.count);
+     }];
 }
 
 - (void)getEventsFromDatabase {

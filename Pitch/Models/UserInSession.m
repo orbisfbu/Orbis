@@ -24,6 +24,8 @@
 }
 
 - (instancetype)init {
+    self.eventsAttendedMArray = [[NSMutableArray alloc] init];
+    self.eventsCreatedMArray = [[NSMutableArray alloc] init];
     return self;
 }
 

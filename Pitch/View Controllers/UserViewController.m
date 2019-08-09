@@ -80,6 +80,8 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 @implementation UserViewController
 
 - (void)viewDidLoad {
+    [[DataHandling shared] getEventsAttendedByUser];
+    [[DataHandling shared] getEventsCreatedByUser];
     self.imagePickerVC = [UIImagePickerController new];
     self.imagePickerVC.delegate = self;
     self.imagePickerVC.allowsEditing = YES;
