@@ -16,6 +16,7 @@ static NSString * const DATABASE_EVENTS_COLLECTION = @"events";
 //constants for event creation that correspond to fields in database
 static NSString * const EVENT_NAME_KEY = @"Event Name";
 static NSString * const EVENT_CREATOR_KEY = @"Created By";
+static NSString * const EVENT_START_DATE_KEY = @"Start Date";
 static NSString * const EVENT_HAS_MUSIC_KEY = @"Has Music";
 static NSString * const EVENT_IMAGE_URL_KEY = @"ImageURL";
 static NSString * const EVENT_AGE_RESTRICTION_KEY = @"Age Restriction";
@@ -328,8 +329,9 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 EVENT_DESCRIPTION_KEY: event.eventDescription,
                                 EVENT_NAME_KEY: event.eventName,
                                 EVENT_VIBES_KEY: event.eventVibesArray,
-                                EVENT_REGISTERED_USERS_KEY: [NSMutableArray new],
+                                EVENT_REGISTERED_USERS_KEY: event.registeredUsersArray,
                                 MUSIC_QUEUE_KEY: songQueue,
+                                EVENT_START_DATE_KEY: event.startDateString
                                 };
     
     __block FIRDocumentReference *eventRef = [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION] addDocumentWithData:eventInfo completion:^(NSError * _Nullable error) {

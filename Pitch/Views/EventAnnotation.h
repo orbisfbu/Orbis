@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EventAnnotation : MKPointAnnotation
 @property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *startDateString;
 @property (nonatomic) CLLocationCoordinate2D coordinate;
 @property (nonatomic, strong) NSString *mainImageURLString;
 @end

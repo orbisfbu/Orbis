@@ -21,6 +21,7 @@
         self.ID = snapshotDictionary[@"ID"];
         self.eventCreator = snapshotDictionary[@"Created By"];
         self.eventName = snapshotDictionary[@"Event Name"];
+        self.startDateString = snapshotDictionary[@"Start Date"];
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
         self.eventLocationString = snapshotDictionary[@"Location"];

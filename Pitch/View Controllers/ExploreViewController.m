@@ -30,7 +30,7 @@
 
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, GetEventsArrayDelegate, GetFilteredEventsArrayDelegate, MKMapViewDelegate, CLLocationManagerDelegate, AddEventToMapDelegate, ApplyFiltersDelegate>
+@interface ExploreViewController () <UITableViewDelegate, UITableViewDataSource, GetEventsArrayDelegate, GetFilteredEventsArrayDelegate, MKMapViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, AddEventToMapDelegate, ApplyFiltersDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *photoMap;
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -51,6 +51,7 @@
 @property (strong, nonatomic) UIButton *refreshMapButton;
 @property BOOL isScrollingTVUp;
 @property BOOL filtersWereSet;
+@property BOOL searchWasMade;
 
 @end
 
@@ -59,6 +60,7 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     self.filtersWereSet = NO;
+    self.searchBarOutlet.delegate = self;
     self.dataHandlingObject = [DataHandling shared];
     self.dataHandlingObject.delegate = self;
     self.dataHandlingObject.filteredEventsDelegate = self;
@@ -129,7 +131,26 @@
     [self.dataHandlingObject getEventsFromDatabase];
 }
 
-- (void)populateMapWithEventswithFilter:(BOOL)filterValue{
+- (BOOL) isFutureEvent:(Event *) eventToCheck {
+    BOOL returnValue = nil;
+    NSDate *currentDate = [[NSDate alloc] init];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    NSString *currentDateString = [dateFormatter stringFromDate:currentDate];
+    NSDate *formattedCurrentDate = [dateFormatter dateFromString:currentDateString];
+    NSDate *startDate = [dateFormatter dateFromString:eventToCheck.startDateString];
+    NSComparisonResult comparisonResult = [formattedCurrentDate compare:startDate];
+    if (comparisonResult == NSOrderedAscending || comparisonResult == NSOrderedSame) { //The current Date is earlier in time than start Date
+        returnValue = YES;
+    }
+    else if (comparisonResult == NSOrderedDescending) { // The receiver is later in time than start Date
+            returnValue = NO;
+    }
+    return returnValue;
+}
+
+- (void)populateMapWithEventswithFilter:(BOOL)filterValue withSearchValue:(BOOL) didSearch { // Populating map with future events only
     if (self.photoMap.annotations.count != 0){
         [self.photoMap removeAnnotations: self.photoMap.annotations];
     }
@@ -137,21 +158,50 @@
     {
         for (Event *thisEvent in self.eventsArray)
         {
-            EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
-            eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
-            eventAnnotationPoint.title = thisEvent.ID;
-            eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
-            [self.photoMap addAnnotation:eventAnnotationPoint];
+            if ([self isFutureEvent:(thisEvent)]) {
+                
+                if (didSearch && [[thisEvent.eventName lowercaseString] containsString:[NSString stringWithFormat:@"%@", [self.searchBarOutlet.text lowercaseString]]]) {
+                    // populate map with future event that contains search text/substring of search text
+                    EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
+                    eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+                    eventAnnotationPoint.title = thisEvent.ID;
+                    eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
+                    eventAnnotationPoint.startDateString = thisEvent.startDateString;
+                    [self.photoMap addAnnotation:eventAnnotationPoint];
+                }
+                else if (!didSearch) {
+                    EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
+                    eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+                    eventAnnotationPoint.title = thisEvent.ID;
+                    eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
+                    eventAnnotationPoint.startDateString = thisEvent.startDateString;
+                    [self.photoMap addAnnotation:eventAnnotationPoint];
+                }
+            }
         }
     }
-    
     else if (self.filteredEventsArray > 0 && self.filtersWereSet){
         for (Event *thisEvent in self.filteredEventsArray)
         {
-            MKPointAnnotation *eventAnnotationPoint = [[MKPointAnnotation alloc] init];
-            eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
-            eventAnnotationPoint.title = thisEvent.ID;
-            [self.photoMap addAnnotation:eventAnnotationPoint];
+            if ([self isFutureEvent:(thisEvent)]) {
+                if (didSearch && [[thisEvent.eventName lowercaseString] containsString:[NSString stringWithFormat:@"%@", [self.searchBarOutlet.text lowercaseString]]]) {
+                    // populate map with future event that contains search text/substring of search text
+                    EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
+                    eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+                    eventAnnotationPoint.title = thisEvent.ID;
+                    eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
+                    eventAnnotationPoint.startDateString = thisEvent.startDateString;
+                    [self.photoMap addAnnotation:eventAnnotationPoint];
+                }
+                else if (!didSearch) {
+                    EventAnnotation *eventAnnotationPoint = [[EventAnnotation alloc] init];
+                    eventAnnotationPoint.coordinate = thisEvent.eventCoordinates;
+                    eventAnnotationPoint.title = thisEvent.ID;
+                    eventAnnotationPoint.mainImageURLString = thisEvent.eventImageURLString;
+                    eventAnnotationPoint.startDateString = thisEvent.startDateString;
+                    [self.photoMap addAnnotation:eventAnnotationPoint];
+                }
+            }
         }
     }
 }
@@ -275,7 +325,7 @@
 
 - (void)refreshEventsDelegateMethod:(nonnull NSArray *)events {
     self.eventsArray = [NSMutableArray arrayWithArray:events];
-    [self populateMapWithEventswithFilter:self.filtersWereSet];
+    [self populateMapWithEventswithFilter:self.filtersWereSet withSearchValue:self.searchWasMade];
 }
 
 - (UIImage *)resizeImage:(UIImage *)image withSize:(CGSize)size {
@@ -388,7 +438,7 @@
     }
     else{
         self.filteredEventsArray = [NSMutableArray arrayWithArray:filteredEvents];
-        [self populateMapWithEventswithFilter:self.filtersWereSet];
+        [self populateMapWithEventswithFilter:self.filtersWereSet withSearchValue:self.searchWasMade];
         [self removeFilterMenu];
         self.filterMenuIsShowing = NO;
     }
@@ -410,5 +460,16 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    if ([self.searchBarOutlet.text isEqualToString:@""]) {
+        self.searchWasMade = NO;
+        [self refreshEventsArray]; // map is populated with all future events
+    }
+    else {
+        self.searchWasMade = YES;
+        [self refreshEventsArray]; // map is populated with future events that fit search criteria
+    }
+    [self.searchBarOutlet resignFirstResponder];
+}
 
 @end
