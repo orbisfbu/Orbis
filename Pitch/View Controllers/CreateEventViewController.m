@@ -153,6 +153,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addGestureRecognizer:self.tap];
     self.vibesArray = [[Vibes sharedVibes] getVibesArray];
     [self createPageObjects];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    self.eventStartDateString = [dateFormatter stringFromDate:self.datePicker.date];
+    
     [self displayInitialPage];
 }
 
@@ -807,8 +813,11 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicQueueCollectionView.frame = CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT);
     
     self.vibesSet = [[NSMutableSet alloc] init];
-    self.additionalImages = [[NSMutableArray alloc] init];
-    self.queuedUpSongsArray = [[NSMutableArray alloc] init];
+    NSLog(@"HEYAA");
+    [self createAdditionalImagesArray];
+    NSLog(@"HEYAA");
+    [self createSongsArray];
+    NSLog(@"HEYAA");
 }
 
 - (void) nextButtonPressed {
@@ -832,7 +841,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self displayMediaPage];
     } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
         [self dismissMediaPage];
-        NSLog(@"HEYYYYY");
         [self displayMusicPage];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         [self publishEvent];
@@ -899,7 +907,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Media": self.additionalImages,
         @"Music Queue": self.queuedUpSongsArray,
         @"Start Date": self.eventStartDateString,
-        @"Registered Users": registeredUsers
+        @"Registered Users": @[[FIRAuth auth].currentUser.uid]
     };
     Event *event = [[Event alloc] initWithDictionary:eventDict];
     [[DataHandling shared] addEventToDatabase:event];
