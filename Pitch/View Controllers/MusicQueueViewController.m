@@ -42,7 +42,7 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"MusicQueueTableViewCell" bundle:nil] forCellReuseIdentifier:@"MusicQueueTableViewCell"];
 }
 
-- (void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer {
+- (void)dismissViewController:(UISwipeGestureRecognizer *)recognizer {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

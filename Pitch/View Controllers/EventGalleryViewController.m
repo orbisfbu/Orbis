@@ -69,7 +69,7 @@
     return self.imagesArray.count;
 }
 
--(void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer {
+-(void)dismissViewController:(UISwipeGestureRecognizer *)recognizer {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
