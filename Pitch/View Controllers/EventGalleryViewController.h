@@ -7,16 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EventGalleryViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIView *clickableMapViewOutlet;
-@property (weak, nonatomic) IBOutlet UIView *galleryTitleView;
-@property (weak, nonatomic) IBOutlet UICollectionView *imageCollectionView;
-@property (weak, nonatomic) IBOutlet UILabel *galleryTitleLabel;
-@property (weak, nonatomic) IBOutlet UIView *swipeIndicatorOutlet;
-@property (strong, nonatomic) NSArray <NSString *> *imageURLStringsArray;
+@property (weak, nonatomic) IBOutlet UIView *clickableMapView;
+@property (weak, nonatomic) IBOutlet UIView *titleView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIView *swipeIndicatorView;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (strong, nonatomic) Event *event;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -2,7 +2,7 @@
 //  EventGalleryCell.h
 //  Pitch
 //
-//  Created by sbernal0115 on 8/5/19.
+//  Created by mariobaxter on 8/9/19.
 //  Copyright © 2019 PitchFBU. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EventGalleryCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *galleryPicImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @end
 
 NS_ASSUME_NONNULL_END
