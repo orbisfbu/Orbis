@@ -794,9 +794,9 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     self.coverImageView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, 0.6 * ([[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT);
     
-    self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT);
+    self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.additionalMediaLabel.frame.size.height);
     
-    self.additionalMediaCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    self.additionalMediaCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.additionalMediaCollectionView.frame.size.height);
     
     self.musicPageDescriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT);
     
@@ -1086,17 +1086,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
     
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+    if ([self.pageName isEqualToString:DETAILS_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"vibesCollectionView"]) {
         CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
         [cell setLabelText:self.vibesArray[indexPath.row]];
         [cell setNeedsLayout];
         [cell layoutIfNeeded];
         CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
         return CGSizeMake(size.width, 30);
-    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"musicCollectionView"]) {
         return CGSizeMake(90, 120);
-    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
-        return CGSizeMake(self.additionalMediaCollectionView.frame.size.height/2, self.additionalMediaCollectionView.frame.size.height/2);
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
+        return CGSizeMake(2*self.additionalMediaCollectionView.frame.size.height/3, 2*self.additionalMediaCollectionView.frame.size.height/3);
     } else {
         return CGSizeMake(90, 120);
     }
