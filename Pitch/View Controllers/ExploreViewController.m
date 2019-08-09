@@ -344,13 +344,13 @@
     [DataHandling shared].userLocation = [locations lastObject];
 }
 
-- (void)applyFiltersButtonWasPressed {
+- (void)applyFiltersButtonDelegate {
     NSLog(@"Applying Filters...");
     self.filtersWereSet = YES;
     [self filterAnnotations];
 }
 
-- (void)resetFiltersButtonWasPressed {
+- (void)resetFiltersButtonDelegate {
     NSLog(@"Resetting Filters...");
     self.filtersWereSet = NO;
     [self.vibesCell resetVibes];
@@ -383,7 +383,7 @@
 
 - (void)refreshFilteredEventsDelegateMethod:(nonnull NSArray *)filteredEvents {
     if (filteredEvents.count == 0){
-        [self resetFiltersButtonWasPressed];
+        [self.applyFiltersCell applyFiltersButtonPressed:NO];
         [self presentAlert:@"No events found with these filters" withMessage:@"Try changing your search criteria"];
     }
     else{

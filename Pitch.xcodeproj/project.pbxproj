@@ -27,6 +27,7 @@
 		780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 780DB2EB22EA24D800B78516 /* EventDetailsViewController.m */; };
 		780DB2F022EA6A8200B78516 /* EventDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */; };
 		781873F822FB811000658734 /* EventAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873F722FB811000658734 /* EventAnnotation.m */; };
+		781873FB22FCD20D00658734 /* CustomFilterButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 781873FA22FCD20D00658734 /* CustomFilterButton.m */; };
 		781A941622ECB184002966B5 /* UserInSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 781A941522ECB184002966B5 /* UserInSession.m */; };
 		7872897D22F90175002CADE8 /* EventGalleryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7872897C22F90175002CADE8 /* EventGalleryCell.m */; };
 		78FC04B522E17C640049E0BD /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78FC04B422E17C640049E0BD /* User.m */; };
@@ -137,6 +138,8 @@
 		780DB2EF22EA6A8200B78516 /* EventDetails.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = EventDetails.storyboard; sourceTree = "<group>"; };
 		781873F622FB811000658734 /* EventAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventAnnotation.h; sourceTree = "<group>"; };
 		781873F722FB811000658734 /* EventAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventAnnotation.m; sourceTree = "<group>"; };
+		781873F922FCD20D00658734 /* CustomFilterButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomFilterButton.h; sourceTree = "<group>"; };
+		781873FA22FCD20D00658734 /* CustomFilterButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomFilterButton.m; sourceTree = "<group>"; };
 		781A941422ECB184002966B5 /* UserInSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInSession.h; sourceTree = "<group>"; };
 		781A941522ECB184002966B5 /* UserInSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInSession.m; sourceTree = "<group>"; };
 		7872897B22F90175002CADE8 /* EventGalleryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGalleryCell.h; sourceTree = "<group>"; };
@@ -430,6 +433,8 @@
 				C138EDE822DFAD9F00AAA0D0 /* Info.plist */,
 				06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */,
 				C138EDE922DFAD9F00AAA0D0 /* main.m */,
+				781873F922FCD20D00658734 /* CustomFilterButton.h */,
+				781873FA22FCD20D00658734 /* CustomFilterButton.m */,
 			);
 			path = Pitch;
 			sourceTree = "<group>";
@@ -814,6 +819,7 @@
 				C138EDEA22DFAD9F00AAA0D0 /* main.m in Sources */,
 				78FC04B822E17C700049E0BD /* Event.m in Sources */,
 				780DB2ED22EA24D800B78516 /* EventDetailsViewController.m in Sources */,
+				781873FB22FCD20D00658734 /* CustomFilterButton.m in Sources */,
 				7872897D22F90175002CADE8 /* EventGalleryCell.m in Sources */,
 				780DB2DC22E6D02200B78516 /* DataHandling.m in Sources */,
 				06A909B422E2300E00CD2969 /* Poll.m in Sources */,

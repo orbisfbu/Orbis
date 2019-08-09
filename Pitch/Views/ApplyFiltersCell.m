@@ -24,20 +24,28 @@
     [self.applyFiltersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.applyFiltersButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
     [self.applyFiltersButton.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
+    [self.applyFiltersButton addTarget:self action:@selector(buttonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
     self.applyFiltersButton.layer.cornerRadius = 5;
+}
+
+- (void) buttonTouchUpInside:(id)sender {
+    CustomFilterButton *buttonClicked = (CustomFilterButton *)sender;
+    [self applyFiltersButtonPressed:buttonClicked.resultsWereFound];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 }
 
-- (IBAction)applyfiltersButtonPressed:(id)sender {
+- (void)applyFiltersButtonPressed:(BOOL)eventsWereFound {
     if ([self.applyFiltersButton.titleLabel.text isEqualToString:@"Apply Filters"]) {
         [self.applyFiltersButton setTitle:@"Reset Filters" forState:UIControlStateNormal];
-        [self.delegate applyFiltersButtonWasPressed];
+        [self.delegate applyFiltersButtonDelegate];
     } else {
         [self.applyFiltersButton setTitle:@"Apply Filters" forState:UIControlStateNormal];
-        [self.delegate resetFiltersButtonWasPressed];
+        if (eventsWereFound){
+            [self.delegate resetFiltersButtonDelegate];
+        }
     }
 }
 

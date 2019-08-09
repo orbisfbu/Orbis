@@ -8,17 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "Filters.h"
+#import "CustomFilterButton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ApplyFiltersDelegate
-- (void) applyFiltersButtonWasPressed;
-- (void) resetFiltersButtonWasPressed;
+- (void) applyFiltersButtonDelegate;
+- (void) resetFiltersButtonDelegate;
 @end
 
 
 @interface ApplyFiltersCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIButton *applyFiltersButton;
+@property (weak, nonatomic) CustomFilterButton *applyFiltersButton;
+- (void)applyFiltersButtonPressed:(BOOL)eventsWereFound;
 @property (nonatomic, weak) id<ApplyFiltersDelegate> delegate;
 @end
 

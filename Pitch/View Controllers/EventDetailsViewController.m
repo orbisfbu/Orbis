@@ -45,9 +45,9 @@
     self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
     self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
     [super viewDidLoad];
-    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
+    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal)];
     [self.clickableMapViewOutlet addGestureRecognizer:tapMap];
-    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
+    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [self.eventNameViewOutlet addGestureRecognizer: downGestureRecognizer];
     self.eventNameLabel.text = self.event.eventName;
@@ -163,7 +163,7 @@
     [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
 }
 
-- (void)dismissTabBarModal:(UISwipeGestureRecognizer *)recognizer {
+- (void)dismissTabBarModal{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
