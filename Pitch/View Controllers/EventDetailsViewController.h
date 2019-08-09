@@ -32,8 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UIButton *registerButton;
 @property (nonatomic) BOOL registrationStatusForEvent;
 @property (strong, nonatomic) Event *event;
-@property (nonatomic) int eventAgeRestrictionInt;
-@property (nonatomic) int eventAttendancCountInt;
 
 @end
 

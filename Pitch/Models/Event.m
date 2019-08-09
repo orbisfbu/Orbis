@@ -25,9 +25,9 @@
         self.eventImageURLString = snapshotDictionary[@"ImageURL"];
         self.eventDescription = snapshotDictionary[@"Description"];
         self.eventLocationString = snapshotDictionary[@"Location"];
-        self.eventVibesArray = [NSMutableArray arrayWithArray:snapshotDictionary[@"Vibes"]];
-        self.eventAgeRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
-        self.eventAttendanceCount = [snapshotDictionary[@"Attendance"] intValue];
+        self.vibesArray = [NSMutableArray arrayWithArray:snapshotDictionary[@"Vibes"]];
+        self.ageRestriction = [snapshotDictionary[@"Age Restriction"] intValue];
+        self.attendanceCount = [snapshotDictionary[@"Attendance"] intValue];
         self.registeredUsersArray = snapshotDictionary[@"Registered Users"];
         self.mediaArray = snapshotDictionary[@"Media"];
         self.numAdditionalMediaFiles = [snapshotDictionary[@"Number of Additional Media Files"] doubleValue];

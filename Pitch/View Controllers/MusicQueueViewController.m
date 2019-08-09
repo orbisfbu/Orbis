@@ -30,9 +30,9 @@
     [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     self.swipeIndicatorView.layer.cornerRadius = self.swipeIndicatorView.frame.size.height/2;
     [self.swipeIndicatorView setBackgroundColor:[UIColor lightGrayColor]];
-    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
+    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissViewController:)];
     [self.clickableMapView addGestureRecognizer:tapMap];
-    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal:)];
+    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissViewController:)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [self.titleView addGestureRecognizer: downGestureRecognizer];
     

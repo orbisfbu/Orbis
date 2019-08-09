@@ -24,11 +24,11 @@
     [self.eventNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
     [self configureBaseViewsAndImage];
     [self createRegisterButton];
-    if (self.event.eventVibesArray.count != 0){
+    if (self.event.vibesArray.count != 0){
         [self createVibesLabelAndVibesCollection];
     }
     [self createDistanceLabel];
-    [self createdAttendanceCountLabel];
+    [self createAttendanceCountLabel];
     [self createAgeRestrictionLabel];
 }
 
@@ -45,9 +45,9 @@
     self.roundedCornersViewOutlet.backgroundColor = UIColorFromRGB(0x21ce99);
     self.scrollViewOutlet.contentInsetAdjustmentBehavior = 2;
     [super viewDidLoad];
-    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal)];
+    UITapGestureRecognizer *tapMap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissViewController)];
     [self.clickableMapViewOutlet addGestureRecognizer:tapMap];
-    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTabBarModal)];
+    UISwipeGestureRecognizer *downGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(dismissViewController)];
     [downGestureRecognizer setDirection:(UISwipeGestureRecognizerDirectionDown)];
     [self.eventNameViewOutlet addGestureRecognizer: downGestureRecognizer];
     self.eventNameLabel.text = self.event.eventName;
@@ -73,8 +73,7 @@
     [self.roundedCornersViewOutlet addSubview:self.registerButton];
 }
 
--(void)createVibesLabelAndVibesCollection
-{
+-(void)createVibesLabelAndVibesCollection {
     self.vibesLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.registerButton.frame.size.width/5, self.registerButton.frame.origin.y + self.registerButton.frame.size.height + 20, 40,20)];
     [self.vibesLabel setText:@"Vibes/Themes:"];
     [self.vibesLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
@@ -95,15 +94,14 @@
     [self.roundedCornersViewOutlet addSubview:self.vibesCollectionView];
 }
 
--(void)createDistanceLabel
-{
+-(void)createDistanceLabel {
     NSArray *locationComponents = [self.event.eventLocationString componentsSeparatedByString:@" "];
     NSNumber  *latitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:0] floatValue]];
     NSNumber  *longitudeNum = [NSNumber numberWithFloat: [[locationComponents objectAtIndex:1] floatValue]];
     CLLocationCoordinate2D thisEventCoordinate = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
     CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
     CLLocationDistance distanceInKilometers = [thisEventLocation distanceFromLocation:[DataHandling shared].userLocation]/1000;
-    if (self.event.eventVibesArray.count != 0){
+    if (self.event.vibesArray.count != 0){
         self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.vibesLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y+self.vibesCollectionView.frame.size.height + 20, 100, 20)];
     }
     else{
@@ -116,24 +114,21 @@
     [self.roundedCornersViewOutlet addSubview:self.distanceFromUserLabel];
 }
 
--(void)createdAttendanceCountLabel
-{
+- (void)createAttendanceCountLabel {
     self.attendanceCountLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.distanceFromUserLabel.frame.origin.x, self.distanceFromUserLabel.frame.origin.y+self.distanceFromUserLabel.frame.size.height + 20, 100, 50)];
-    [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.event.eventAttendanceCount]];
+    [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.event.attendanceCount]];
     [self.attendanceCountLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.attendanceCountLabel sizeToFit];
     [self.attendanceCountLabel setRestorationIdentifier:@"attendanceCountLabel"];
     [self.roundedCornersViewOutlet addSubview:self.attendanceCountLabel];
 }
 
--(void)createAgeRestrictionLabel
-{
+- (void)createAgeRestrictionLabel {
     self.ageRestrictionLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.attendanceCountLabel.frame.origin.x, self.attendanceCountLabel.frame.origin.y+self.attendanceCountLabel.frame.size.height + 20, 100, 20)];
     NSString *textToShow;
-    if (self.event.eventAgeRestriction != 0){
-        textToShow = [NSString stringWithFormat:@"Age Restriction: %d", self.event.eventAgeRestriction];
-    }
-    else{
+    if (self.event.ageRestriction != 0){
+        textToShow = [NSString stringWithFormat:@"Age Restriction: %d", self.event.ageRestriction];
+    } else {
         textToShow = @"Age Restriction: None";
     }
     [self.ageRestrictionLabel setText:textToShow];
@@ -144,50 +139,47 @@
     [self.ageRestrictionLabel.bottomAnchor constraintEqualToAnchor:self.roundedCornersViewOutlet.bottomAnchor constant:-10.0].active = YES;
 }
 
-
-- (void)registerButtonPressed {
+- (void) registerButtonPressed {
     if ([self.registerButton.titleLabel.text isEqualToString:@"Register"]){
         [self.registerButton setSelected:YES];
         [self.registerButton setTitle:@"Registered" forState:UIControlStateNormal];
-        self.eventAttendancCountInt += 1;
+        self.event.attendanceCount += 1;
         [[DataHandling shared] registerUserToEvent:self.event];
         [self.registerButton setBackgroundColor:[UIColor lightGrayColor]];
         NSLog(@"Registered user; now in registered users array");
     } else {
         [self.registerButton setTitle:@"Register" forState:UIControlStateNormal];
-        self.eventAttendancCountInt -= 1;
+        self.event.attendanceCount -= 1;
         [[DataHandling shared] unregisterUser:self.event];
         [self.registerButton setBackgroundColor: UIColorFromRGB(0xf5f5f5)];
         NSLog(@"Unregistered user; now not in registered users array");
     }
-    [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.eventAttendancCountInt]];
+    CGSize size = [[NSString stringWithFormat:@"Attendance: %d", self.event.attendanceCount] sizeWithAttributes:@{NSFontAttributeName:[UIFont fontWithName:@"GothamRounded-Bold" size:20]}];
+    [self.attendanceCountLabel setFrame:CGRectMake(self.attendanceCountLabel.frame.origin.x, self.attendanceCountLabel.frame.origin.y, size.width, self.attendanceCountLabel.frame.size.height)];
+    [self.attendanceCountLabel setText:[NSString stringWithFormat:@"Attendance: %d", self.event.attendanceCount]];
 }
 
-- (void)dismissTabBarModal{
+- (void) dismissViewController {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
-    [cell setLabelText:self.event.eventVibesArray[indexPath.item]];
+    [cell setLabelText:self.event.vibesArray[indexPath.item]];
     return cell;
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.event.eventVibesArray.count;
+    return self.event.vibesArray.count;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
-    [cell setLabelText:self.event.eventVibesArray[indexPath.row]];
+    [cell setLabelText:self.event.vibesArray[indexPath.row]];
     [cell setNeedsLayout];
     [cell layoutIfNeeded];
     CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return CGSizeMake(size.width, 30);
-}
-
-- (void)checkForUserRegistrationDelegateMethod:(BOOL)registerValue {
-    self.registrationStatusForEvent = registerValue;
 }
 
 @end

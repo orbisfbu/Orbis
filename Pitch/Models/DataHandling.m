@@ -347,13 +347,13 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }
     NSDictionary *eventInfo = @{
                                 EVENT_CREATOR_KEY: [UserInSession shared].sharedUser.nameString,
-                                EVENT_ATTENDANCE_KEY: @(event.eventAttendanceCount),
+                                EVENT_ATTENDANCE_KEY: @(event.attendanceCount),
                                 EVENT_IMAGE_URL_KEY: event.eventImageURLString,
-                                EVENT_AGE_RESTRICTION_KEY: @(event.eventAgeRestriction),
+                                EVENT_AGE_RESTRICTION_KEY: @(event.ageRestriction),
                                 EVENT_LOCATION_KEY: event.eventLocationString,
                                 EVENT_DESCRIPTION_KEY: event.eventDescription,
                                 EVENT_NAME_KEY: event.eventName,
-                                EVENT_VIBES_KEY: event.eventVibesArray,
+                                EVENT_VIBES_KEY: event.vibesArray,
                                 EVENT_REGISTERED_USERS_KEY: event.registeredUsersArray,
                                 MUSIC_QUEUE_KEY: songQueue,
                                 EVENT_START_DATE_KEY: event.startDateString,
@@ -429,8 +429,11 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
             NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:snapshot.data];
             [eventDict setValue:snapshot.documentID forKey:@"ID"];
             NSMutableArray *songsArray = [[NSMutableArray alloc] init];
-            for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
-                [songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][songIndex]]];
+            //for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
+            for (int i = 0; i < ((NSDictionary *)snapshot.data[@"Music Queue"]).count; i++) {
+                //[songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][songIndex]]];
+                [songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][[NSString stringWithFormat:@"%i", i]]]];
+                //[songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][NSString stringWithFormat:@"%i", i]]];
             }
             [eventDict setValue:songsArray forKey:@"Music Queue"];
             completion([[Event alloc] initWithDictionary:eventDict]);

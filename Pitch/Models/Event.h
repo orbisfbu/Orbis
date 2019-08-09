@@ -23,11 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *eventImageURLString;
 @property (nonatomic) NSString *eventDescription;
 @property (nonatomic, strong) NSString *eventLocationString;
-@property (nonatomic, strong) NSMutableArray *eventVibesArray;
+@property (nonatomic, strong) NSMutableArray *vibesArray;
 @property (nonatomic) CLLocationCoordinate2D eventCoordinates;
 @property (nonatomic, strong) NSMutableArray <NSString *> *registeredUsersArray;
-@property (nonatomic) int eventAttendanceCount;
-@property (nonatomic) int eventAgeRestriction;
+@property (nonatomic) int attendanceCount;
+@property (nonatomic) int ageRestriction;
 @property (strong, nonatomic) NSMutableArray <Song *> *musicQueue;
 @property (strong, nonatomic) NSMutableArray <UIImage *> *mediaArray;
 @property double numAdditionalMediaFiles;
