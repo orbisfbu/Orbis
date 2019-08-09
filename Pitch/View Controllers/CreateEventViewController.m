@@ -133,9 +133,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 @property (strong, nonatomic) NSMutableArray *songsArray;
 @property (strong, nonatomic) NSMutableArray *queuedUpSongsArray;
 
-// Anchors
-
-
 @end
 
 @implementation CreateEventViewController
@@ -156,6 +153,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [self.view addGestureRecognizer:self.tap];
     self.vibesArray = [[Vibes sharedVibes] getVibesArray];
     [self createPageObjects];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    self.eventStartDateString = [dateFormatter stringFromDate:self.datePicker.date];
+    
     [self displayInitialPage];
 }
 
@@ -356,6 +359,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT) collectionViewLayout:layout];
     self.vibesCollectionView.layer.cornerRadius = 5;
+    [self.vibesCollectionView setRestorationIdentifier:@"vibesCollectionView"];
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     self.vibesCollectionView.delegate = self;
     self.vibesCollectionView.dataSource = self;
@@ -501,6 +505,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicQueueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT) collectionViewLayout:musicCVLayout];
     [self.musicQueueCollectionView setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
     self.musicQueueCollectionView.layer.cornerRadius = 5;
+    [self.musicQueueCollectionView setRestorationIdentifier:@"musicCollectionView"];
     [self.musicQueueCollectionView registerNib:[UINib nibWithNibName:@"MusicQueueCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MusicQueueCollectionViewCell"];
     self.musicQueueCollectionView.delegate = self;
     self.musicQueueCollectionView.dataSource = self;
@@ -787,11 +792,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     
     self.coverImageLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, LABEL_HEIGHT);
     
-    self.coverImageView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, 0.6 * ([[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET), 0.6 * 8 * LABEL_HEIGHT);
+    [self.coverImageView setImage:[UIImage imageNamed:@"plus"]];
+    self.coverImageView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.coverImageView.frame.size.height);
     
-    self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3 * LABEL_HEIGHT);
+    self.additionalMediaLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.additionalMediaLabel.frame.size.height);
     
-    self.additionalMediaCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 3*LABEL_HEIGHT);
+    self.additionalMediaCollectionView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.additionalMediaCollectionView.frame.size.height);
     
     self.musicPageDescriptionLabel.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2 * X_OFFSET, LABEL_HEIGHT);
     
@@ -808,6 +814,13 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicResultsTableView.frame = CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, self.view.frame.size.height/2.1);
     
     self.musicQueueCollectionView.frame = CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT);
+    
+    self.vibesSet = [[NSMutableSet alloc] init];
+    NSLog(@"HEYAA");
+    [self createAdditionalImagesArray];
+    NSLog(@"HEYAA");
+    [self createSongsArray];
+    NSLog(@"HEYAA");
 }
 
 - (void) nextButtonPressed {
@@ -831,7 +844,6 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [self displayMediaPage];
     } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
         [self dismissMediaPage];
-        NSLog(@"HEYYYYY");
         [self displayMusicPage];
     } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
         [self publishEvent];
@@ -884,6 +896,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 - (void)publishEvent {
     [self.additionalImages removeObjectAtIndex:0]; // Remove the plus image
     [self.additionalImages addObject:self.coverImageView.image]; // Add the main image
+    NSMutableArray *registeredUsers = [[NSMutableArray alloc] init];
+    [registeredUsers addObject:[FIRAuth auth].currentUser.uid];
     NSDictionary *eventDict = @{
         @"Created By": [[[UserInSession shared] sharedUser] nameString],
         @"Event Name": self.eventTitleTextField.text,
@@ -895,7 +909,8 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         @"Vibes": [self.vibesSet allObjects],
         @"Media": self.additionalImages,
         @"Music Queue": self.queuedUpSongsArray,
-        @"Start Date": self.eventStartDateString
+        @"Start Date": self.eventStartDateString,
+        @"Registered Users": @[[FIRAuth auth].currentUser.uid]
     };
     Event *event = [[Event alloc] initWithDictionary:eventDict];
     [[DataHandling shared] addEventToDatabase:event];
@@ -1028,12 +1043,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+    if ([self.pageName isEqualToString:DETAILS_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"vibesCollectionView"]) {
         CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
         [cell setLabelText:self.vibesArray[indexPath.item]];
         [cell setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
         return cell;
-    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && ![collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"musicCollectionView"]) {
         NSLog(@"1. ROW: %lu", indexPath.row);
         NSLog(@"%@", collectionView);
         MusicQueueCollectionViewCell *cell = [self.musicQueueCollectionView dequeueReusableCellWithReuseIdentifier:@"MusicQueueCollectionViewCell" forIndexPath:indexPath];
@@ -1044,7 +1059,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [cell.nameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
         [cell.artistNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:10]];
         return cell;
-    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW]  && [collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
         MediaCollectionViewCell *cell = [self.additionalMediaCollectionView dequeueReusableCellWithReuseIdentifier:@"MediaCollectionViewCell" forIndexPath:indexPath];
         [cell.imageView setImage:self.additionalImages[indexPath.row]];
         cell.layer.cornerRadius = 5;
@@ -1072,17 +1087,17 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
     
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+    if ([self.pageName isEqualToString:DETAILS_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"vibesCollectionView"]) {
         CustomCollectionViewCell *cell = [[NSBundle mainBundle] loadNibNamed:@"CustomCollectionViewCell" owner:self options:nil].firstObject;
         [cell setLabelText:self.vibesArray[indexPath.row]];
         [cell setNeedsLayout];
         [cell layoutIfNeeded];
         CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
         return CGSizeMake(size.width, 30);
-    } else if ([self.pageName isEqualToString:MUSIC_VIEW]) {
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"musicCollectionView"]) {
         return CGSizeMake(90, 120);
-    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
-        return CGSizeMake(self.additionalMediaCollectionView.frame.size.height/2, self.additionalMediaCollectionView.frame.size.height/2);
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
+        return CGSizeMake(2*self.additionalMediaCollectionView.frame.size.height/3, 2*self.additionalMediaCollectionView.frame.size.height/3);
     } else {
         return CGSizeMake(90, 120);
     }

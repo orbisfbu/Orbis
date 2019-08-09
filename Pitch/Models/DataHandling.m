@@ -329,7 +329,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                 EVENT_DESCRIPTION_KEY: event.eventDescription,
                                 EVENT_NAME_KEY: event.eventName,
                                 EVENT_VIBES_KEY: event.eventVibesArray,
-                                EVENT_REGISTERED_USERS_KEY: [NSMutableArray new],
+                                EVENT_REGISTERED_USERS_KEY: event.registeredUsersArray,
                                 MUSIC_QUEUE_KEY: songQueue,
                                 EVENT_START_DATE_KEY: event.startDateString
                                 };
