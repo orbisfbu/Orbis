@@ -359,6 +359,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     [layout setScrollDirection:UICollectionViewScrollDirectionHorizontal];
     self.vibesCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - 2*X_OFFSET, 1.3*LABEL_HEIGHT) collectionViewLayout:layout];
     self.vibesCollectionView.layer.cornerRadius = 5;
+    [self.vibesCollectionView setRestorationIdentifier:@"vibesCollectionView"];
     [self.vibesCollectionView registerNib:[UINib nibWithNibName:@"CustomCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CustomCollectionViewCell"];
     self.vibesCollectionView.delegate = self;
     self.vibesCollectionView.dataSource = self;
@@ -504,6 +505,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
     self.musicQueueCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(X_OFFSET/2, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width - X_OFFSET, 4*LABEL_HEIGHT) collectionViewLayout:musicCVLayout];
     [self.musicQueueCollectionView setBackgroundColor:UIColorFromRGB(BACKGROUND_GREEN)];
     self.musicQueueCollectionView.layer.cornerRadius = 5;
+    [self.musicQueueCollectionView setRestorationIdentifier:@"musicCollectionView"];
     [self.musicQueueCollectionView registerNib:[UINib nibWithNibName:@"MusicQueueCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"MusicQueueCollectionViewCell"];
     self.musicQueueCollectionView.delegate = self;
     self.musicQueueCollectionView.dataSource = self;
@@ -1040,12 +1042,12 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    if ([self.pageName isEqualToString:DETAILS_VIEW]) {
+    if ([self.pageName isEqualToString:DETAILS_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"vibesCollectionView"]) {
         CustomCollectionViewCell *cell = [self.vibesCollectionView dequeueReusableCellWithReuseIdentifier:@"CustomCollectionViewCell" forIndexPath:indexPath];
         [cell setLabelText:self.vibesArray[indexPath.item]];
         [cell setBackgroundColor:UIColorFromRGB(LIGHT_GREEN)];
         return cell;
-    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && ![collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
+    } else if ([self.pageName isEqualToString:MUSIC_VIEW] && [collectionView.restorationIdentifier isEqualToString:@"musicCollectionView"]) {
         NSLog(@"1. ROW: %lu", indexPath.row);
         NSLog(@"%@", collectionView);
         MusicQueueCollectionViewCell *cell = [self.musicQueueCollectionView dequeueReusableCellWithReuseIdentifier:@"MusicQueueCollectionViewCell" forIndexPath:indexPath];
@@ -1056,7 +1058,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
         [cell.nameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:15]];
         [cell.artistNameLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:10]];
         return cell;
-    } else if ([self.pageName isEqualToString:MEDIA_VIEW]) {
+    } else if ([self.pageName isEqualToString:MEDIA_VIEW]  && [collectionView.restorationIdentifier isEqualToString:@"additionalMediaCollectionView"]) {
         MediaCollectionViewCell *cell = [self.additionalMediaCollectionView dequeueReusableCellWithReuseIdentifier:@"MediaCollectionViewCell" forIndexPath:indexPath];
         [cell.imageView setImage:self.additionalImages[indexPath.row]];
         cell.layer.cornerRadius = 5;
