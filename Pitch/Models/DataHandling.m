@@ -220,7 +220,10 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }
 }
 
-- (void) getEventsAttendedByUser {
+- (void) getEventsAttendedByUserWithCompletion: (void (^) (NSMutableArray *attendedEventsByUserArray)) completion{
+    
+    
+    NSMutableArray *finalAttendedEventsArray = [[NSMutableArray alloc] init];
     [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
      getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
          if (error != nil) {
@@ -237,31 +240,53 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                      NSDate *formattedCurrentDate = [dateFormatter dateFromString:currentDateString];
                      NSDate *startDate = [dateFormatter dateFromString:attendedEventToAdd.startDateString];
                      NSComparisonResult comparisonResult = [formattedCurrentDate compare:startDate];
-                     if (comparisonResult == NSOrderedDescending ) { //The current Date is earlier in time than start Date
-                         [[UserInSession shared].eventsAttendedMArray addObject:attendedEventToAdd]; // event will be added to NSMutableArray because event was in the past and user was registered
+                     if (comparisonResult == NSOrderedDescending ) {
+                         [finalAttendedEventsArray addObject:attendedEventToAdd];
                      }
                  }
              }
          }
-         NSLog(@"Number of events attended by (USER PAGE): %lu", [UserInSession shared].eventsAttendedMArray.count);
+         NSLog(@"Number of events attended by (USER PAGE): %lu", finalAttendedEventsArray.count);
+         completion (finalAttendedEventsArray);
+         
      }];
 }
 
-- (void) getEventsCreatedByUser {
-    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
-     getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
-         if (error != nil) {
-             NSLog(@"Error getting events from database: %@", error);
-         } else {
-             for (FIRDocumentSnapshot *document in snapshot.documents) {
-                 if ([document.data[@"Created By"] isEqualToString:[UserInSession shared].sharedUser.nameString]) {
-                     Event *createdEventToAdd = [[Event alloc ]initWithDictionary:document.data];
-                     [[UserInSession shared].eventsCreatedMArray addObject:createdEventToAdd];
+//- (void) getEventsCreatedByUser {
+//    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
+//     getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
+//         if (error != nil) {
+//             NSLog(@"Error getting events from database: %@", error);
+//         } else {
+//             for (FIRDocumentSnapshot *document in snapshot.documents) {
+//                 if ([document.data[@"Created By"] isEqualToString:[UserInSession shared].sharedUser.nameString]) {
+//
+//                     Event *createdEventToAdd = [[Event alloc ]initWithDictionary:document.data];
+//                     [[UserInSession shared].eventsCreatedMArray addObject:createdEventToAdd];
+//                 }
+//             }
+//         }
+//         NSLog(@"Number of events created by (USER): %lu", [UserInSession shared].eventsCreatedMArray.count);
+//     }];
+//}
+
+- (void) getEventsCreatedByUserwithCompletion:(void (^) (NSMutableArray *createdEventsByUserArray))completion {
+        NSMutableArray <Event *> *finalCreatedEventsArray = [[NSMutableArray alloc] init];
+        [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
+         getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
+             if (error != nil) {
+                 NSLog(@"Error getting events from database: %@", error);
+             } else {
+                 for (FIRDocumentSnapshot *document in snapshot.documents) {
+                     if ([document.data[@"Created By"] isEqualToString:[UserInSession shared].sharedUser.nameString]) {
+                         Event *createdEventToAdd = [[Event alloc ]initWithDictionary:document.data];
+                         [finalCreatedEventsArray addObject:createdEventToAdd];
+                     }
                  }
              }
-         }
-         NSLog(@"Number of events created by (USER): %lu", [UserInSession shared].eventsCreatedMArray.count);
-     }];
+             NSLog(@"Number of events created by (USER): %lu", finalCreatedEventsArray.count);
+             completion (finalCreatedEventsArray);
+         }];
 }
 
 - (void)getEventsFromDatabase {

@@ -10,7 +10,9 @@
 #import "UserViewController.h"
 #import "BioCell.h"
 #import "ProfileLinksCell.h"
-#import "EventListCell.h"
+#import "EventsCollectionViewCell.h"
+#import "EventsCreatedTableViewCell.h"
+#import "EventsAttendedTableViewCell.h"
 #import "FirstLastNameCell.h"
 #import "LogInViewController.h"
 #import "LogoutCell.h"
@@ -80,8 +82,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 @implementation UserViewController
 
 - (void)viewDidLoad {
-    [[DataHandling shared] getEventsAttendedByUser];
-    [[DataHandling shared] getEventsCreatedByUser];
+    [super viewDidLoad];
     self.imagePickerVC = [UIImagePickerController new];
     self.imagePickerVC.delegate = self;
     self.imagePickerVC.allowsEditing = YES;
@@ -92,14 +93,23 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         NSLog(@"Camera 🚫 available so we will use photo library instead");
         self.imagePickerVC.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
-    //user currentAccessToken to detect whether a Facebook user
-    //is already logged-in; if so, automatically load the profile
-    //and profile picture when userView is selected
-    [super viewDidLoad];
+    
     [self.backButton setAlpha:0];
     [self.backButton setTransform:CGAffineTransformMakeRotation(M_PI_2)];
     [self createPageObjects];
     [self createUserProfile];
+}
+
+- (void) viewDidAppear:(BOOL)animated {
+    [[DataHandling shared] getEventsCreatedByUserWithCompletion:^(NSMutableArray * _Nonnull createdEventsByUserArray) {
+        [UserInSession shared].createdEventsByUserArray = createdEventsByUserArray;
+        [[DataHandling shared] getEventsAttendedByUserWithCompletion:^(NSMutableArray * _Nonnull attendedEventsByUserArray) {
+            [UserInSession shared].attendedEventsByUserArray = attendedEventsByUserArray;
+            NSLog(@"EVENTS CREATED M ARRAY COUNT: %lu",  [UserInSession shared].createdEventsByUserArray.count);
+            NSLog(@"EVENTS ATTENDED M ARRAY COUNT: %lu", [UserInSession shared].attendedEventsByUserArray.count);
+            NSLog(@"USER: %@", [UserInSession shared].sharedUser.ID);
+        }];
+    }];
 }
 
 - (void) createPageObjects {
@@ -187,13 +197,12 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 2){
-        EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
+        EventsAttendedTableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventsAttendedTableViewCell"];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 3){
-        EventListCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventListCell"];
+        EventsCreatedTableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventsCreatedTableViewCell"];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
-        [cell.title setText:@"Events Created"];
         return cell;
     } else if (row == 4){
         ProfileLinksCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"ProfileLinksCell"];

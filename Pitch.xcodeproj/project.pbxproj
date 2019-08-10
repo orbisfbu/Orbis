@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		02AC025ECB2F25A725644A38 /* Pods_PitchTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E77442B328194BAFFF8027B4 /* Pods_PitchTests.framework */; };
+		063C91BC22FE2A2B0020D104 /* EventsAttendedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 063C91BA22FE2A2B0020D104 /* EventsAttendedTableViewCell.m */; };
+		063C91BD22FE2A2B0020D104 /* EventsAttendedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 063C91BB22FE2A2B0020D104 /* EventsAttendedTableViewCell.xib */; };
 		06A909B122DFDA4000CD2969 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */; };
 		06A909B422E2300E00CD2969 /* Poll.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B322E2300E00CD2969 /* Poll.m */; };
 		06A909B822E6792300CD2969 /* EventTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A909B622E6792300CD2969 /* EventTitleCell.m */; };
@@ -59,8 +61,8 @@
 		C1616DFC22EB6C70004B536B /* BioCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616DFA22EB6C70004B536B /* BioCell.xib */; };
 		C1616E0022EB7322004B536B /* ProfileLinksCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616DFE22EB7322004B536B /* ProfileLinksCell.m */; };
 		C1616E0122EB7322004B536B /* ProfileLinksCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */; };
-		C1616E0522EB920D004B536B /* EventListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0322EB920D004B536B /* EventListCell.m */; };
-		C1616E0622EB920D004B536B /* EventListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0422EB920D004B536B /* EventListCell.xib */; };
+		C1616E0522EB920D004B536B /* EventsCreatedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0322EB920D004B536B /* EventsCreatedTableViewCell.m */; };
+		C1616E0622EB920D004B536B /* EventsCreatedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0422EB920D004B536B /* EventsCreatedTableViewCell.xib */; };
 		C1616E0A22EB931F004B536B /* EventsCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */; };
 		C1616E0B22EB931F004B536B /* EventsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */; };
 		C1616E0F22EB98C8004B536B /* FirstLastNameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C1616E0D22EB98C8004B536B /* FirstLastNameCell.m */; };
@@ -110,6 +112,9 @@
 
 /* Begin PBXFileReference section */
 		02D745D9339DDF102F5764B6 /* Pods_Pitch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pitch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		063C91B922FE2A2B0020D104 /* EventsAttendedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventsAttendedTableViewCell.h; sourceTree = "<group>"; };
+		063C91BA22FE2A2B0020D104 /* EventsAttendedTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventsAttendedTableViewCell.m; sourceTree = "<group>"; };
+		063C91BB22FE2A2B0020D104 /* EventsAttendedTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventsAttendedTableViewCell.xib; sourceTree = "<group>"; };
 		06A909B022DFDA4000CD2969 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06A909B222E2300E00CD2969 /* Poll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poll.h; sourceTree = "<group>"; };
 		06A909B322E2300E00CD2969 /* Poll.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Poll.m; sourceTree = "<group>"; };
@@ -195,9 +200,9 @@
 		C1616DFD22EB7322004B536B /* ProfileLinksCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileLinksCell.h; sourceTree = "<group>"; };
 		C1616DFE22EB7322004B536B /* ProfileLinksCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileLinksCell.m; sourceTree = "<group>"; };
 		C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileLinksCell.xib; sourceTree = "<group>"; };
-		C1616E0222EB920D004B536B /* EventListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventListCell.h; sourceTree = "<group>"; };
-		C1616E0322EB920D004B536B /* EventListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventListCell.m; sourceTree = "<group>"; };
-		C1616E0422EB920D004B536B /* EventListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventListCell.xib; sourceTree = "<group>"; };
+		C1616E0222EB920D004B536B /* EventsCreatedTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventsCreatedTableViewCell.h; sourceTree = "<group>"; };
+		C1616E0322EB920D004B536B /* EventsCreatedTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventsCreatedTableViewCell.m; sourceTree = "<group>"; };
+		C1616E0422EB920D004B536B /* EventsCreatedTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventsCreatedTableViewCell.xib; sourceTree = "<group>"; };
 		C1616E0722EB931F004B536B /* EventsCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventsCollectionViewCell.h; sourceTree = "<group>"; };
 		C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventsCollectionViewCell.m; sourceTree = "<group>"; };
 		C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EventsCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -301,15 +306,18 @@
 				C1616DF822EB6C70004B536B /* BioCell.h */,
 				C1616DF922EB6C70004B536B /* BioCell.m */,
 				C1616DFA22EB6C70004B536B /* BioCell.xib */,
-				C1616E0222EB920D004B536B /* EventListCell.h */,
-				C1616E0322EB920D004B536B /* EventListCell.m */,
-				C1616E0422EB920D004B536B /* EventListCell.xib */,
+				C1616E0222EB920D004B536B /* EventsCreatedTableViewCell.h */,
+				C1616E0322EB920D004B536B /* EventsCreatedTableViewCell.m */,
+				C1616E0422EB920D004B536B /* EventsCreatedTableViewCell.xib */,
 				C1616E0722EB931F004B536B /* EventsCollectionViewCell.h */,
 				C1616E0822EB931F004B536B /* EventsCollectionViewCell.m */,
 				C1616E0922EB931F004B536B /* EventsCollectionViewCell.xib */,
 				C1616DFD22EB7322004B536B /* ProfileLinksCell.h */,
 				C1616DFE22EB7322004B536B /* ProfileLinksCell.m */,
 				C1616DFF22EB7322004B536B /* ProfileLinksCell.xib */,
+				063C91B922FE2A2B0020D104 /* EventsAttendedTableViewCell.h */,
+				063C91BA22FE2A2B0020D104 /* EventsAttendedTableViewCell.m */,
+				063C91BB22FE2A2B0020D104 /* EventsAttendedTableViewCell.xib */,
 			);
 			path = "User Profile Views";
 			sourceTree = "<group>";
@@ -641,7 +649,7 @@
 				C1C3418922F8ABF600A09666 /* GothamRounded-Medium.otf in Resources */,
 				C1C3416E22F0E36500A09666 /* DragCell.xib in Resources */,
 				C1616DFC22EB6C70004B536B /* BioCell.xib in Resources */,
-				C1616E0622EB920D004B536B /* EventListCell.xib in Resources */,
+				C1616E0622EB920D004B536B /* EventsCreatedTableViewCell.xib in Resources */,
 				C1C3419D22FDFF0700A09666 /* EventGalleryCell.xib in Resources */,
 				C1C3418722F8A96200A09666 /* MusicQueueTableViewCell.xib in Resources */,
 				C1616E0122EB7322004B536B /* ProfileLinksCell.xib in Resources */,
@@ -659,6 +667,7 @@
 				06A909CD22E67A3500CD2969 /* CustomPollCell.xib in Resources */,
 				C1C3418B22F8AC4800A09666 /* GothamRounded-Book.otf in Resources */,
 				C1C3419822FB61A700A09666 /* MediaCollectionViewCell.xib in Resources */,
+				063C91BD22FE2A2B0020D104 /* EventsAttendedTableViewCell.xib in Resources */,
 				C138EDE422DFAD9F00AAA0D0 /* Assets.xcassets in Resources */,
 				C14E1A0022E23BF000883CFB /* AgeCell.xib in Resources */,
 				C14E1A0522E2768B00883CFB /* CustomCollectionViewCell.xib in Resources */,
@@ -799,7 +808,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1C3418222F4E60400A09666 /* Song.m in Sources */,
-				C1616E0522EB920D004B536B /* EventListCell.m in Sources */,
+				063C91BC22FE2A2B0020D104 /* EventsAttendedTableViewCell.m in Sources */,
+				C1616E0522EB920D004B536B /* EventsCreatedTableViewCell.m in Sources */,
 				C1C3416622F0C21900A09666 /* LogoutCell.m in Sources */,
 				C1616E4022F0A7D2004B536B /* Filters.m in Sources */,
 				C1C3416D22F0E36500A09666 /* DragCell.m in Sources */,

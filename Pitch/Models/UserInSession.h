@@ -14,8 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UserInSession : NSObject
 @property (strong, nonatomic) User *sharedUser;
-@property (strong, nonatomic) NSMutableArray <Event *> *eventsCreatedMArray;
-@property (strong, nonatomic) NSMutableArray <Event *> *eventsAttendedMArray;
+@property (strong, nonatomic) NSMutableArray <Event *> *createdEventsByUserArray;
+@property (strong, nonatomic) NSMutableArray <Event *> *attendedEventsByUserArray;
 + (instancetype)shared;
 - (void)setCurrentUser: (NSDictionary *)userInfo withUserID:(NSString *)userID;
 @end

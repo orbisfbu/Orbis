@@ -40,8 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DataHandling : NSObject
 + (instancetype)shared;
-- (void) getEventsAttendedByUser;
-- (void) getEventsCreatedByUser;
+- (void) getEventsAttendedByUserWithCompletion: (void (^) (NSMutableArray *attendedEventsByUserArray)) completion;
+- (void) getEventsCreatedByUserWithCompletion:(void (^) (NSMutableArray *createdEventsByUserArray))completion;
 - (void)getEventsFromDatabase;
 - (void)setUserProfileImage:(UIImageView *)profile_imageImageView;
 - (void)updateProfileImage:(UIImage*)imageToUpload withUserID:(NSString *)userID withCompletion:(void (^) (NSString *createdProfileImageURLString))completion;

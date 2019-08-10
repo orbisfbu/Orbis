@@ -1,8 +1,8 @@
 //
-//  EventListCell.h
+//  EventsAttendedTableViewCell.h
 //  Pitch
 //
-//  Created by mariobaxter on 7/26/19.
+//  Created by ezietz on 8/9/19.
 //  Copyright © 2019 PitchFBU. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EventListCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface EventsAttendedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @end
