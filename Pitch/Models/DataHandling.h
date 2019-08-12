@@ -56,8 +56,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<InstantiateSharedUserDelegate> sharedUserDelegate;
 // Mario's methods
 - (void) getEvent:(NSString *)eventID withCompletion:(void (^) (Event *event))completion;
-- (void) user:(NSString *)userID didLikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
-- (void) user:(NSString *)userID didUnlikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID;
+- (void) user:(NSString *)userID didLikeSong:(Song *)song withName:(NSString *)name andNumLikes:(long)numLikes atEvent:(NSString *)eventID;
+- (void) user:(NSString *)userID didUnlikeSong:(Song *)song withName:(NSString *)name andNumLikes:(long)numLikes atEvent:(NSString *)eventID;
 - (void)registerUserToEvent: (Event *)eventName;
 - (void)unregisterUser: (Event *)event;
 - (void) getImageURLFromEvent:(NSString *)eventID atIndex:(int)index withCompletion:(void (^) (UIImage *image))completion;

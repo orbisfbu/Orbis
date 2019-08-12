@@ -40,12 +40,12 @@
         [self.song.userIDsThatHaveLikedSong removeObject:[FIRAuth auth].currentUser.uid];
         [self.likeButton setImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
         [self.numLikesLabel setText:[NSString stringWithFormat:@"%i", [self.numLikesLabel.text intValue] - 1]];
-        [self.dataHandler user:[FIRAuth auth].currentUser.uid didUnlikeSong:self.song atIndex:self.index atEvent:self.eventID];
+        [self.dataHandler user:[FIRAuth auth].currentUser.uid didUnlikeSong:self.song withName:self.song.title andNumLikes:self.song.numLikes atEvent:self.eventID];
     } else {
         [self.song.userIDsThatHaveLikedSong addObject:[FIRAuth auth].currentUser.uid];
         [self.likeButton setImage:[UIImage imageNamed:@"red_heart"] forState:UIControlStateNormal];
         [self.numLikesLabel setText:[NSString stringWithFormat:@"%i", [self.numLikesLabel.text intValue] + 1]];
-        [self.dataHandler user:[FIRAuth auth].currentUser.uid didLikeSong:self.song atIndex:self.index atEvent:self.eventID];
+        [self.dataHandler user:[FIRAuth auth].currentUser.uid didLikeSong:self.song withName:self.song.title andNumLikes:self.song.numLikes atEvent:self.eventID];
     }
 }
 

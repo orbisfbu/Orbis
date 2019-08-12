@@ -18,13 +18,13 @@
 @implementation MusicQueueViewController
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     [self configureInitialViewsAndGestures];
     NSLog(@"MUSIC QUEUE: %@", self.event.musicQueue);
     self.musicQueue = self.event.musicQueue;
 }
 
 - (void)configureInitialViewsAndGestures {
-    [super viewDidLoad];
     self.titleView.layer.cornerRadius = 30;
     self.titleView.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
     [self.titleLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:25]];
@@ -61,7 +61,6 @@
     } else if (!self.isRegistered) {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
         cell.eventID = self.event.ID;
-        cell.index = indexPath.row - 1;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         cell.song = self.event.musicQueue[indexPath.row - 1];
         [cell awakeFromNib];
@@ -69,7 +68,6 @@
     } else {
         MusicQueueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"MusicQueueTableViewCell"];
         cell.eventID = self.event.ID;
-        cell.index = indexPath.row;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         cell.song = self.event.musicQueue[indexPath.row];
         [cell awakeFromNib];

@@ -429,10 +429,37 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
             NSMutableDictionary *eventDict = [[NSMutableDictionary alloc] initWithDictionary:snapshot.data];
             [eventDict setValue:snapshot.documentID forKey:@"ID"];
             NSMutableArray *songsArray = [[NSMutableArray alloc] init];
-            //for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
-            for (int i = 0; i < ((NSDictionary *)snapshot.data[@"Music Queue"]).count; i++) {
+            for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
+            //for (int i = 0; i < ((NSDictionary *)snapshot.data[@"Music Queue"]).count; i++) {
                 //[songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][songIndex]]];
-                [songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][[NSString stringWithFormat:@"%i", i]]]];
+                
+                
+//                Song *songToAdd = [[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][songIndex]];
+//                NSUInteger insPoint = [songsArray indexOfObject:songToAdd inSortedRange:NSMakeRange(0, songsArray.count)
+//                                       options:NSBinarySearchingInsertionIndex usingComparator:^NSComparisonResult(_Nonnull id lhs, _Nonnull id rhs) {
+//                                           return ((Song *)lhs).numLikes < ((Song *)rhs).numLikes;
+//                                       }
+//                                ];
+//
+//                [songsArray insertObject:songToAdd atIndex:insPoint];
+                
+                Song *songToAdd = [[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][songIndex]];
+                if ([songIndex isEqualToString:@"0"]) {
+                    [songsArray addObject:songToAdd];
+                } else {
+                    int i = 0;
+                    for (Song *song in songsArray) {
+                        if (song.numLikes <= songToAdd.numLikes) {
+                            [songsArray insertObject:songToAdd atIndex:i];
+                            break;
+                        } else if (i == songsArray.count - 1) {
+                            [songsArray addObject:songToAdd];
+                        }
+                        i++;
+                    }
+                }
+                
+                //[songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][[NSString stringWithFormat:@"%i", i]]]];
                 //[songsArray addObject:[[Song alloc] initWithDictionary:snapshot.data[@"Music Queue"][NSString stringWithFormat:@"%i", i]]];
             }
             [eventDict setValue:songsArray forKey:@"Music Queue"];
@@ -473,45 +500,73 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     }];
 }
 
-- (void) user:(NSString *)userID didLikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID {
+//- (void) user:(NSString *)userID didLikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID {
+//    __block FIRDocumentReference *eventRef;
+//    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+//    eventRef = [eventsRef documentWithPath:eventID];
+//    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+//        if (error != nil) {
+//            NSLog(@"Error getting the event");
+//        } else {
+//            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:+1],
+//                                   [NSString stringWithFormat:@"Music Queue.%li.userIDs", index]:[FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]}];
+//        }
+//    }];
+//}
+
+- (void) user:(NSString *)userID didUnlikeSong:(Song *)song withName:(NSString *)name andNumLikes:(long)numLikes atEvent:(NSString *)eventID {
+    
     __block FIRDocumentReference *eventRef;
     FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
     eventRef = [eventsRef documentWithPath:eventID];
-    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+    [[eventsRef documentWithPath:eventID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil) {
-            NSLog(@"Error getting the event");
+            NSLog(@"Error getting events from database: %@", error);
         } else {
-            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:+1],
-                                   [NSString stringWithFormat:@"Music Queue.%li.userIDs", index]:[FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]}];
+            for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
+                if ([snapshot.data[@"Music Queue"][songIndex][@"Title"] isEqualToString:name] && [[NSString stringWithFormat:@"%@", snapshot.data[@"Music Queue"][songIndex][@"numLikes"]] isEqualToString:[NSString stringWithFormat:@"%li", numLikes]]) {
+                    [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%@.numLikes", songIndex]:[FIRFieldValue fieldValueForIntegerIncrement:-1], [NSString stringWithFormat:@"Music Queue.%@.userIDs", songIndex]:[FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]}];
+                }
+            }
         }
     }];
+    
+//    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+//        if (error != nil) {
+//            NSLog(@"Error getting the event");
+//        } else {
+//
+//        }
+//    }];
 }
 
-- (void) user:(NSString *)userID didUnlikeSong:(Song *)song atIndex:(NSInteger)index atEvent:(NSString *)eventID {
+- (void) user:(NSString *)userID didLikeSong:(Song *)song withName:(NSString *)name andNumLikes:(long)numLikes atEvent:(NSString *)eventID {
+    
     __block FIRDocumentReference *eventRef;
     FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
     eventRef = [eventsRef documentWithPath:eventID];
-    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+    [[eventsRef documentWithPath:eventID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (error != nil) {
-            NSLog(@"Error getting the event");
+            NSLog(@"Error getting events from database: %@", error);
         } else {
-            [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%li.numLikes", index]:[FIRFieldValue fieldValueForIntegerIncrement:-1],
-                                   [NSString stringWithFormat:@"Music Queue.%li.userIDs", index]:[FIRFieldValue fieldValueForArrayRemove:@[[FIRAuth auth].currentUser.uid]]}];
+            for (NSString *songIndex in snapshot.data[@"Music Queue"]) {
+                if ([snapshot.data[@"Music Queue"][songIndex][@"Title"] isEqualToString:name] && [[NSString stringWithFormat:@"%@", snapshot.data[@"Music Queue"][songIndex][@"numLikes"]] isEqualToString:[NSString stringWithFormat:@"%li", numLikes]]) {
+                    [eventRef updateData:@{[NSString stringWithFormat:@"Music Queue.%@.numLikes", songIndex]:[FIRFieldValue fieldValueForIntegerIncrement:1], [NSString stringWithFormat:@"Music Queue.%@.userIDs", songIndex]:[FIRFieldValue fieldValueForArrayUnion:@[[FIRAuth auth].currentUser.uid]]}];
+                }
+            }
         }
     }];
-}
-
-- (void) getNumberOfAdditionalMediaFilesFromEvent:(NSString *)eventID withCompletion:(void (^) (int count))completion {
-    __block FIRDocumentReference *eventRef;
-    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
-    eventRef = [eventsRef documentWithPath:eventID];
-    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
-        if (error != nil) {
-            NSLog(@"Error getting the event");
-        } else {
-            completion([snapshot.data[@"Number of Additional Media Files"] intValue]);
-        }
-    }];
+    
+//    __block FIRDocumentReference *eventRef;
+//    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+//    eventRef = [eventsRef documentWithPath:eventID];
+//    [eventRef getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+//        if (error != nil) {
+//            NSLog(@"Error getting the event");
+//        } else {
+//            completion([snapshot.data[@"Number of Additional Media Files"] intValue]);
+//        }
+//    }];
 }
 
 - (void) getImageURLFromEvent:(NSString *)eventID atIndex:(int)index withCompletion:(void (^) (UIImage *imageURL))completion {
