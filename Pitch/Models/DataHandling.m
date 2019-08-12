@@ -453,7 +453,8 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                             [songsArray insertObject:songToAdd atIndex:i];
                             break;
                         } else if (i == songsArray.count - 1) {
-                            [songsArray addObject:songToAdd];
+                            [songsArray addObject:songToAdd
+                             ];
                         }
                         i++;
                     }
@@ -579,6 +580,19 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
             NSLog(@"SUCCESS DOWNLOADING IMAGE FROM STORAGE");
             UIImage *image = [UIImage imageWithData:data];
             completion(image);
+        }
+    }];
+}
+
+- (void) getNumberOfAdditionalMediaFilesFromEvent:(NSString *)eventID withCompletion:(void (^) (int count))completion {
+    __block FIRDocumentReference *eventRef;
+    FIRCollectionReference *eventsRef = [self.database collectionWithPath:@"events"];
+    eventRef = [eventsRef documentWithPath:eventID];
+    [[eventsRef documentWithPath:eventID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Error getting events from database: %@", error);
+        } else {
+            completion([snapshot.data[@"Number of Additional Media Files"] intValue]);
         }
     }];
 }
