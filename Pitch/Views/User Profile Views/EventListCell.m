@@ -26,8 +26,8 @@
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    long row = indexPath.item%3 + 1;
-    NSString *imageName = [NSString stringWithFormat:@"example_event_%lu", row];
+    long row = indexPath.item%3+1;
+    NSString *imageName = [NSString stringWithFormat:@"random%lu", row];
     EventsCollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:@"EventsCollectionViewCell" forIndexPath:indexPath];
     [cell.eventImage setImage:[UIImage imageNamed:imageName]];
     cell.layer.cornerRadius = 10;
@@ -35,7 +35,7 @@
 }
 
 - (NSInteger)collectionView:(nonnull UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    return 4;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="100" height="200"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ngm-N8-hw8">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ngm-N8-hw8">
                         <rect key="frame" x="0.0" y="0.0" width="100" height="200"/>
                         <color key="backgroundColor" red="0.38259750599999998" green="0.79456412789999997" blue="0.61566519740000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <color key="tintColor" red="0.38259750599999998" green="0.79456412789999997" blue="0.61566519740000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
