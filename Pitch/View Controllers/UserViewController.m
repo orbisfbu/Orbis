@@ -31,6 +31,7 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
 @interface UserViewController () <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, LogoutUserDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property (strong, nonatomic) UIImagePickerController *imagePickerVC;
+@property (strong, nonatomic) UIImageView *currentPickerTarget;
 //inputted properties to be used and checked during
 //the welcoming process; will have to check whether or not
 //initially inputted email and password correspond to existing account
@@ -101,15 +102,6 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    [[DataHandling shared] getEventsCreatedByUserWithCompletion:^(NSMutableArray * _Nonnull createdEventsByUserArray) {
-        [UserInSession shared].createdEventsByUserArray = createdEventsByUserArray;
-        [[DataHandling shared] getEventsAttendedByUserWithCompletion:^(NSMutableArray * _Nonnull attendedEventsByUserArray) {
-            [UserInSession shared].attendedEventsByUserArray = attendedEventsByUserArray;
-            NSLog(@"EVENTS CREATED M ARRAY COUNT: %lu",  [UserInSession shared].createdEventsByUserArray.count);
-            NSLog(@"EVENTS ATTENDED M ARRAY COUNT: %lu", [UserInSession shared].attendedEventsByUserArray.count);
-            NSLog(@"USER: %@", [UserInSession shared].sharedUser.ID);
-        }];
-    }];
 }
 
 - (void) createPageObjects {
@@ -117,12 +109,18 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     self.userBackgroundImageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, 200)];
     [self.view addSubview:self.userBackgroundImageView];
     [self.userBackgroundImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    self.userBackgroundImageView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *backgroundImageTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundImageWasClicked:)];
+    backgroundImageTapRecognizer.numberOfTapsRequired = 2;
+    [self.userBackgroundImageView addGestureRecognizer:backgroundImageTapRecognizer];
+    [[DataHandling shared] setBackgroundImage:self.userBackgroundImageView];
     [[self.userBackgroundImageView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor] setActive:YES];
     [[self.userBackgroundImageView.rightAnchor constraintEqualToAnchor:self.view.rightAnchor] setActive:YES];
     [[self.userBackgroundImageView.topAnchor constraintEqualToAnchor:self.view.topAnchor] setActive:YES];
     [[self.userBackgroundImageView.heightAnchor constraintEqualToConstant:200] setActive:YES];
-    [self.userBackgroundImageView setImage:[UIImage imageNamed:@"background_user_default"]];
-    [self.userBackgroundImageView setBackgroundColor:[UIColor blueColor]];
+    //change line below so that it uses the background image setter method
+    [self.userBackgroundImageView setImage:[UIImage imageNamed:@"default_background"]];
+    [self.userBackgroundImageView setBackgroundColor:[UIColor clearColor]];
     
     // Add profile scroll view
     self.userProfileTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.userBackgroundImageView.frame.size.height) style:UITableViewStylePlain];
@@ -137,6 +135,8 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventListCell" bundle:nil] forCellReuseIdentifier:@"EventListCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"FirstLastNameCell" bundle:nil] forCellReuseIdentifier:@"FirstLastNameCell"];
     [self.userProfileTableView registerNib:[UINib nibWithNibName:@"LogoutCell" bundle:nil] forCellReuseIdentifier:@"LogoutCell"];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventsAttendedTableViewCell" bundle:nil] forCellReuseIdentifier:@"EventsAttendedTableViewCellIdentifier"];
+    [self.userProfileTableView registerNib:[UINib nibWithNibName:@"EventsCreatedTableViewCell" bundle:nil] forCellReuseIdentifier:@"EventsCreatedTableViewCellIdentifier"];
     //self.userProfileTableView.estimatedRowHeight = 150; // added
     //self.userProfileTableView.rowHeight = UITableViewAutomaticDimension; // added
     self.userProfileTableView.delegate = self;
@@ -150,10 +150,8 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
     profileImageTapRecognizer.numberOfTapsRequired = 2;
     self.userProfileImageView.layer.cornerRadius = self.userProfileImageView.frame.size.width/2;
     [self.userProfileImageView addGestureRecognizer:profileImageTapRecognizer];
-    //add dataHandling method here "setUserProfileImage" to load the profile image from the database
     [[DataHandling shared] setUserProfileImage:self.userProfileImageView];
-    //[self.userProfileImageView setImage:];
-    [self.userProfileImageView setBackgroundColor:[UIColor redColor]];
+    [self.userProfileImageView setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:self.userProfileImageView];
     
     // Add username label
@@ -197,11 +195,11 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 2){
-        EventsAttendedTableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventsAttendedTableViewCell"];
+        EventsAttendedTableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventsAttendedTableViewCellIdentifier"];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 3){
-        EventsCreatedTableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventsCreatedTableViewCell"];
+        EventsCreatedTableViewCell *cell = [self.userProfileTableView dequeueReusableCellWithIdentifier:@"EventsCreatedTableViewCellIdentifier"];
         cell.selectionStyle = UITableViewCellEditingStyleNone;
         return cell;
     } else if (row == 4){
@@ -263,16 +261,34 @@ static double const BACKGORUND_IMAGE_MAX_HEIGHT = 250.0;
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *editedImage = info[UIImagePickerControllerEditedImage];
-    [[DataHandling shared] updateProfileImage:editedImage withUserID:[UserInSession shared].sharedUser.ID withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
-        [UserInSession shared].sharedUser.profileImageURLString = createdProfileImageURLString;
-        NSLog(@"Successfully stored image and updated userProfileImageURLString");
-        [[DataHandling shared] setUserProfileImage:self.userProfileImageView];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }];
+    if (self.currentPickerTarget == self.userProfileImageView){
+        [[DataHandling shared] updateProfileImage:editedImage withUserID:[UserInSession shared].sharedUser.ID withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
+            [UserInSession shared].sharedUser.profileImageURLString = createdProfileImageURLString;
+            NSLog(@"Successfully stored image and updated userProfileImageURLString");
+            [[DataHandling shared] setUserProfileImage:self.userProfileImageView];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+    }
+    else if (self.currentPickerTarget == self.userBackgroundImageView){
+        [[DataHandling shared] updateBackgroundImage:editedImage withUserID:[UserInSession shared].sharedUser.ID withCompletion:^(NSString * _Nonnull createdBackgroundImageURLString) {
+            [UserInSession shared].sharedUser.profileBackgroundImageURLString = createdBackgroundImageURLString;
+            NSLog(@"Successfully stored background image and updated userBackgroundImageURLString");
+            [[DataHandling shared] setBackgroundImage:self.userBackgroundImageView];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+    }
+    
 }
 
-- (void)profileImageWasClicked: (UITapGestureRecognizer *)tap{
+- (void)profileImageWasClicked:(UITapGestureRecognizer*)tap{
+    self.currentPickerTarget = self.userProfileImageView;
     [self presentViewController:self.imagePickerVC animated:YES completion:nil];
 }
+
+- (void)backgroundImageWasClicked:(UITapGestureRecognizer*)tap{
+    self.currentPickerTarget = self.userBackgroundImageView;
+    [self presentViewController:self.imagePickerVC animated:YES completion:nil];
+}
+                            
 
 @end

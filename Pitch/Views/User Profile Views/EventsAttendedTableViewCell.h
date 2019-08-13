@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Event.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EventsAttendedTableViewCell : UITableViewCell <UICollectionViewDelegate, UICollectionViewDataSource>
+@property (strong, nonatomic) NSMutableArray <Event *> *eventsAttendedByUserMArray;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @end

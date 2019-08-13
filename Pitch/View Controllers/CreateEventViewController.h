@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface CreateEventViewController : UIViewController
-
 @property (nonatomic, weak) id<AddEventToMapDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UIButton *backButton;
 

@@ -168,9 +168,7 @@ static NSString * const SUCCESSFUL_EVENT_SAVE = @"Successfully saved Event info 
 }
 
 - (void) createSongsArray {
-    
     self.songsArray = [[NSMutableArray alloc] init];
-    
     Song *song = [[Song alloc] init];
     [song setTitle:@"Jocelyn Flores"];
     [song setArtistName:@"XXXTENTACION"];

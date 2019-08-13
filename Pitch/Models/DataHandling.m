@@ -96,7 +96,6 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
             if (error.code == FIRStorageErrorCodeObjectNotFound){
                 NSLog(@"PROFILE IMAGE DIDNT EXIST, WILL UPLOAD FOR FIRST TIME NOW");
             }
-            
         } else {
             // Delete the old user profile image
             [deleteRef deleteWithCompletion:^(NSError *error){
@@ -104,7 +103,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                     NSLog(@"THERE WAS AN ERROR DELETING OLD PROFILE IMAGE");
                     switch (error.code) {
                         case FIRStorageErrorCodeObjectNotFound:
-                            NSLog(@"THE FILE YOU ARE TRYING TO DELETE DOESNT EXIST");
+                            NSLog(@"THE PROFILE IMAGE YOU ARE TRYING TO DELETE DOESNT EXIST");
                             break;
                     }
                 } else {
@@ -112,15 +111,12 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                 }
             }];
         }
-        
-        
         FIRStorageUploadTask *uploadTask = [checkForExistanceRef putData:data
                                                                 metadata:nil
                                                               completion:^(FIRStorageMetadata *metadata,
                                                                            NSError *error) {
                                                                   if (error != nil) {
                                                                       switch (error.code) {
-                                                                              
                                                                           case FIRStorageErrorCodeObjectNotFound:
                                                                               NSLog(@"UPLOAD REACHED SOME ERROR, doesn't exist");
                                                                               break;
@@ -135,6 +131,9 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
                                                                               //convert to URL string since this is how User object stores it
                                                                               //this ensures profileImageURLString is also updated
                                                                               completion(URL.absoluteString);
+                                                                              [userDocumentRef updateData:@{USER_PROFILE_IMAGE_KEY:URL.absoluteString} completion:^(NSError * _Nullable error) {
+                                                                                  NSLog(@"USER PROFILE IMAGE UPDATED IN DATABASE");
+                                                                              }];
                                                                           }
                                                                       }];
                                                                   }
@@ -146,6 +145,10 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
 
 
 - (void)setUserProfileImage:(UIImageView *)profile_imageImageView{
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityIndicator setCenter: profile_imageImageView.center];
+    [activityIndicator startAnimating];
+    [profile_imageImageView addSubview:activityIndicator];
     NSString *userID = [UserInSession shared].sharedUser.ID;
     FIRStorageReference *storageRef = [self.storage reference];
     FIRStorageReference *userProfileImageRef = [storageRef child:[NSString stringWithFormat:@"users/%@/profileImage.jpg", userID]];
@@ -154,10 +157,94 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     [userProfileImageRef downloadURLWithCompletion:^(NSURL *URL, NSError *error){
         if (error != nil) {
             NSLog(@"ERROR GETTING PROFILE IMAGE FROM STORAGE");
-            NSLog(@"THIS IS THE ERROR CODE: %ln", (long)error.code);
+            NSLog(@"THIS IS THE ERROR CODE: %lu", (long)error.code);
         } else {
-            //successfully setImageView
-            [profile_imageImageView sd_setImageWithURL:URL placeholderImage:placeholderImage];
+            [profile_imageImageView sd_setImageWithURL:URL];
+            [activityIndicator stopAnimating];
+        }
+    }];
+}
+
+- (void)updateBackgroundImage:(UIImage*)imageToUpload withUserID:(NSString *)userID withCompletion:(void (^) (NSString *createdBackgroundImageURLString))completion {
+    NSString *pathToBackgroundImage = [NSString stringWithFormat:@"users/%@/backgroundImage.jpg", userID];
+    //document reference used to update user profileImageURLString in database
+    FIRDocumentReference *userDocumentRef = [[self.database collectionWithPath:DATABASE_USERS_COLLECTION] documentWithPath:userID];
+    // Data in memory
+    NSData *data = UIImageJPEGRepresentation(imageToUpload, 0.8);
+    // Create a storage reference from our storage service
+    FIRStorageReference *storageRef = [self.storage reference];
+    FIRStorageReference *checkForExistanceRef = [storageRef child:pathToBackgroundImage];
+    FIRStorageReference *deleteRef = [storageRef child:pathToBackgroundImage];
+    [checkForExistanceRef downloadURLWithCompletion:^(NSURL *URL, NSError *error){
+        if (error != nil) {
+            if (error.code == FIRStorageErrorCodeObjectNotFound){
+                NSLog(@"BACKGROUND IMAGE DIDNT EXIST, WILL UPLOAD FOR FIRST TIME NOW");
+            }
+            
+        } else {
+            // Delete the old user profile image
+            [deleteRef deleteWithCompletion:^(NSError *error){
+                if (error != nil) {
+                    NSLog(@"THERE WAS AN ERROR DELETING OLD BACKGROUND IMAGE");
+                    switch (error.code) {
+                        case FIRStorageErrorCodeObjectNotFound:
+                            NSLog(@"THE BACKGROUND IMAGE YOU ARE TRYING TO DELETE DOESNT EXIST");
+                            break;
+                    }
+                } else {
+                    NSLog(@"SUCCESSFULLY DELETED OLD BACKGROUND IMAGE");
+                }
+            }];
+        }
+        FIRStorageUploadTask *uploadTask = [checkForExistanceRef putData:data
+                                                                metadata:nil
+                                                              completion:^(FIRStorageMetadata *metadata,
+                                                                           NSError *error) {
+                                                                  if (error != nil) {
+                                                                      switch (error.code) {
+                                                                          case FIRStorageErrorCodeObjectNotFound:
+                                                                              NSLog(@"BACKGROUND IMAGE UPLOAD REACHED SOME ERROR, doesn't exist");
+                                                                              break;
+                                                                      }
+                                                                  } else {
+                                                                      // You can also access to download URL after upload.
+                                                                      [checkForExistanceRef downloadURLWithCompletion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+                                                                          if (error != nil) {
+                                                                              NSLog(@"THERE WAS AN ERROR DOWNLOADING STORED BACKGROUND IMAGE URL");
+                                                                              completion(nil);
+                                                                          } else {
+                                                                              //convert to URL string since this is how User object stores it
+                                                                              //this ensures profileImageURLString is also updated
+                                                                              completion(URL.absoluteString);
+                                                                              [userDocumentRef updateData:@{USER_BACKGROUND_KEY:URL.absoluteString}];
+                                                                              
+                                                                          }
+                                                                      }];
+                                                                  }
+                                                              }];
+        
+    }];
+    
+}
+
+- (void)setBackgroundImage:(UIImageView *)background_imageImageView{
+    background_imageImageView.image = nil;
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [activityIndicator setCenter: background_imageImageView.center];
+    [activityIndicator startAnimating];
+    [background_imageImageView addSubview:activityIndicator];
+    NSString *userID = [UserInSession shared].sharedUser.ID;
+    FIRStorageReference *storageRef = [self.storage reference];
+    FIRStorageReference *userBackgroundImageRef = [storageRef child:[NSString stringWithFormat:@"users/%@/backgroundImage.jpg", userID]];
+    UIImage *placeholderImage = [UIImage imageNamed:@"default_background"];
+    // Fetch the download URL
+    [userBackgroundImageRef downloadURLWithCompletion:^(NSURL *URL, NSError *error){
+        if (error != nil) {
+            NSLog(@"ERROR GETTING BACKGROUND IMAGE FROM STORAGE");
+            NSLog(@"THIS IS THE ERROR CODE: %lu", (long)error.code);
+        } else {
+            [background_imageImageView sd_setImageWithURL:URL];
+            [activityIndicator stopAnimating];
         }
     }];
 }
@@ -221,8 +308,6 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
 }
 
 - (void) getEventsAttendedByUserWithCompletion: (void (^) (NSMutableArray *attendedEventsByUserArray)) completion{
-    
-    
     NSMutableArray *finalAttendedEventsArray = [[NSMutableArray alloc] init];
     [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
      getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
@@ -252,25 +337,7 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
      }];
 }
 
-//- (void) getEventsCreatedByUser {
-//    [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
-//     getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
-//         if (error != nil) {
-//             NSLog(@"Error getting events from database: %@", error);
-//         } else {
-//             for (FIRDocumentSnapshot *document in snapshot.documents) {
-//                 if ([document.data[@"Created By"] isEqualToString:[UserInSession shared].sharedUser.nameString]) {
-//
-//                     Event *createdEventToAdd = [[Event alloc ]initWithDictionary:document.data];
-//                     [[UserInSession shared].eventsCreatedMArray addObject:createdEventToAdd];
-//                 }
-//             }
-//         }
-//         NSLog(@"Number of events created by (USER): %lu", [UserInSession shared].eventsCreatedMArray.count);
-//     }];
-//}
-
-- (void) getEventsCreatedByUserwithCompletion:(void (^) (NSMutableArray *createdEventsByUserArray))completion {
+- (void) getEventsCreatedByUserWithCompletion:(void (^) (NSMutableArray *createdEventsByUserArray))completion {
         NSMutableArray <Event *> *finalCreatedEventsArray = [[NSMutableArray alloc] init];
         [[self.database collectionWithPath:DATABASE_EVENTS_COLLECTION]
          getDocumentsWithCompletion:^(FIRQuerySnapshot *snapshot, NSError *error) {
@@ -312,7 +379,6 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     int ageRestrictionFilter = [filters[FILTER_AGE_KEY] intValue];
     NSMutableSet *vibesFilterSet = filters[FILTER_VIBES_KEY];
     long distanceFilter = [filters[FILTER_DISTANCE_KEY] longValue];
-    
     long minNumPeopleFilter = [filters[FILTER_MINPEOPLE_KEY] longValue];
     long maxNumPeopleFilter = [filters[FILTER_MAXPEOPLE_KEY] longValue];
     
@@ -431,9 +497,28 @@ static NSString * const FILTER_MAXPEOPLE_KEY = @"Max People";
     [[[self.database collectionWithPath:@"users"] documentWithPath:userID] getDocumentWithCompletion:^(FIRDocumentSnapshot * _Nullable snapshot, NSError * _Nullable error) {
         if (snapshot.exists)
         {
-            NSLog(@"USER DOES EXIST");
+            NSLog(@"USER DOES EXIST: %@", userID);
             [[UserInSession shared] setCurrentUser:snapshot.data withUserID:userID];
+            NSLog(@"THIS IS THE USERS NAME: %@", [UserInSession shared].sharedUser.nameString);
             [self.sharedUserDelegate segueToAppUponLogin];
+            
+//            [self getEventsCreatedByUserWithCompletion:^(NSMutableArray * _Nonnull createdEventsByUserArray) {
+//
+//                [UserInSession shared].createdEventsByUserArray = createdEventsByUserArray;
+//
+//                [self getEventsAttendedByUserWithCompletion:^(NSMutableArray * _Nonnull attendedEventsByUserArray) {
+//
+//                    [UserInSession shared].attendedEventsByUserArray = attendedEventsByUserArray;
+//
+//
+//                    NSLog(@"EVENTS CREATED M ARRAY COUNT: %lu",  [UserInSession shared].createdEventsByUserArray.count);
+//                    NSLog(@"EVENTS ATTENDED M ARRAY COUNT: %lu", [UserInSession shared].attendedEventsByUserArray.count);
+//                    NSLog(@"USER: %@", [UserInSession shared].sharedUser.ID);
+//
+//                    [self.sharedUserDelegate segueToAppUponLogin];
+//                }];
+//            }];
+            
         }
         else{
             NSLog(@"THIS USER DOESNT EXIST, ERROR IS: %@", error);

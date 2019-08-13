@@ -548,7 +548,6 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
                              if (authResult.user) {
                                  [self dismissSignInPage];
                                  [[DataHandling shared] loadUserInfoAndApp:authResult.user.uid];
-                                 
                              }
                              else{
                                  switch([error code]){
@@ -606,12 +605,15 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
                                          [[DataHandling shared] updateProfileImage:[UIImage imageNamed:@"default_profile"] withUserID:userID withCompletion:^(NSString * _Nonnull createdProfileImageURLString) {
                                              //making sure to add newly created profileImageURLString after completion
                                              [userAllInfo setValue:createdProfileImageURLString forKey:USER_PROFILE_IMAGE_URLSTRING];
-                                             [[DataHandling shared] addUserToDatabase:[[User alloc] initWithDictionary:userAllInfo] withUserID:userID];
                                              [userAllInfo setValue:userID forKey:USER_ID_KEY];
-                                             [[UserInSession shared] setCurrentUser:userAllInfo withUserID:userID];
-                                             [self dismissSignInPage];
-                                             [self dismissSignUpPage2:YES];
-                                             [self segueToApp:YES];
+                                             [[DataHandling shared] addUserToDatabase:[[User alloc] initWithDictionary:userAllInfo] withUserID:userID];
+                                             [[DataHandling shared] updateBackgroundImage:[UIImage imageNamed:@"default_background"] withUserID:userID withCompletion:^(NSString * _Nonnull createdBackgroundImageURLString) {
+                                                 [userAllInfo setValue:createdBackgroundImageURLString forKey:USER_BACKGROUND_IMG_URLSTRING];
+                                                 [[UserInSession shared] setCurrentUser:userAllInfo withUserID:userID];
+                                                 [self dismissSignInPage];
+                                                 [self dismissSignUpPage2:YES];
+                                                 [self segueToApp:YES];
+                                             }];
                                          }];  
                                      }
                                      else{

@@ -95,6 +95,21 @@
     [self.roundedCornersViewOutlet addSubview:self.vibesCollectionView];
 }
 
+
+- (void)createDateAndTimeLabel{
+    if (self.event.eventVibesArray.count != 0){
+        self.dateAndTimeLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.vibesLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y+self.vibesCollectionView.frame.size.height + 20, 100, 20)];
+    }
+    else{
+        self.dateAndTimeLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.registerButton.frame.size.width/5, self.registerButton.frame.origin.y+self.self.registerButton.frame.size.height + 20, 100, 20)];
+    }
+    [self.dateAndTimeLabel setText:self.event.startDateString];
+    [self.dateAndTimeLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
+    [self.dateAndTimeLabel sizeToFit];
+    [self.dateAndTimeLabel setRestorationIdentifier:@"dateAndTimeLabel"];
+    [self.roundedCornersViewOutlet addSubview:self.attendanceCountLabel];
+}
+
 -(void)createDistanceLabel
 {
     NSArray *locationComponents = [self.event.eventLocationString componentsSeparatedByString:@" "];
@@ -103,12 +118,7 @@
     CLLocationCoordinate2D thisEventCoordinate = CLLocationCoordinate2DMake(latitudeNum.floatValue, longitudeNum.floatValue);
     CLLocation *thisEventLocation = [[CLLocation alloc] initWithLatitude:thisEventCoordinate.latitude longitude:thisEventCoordinate.longitude];
     CLLocationDistance distanceInKilometers = [thisEventLocation distanceFromLocation:[DataHandling shared].userLocation]/1000;
-    if (self.event.eventVibesArray.count != 0){
-        self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.vibesLabel.frame.origin.x, self.vibesCollectionView.frame.origin.y+self.vibesCollectionView.frame.size.height + 20, 100, 20)];
-    }
-    else{
-        self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.registerButton.frame.size.width/5, self.registerButton.frame.origin.y+self.self.registerButton.frame.size.height + 20, 100, 20)];
-    }
+    self.distanceFromUserLabel = [[UILabel alloc] initWithFrame: CGRectMake(self.dateAndTimeLabel.frame.origin.x, self.dateAndTimeLabel.frame.origin.y+self.dateAndTimeLabel.frame.size.height + 20, 100, 20)];
     [self.distanceFromUserLabel setText:[NSString stringWithFormat:@"Distance From You: %.1fkm", distanceInKilometers]];
     [self.distanceFromUserLabel setFont:[UIFont fontWithName:@"GothamRounded-Bold" size:20]];
     [self.distanceFromUserLabel sizeToFit];
@@ -184,10 +194,6 @@
     [cell layoutIfNeeded];
     CGSize size = [cell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
     return CGSizeMake(size.width, 30);
-}
-
-- (void)checkForUserRegistrationDelegateMethod:(BOOL)registerValue {
-    self.registrationStatusForEvent = registerValue;
 }
 
 @end

@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) UILabel *distanceFromUserLabel;
 @property (strong, nonatomic) UILabel *attendanceCountLabel;
 @property (strong, nonatomic) UILabel *vibesLabel;
-@property (strong, nonatomic) UILabel *extraLabel;
+@property (strong, nonatomic) UILabel *dateAndTimeLabel;
 @property (strong, nonatomic) UICollectionView *vibesCollectionView;
 @property (strong, nonatomic) UIButton *registerButton;
 @property (nonatomic) BOOL registrationStatusForEvent;

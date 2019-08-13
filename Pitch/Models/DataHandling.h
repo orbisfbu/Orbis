@@ -44,7 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) getEventsCreatedByUserWithCompletion:(void (^) (NSMutableArray *createdEventsByUserArray))completion;
 - (void)getEventsFromDatabase;
 - (void)setUserProfileImage:(UIImageView *)profile_imageImageView;
+- (void)setBackgroundImage:(UIImageView *)background_imageImageView;
 - (void)updateProfileImage:(UIImage*)imageToUpload withUserID:(NSString *)userID withCompletion:(void (^) (NSString *createdProfileImageURLString))completion;
+- (void)updateBackgroundImage:(UIImage*)imageToUpload withUserID:(NSString *)userID withCompletion:(void (^) (NSString *createdBackgroundImageURLString))completion;
 - (void) updateUserBio:(NSString *)userBioUpdate withCompletion:(void (^) (BOOL succeeded))completion;
 - (void)addEventToDatabase:(Event *)definedEvent;
 - (void)addUserToDatabase:(User *)thisUser withUserID:(NSString *)createdUserID;
