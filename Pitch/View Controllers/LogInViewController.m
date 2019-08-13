@@ -124,7 +124,7 @@ static NSInteger const LABEL_GRAY = 0xc7c7cd;
         // Add touch gestures to dismiss keyboard
         self.tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
         [self.view addGestureRecognizer:self.tapGesture];
-        [self.tapGesture setCancelsTouchesInView:NO];
+        [self.tapGesture setCancelsTouchesInView:YES];
         [self createPageObjects];
         [self createContinuePage];
     }

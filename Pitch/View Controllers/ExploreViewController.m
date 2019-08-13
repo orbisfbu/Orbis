@@ -473,4 +473,9 @@
     [self.searchBarOutlet resignFirstResponder];
 }
 
+- (void) searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+        UITextField *textField = [searchBar valueForKey:@"_searchField"];
+        textField.clearButtonMode = UITextFieldViewModeNever;
+}
+
 @end
