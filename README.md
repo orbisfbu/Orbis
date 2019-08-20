@@ -8,7 +8,7 @@
 
 <img src= 'http://g.recordit.co/PwwIkjOpyz.gif' width='' alt='Video Walkthrough' />
 
-<img src= 'https://recordit.co/sKdzROcmQy' width='' alt='Video Walkthrough' />
+<img src= 'https://recordit.co/sKdzROcmQy.gif' width='' alt='Video Walkthrough' />
 
 
 
